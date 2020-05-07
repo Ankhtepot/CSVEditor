@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="CSVEditor.View.Controls.DirectoryWithCsvControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             xmlns:convertors="clr-namespace:CSVEditor.ViewModel.Convertors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+    <UserControl.Resources>
+        <convertors:AbsPathToFileNameConvertor x:Key="AbsPathToFileNameConvertor"/>
+        <Style TargetType="TextBlock" x:Key="HeaderBorderBoxStyle">
+            <Setter Property="Background" Value="Olive"/>
+            <Setter Property="Foreground" Value="AntiqueWhite"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border>
+        <StackPanel>
+            <StackPanel>
+                <TextBlock x:Name="RootPathTextBlock" 
+                           Text="{Binding DirectoryAbsolutePath}"
+                           TextWrapping="Wrap"
+                           Width="200"/>
+                <ListBox ItemsSource="{Binding CsvFilesNames}"
+                         SelectedItem="{Binding Path=.}"
+                         SelectionChanged="list_SelectionChanged"
+                         x:Name="CsvFilesListBox"
+                         LostFocus="CsvFilesListBox_LostFocus">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Name="filePathTextBlock"
+                                       Text="{Binding Path=., Converter={StaticResource AbsPathToFileNameConvertor}}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>
