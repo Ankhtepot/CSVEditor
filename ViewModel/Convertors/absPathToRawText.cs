@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace CSVEditor.ViewModel.Convertors
 {
-    class absPathToRawText : IValueConverter
+    class AbsPathToRawText : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

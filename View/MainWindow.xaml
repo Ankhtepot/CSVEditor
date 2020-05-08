@@ -11,13 +11,14 @@
         mc:Ignorable="d"
         Title="CSV Editor" 
         Height="450" 
-        Width="1000">
+        Width="1000"
+        >
 
     <Window.Resources>
         <vm:EditorVM x:Key="EditorVM"/>
         <convertors:BoolToGitRepoFoundConvertor x:Key="BoolToRepoConvertor"/>
         <convertors:AbsPathToFileNameConvertor x:Key="AbsPathToFileNameConvertor"/>
-        <convertors:absPathToRawText x:Key="AbsPathToRawText"/>
+        <convertors:AbsPathToRawText x:Key="AbsPathToRawText"/>
     </Window.Resources>
 
     <StackPanel DataContext="{StaticResource EditorVM}">
@@ -45,17 +46,17 @@
         </Border>
 
         <!-- Main Section -->
-        <Border Style="{StaticResource BaseBorderStyle}" >
+        <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"></ColumnDefinition>
-                    <ColumnDefinition Width="5"></ColumnDefinition>
+                    <ColumnDefinition Width="15"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <!--#region Loaded files section -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0">
-                    <StackPanel Height="340">
+                    <StackPanel VerticalAlignment="Stretch">
                         <TextBlock Text="Loaded CSV files" Margin="10,0"/>
                         <ListBox ItemsSource="{Binding CsvFilesStructure}"
                                  SelectedItem="{Binding SelectedDirectory}"
@@ -87,7 +88,7 @@
                 <GridSplitter Grid.Column="1" 
                               ResizeDirection="Columns"
                               HorizontalAlignment="Stretch"
-                              Height="50"
+                              Height="100"
                               Background="BlueViolet"
                               VerticalAlignment="Center"
                               Margin="5"
@@ -96,7 +97,7 @@
                 
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2">
-                    <TabControl>
+                    <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <!--#region RawEdit -->
                         <TabItem Header="Raw Edit">
                             <DockPanel >
@@ -127,15 +128,12 @@
                                                     SelectedText="{Binding SelectedText}"
                                                     FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
                                                     />
-                                <!--<Viewbox>-->
-                                    <Border Style="{StaticResource BaseBorderStyle}" Height="280">
-                                        <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawText}}"
-                                                 Height="280"
-                                                 Width="700"
-                                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                                                 />
-                                    </Border>
-                                <!--</Viewbox>-->
+                                <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawText}}"
+                                                
+                                                VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                                />
+                                </Border>
                             </StackPanel>
                         </TabItem>
                     </TabControl>
