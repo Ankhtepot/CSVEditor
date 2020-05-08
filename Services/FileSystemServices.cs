@@ -43,13 +43,13 @@ namespace CSVEditor.ViewModel
 
         public static ObservableCollection<DirectoryWithCsv> GetCsvFilesStructureFromRootDirectory(string rootPath)
         {
-            var result = CrawlRootDirectory(new ObservableCollection<DirectoryWithCsv>(), rootPath);
+            var result = CrawlDirectoryForCsvFiles(new ObservableCollection<DirectoryWithCsv>(), rootPath, rootPath);
             return result;
         }
 
-        public static ObservableCollection<DirectoryWithCsv> CrawlRootDirectory(ObservableCollection<DirectoryWithCsv> resultCollection, string path)
+        public static ObservableCollection<DirectoryWithCsv> CrawlDirectoryForCsvFiles(ObservableCollection<DirectoryWithCsv> resultCollection, string rootPath, string path)
         {
-            var directoryCsvFiles = ScanDirectory(path);
+            var directoryCsvFiles = ScanDirectory(rootPath, path);
 
             if (directoryCsvFiles != null)
             {
@@ -70,13 +70,13 @@ namespace CSVEditor.ViewModel
             foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
                 //Console.WriteLine("Scanning directory: " + path);
-                CrawlRootDirectory(resultCollection, directory);
+                CrawlDirectoryForCsvFiles(resultCollection, rootPath, directory);
             }
 
             return resultCollection;
         }
 
-        public static DirectoryWithCsv ScanDirectory(string path)
+        public static DirectoryWithCsv ScanDirectory(string rootPath, string path)
         {
             ObservableCollection<string> csvFiles = null;
             try
@@ -89,8 +89,11 @@ namespace CSVEditor.ViewModel
                 Console.WriteLine($"Insufficient rights to read all files in \"{path}\".");
             }
 
+            var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
+            directoryPath = directoryPath == "." ? Constants.ROOT_DIRECTORY : directoryPath;
+
             return (csvFiles != null && csvFiles.Count > 0) 
-                ? new DirectoryWithCsv(path, csvFiles) 
+                ? new DirectoryWithCsv(directoryPath, csvFiles) 
                 : null;
         }
     }

@@ -14,15 +14,14 @@ namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
-        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
+        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });        
 
         private string rootRepositoryPath;
 
         public string RootRepositoryPath {
             get => rootRepositoryPath;
             set {
-                rootRepositoryPath = value;
-                OnPropertyChanged(nameof(RootRepositoryPath));
+                rootRepositoryPath = value; OnPropertyChanged(nameof(RootRepositoryPath));
             }
         }
 
@@ -38,7 +37,18 @@ namespace CSVEditor.ViewModel
         public bool IsEditing
         {
             get { return isEditing; }
-            set { isEditing = value; }
+            set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); }
+        }
+
+        private string selectedText;
+
+        public string SelectedText
+        {
+            get { return selectedText; }
+            set 
+            {
+                selectedText = value; OnPropertyChanged(nameof(SelectedText));
+            }
         }
 
         //TODO: remove if not neccesarry
@@ -99,6 +109,7 @@ namespace CSVEditor.ViewModel
         {
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsGitRepo = false;
+            SelectedText = Constants.SELECTED_TEXT_DEFAULT;
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();

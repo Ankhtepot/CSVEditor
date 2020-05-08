@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using CSVEditor.Annotations;
+using CSVEditor.Services;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.Model
@@ -15,7 +17,8 @@ namespace CSVEditor.Model
     {
         private string absPath;
 
-        public string AbsPath {
+        public string AbsPath
+        {
             get { return absPath; }
             set
             {
@@ -26,7 +29,8 @@ namespace CSVEditor.Model
 
         private int headerIndex;
 
-        public int HeaderIndex {
+        public int HeaderIndex
+        {
             get { return headerIndex; }
             set
             {
@@ -37,7 +41,8 @@ namespace CSVEditor.Model
 
         private List<string> headersStrings;
 
-        public List<string> HeadersStrings {
+        public List<string> HeadersStrings
+        {
             get { return headersStrings; }
             set
             {
@@ -59,9 +64,10 @@ namespace CSVEditor.Model
         }
 
 
-        private ObservableCollection<ObservableCollection<CsvField>> lines;
+        private ObservableCollection<ObservableCollection<string>> lines;
 
-        public ObservableCollection<ObservableCollection<CsvField>> Lines {
+        public ObservableCollection<ObservableCollection<string>> Lines
+        {
             get { return lines; }
             set
             {
@@ -70,13 +76,13 @@ namespace CSVEditor.Model
             }
         }
 
-        private static ObservableCollection<char> delimiters = new ObservableCollection<char> { ',', ';',':'};
+        private static ObservableCollection<char> delimiters = new ObservableCollection<char> { ',', ';', ':' };
 
-        private CsvFile() : this ("", 0, ',', new ObservableCollection<ObservableCollection<CsvField>>())
+        private CsvFile() : this("", 0, ',', new ObservableCollection<ObservableCollection<string>>())
         {
         }
 
-        public CsvFile(string fullName, int headerIndex, char delimiter, ObservableCollection<ObservableCollection<CsvField>> lines)
+        public CsvFile(string fullName, int headerIndex, char delimiter, ObservableCollection<ObservableCollection<string>> lines)
         {
             AbsPath = fullName ?? throw new ArgumentNullException(nameof(fullName));
             HeaderIndex = headerIndex;
@@ -99,53 +105,54 @@ namespace CSVEditor.Model
         {
             CsvFile result = new CsvFile();
 
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
-                using(StreamReader stream = File.OpenText(path))
+                var text = FileProcessingServices.GetRawFileText(path);
+
+                if (text == "") return result;
+
+                string[] lines = text.Split(Environment.NewLine);
+
+                var fileIsValid = true;
+
+                try
                 {
-                    string text =  stream.ReadToEnd();
-                    string[] lines = text.Split(Environment.NewLine);
+                    result.Delimiter = IdentifyCsvDelimiter(lines[0]);
+                }
+                catch (InvalidDataException)
+                {
+                    fileIsValid = false;
+                }
 
-                    var fileIsValid = true;
+                if (fileIsValid)
+                {
+                    var csvLines = new ObservableCollection<ObservableCollection<string>>();
 
-                    try
+                    foreach (var line in lines)
                     {
-                        result.Delimiter = IdentifyCsvDelimiter(lines[0]);
-                    }
-                    catch (InvalidDataException)
-                    {
-                        fileIsValid = false;
+                        csvLines.Add(getColumnContents(line, result.Delimiter));
                     }
 
-                    if (fileIsValid)
-                    {
-                        var csvLines = new ObservableCollection<ObservableCollection<CsvField>>();
-
-                        foreach (var line in lines)
-                        {
-                            var csvLine = new ObservableCollection<CsvField>();
-                            //TODO: ignore part of text in "" or ''
-                            foreach (var column in line.Split(result.Delimiter))
-                            {
-                                var field = new CsvField(FieldType.TextBlock, column, "");
-                                csvLine.Add(field);
-                            }
-
-                            csvLines.Add(csvLine);
-                        } 
-                    }
+                    result.headersStrings = csvLines[0].ToList();
+                    csvLines.RemoveAt(0);
+                    result.lines = csvLines;
                 }
             }
 
             return result;
         }
 
+        private ObservableCollection<string> getColumnContents(string line, char delimiter)
+        {
+            //TODO - add algorthytm to properly split "" and '' fields
+            return new ObservableCollection<string>(line.Split(delimiter));
+        }
+
         private char IdentifyCsvDelimiter(string line)
         {
-            //TODO: find to way to skip "" and '' strings to determinate delimiter
-            foreach(char letter in line)
+            foreach (char letter in line)
             {
-                if (!(char.IsLetterOrDigit(letter) || char.IsWhiteSpace(letter) || letter == '\"' || letter == '\'')) 
+                if (!(char.IsLetterOrDigit(letter) || char.IsWhiteSpace(letter) || letter == '\"' || letter == '\'') && delimiters.Contains(letter))
                 {
                     return letter;
                 }

@@ -17,6 +17,7 @@
         <vm:EditorVM x:Key="EditorVM"/>
         <convertors:BoolToGitRepoFoundConvertor x:Key="BoolToRepoConvertor"/>
         <convertors:AbsPathToFileNameConvertor x:Key="AbsPathToFileNameConvertor"/>
+        <convertors:absPathToRawText x:Key="AbsPathToRawText"/>
     </Window.Resources>
 
     <StackPanel DataContext="{StaticResource EditorVM}">
@@ -96,29 +97,13 @@
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2">
                     <TabControl>
+                        <!--#region RawEdit -->
                         <TabItem Header="Raw Edit">
                             <DockPanel >
-                                <Grid DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center" Background="Beige">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="85"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="Slected File:" 
-                                           Grid.Row="0" 
-                                           Grid.Column="0" 
-                                           Margin="10,0,0,0"
-                                           VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" 
-                                               Grid.Row="0"  
-                                               Text="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
-                                               VerticalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               Margin="0,0,10,0"
-                                   />
-                                </Grid>
+                                <uc:FileInfoControl DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                                    SelectedText="{Binding SelectedText}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
+                                                    />
 
                                 <ToggleButton Content="Edit"
                                         Height="30"
@@ -130,9 +115,28 @@
                                     </ToggleButton.LayoutTransform>
                                 </ToggleButton>
                                 <DataGrid>
-                                    
+
                                 </DataGrid>
                             </DockPanel>
+                        </TabItem>
+                        <!--#endregion RawEdit-->
+
+                        <TabItem Header="Raw File">
+                            <StackPanel>
+                                <uc:FileInfoControl VerticalAlignment="Top" HorizontalAlignment="Center"
+                                                    SelectedText="{Binding SelectedText}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
+                                                    />
+                                <!--<Viewbox>-->
+                                    <Border Style="{StaticResource BaseBorderStyle}" Height="280">
+                                        <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawText}}"
+                                                 Height="280"
+                                                 Width="700"
+                                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                                 />
+                                    </Border>
+                                <!--</Viewbox>-->
+                            </StackPanel>
                         </TabItem>
                     </TabControl>
                 </Border>
