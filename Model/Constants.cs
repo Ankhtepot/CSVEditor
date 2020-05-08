@@ -8,5 +8,6 @@ namespace CSVEditor.Model
     {
         public const string LOAD_REPOSITORY_PLACEHOLDER = "Load Repository...";
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";
+        public const string NO_FILE_SELECTED = "No file selected.";
     }
 }

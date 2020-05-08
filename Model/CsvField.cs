@@ -8,7 +8,7 @@ using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.Model
 {
-    public class CsvLine : INotifyPropertyChanged
+    public class CsvField : INotifyPropertyChanged
     {
         private Enums.FieldType type;
 
@@ -43,6 +43,16 @@ namespace CSVEditor.Model
             }
         }
 
+        public CsvField() : this (FieldType.TextBlock, "", "")
+        {
+        }
+
+        public CsvField(FieldType type, string content, string uRI = "")
+        {
+            Type = type;
+            Content = content ?? throw new ArgumentNullException(nameof(content));
+            URI = uRI;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

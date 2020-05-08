@@ -11,11 +11,12 @@
         mc:Ignorable="d"
         Title="CSV Editor" 
         Height="450" 
-        Width="800">
+        Width="1000">
 
     <Window.Resources>
-        <vm:EditorVM x:Key="EditorVM"></vm:EditorVM>
-        <convertors:BoolToGitRepoFoundConvertor x:Key="BoolToRepoConvertor"></convertors:BoolToGitRepoFoundConvertor>
+        <vm:EditorVM x:Key="EditorVM"/>
+        <convertors:BoolToGitRepoFoundConvertor x:Key="BoolToRepoConvertor"/>
+        <convertors:AbsPathToFileNameConvertor x:Key="AbsPathToFileNameConvertor"/>
     </Window.Resources>
 
     <StackPanel DataContext="{StaticResource EditorVM}">
@@ -43,20 +44,23 @@
         </Border>
 
         <!-- Main Section -->
-        <Border Style="{StaticResource BaseBorderStyle}">
+        <Border Style="{StaticResource BaseBorderStyle}" >
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="250"></ColumnDefinition>
                     <ColumnDefinition Width="5"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
+                <!--#region Loaded files section -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0">
-                    <StackPanel>
-                        <TextBlock Text="Loaded CSV files"/>
+                    <StackPanel Height="340">
+                        <TextBlock Text="Loaded CSV files" Margin="10,0"/>
                         <ListBox ItemsSource="{Binding CsvFilesStructure}"
                                  SelectedItem="{Binding SelectedDirectory}"
                                  x:Name="DirectoryListBoxOutter"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 MaxHeight="325"
                                  >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -68,50 +72,71 @@
                                     <uc:DirectoryWithCsvControl 
                                         x:Name="DirectoryListBoxInner" 
                                         DirectoryData="{Binding}"
-                                        SelectedFile="{Binding DataContext.SelectedCsvFile, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                        SelectedFile="{Binding DataContext.SelectedFile, 
+                                            Mode=TwoWay, 
+                                            RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </StackPanel>
                 </Border>
+                <!--#endregion Loaded files section-->
+                <!--#region GriSplitter -->
                 <GridSplitter Grid.Column="1" 
                               ResizeDirection="Columns"
                               HorizontalAlignment="Stretch"
                               Height="50"
                               Background="BlueViolet"
                               VerticalAlignment="Center"
+                              Margin="5"
                               ></GridSplitter>
+                <!--#endregion GridSplitter-->
+                
+                <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Label Content="Selected Directory:" 
-                               Grid.Row="0" 
-                               Grid.Column="0" 
-                               VerticalAlignment="Center"></Label>
-                        <TextBlock Grid.Column="1" 
-                                   Grid.Row="0"  
-                                   Text="{Binding SelectedDirectory.DirectoryAbsolutePath}" 
-                                   VerticalAlignment="Center"/>
-                        <Label Content="Slected File:" 
-                               Grid.Row="1" 
-                               Grid.Column="0" 
-                               VerticalAlignment="Center"></Label>
-                        <TextBlock Grid.Column="1" 
-                                   Grid.Row="1"  
-                                   Text="{Binding SelectedCsvFile}"
-                                   VerticalAlignment="Center"
+                    <TabControl>
+                        <TabItem Header="Raw Edit">
+                            <DockPanel >
+                                <Grid DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center" Background="Beige">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="85"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Slected File:" 
+                                           Grid.Row="0" 
+                                           Grid.Column="0" 
+                                           Margin="10,0,0,0"
+                                           VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Grid.Row="0"  
+                                               Text="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,10,0"
                                    />
-                    </Grid>
+                                </Grid>
+
+                                <ToggleButton Content="Edit"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        DockPanel.Dock="Left"
+                                        >
+                                    <ToggleButton.LayoutTransform>
+                                        <RotateTransform Angle="90"/>
+                                    </ToggleButton.LayoutTransform>
+                                </ToggleButton>
+                                <DataGrid>
+                                    
+                                </DataGrid>
+                            </DockPanel>
+                        </TabItem>
+                    </TabControl>
                 </Border>
+                <!--#endregion EditTab -->
             </Grid>
         </Border>
     </StackPanel>

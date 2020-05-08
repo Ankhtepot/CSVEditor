@@ -14,6 +14,8 @@ namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
+        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
+
         private string rootRepositoryPath;
 
         public string RootRepositoryPath {
@@ -31,6 +33,15 @@ namespace CSVEditor.ViewModel
             set { isGitRepo = value; OnPropertyChanged(nameof(IsGitRepo)); }
         }
 
+        private bool isEditing;
+
+        public bool IsEditing
+        {
+            get { return isEditing; }
+            set { isEditing = value; }
+        }
+
+        //TODO: remove if not neccesarry
         private DirectoryWithCsv selectedDirectory;
 
         public DirectoryWithCsv SelectedDirectory {
@@ -42,17 +53,30 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private string selectedCsvFile;
+        private string selectedFile;
 
-        public string SelectedCsvFile {
-            get { return selectedCsvFile; }
+        public string SelectedFile {
+            get 
+            {
+                return  string.IsNullOrEmpty(selectedFile) ? Constants.NO_FILE_SELECTED : selectedFile; 
+            }
             set 
             {
-                selectedCsvFile = value;
-                Console.WriteLine("MainVM.SelectedCsvFile: " + selectedCsvFile);
-                OnPropertyChanged(nameof(SelectedCsvFile));
+                selectedFile = value;
+                Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
+                SelectedCsvFile = new CsvFile(selectedFile);
+                OnPropertyChanged(nameof(SelectedFile));
             }
         }
+
+        private CsvFile selectedCsvFile;
+
+        public CsvFile SelectedCsvFile
+        {
+            get { return selectedCsvFile; }
+            set { selectedCsvFile = value; }
+        }
+
 
 
         public ObservableCollection<CsvFile> CsvFiles { get; set; }
@@ -78,7 +102,7 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
-            CsvFilesStructure.Add(new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." }));
+            CsvFilesStructure.Add(DEFAULT_DIRECTORY);
         }
 
         //*******************************
@@ -92,9 +116,18 @@ namespace CSVEditor.ViewModel
             IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
 
             CsvFilesStructure.Clear();
-            foreach (var directory in FileSystemServices.GetCsvFilesStructureFromRootDirectory(RootRepositoryPath))
+
+            var foundStructure = FileSystemServices.GetCsvFilesStructureFromRootDirectory(RootRepositoryPath);
+            if (foundStructure != null && foundStructure.Count > 0)
             {
-                CsvFilesStructure.Add(directory);
+                foreach (var directory in foundStructure)
+                {
+                    CsvFilesStructure.Add(directory);
+                } 
+            } 
+            else
+            {
+                CsvFilesStructure.Add(DEFAULT_DIRECTORY);
             }
         }
 
