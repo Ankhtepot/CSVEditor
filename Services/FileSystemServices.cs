@@ -30,8 +30,7 @@ namespace CSVEditor.ViewModel
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
-            //TODO: handle GetDirectories exception
-            foreach (var directory in Directory.GetDirectories(rootPath))
+            foreach (var directory in Directory.GetDirectories(rootPath, @".git"))
             {
                 if (Regex.Match(directory, "\\.git").Success)
                 {

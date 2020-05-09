@@ -21,9 +21,19 @@
         <convertors:AbsPathToRawText x:Key="AbsPathToRawText"/>
     </Window.Resources>
 
-    <StackPanel DataContext="{StaticResource EditorVM}">
-        <!-- Load Repo Section -->
-        <Border Style="{StaticResource BaseBorderStyle}">
+    <Grid DataContext="{StaticResource EditorVM}" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--#region Load Repo Section -->
+        <Border Style="{StaticResource BaseBorderStyle}"
+                Grid.Row="0"
+                VerticalAlignment="Center"
+                >
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -44,25 +54,38 @@
                 </Border>
             </Grid>
         </Border>
+        <!--#endregion Load Repo Section-->
 
-        <!-- Main Section -->
-        <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <!--#region Main Section -->
+        <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                Grid.Row="1"
+                >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"></ColumnDefinition>
                     <ColumnDefinition Width="15"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
                 <!--#region Loaded files section -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0">
-                    <StackPanel VerticalAlignment="Stretch">
-                        <TextBlock Text="Loaded CSV files" Margin="10,0"/>
-                        <ListBox ItemsSource="{Binding CsvFilesStructure}"
+                    <Grid VerticalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Loaded CSV files" 
+                                   Margin="10,0"
+                                   Grid.Row="0"/>
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding CsvFilesStructure}"
                                  SelectedItem="{Binding SelectedDirectory}"
                                  x:Name="DirectoryListBoxOutter"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 MaxHeight="325"
+                                 VerticalAlignment="Stretch"
                                  >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -81,9 +104,10 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                    </StackPanel>
+                    </Grid>
                 </Border>
                 <!--#endregion Loaded files section-->
+
                 <!--#region GriSplitter -->
                 <GridSplitter Grid.Column="1" 
                               ResizeDirection="Columns"
@@ -94,7 +118,7 @@
                               Margin="5"
                               ></GridSplitter>
                 <!--#endregion GridSplitter-->
-                
+
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2">
                     <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -122,24 +146,33 @@
                         </TabItem>
                         <!--#endregion RawEdit-->
 
+                        <!--#region RawText -->
                         <TabItem Header="Raw File">
-                            <StackPanel>
-                                <uc:FileInfoControl VerticalAlignment="Top" HorizontalAlignment="Center"
+                            <Grid x:Name="RawFileStackPanel">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
                                                     FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
                                                     />
-                                <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Border Style="{StaticResource BaseBorderStyle}"
+                                        Grid.Row="1"
+                                        >
                                     <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawText}}"
-                                                
                                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                                                 />
                                 </Border>
-                            </StackPanel>
+                            </Grid>
                         </TabItem>
+                        <!--#endregion RawText-->
                     </TabControl>
                 </Border>
                 <!--#endregion EditTab -->
             </Grid>
         </Border>
-    </StackPanel>
+        <!--#endregion Main Section-->
+    </Grid>
 </Window>
