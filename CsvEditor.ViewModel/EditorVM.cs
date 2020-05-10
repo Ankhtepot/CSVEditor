@@ -1,33 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CSVEditor.Model;
+using CSVEditor.ViewModel.Commands;
+using JetBrains.Annotations;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using CSVEditor.Annotations;
-using CSVEditor.Model;
-using CSVEditor.ViewModel.Commands;
 
 namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
-        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });        
+        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
 
         private string rootRepositoryPath;
 
-        public string RootRepositoryPath {
+        public string RootRepositoryPath
+        {
             get => rootRepositoryPath;
-            set {
+            set
+            {
                 rootRepositoryPath = value; OnPropertyChanged(nameof(RootRepositoryPath));
             }
         }
 
         private bool isGitRepo;
 
-        public bool IsGitRepo {
+        public bool IsGitRepo
+        {
             get { return isGitRepo; }
             set { isGitRepo = value; OnPropertyChanged(nameof(IsGitRepo)); }
         }
@@ -45,7 +44,7 @@ namespace CSVEditor.ViewModel
         public string SelectedText
         {
             get { return selectedText; }
-            set 
+            set
             {
                 selectedText = value; OnPropertyChanged(nameof(SelectedText));
             }
@@ -54,9 +53,11 @@ namespace CSVEditor.ViewModel
         //TODO: remove if not neccesarry
         private DirectoryWithCsv selectedDirectory;
 
-        public DirectoryWithCsv SelectedDirectory {
+        public DirectoryWithCsv SelectedDirectory
+        {
             get { return selectedDirectory; }
-            set {
+            set
+            {
                 selectedDirectory = value;
                 Console.WriteLine("Selected Directory: " + selectedDirectory?.DirectoryAbsolutePath);
                 OnPropertyChanged(nameof(SelectedDirectory));
@@ -65,12 +66,13 @@ namespace CSVEditor.ViewModel
 
         private string selectedFile;
 
-        public string SelectedFile {
-            get 
+        public string SelectedFile
+        {
+            get
             {
-                return  string.IsNullOrEmpty(selectedFile) ? Constants.NO_FILE_SELECTED : selectedFile; 
+                return string.IsNullOrEmpty(selectedFile) ? Constants.NO_FILE_SELECTED : selectedFile;
             }
-            set 
+            set
             {
                 selectedFile = value;
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
@@ -134,8 +136,8 @@ namespace CSVEditor.ViewModel
                 foreach (var directory in foundStructure)
                 {
                     CsvFilesStructure.Add(directory);
-                } 
-            } 
+                }
+            }
             else
             {
                 CsvFilesStructure.Add(DEFAULT_DIRECTORY);

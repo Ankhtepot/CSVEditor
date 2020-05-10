@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
-namespace CSVEditor.ViewModel.Convertors
+namespace CSVEditor.ViewModel.Converters
 {
-    class AbsPathToFileNameConvertor : IValueConverter
+    public class BoolToGitRepoFoundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var absPath = (string)value;
-            var lastDelimiterIndex = absPath.LastIndexOf('\\');
-            return lastDelimiterIndex > 0 ? absPath.Substring(lastDelimiterIndex + 1) : absPath;
+            return (bool)value ? "Is Repo." : "Not found.";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

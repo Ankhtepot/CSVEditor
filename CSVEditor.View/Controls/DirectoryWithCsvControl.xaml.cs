@@ -1,5 +1,5 @@
-﻿using CSVEditor.Annotations;
-using CSVEditor.Model;
+﻿using CSVEditor.Model;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,12 +16,13 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class DirectoryWithCsvControl : UserControl, INotifyPropertyChanged
     {
-        public DirectoryWithCsv DirectoryData {
+        public DirectoryWithCsv DirectoryData
+        {
             get { return (DirectoryWithCsv)GetValue(directoryProperty); }
             set { SetValue(directoryProperty, value); }
         }
 
-        private static DirectoryWithCsv defaultRecord = new DirectoryWithCsv("Directory", new ObservableCollection<string> {"Files"});
+        private static DirectoryWithCsv defaultRecord = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files" });
 
         // Using a DependencyProperty as the backing store for Directory.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty directoryProperty =
@@ -33,7 +34,7 @@ namespace CSVEditor.View.Controls
         {
             DirectoryWithCsvControl control = d as DirectoryWithCsvControl;
 
-            if(control != null)
+            if (control != null)
             {
                 DirectoryWithCsv newValue = e.NewValue as DirectoryWithCsv;
                 control.RootPathTextBlock.Text = newValue.DirectoryAbsolutePath;
@@ -41,13 +42,14 @@ namespace CSVEditor.View.Controls
             }
         }
 
-        public string SelectedFile {
+        public string SelectedFile
+        {
             get { return (string)GetValue(SelectedFileProperty); }
             set { SetValue(SelectedFileProperty, value); }
         }
 
         public static readonly DependencyProperty SelectedFileProperty =
-            DependencyProperty.Register("SelectedFile", typeof(string), typeof(DirectoryWithCsvControl), new PropertyMetadata("SelectedFile"));        
+            DependencyProperty.Register("SelectedFile", typeof(string), typeof(DirectoryWithCsvControl), new PropertyMetadata("SelectedFile"));
 
         public DirectoryWithCsvControl()
         {
@@ -58,7 +60,7 @@ namespace CSVEditor.View.Controls
         {
             if (e.AddedItems.Count != 0)
             {
-                SelectedFile = e.AddedItems[0].ToString(); 
+                SelectedFile = e.AddedItems[0].ToString();
             }
         }
 

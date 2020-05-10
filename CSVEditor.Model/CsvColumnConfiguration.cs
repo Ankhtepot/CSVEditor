@@ -1,9 +1,9 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using CSVEditor.Annotations;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.Model

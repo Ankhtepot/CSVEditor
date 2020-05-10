@@ -1,12 +1,12 @@
-﻿<Window x:Class="CSVEditor.View.MainWindow"
+﻿<Window x:Class="CSVEditor.View.EditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CSVEditor"
-        xmlns:vm="clr-namespace:CSVEditor.ViewModel"
-        xmlns:commands="clr-namespace:CSVEditor.ViewModel.Commands"
-        xmlns:convertors="clr-namespace:CSVEditor.ViewModel.Convertors"
+        xmlns:local="clr-namespace:CSVEditor.View"
+        xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
+        xmlns:commands="clr-namespace:CSVEditor.ViewModel.Commands;assembly=CSVEditor.ViewModel"
+        xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         mc:Ignorable="d"
         Title="CSV Editor" 
@@ -16,9 +16,9 @@
 
     <Window.Resources>
         <vm:EditorVM x:Key="EditorVM"/>
-        <convertors:BoolToGitRepoFoundConvertor x:Key="BoolToRepoConvertor"/>
-        <convertors:AbsPathToFileNameConvertor x:Key="AbsPathToFileNameConvertor"/>
-        <convertors:AbsPathToRawText x:Key="AbsPathToRawText"/>
+        <converters:BoolToGitRepoFoundConverter x:Key="BoolToGitRepoFoundConverter"/>
+        <converters:AbsPathToFileNameConverter x:Key="AbsPathToFileNameConverter"/>
+        <converters:AbsPathToRawTextConverter x:Key="AbsPathToRawTextConverter"/>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource EditorVM}" VerticalAlignment="Stretch">
@@ -50,7 +50,7 @@
                     <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToRepoConvertor}}"/>
+                    <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
                 </Border>
             </Grid>
         </Border>
@@ -127,7 +127,7 @@
                             <DockPanel >
                                 <uc:FileInfoControl DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
                                                     />
 
                                 <ToggleButton Content="Edit"
@@ -156,12 +156,12 @@
 
                                 <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConvertor}}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
                                                     />
                                 <Border Style="{StaticResource BaseBorderStyle}"
                                         Grid.Row="1"
                                         >
-                                    <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawText}}"
+                                    <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawTextConverter}}"
                                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                                                 />
                                 </Border>
