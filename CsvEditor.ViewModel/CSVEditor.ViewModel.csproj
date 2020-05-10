@@ -16,6 +16,7 @@
   <ItemGroup>
     <Reference Include="System.Windows.Data">
       <HintPath>..\..\..\DLLs\System.Windows.Data\System.Windows.Data.dll</HintPath>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 
