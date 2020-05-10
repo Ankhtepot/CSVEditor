@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CSVEditor.Services
@@ -17,6 +18,12 @@ namespace CSVEditor.Services
                 }
             }
             return "";
+        }
+
+        public static string RemoveFirstLine(string text)
+        {
+            string[] lines = text.Split(Environment.NewLine).Skip(1).ToArray();
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

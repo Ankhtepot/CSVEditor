@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CSVEditor.Annotations;
 using CSVEditor.Services;
@@ -22,8 +23,7 @@ namespace CSVEditor.Model
             get { return absPath; }
             set
             {
-                absPath = value;
-                OnPropertyChanged(nameof(AbsPath));
+                absPath = value; OnPropertyChanged(nameof(AbsPath));
             }
         }
 
@@ -34,8 +34,7 @@ namespace CSVEditor.Model
             get { return headerIndex; }
             set
             {
-                headerIndex = value;
-                OnPropertyChanged(nameof(HeaderIndex));
+                headerIndex = value;OnPropertyChanged(nameof(HeaderIndex));
             }
         }
 
@@ -46,8 +45,7 @@ namespace CSVEditor.Model
             get { return headersStrings; }
             set
             {
-                headersStrings = value;
-                OnPropertyChanged(nameof(HeadersStrings));
+                headersStrings = value;OnPropertyChanged(nameof(HeadersStrings));
             }
         }
 
@@ -58,25 +56,29 @@ namespace CSVEditor.Model
             get { return delimiter; }
             set
             {
-                delimiter = value;
-                OnPropertyChanged(nameof(Delimiter));
+                delimiter = value; OnPropertyChanged(nameof(Delimiter));
             }
         }
 
+        private int columnCount;
 
-        private ObservableCollection<ObservableCollection<string>> lines;
-
-        public ObservableCollection<ObservableCollection<string>> Lines
+        public int ColumnCount
         {
-            get { return lines; }
-            set
+            get { return columnCount; }
+            set 
             {
-                lines = value;
-                OnPropertyChanged(nameof(Lines));
+                columnCount = value; OnPropertyChanged(nameof(ColumnCount));
             }
         }
+
+
+        private ObservableCollection<ObservableCollection<string>> Lines;
+
+        public ObservableCollection<CsvColumnConfiguration> ColumnConfigurations;
 
         private static ObservableCollection<char> delimiters = new ObservableCollection<char> { ',', ';', ':' };
+
+        private static ObservableCollection<char> blockIdentifiers = new ObservableCollection<char> { '\"', '\'' };
 
         private CsvFile() : this("", 0, ',', new ObservableCollection<ObservableCollection<string>>())
         {
@@ -89,6 +91,7 @@ namespace CSVEditor.Model
             HeadersStrings = new List<string>();
             Delimiter = delimiter;
             Lines = lines ?? throw new ArgumentNullException(nameof(lines));
+            ColumnConfigurations = new ObservableCollection<CsvColumnConfiguration>();
         }
 
         public CsvFile(string absFilePath)
@@ -99,6 +102,7 @@ namespace CSVEditor.Model
             HeadersStrings = transformedFile.HeadersStrings;
             Delimiter = transformedFile.Delimiter;
             Lines = transformedFile.Lines;
+            ColumnConfigurations = transformedFile.ColumnConfigurations;
         }
 
         private CsvFile csvFileFromAbsPath(string path)
@@ -118,6 +122,7 @@ namespace CSVEditor.Model
                 try
                 {
                     result.Delimiter = IdentifyCsvDelimiter(lines[0]);
+                    result.HeadersStrings = lines[0].Split(result.Delimiter).ToList();                    
                 }
                 catch (InvalidDataException)
                 {
@@ -126,33 +131,78 @@ namespace CSVEditor.Model
 
                 if (fileIsValid)
                 {
-                    var csvLines = new ObservableCollection<ObservableCollection<string>>();
+                    result.ColumnCount = result.HeadersStrings.Count;
+                    result.AbsPath = path;
 
-                    foreach (var line in lines)
+                    for (int i = 0; i < result.ColumnCount; i++)
                     {
-                        csvLines.Add(getColumnContents(line, result.Delimiter));
+                        result.ColumnConfigurations.Add(new CsvColumnConfiguration());
                     }
 
-                    result.headersStrings = csvLines[0].ToList();
-                    csvLines.RemoveAt(0);
-                    result.lines = csvLines;
+                    var csvLines = new ObservableCollection<ObservableCollection<string>>();
+                    var columnContents = getColumnContents(FileProcessingServices.RemoveFirstLine(text), result.Delimiter);
+
+                    while(columnContents.Count > 0)
+                    {
+                        ObservableCollection<string> newLine = new ObservableCollection<string>();
+                        for (int i = 0; i < result.ColumnCount; i++)
+                        {
+                            newLine.Add(columnContents[0]);
+                            columnContents.RemoveAt(0);
+                        }
+                        csvLines.Add(newLine);
+                    }
+
+                    result.Lines = csvLines;
                 }
             }
 
             return result;
         }
 
-        private ObservableCollection<string> getColumnContents(string line, char delimiter)
+        private ObservableCollection<string> getColumnContents(string text, char delimiter)
         {
-            //TODO - add algorthytm to properly split "" and '' fields
-            return new ObservableCollection<string>(line.Split(delimiter));
+            ObservableCollection<string> result = new ObservableCollection<string>();
+
+            var workingText = text;
+
+            while (workingText != string.Empty)
+            {
+                if (workingText[0] == delimiter)
+                {
+                    result.Add("");
+                    workingText = workingText.Remove(0, 1);
+                } 
+                else
+                if(blockIdentifiers.Contains(workingText[0]))
+                {
+                    var endOfBlockIndex = workingText.IndexOf(char.ToString(workingText[0]) + char.ToString(delimiter), 1) + 1;
+                    result.Add(workingText.Substring(0, endOfBlockIndex));
+                    workingText = workingText.Remove(0, endOfBlockIndex + 1);
+                }
+                else
+                {
+                    var delimiterIndex = workingText.IndexOf(delimiter);
+                    var endOfLineIndex = workingText.IndexOf("\n");
+                    delimiterIndex = endOfLineIndex != -1 && endOfLineIndex < delimiterIndex
+                        ? endOfLineIndex
+                        : delimiterIndex;
+                    var newContent = delimiterIndex == -1 
+                        ? workingText
+                        : workingText.Substring(0, delimiterIndex);
+                    result.Add(newContent);
+                    workingText = workingText.Remove(0, delimiterIndex == -1 ? workingText.Length : delimiterIndex + 1);
+                }
+            }
+
+            return result;
         }
 
         private char IdentifyCsvDelimiter(string line)
         {
             foreach (char letter in line)
             {
-                if (!(char.IsLetterOrDigit(letter) || char.IsWhiteSpace(letter) || letter == '\"' || letter == '\'') && delimiters.Contains(letter))
+                if (!(char.IsLetterOrDigit(letter) || char.IsWhiteSpace(letter) || blockIdentifiers.Contains(letter)) && delimiters.Contains(letter))
                 {
                     return letter;
                 }
