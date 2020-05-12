@@ -30,12 +30,26 @@ namespace CSVEditor.ViewModel
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
-            foreach (var directory in Directory.GetDirectories(rootPath, @".git"))
+            List<string> rootPathDirectories = new List<string>();
+
+            try
             {
-                if (Regex.Match(directory, "\\.git").Success)
+                rootPathDirectories = Directory.GetDirectories(rootPath, @".git").ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while checking for GitRepo: " + e.Message);
+            }
+
+            if (rootPathDirectories != null && rootPathDirectories.Count > 0)
+            {
+                foreach (var directory in rootPathDirectories)
                 {
-                    return true;
-                }
+                    if (Regex.Match(directory, "\\.git").Success)
+                    {
+                        return true;
+                    }
+                } 
             }
 
             return false;

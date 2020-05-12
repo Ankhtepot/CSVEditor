@@ -5,6 +5,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
 {
@@ -30,6 +31,23 @@ namespace CSVEditor.ViewModel
             get { return isGitRepo; }
             set { isGitRepo = value; OnPropertyChanged(nameof(IsGitRepo)); }
         }
+
+        private WorkStatus workingStatus;
+
+        public WorkStatus WorkingStatus
+        {
+            get { return workingStatus; }
+            set { workingStatus = value; OnPropertyChanged(); }
+        }
+
+        private int workProgress;
+
+        public int WorkProgress
+        {
+            get { return workProgress; }
+            set { workProgress = value; OnPropertyChanged(); }
+        }
+
 
         private bool isEditing;
 
@@ -112,6 +130,7 @@ namespace CSVEditor.ViewModel
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsGitRepo = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
+            WorkingStatus = WorkStatus.Idle;
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
@@ -130,7 +149,52 @@ namespace CSVEditor.ViewModel
 
             CsvFilesStructure.Clear();
 
-            var foundStructure = FileSystemServices.GetCsvFilesStructureFromRootDirectory(RootRepositoryPath);
+            //var foundStructure = FileSystemServices.GetCsvFilesStructureFromRootDirectory(RootRepositoryPath);
+            //if (foundStructure != null && foundStructure.Count > 0)
+            //{
+            //    foreach (var directory in foundStructure)
+            //    {
+            //        CsvFilesStructure.Add(directory);
+            //    }
+            //}
+            //else
+            //{
+            //    CsvFilesStructure.Add(DEFAULT_DIRECTORY);
+            //}
+            
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += loadDirectoryStructure_DoWork;
+            worker.WorkerReportsProgress = true;
+            worker.ProgressChanged += loadDirectoryStructure_ProgressChanged;
+            worker.RunWorkerCompleted += loadDirectoryStructure_Completed;
+            worker.RunWorkerAsync(RootRepositoryPath);
+            
+        }
+
+        private void loadDirectoryStructure_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            worker.ReportProgress(100);
+
+            WorkingStatus = WorkStatus.Working;
+
+            var path = e.Argument as string;
+            ObservableCollection<DirectoryWithCsv> result = new ObservableCollection<DirectoryWithCsv>();
+
+            result = FileSystemServices.CrawlDirectoryForCsvFiles(result, path, path);
+
+            WorkingStatus = WorkStatus.Idle;
+        }
+
+        private void loadDirectoryStructure_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.UserState == null)
+            {
+                WorkProgress = e.ProgressPercentage;
+                return;
+            }
+
+            var foundStructure = e.UserState as ObservableCollection<DirectoryWithCsv>;
             if (foundStructure != null && foundStructure.Count > 0)
             {
                 foreach (var directory in foundStructure)
@@ -142,6 +206,25 @@ namespace CSVEditor.ViewModel
             {
                 CsvFilesStructure.Add(DEFAULT_DIRECTORY);
             }
+        }
+
+        private void loadDirectoryStructure_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var resultLabel = "";
+            if (e.Cancelled == true)
+            {
+                resultLabel = "Canceled!";
+            }
+            else if (e.Error != null)
+            {
+                resultLabel = "Error: " + e.Error.Message;
+            }
+            else
+            {
+                resultLabel = "Done!";
+            }
+
+            Console.WriteLine($"BW-Completed status: {resultLabel}");
         }
 
         [NotifyPropertyChangedInvocator]

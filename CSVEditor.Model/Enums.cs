@@ -14,5 +14,14 @@ namespace CSVEditor.Model
             URI,
             Select
         }
+
+        public enum WorkStatus 
+        {
+            Idle,
+            Working,
+            Canceled,
+            Error,
+            Done
+        }
     }
 }

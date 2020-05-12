@@ -22,5 +22,14 @@
         <Setter Property="CornerRadius" Value="5"></Setter>
         <Setter Property="Margin" Value="5"/>
     </Style>
+    <!-- TextBlock -->
+    <Style TargetType="TextBlock" x:Key="BaseTextBlockStyle">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}" x:Key="BigTextBoxStyle">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
 
 </ResourceDictionary>

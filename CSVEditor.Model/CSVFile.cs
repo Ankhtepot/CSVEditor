@@ -143,8 +143,11 @@ namespace CSVEditor.Model
                         ObservableCollection<string> newLine = new ObservableCollection<string>();
                         for (int i = 0; i < result.ColumnCount; i++)
                         {
-                            newLine.Add(columnContents[0]);
-                            columnContents.RemoveAt(0);
+                            if (columnContents.Count > 0)
+                            {
+                                newLine.Add(columnContents[0]);
+                                columnContents.RemoveAt(0); 
+                            }
                         }
                         csvLines.Add(newLine);
                     }

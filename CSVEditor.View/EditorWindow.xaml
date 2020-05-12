@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
         xmlns:commands="clr-namespace:CSVEditor.ViewModel.Commands;assembly=CSVEditor.ViewModel"
@@ -26,35 +27,64 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!--#region Load Repo Section -->
+        <!--#region Control Bar -->
         <Border Style="{StaticResource BaseBorderStyle}"
                 Grid.Row="0"
                 VerticalAlignment="Center"
                 >
-            <Grid HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-                <Border Style="{StaticResource LeftRoundedBorderStyle}">
-                    <Button Grid.Column="0"
-                    HorizontalAlignment="Center"
-                    Command="{Binding LoadRepositoryCommand}">LOAD</Button>
-                </Border>
-                <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}">
-                    <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
-                </Border>
-                <Border Grid.Column="2" Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <!--#region column 0: Work Indication -->
+                <uc:ProgressInfoControl WorkStatus="{Binding WorkingStatus}"
+                                        Progress="{Binding WorkProgress}"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        Width="300"
+                                        />
+                <!--#endregion-->
+
+                <!--#region column 1: Load repo section -->
+                <Grid Grid.Column="1" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Style="{StaticResource LeftRoundedBorderStyle}" VerticalAlignment="Center">
+                        <Button Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                Height="25"
+                                Command="{Binding LoadRepositoryCommand}"
+                                >LOAD</Button>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center" Margin="0.5">
+                        <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
+                    </Border>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region column 2: GitRepo control -->
+                <Border Grid.Column="2" Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Center" HorizontalAlignment="Right">
                     <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
                 </Border>
+                <!--#endregion-->
             </Grid>
         </Border>
-        <!--#endregion Load Repo Section-->
+        <!--#endregion Control Bar-->
 
         <!--#region Main Section -->
         <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
