@@ -1,5 +1,6 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Interfaces;
+using CSVEditor.ViewModel.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,48 +9,13 @@ using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel.BackgroundWorkers
 {
-    public class LoadDirectoriesWithCsvWorker : IWorker
+    public class LoadDirectoriesWithCsvWorker : WorkerAbs
     {
-        public BackgroundWorker Worker;
-
-        private static LoadDirectoriesWithCsvWorker instance;
-
-        private EditorVM VM { get; set; }
-
-        public LoadDirectoriesWithCsvWorker(EditorVM vM)
+        public LoadDirectoriesWithCsvWorker(EditorVM vM) : base (vM)
         {
-            VM = vM ?? throw new ArgumentNullException(nameof(vM));
-
-            Worker = new BackgroundWorker();
-            Worker.DoWork += loadDirectoryStructure_DoWork;
-            Worker.WorkerReportsProgress = true;
-            Worker.WorkerSupportsCancellation = true;
-            Worker.ProgressChanged += loadDirectoryStructure_ProgressChanged;
-            Worker.RunWorkerCompleted += loadDirectoryStructure_Completed;
         }
 
-        public static LoadDirectoriesWithCsvWorker CreateWith(EditorVM VM)
-        {
-            if (instance != null)
-            {
-                return instance;
-            }
-
-            instance = new LoadDirectoriesWithCsvWorker(VM);
-            return instance;
-        }
-
-        public void RunAsync(object forPath)
-        {
-            Worker.RunWorkerAsync((string)forPath);
-        }
-
-        public void CancelAsync()
-        {
-            Worker.CancelAsync();
-        }
-
-        private void loadDirectoryStructure_DoWork(object sender, DoWorkEventArgs e)
+        protected override void _DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
             worker.ReportProgress(100);
@@ -89,7 +55,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             });            
         }
 
-        private void loadDirectoryStructure_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.UserState == null)
             {
@@ -108,28 +74,6 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             {
                 VM.CsvFilesStructure.Add(VM.DEFAULT_DIRECTORY);
             }
-        }
-
-        private void loadDirectoryStructure_Completed(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var resultInfo = "";
-            if (e.Cancelled == true)
-            {
-                resultInfo = "Canceled!";
-                VM.WorkingStatus = WorkStatus.Canceled;
-            }
-            else if (e.Error != null)
-            {
-                resultInfo = "Error: " + e.Error.Message;
-                VM.WorkingStatus = WorkStatus.Error;
-            }
-            else
-            {
-                resultInfo = "Done!";
-                VM.WorkingStatus = WorkStatus.Done;
-            }
-
-            Console.WriteLine($"BW:LoadDirectoriesFromPathWorker - Completed status: {resultInfo}");
         }
     }
 }

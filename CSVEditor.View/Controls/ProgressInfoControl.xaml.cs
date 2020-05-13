@@ -117,7 +117,7 @@ namespace CSVEditor.View.Controls
             control.WorkProgressBar.IsIndeterminate = false;
             control.WorkProgressBar.Value = 0;
             control.WorkProgressBar.Visibility = Visibility.Collapsed;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             control.WorkStatus = WorkStatus.Idle;
         }
     }

@@ -13,7 +13,7 @@ namespace CSVEditor.ViewModel.Abstracts
     {
         public BackgroundWorker Worker;
 
-        private EditorVM VM { get; set; }
+        protected EditorVM VM { get; set; }
 
         public WorkerAbs(EditorVM vM)
         {

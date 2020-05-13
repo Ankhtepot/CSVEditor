@@ -37,7 +37,7 @@
                          Grid.Column="2"
                          Minimum="0"
                          Maximum="100"
-                         Visibility="Visible"
+                         Visibility="Collapsed"
                          Orientation="Horizontal"
                          Margin="5"
                          Height="15"
