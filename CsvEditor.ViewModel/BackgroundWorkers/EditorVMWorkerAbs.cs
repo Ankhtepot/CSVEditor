@@ -1,21 +1,18 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel.Abstracts
 {
-    public abstract class WorkerAbs : IWorker
+    public abstract class EditorVMWorkerAbs : IWorker
     {
         public BackgroundWorker Worker;
 
         protected EditorVM VM { get; set; }
 
-        public WorkerAbs(EditorVM vM)
+        public EditorVMWorkerAbs(EditorVM vM)
         {
             VM = vM ?? throw new ArgumentNullException(nameof(vM));
 

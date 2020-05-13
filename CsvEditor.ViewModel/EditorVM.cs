@@ -3,13 +3,10 @@ using CSVEditor.ViewModel.BackgroundWorkers;
 using CSVEditor.ViewModel.Commands;
 using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
