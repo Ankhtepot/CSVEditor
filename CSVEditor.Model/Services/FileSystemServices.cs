@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using CSVEditor.Model;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -55,39 +54,42 @@ namespace CSVEditor.ViewModel
             return false;
         }
 
-        public static ObservableCollection<DirectoryWithCsv> GetCsvFilesStructureFromRootDirectory(string rootPath)
+        public static List<string> GetDirectoriesFromRootPath(string rootPath)
         {
-            var result = CrawlDirectoryForCsvFiles(new ObservableCollection<DirectoryWithCsv>(), rootPath, rootPath);
-            return result;
-        }
-
-        public static ObservableCollection<DirectoryWithCsv> CrawlDirectoryForCsvFiles(ObservableCollection<DirectoryWithCsv> resultCollection, string rootPath, string path)
-        {
-            var directoryCsvFiles = ScanDirectory(rootPath, path);
-
-            if (directoryCsvFiles != null)
+            if (!Directory.Exists(rootPath))
             {
-                resultCollection.Add(directoryCsvFiles);
+                return null;
             }
 
-            IEnumerable<string> directories = new List<string>();
+            IEnumerable<string> result = getDirectoriesFromPath(rootPath);
+
+            foreach (var directory in result.Where(dir => !Regex.Match(dir, "\\.git").Success))
+            {
+                //Console.WriteLine("Scanning directory: " + directory);
+                result = result.Concat(GetDirectoriesFromRootPath(directory)).ToList();
+            }
+
+            return result.ToList();
+        }
+
+        private static List<string> getDirectoriesFromPath(string path)
+        {
+            List<string> directories = new List<string>();
 
             try
             {
-                directories = Directory.GetDirectories(path);
+                directories = Directory.GetDirectories(path).ToList();
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine($"Insufficient rights to scan CSV files in \"{path}\".");
+                Console.WriteLine($"Insufficient rights to scan direcotry at \"{path}\".");
             }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine($"Uknown error occured while reading directories at \"{path}\".");
+            //}
 
-            foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
-            {
-                //Console.WriteLine("Scanning directory: " + path);
-                CrawlDirectoryForCsvFiles(resultCollection, rootPath, directory);
-            }
-
-            return resultCollection;
+            return directories;
         }
 
         public static DirectoryWithCsv ScanDirectory(string rootPath, string path)
@@ -102,6 +104,10 @@ namespace CSVEditor.ViewModel
             {
                 Console.WriteLine($"Insufficient rights to read all files in \"{path}\".");
             }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine($"Unexpected error occured: {e.Message}");
+            //}
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
             directoryPath = directoryPath == "." ? Constants.ROOT_DIRECTORY : directoryPath;

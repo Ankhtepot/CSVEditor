@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel.Commands
 {
@@ -16,7 +17,13 @@ namespace CSVEditor.ViewModel.Commands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if(parameter == null)
+            {
+                return true;
+            }
+
+            var status = (WorkStatus)parameter;
+            return status == WorkStatus.Idle;
         }
 
         public void Execute(object parameter)

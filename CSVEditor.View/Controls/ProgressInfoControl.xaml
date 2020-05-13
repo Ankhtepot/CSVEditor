@@ -7,29 +7,29 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="300">
+             d:DesignHeight="50" d:DesignWidth="70"
+             >
 
     <UserControl.Resources>
         <converters:WorkStatusToTextConverter x:Key="WorkStatusToTextConverter"/>
     </UserControl.Resources>
     
-    <Border Style="{StaticResource BaseBorderStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" MaxWidth="100"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="36"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" 
+            <TextBlock Grid.Column="1" 
                        x:Name="WorkStatusTextBlock"
-                       Style="{StaticResource BigTextBoxStyle}"/>
-            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="0,2,5,2" VerticalAlignment="Center">
-                <fa:ImageAwesome Grid.Column="1"
-                                 x:Name="Spinner"
+                       Style="{StaticResource BigTextBoxStyle}"
+                       HorizontalAlignment="Left"/>
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="5,2,5,2" VerticalAlignment="Center">
+                <fa:ImageAwesome x:Name="Spinner"
                                  Icon="Cog" Width="25"
                                  Margin="2"/>
             </Border>
@@ -40,8 +40,8 @@
                          Visibility="Visible"
                          Orientation="Horizontal"
                          Margin="5"
+                         Height="15"
                          IsIndeterminate="False"
                          />
         </Grid>
-    </Border>
 </UserControl>

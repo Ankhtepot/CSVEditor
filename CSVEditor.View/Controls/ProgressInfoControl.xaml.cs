@@ -47,13 +47,14 @@ namespace CSVEditor.View.Controls
         private static void ProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ProgressInfoControl control = (ProgressInfoControl)d;
-            var progressValue = Math.Max((int)e.NewValue, 0);
-            if(progressValue > 100)
+            var progressValue = (int)e.NewValue;
+            if(progressValue >= 100)
             {
                 control.WorkProgressBar.IsIndeterminate = true;
             }
             else
             {
+                control.WorkProgressBar.IsIndeterminate = false;
                 control.WorkProgressBar.Value = progressValue;
             }
         }
@@ -74,53 +75,50 @@ namespace CSVEditor.View.Controls
 
         private static void manageWorkStatus(WorkStatus status, ProgressInfoControl control)
         {
-            var statusText = Constants.UNKNOWN_STATE;
             switch (status)
             {
                 case WorkStatus.Idle:
                     {
-                        resetSpinnerAndProgressBarToDefaultStateDelayed(control);
-                        statusText = Constants.IDLE_WORK_STATUS;
+                        control.WorkStatusTextBlock.Text = Constants.IDLE_WORK_STATUS;
+                        control.Spinner.Spin = false;
+                        control.WorkProgressBar.IsIndeterminate = false;
+                        control.WorkProgressBar.Value = 0;
                     };
                     break;
                 case WorkStatus.Working:
                     {
                         control.WorkProgressBar.Visibility = Visibility.Visible;
                         control.Spinner.Spin = true;
-                        statusText = Constants.WORKING_WORK_STATUS;
+                        control.WorkStatusTextBlock.Text = Constants.WORKING_WORK_STATUS;
                     };
                         break;
                 case WorkStatus.Canceled:
                     {
-                        resetSpinnerAndProgressBarToDefaultStateDelayed(control);
-                        statusText = Constants.CANCELED_WORK_STATUS;
+                        resetSpinnerAndProgressBarToIdleStateDelayed(control, Constants.CANCELED_WORK_STATUS);
                     };
                     break;
                 case WorkStatus.Error:
                     {
-                        resetSpinnerAndProgressBarToDefaultStateDelayed(control);
-                        statusText = Constants.ERROR_WORK_STATUS;
+                        resetSpinnerAndProgressBarToIdleStateDelayed(control, Constants.ERROR_WORK_STATUS);
                     };
                     break;
                 case WorkStatus.Done:
                     {
-                        resetSpinnerAndProgressBarToDefaultStateDelayed(control);
-                        statusText = Constants.COMPLETED_WORK_STATUS;
+                        resetSpinnerAndProgressBarToIdleStateDelayed(control, Constants.COMPLETED_WORK_STATUS);
                     };
                     break;
-                default: statusText =  Constants.UNKNOWN_STATE; break;
             }
-
-            control.WorkStatusTextBlock.Text = statusText;
         }
 
-        private static async void resetSpinnerAndProgressBarToDefaultStateDelayed(ProgressInfoControl control)
+        private static async void resetSpinnerAndProgressBarToIdleStateDelayed(ProgressInfoControl control, string fromState)
         {
-            await Task.Delay(1000);
+            control.WorkStatusTextBlock.Text = fromState;
             control.Spinner.Spin = false;
             control.WorkProgressBar.IsIndeterminate = false;
             control.WorkProgressBar.Value = 0;
-            control.WorkProgressBar.Visibility = Visibility.Hidden;
+            control.WorkProgressBar.Visibility = Visibility.Collapsed;
+            await Task.Delay(3000);
+            control.WorkStatus = WorkStatus.Idle;
         }
     }
 }

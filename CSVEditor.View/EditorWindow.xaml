@@ -13,6 +13,7 @@
         Title="CSV Editor" 
         Height="450" 
         Width="1000"
+        MinWidth="600"
         >
 
     <Window.Resources>
@@ -20,6 +21,7 @@
         <converters:BoolToGitRepoFoundConverter x:Key="BoolToGitRepoFoundConverter"/>
         <converters:AbsPathToFileNameConverter x:Key="AbsPathToFileNameConverter"/>
         <converters:AbsPathToRawTextConverter x:Key="AbsPathToRawTextConverter"/>
+        <converters:WorkStatusToEnabledConverter x:Key="WorkStatusToEnabledConverter"/>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource EditorVM}" VerticalAlignment="Stretch">
@@ -46,10 +48,11 @@
                 </Grid.RowDefinitions>
 
                 <!--#region column 0: Work Indication -->
-                <uc:ProgressInfoControl WorkStatus="{Binding WorkingStatus}"
+                <uc:ProgressInfoControl WorkStatus="{Binding WorkingStatus, Mode=TwoWay}"
                                         Progress="{Binding WorkProgress}"
                                         Grid.Column="0"
                                         HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
                                         Width="300"
                                         />
                 <!--#endregion-->
@@ -57,20 +60,29 @@
                 <!--#region column 1: Load repo section -->
                 <Grid Grid.Column="1" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
 
-                    <Border Style="{StaticResource LeftRoundedBorderStyle}" VerticalAlignment="Center">
+                    <!--<Border Style="{StaticResource LeftRoundedBorderStyle}" VerticalAlignment="Center">-->
                         <Button Grid.Column="0"
-                                HorizontalAlignment="Center"
-                                Height="25"
+                                Content="LOAD"
+                                HorizontalAlignment="Left"
+                                Height="28"
+                                Width="60"
                                 Command="{Binding LoadRepositoryCommand}"
-                                >LOAD</Button>
-                    </Border>
+                                CommandParameter="{Binding WorkingStatus}"
+                                IsEnabled="{Binding WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
+                                Margin="1,0"
+                                >
+                            <Button.Resources>
+                                <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}"/>
+                            </Button.Resources>
+                        </Button>
+                    <!--</Border>-->
                     <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center" Margin="0.5">
                         <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
                     </Border>
@@ -101,12 +113,13 @@
                 </Grid.RowDefinitions>
 
                 <!--#region Loaded files section -->
-                <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0">
+                <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="5,5,0,5">
                     <Grid VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
+                        
                         <TextBlock Text="Loaded CSV files" 
                                    Margin="10,0"
                                    Grid.Row="0"/>
@@ -116,6 +129,7 @@
                                  x:Name="DirectoryListBoxOutter"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  VerticalAlignment="Stretch"
+                                 IsEnabled="{Binding WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                                  >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -139,18 +153,19 @@
                 <!--#endregion Loaded files section-->
 
                 <!--#region GriSplitter -->
-                <GridSplitter Grid.Column="1" 
-                              ResizeDirection="Columns"
-                              HorizontalAlignment="Stretch"
-                              Height="100"
-                              Background="BlueViolet"
-                              VerticalAlignment="Center"
-                              Margin="5"
-                              ></GridSplitter>
+                <GridSplitter Grid.Column="1"
+                            ResizeDirection="Columns"
+                            HorizontalAlignment="Center"
+                            Width="5"
+                            Height="100"
+                            Background="Blue"
+                            VerticalAlignment="Center"
+                            Margin="0"
+                            ></GridSplitter>
                 <!--#endregion GridSplitter-->
 
                 <!--#region EditTab -->
-                <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2">
+                <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
                     <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <!--#region RawEdit -->
                         <TabItem Header="Raw Edit">

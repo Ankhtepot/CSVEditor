@@ -22,6 +22,11 @@
         <Setter Property="CornerRadius" Value="5"></Setter>
         <Setter Property="Margin" Value="5"/>
     </Style>
+    <Style TargetType="Border" x:Key="LeftSideRoundedBorderForButtonStyle">
+        <Setter Property="CornerRadius" Value="15,0,0,15"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
     <!-- TextBlock -->
     <Style TargetType="TextBlock" x:Key="BaseTextBlockStyle">
         <Setter Property="Margin" Value="5"/>

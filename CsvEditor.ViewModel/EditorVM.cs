@@ -1,17 +1,22 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.ViewModel.BackgroundWorkers;
 using CSVEditor.ViewModel.Commands;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
-        private readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
+        public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
 
         private string rootRepositoryPath;
 
@@ -37,7 +42,12 @@ namespace CSVEditor.ViewModel
         public WorkStatus WorkingStatus
         {
             get { return workingStatus; }
-            set { workingStatus = value; OnPropertyChanged(); }
+            set 
+            {
+                workingStatus = value;
+                Console.WriteLine($"EditorVM:Working status = {value}");
+                OnPropertyChanged(nameof(WorkingStatus)); 
+            }
         }
 
         private int workProgress;
@@ -94,7 +104,7 @@ namespace CSVEditor.ViewModel
             {
                 selectedFile = value;
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
-                SelectedCsvFile = new CsvFile(selectedFile);
+                ProcessSelectedFile();
                 OnPropertyChanged(nameof(SelectedFile));
             }
         }
@@ -104,10 +114,8 @@ namespace CSVEditor.ViewModel
         public CsvFile SelectedCsvFile
         {
             get { return selectedCsvFile; }
-            set { selectedCsvFile = value; }
+            set { selectedCsvFile = value; OnPropertyChanged(); }
         }
-
-
 
         public ObservableCollection<CsvFile> CsvFiles { get; set; }
 
@@ -143,88 +151,30 @@ namespace CSVEditor.ViewModel
 
         public void LoadRepository()
         {
+            if(WorkingStatus != WorkStatus.Idle)
+            {
+                return;
+            }
+
+            SelectedFile = null;
+
             RootRepositoryPath = FileSystemServices.LoadRootRepositoryPath();
 
             IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
 
             CsvFilesStructure.Clear();
 
-            //var foundStructure = FileSystemServices.GetCsvFilesStructureFromRootDirectory(RootRepositoryPath);
-            //if (foundStructure != null && foundStructure.Count > 0)
-            //{
-            //    foreach (var directory in foundStructure)
-            //    {
-            //        CsvFilesStructure.Add(directory);
-            //    }
-            //}
-            //else
-            //{
-            //    CsvFilesStructure.Add(DEFAULT_DIRECTORY);
-            //}
-            
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += loadDirectoryStructure_DoWork;
-            worker.WorkerReportsProgress = true;
-            worker.ProgressChanged += loadDirectoryStructure_ProgressChanged;
-            worker.RunWorkerCompleted += loadDirectoryStructure_Completed;
-            worker.RunWorkerAsync(RootRepositoryPath);
-            
+            //LoadDirectoriesWithCsvWorker.CreateWith(this).RunAsync(RootRepositoryPath);
+            new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);
         }
 
-        private void loadDirectoryStructure_DoWork(object sender, DoWorkEventArgs e)
+        public void ProcessSelectedFile()
         {
-            BackgroundWorker worker = (BackgroundWorker)sender;
-            worker.ReportProgress(100);
-
-            WorkingStatus = WorkStatus.Working;
-
-            var path = e.Argument as string;
-            ObservableCollection<DirectoryWithCsv> result = new ObservableCollection<DirectoryWithCsv>();
-
-            result = FileSystemServices.CrawlDirectoryForCsvFiles(result, path, path);
-
-            WorkingStatus = WorkStatus.Idle;
-        }
-
-        private void loadDirectoryStructure_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (e.UserState == null)
+            if(File.Exists(SelectedFile))
             {
-                WorkProgress = e.ProgressPercentage;
-                return;
+                //GetCsvFileFromPathWorker.CreateWith(this).RunAsync(SelectedFile);
+                new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
             }
-
-            var foundStructure = e.UserState as ObservableCollection<DirectoryWithCsv>;
-            if (foundStructure != null && foundStructure.Count > 0)
-            {
-                foreach (var directory in foundStructure)
-                {
-                    CsvFilesStructure.Add(directory);
-                }
-            }
-            else
-            {
-                CsvFilesStructure.Add(DEFAULT_DIRECTORY);
-            }
-        }
-
-        private void loadDirectoryStructure_Completed(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var resultLabel = "";
-            if (e.Cancelled == true)
-            {
-                resultLabel = "Canceled!";
-            }
-            else if (e.Error != null)
-            {
-                resultLabel = "Error: " + e.Error.Message;
-            }
-            else
-            {
-                resultLabel = "Done!";
-            }
-
-            Console.WriteLine($"BW-Completed status: {resultLabel}");
         }
 
         [NotifyPropertyChangedInvocator]
