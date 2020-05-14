@@ -5,7 +5,7 @@ using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel.BackgroundWorkers
 {
-    public class GetCsvFileFromPathWorker : EditorVMWorkerAbs
+    public class GetCsvFileFromPathWorker : AbstractEditorVMWorker
     {
         public GetCsvFileFromPathWorker(EditorVM vM) : base(vM) {}
 

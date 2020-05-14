@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using CSVEditor.ViewModel.Commands;
 using JetBrains.Annotations;
@@ -52,7 +53,17 @@ namespace CSVEditor.ViewModel
         public int WorkProgress
         {
             get { return workProgress; }
-            set { workProgress = value; OnPropertyChanged(); }
+            set {
+                workProgress = value;
+                OnPropertyChanged(); }
+        }
+
+        private AbstractEditorVMWorker activeWorker;
+
+        public AbstractEditorVMWorker ActiveWorker //this field is being handled by AbstractEditorVMWorker
+        {
+            get { return activeWorker; }
+            set { activeWorker = value; OnPropertyChanged(); }
         }
 
 
@@ -125,6 +136,7 @@ namespace CSVEditor.ViewModel
         //*******************************
 
         public LoadRepositoryCommand LoadRepositoryCommand { get; set; }
+        public CancelActiveWorkerAsyncCommand CancelActiveWorkerAsyncCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
@@ -138,6 +150,7 @@ namespace CSVEditor.ViewModel
             WorkingStatus = WorkStatus.Idle;
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
+            CancelActiveWorkerAsyncCommand = new CancelActiveWorkerAsyncCommand(this);
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
             CsvFilesStructure.Add(DEFAULT_DIRECTORY);
         }
@@ -148,28 +161,26 @@ namespace CSVEditor.ViewModel
 
         public void LoadRepository()
         {
-            if(WorkingStatus != WorkStatus.Idle)
-            {
-                return;
-            }
-
             SelectedFile = null;
 
-            RootRepositoryPath = FileSystemServices.LoadRootRepositoryPath();
+            RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath();
 
             IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
 
             CsvFilesStructure.Clear();
 
-            //LoadDirectoriesWithCsvWorker.CreateWith(this).RunAsync(RootRepositoryPath);
             new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);
+        }
+
+        public void CancelActiveWorkerAsync()
+        {
+            ActiveWorker?.CancelAsync();
         }
 
         public void ProcessSelectedFile()
         {
             if(File.Exists(SelectedFile))
             {
-                //GetCsvFileFromPathWorker.CreateWith(this).RunAsync(SelectedFile);
                 new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
             }
         }

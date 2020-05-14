@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:CSVEditor.View">
 
+    <!--Border-->
     <!--Rounded neighboring textblocks-->
     <Style TargetType="Border" x:Key="LeftRoundedBorderStyle">
         <Setter Property="CornerRadius" Value="10,0,0,10"></Setter>
@@ -15,7 +16,7 @@
         <Setter Property="Margin" Value="0,5,5,5"></Setter>
         <Setter Property="Background" Value="Azure"></Setter>
     </Style>
-    <!--Border-->
+    <!-- -->
     <Style TargetType="Border" x:Key="BaseBorderStyle">
         <Setter Property="BorderBrush" Value="Black"></Setter>
         <Setter Property="BorderThickness" Value="1"></Setter>
@@ -35,6 +36,12 @@
     <Style TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}" x:Key="BigTextBoxStyle">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <!-- Button -->
+    <Style TargetType="Button" x:Key="CancelButtonStyle">
+        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="Background" Value="MistyRose"/>
+        <Setter Property="BorderBrush" Value="Red"/>
     </Style>
 
 </ResourceDictionary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,7 +12,7 @@ namespace CSVEditor.ViewModel
 {
     public class FileSystemServices
     {
-        public static string LoadRootRepositoryPath()
+        public static string QueryUserForRootRepositoryPath()
         {
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
@@ -54,26 +55,39 @@ namespace CSVEditor.ViewModel
             return false;
         }
 
-        public static List<string> GetDirectoriesFromRootPath(string rootPath)
+        public static List<string> GetDirectoriesFromRootPath(string rootPath, BackgroundWorker worker = null)
         {
             if (!Directory.Exists(rootPath))
             {
                 return null;
             }
 
-            IEnumerable<string> result = getDirectoriesFromPath(rootPath);
+            IEnumerable<string> directories = getDirectoriesFromPath(rootPath, worker) ?? new List<string>();
 
-            foreach (var directory in result.Where(dir => !Regex.Match(dir, "\\.git").Success))
+            //if(directories == null)
+            //{
+            //    directories = new List<string>();
+            //}
+
+            foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
                 //Console.WriteLine("Scanning directory: " + directory);
-                result = result.Concat(GetDirectoriesFromRootPath(directory)).ToList();
+                var recursiveYield = GetDirectoriesFromRootPath(directory, worker);
+                directories = recursiveYield != null
+                    ? directories.Concat(recursiveYield).ToList()
+                    : null;
             }
 
-            return result.ToList();
+            return directories != null ? directories.ToList() : null;
         }
 
-        private static List<string> getDirectoriesFromPath(string path)
+        private static List<string> getDirectoriesFromPath(string path, BackgroundWorker worker = null)
         {
+            if(worker != null && worker.CancellationPending)
+            {
+                return null;
+            }
+
             List<string> directories = new List<string>();
 
             try
@@ -83,11 +97,7 @@ namespace CSVEditor.ViewModel
             catch (UnauthorizedAccessException e)
             {
                 Console.WriteLine($"Insufficient rights to scan direcotry at \"{path}\".");
-            }
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine($"Uknown error occured while reading directories at \"{path}\".");
-            //}
+            }            
 
             return directories;
         }
@@ -104,10 +114,6 @@ namespace CSVEditor.ViewModel
             {
                 Console.WriteLine($"Insufficient rights to read all files in \"{path}\".");
             }
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine($"Unexpected error occured: {e.Message}");
-            //}
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
             directoryPath = directoryPath == "." ? Constants.ROOT_DIRECTORY : directoryPath;

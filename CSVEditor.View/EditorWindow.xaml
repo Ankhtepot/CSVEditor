@@ -22,6 +22,7 @@
         <converters:AbsPathToFileNameConverter x:Key="AbsPathToFileNameConverter"/>
         <converters:AbsPathToRawTextConverter x:Key="AbsPathToRawTextConverter"/>
         <converters:WorkStatusToEnabledConverter x:Key="WorkStatusToEnabledConverter"/>
+        <converters:WorkStatusToVisibilityConverter x:Key="WorkStatusToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource EditorVM}" VerticalAlignment="Stretch">
@@ -44,6 +45,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
@@ -94,6 +96,20 @@
                     <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
                 </Border>
                 <!--#endregion-->
+
+                <Button Grid.Row="1"
+                        Content="Cancel process"
+                        HorizontalAlignment="Left"                        
+                        Visibility="{Binding WorkingStatus, Converter={StaticResource WorkStatusToVisibilityConverter}}"
+                        Style="{StaticResource CancelButtonStyle}"
+                        Command="{Binding CancelActiveWorkerAsyncCommand}"
+                        >
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </Grid>
         </Border>
         <!--#endregion Control Bar-->

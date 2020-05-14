@@ -6,17 +6,18 @@ using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel.Abstracts
 {
-    public abstract class EditorVMWorkerAbs : IWorker
+    public abstract class AbstractEditorVMWorker : IWorker
     {
         public BackgroundWorker Worker;
 
         protected EditorVM VM { get; set; }
 
-        public EditorVMWorkerAbs(EditorVM vM)
+        public AbstractEditorVMWorker(EditorVM vM)
         {
             VM = vM ?? throw new ArgumentNullException(nameof(vM));
 
             Worker = new BackgroundWorker();
+            VM.ActiveWorker = this;
             Worker.DoWork += _DoWork;
             Worker.WorkerReportsProgress = true;
             Worker.WorkerSupportsCancellation = true;
@@ -58,6 +59,18 @@ namespace CSVEditor.ViewModel.Abstracts
             }
 
             Console.WriteLine($"BW:{GetType().Name} - Completed status: {resultInfo}");
+            VM.ActiveWorker = null;
+        }
+
+        public void CancelWorker()
+        {
+            Worker.DoWork -= _DoWork;
+            Worker.DoWork += Cancel_DoWork;
+        }
+
+        private void Cancel_DoWork(object o, DoWorkEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }
