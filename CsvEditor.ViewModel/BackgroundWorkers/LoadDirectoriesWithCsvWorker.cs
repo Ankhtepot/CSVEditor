@@ -16,9 +16,9 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
 
-            VM.WorkingStatus = WorkStatus.Working;
+            VM.AsyncVM.WorkingStatus = WorkStatus.Working;
 
-            worker.ReportProgress(VM.WorkProgress + 100); // +100 to always trigger change for progress value >=100
+            worker.ReportProgress(VM.AsyncVM.WorkProgress + 100); // +100 to always trigger change for progress value >=100
             var path = e.Argument as string;
 
             var directories = new List<string> { path };
@@ -65,12 +65,12 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
     {
         if (e.UserState == null)
         {
-            VM.WorkProgress = e.ProgressPercentage;
+            VM.AsyncVM.WorkProgress = e.ProgressPercentage;
             return;
         }
 
         var foundDirectoryWithCsv = e.UserState as DirectoryWithCsv;
-        VM.WorkProgress = e.ProgressPercentage;
+        VM.AsyncVM.WorkProgress = e.ProgressPercentage;
         if (foundDirectoryWithCsv != null)
         {
             VM.CsvFilesStructure.Add(foundDirectoryWithCsv);

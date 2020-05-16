@@ -23,8 +23,8 @@ namespace CSVEditor.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine("Canceling Active Worker: " + VM.ActiveWorker.GetType().Name);
-            VM.CancelActiveWorkerAsync();
+            Console.WriteLine("Canceling Active Worker: " + VM.AsyncVM.ActiveWorker.GetType().Name);
+            VM.AsyncVM.CancelActiveWorkerAsync();
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Services;
+using CSVEditor.ViewModel.Abstracts;
 using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
 {
@@ -30,6 +29,40 @@ namespace CSVEditor.ViewModel
             get { return isConverterProcessing; }
             set { isConverterProcessing = value; OnPropertyChanged(); }
         }
+
+        private WorkStatus workingStatus;
+
+        public WorkStatus WorkingStatus
+        {
+            get { return workingStatus; }
+            set
+            {
+                workingStatus = value;
+                Console.WriteLine($"EditorVM:Working status = {value}");
+                OnPropertyChanged(nameof(WorkingStatus));
+            }
+        }
+
+        private int workProgress;
+
+        public int WorkProgress
+        {
+            get { return workProgress; }
+            set
+            {
+                workProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AbstractEditorVMWorker activeWorker;
+
+        public AbstractEditorVMWorker ActiveWorker //this field is being handled by AbstractEditorVMWorker
+        {
+            get { return activeWorker; }
+            set { activeWorker = value; OnPropertyChanged(); }
+        }
+
 
         private EditorVM editorVM;
 
@@ -83,6 +116,11 @@ namespace CSVEditor.ViewModel
                     Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }
             });
+        }
+
+        public void CancelActiveWorkerAsync()
+        {
+            ActiveWorker?.CancelAsync();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

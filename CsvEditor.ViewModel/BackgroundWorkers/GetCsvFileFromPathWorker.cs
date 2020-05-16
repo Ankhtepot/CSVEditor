@@ -12,8 +12,8 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
         protected override void _DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
-            worker.ReportProgress(VM.WorkProgress + 100);
-            VM.WorkingStatus = WorkStatus.Working;
+            worker.ReportProgress(VM.AsyncVM.WorkProgress + 100);
+            VM.AsyncVM.WorkingStatus = WorkStatus.Working;
             VM.SelectedCsvFile = new CsvFile((string)e.Argument, worker);
 
             if (worker.CancellationPending == true)
@@ -24,7 +24,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
 
         protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            VM.WorkProgress += 100;
+            VM.AsyncVM.WorkProgress += 100;
         }
     }
 }

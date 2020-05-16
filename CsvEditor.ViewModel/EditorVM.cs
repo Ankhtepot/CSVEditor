@@ -33,39 +33,7 @@ namespace CSVEditor.ViewModel
         {
             get { return isGitRepo; }
             set { isGitRepo = value; OnPropertyChanged(nameof(IsGitRepo)); }
-        }
-
-        private WorkStatus workingStatus;
-
-        public WorkStatus WorkingStatus
-        {
-            get { return workingStatus; }
-            set 
-            {
-                workingStatus = value;
-                Console.WriteLine($"EditorVM:Working status = {value}");
-                OnPropertyChanged(nameof(WorkingStatus)); 
-            }
-        }
-
-        private int workProgress;
-
-        public int WorkProgress
-        {
-            get { return workProgress; }
-            set {
-                workProgress = value;
-                OnPropertyChanged(); }
-        }
-
-        private AbstractEditorVMWorker activeWorker;
-
-        public AbstractEditorVMWorker ActiveWorker //this field is being handled by AbstractEditorVMWorker
-        {
-            get { return activeWorker; }
-            set { activeWorker = value; OnPropertyChanged(); }
-        }
-
+        }        
 
         private bool isEditing;
 
@@ -155,7 +123,7 @@ namespace CSVEditor.ViewModel
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsGitRepo = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
-            WorkingStatus = WorkStatus.Idle;
+            AsyncVM.WorkingStatus = WorkStatus.Idle;
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
             CsvFilesStructure.Add(DEFAULT_DIRECTORY);
 
@@ -178,12 +146,7 @@ namespace CSVEditor.ViewModel
             CsvFilesStructure.Clear();
 
             new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);
-        }
-
-        public void CancelActiveWorkerAsync()
-        {
-            ActiveWorker?.CancelAsync();
-        }
+        }       
 
         public void ProcessSelectedFile(string value)
         {

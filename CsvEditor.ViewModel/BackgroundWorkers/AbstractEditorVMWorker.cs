@@ -17,7 +17,7 @@ namespace CSVEditor.ViewModel.Abstracts
             VM = vM ?? throw new ArgumentNullException(nameof(vM));
 
             Worker = new BackgroundWorker();
-            VM.ActiveWorker = this;
+            VM.AsyncVM.ActiveWorker = this;
             Worker.DoWork += _DoWork;
             Worker.WorkerReportsProgress = true;
             Worker.WorkerSupportsCancellation = true;
@@ -45,21 +45,21 @@ namespace CSVEditor.ViewModel.Abstracts
             if (e.Cancelled == true)
             {
                 resultInfo = "Canceled!";
-                VM.WorkingStatus = WorkStatus.Canceled;
+                VM.AsyncVM.WorkingStatus = WorkStatus.Canceled;
             }
             else if (e.Error != null)
             {
                 resultInfo = "Error: " + e.Error.Message;
-                VM.WorkingStatus = WorkStatus.Error;
+                VM.AsyncVM.WorkingStatus = WorkStatus.Error;
             }
             else
             {
                 resultInfo = "Done!";
-                VM.WorkingStatus = WorkStatus.Done;
+                VM.AsyncVM.WorkingStatus = WorkStatus.Done;
             }
 
             Console.WriteLine($"BW:{GetType().Name} - Completed status: {resultInfo}");
-            VM.ActiveWorker = null;
+            VM.AsyncVM.ActiveWorker = null;
         }
 
         public void CancelWorker()
