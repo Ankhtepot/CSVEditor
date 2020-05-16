@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSVEditor.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,12 @@ namespace CSVEditor.View
     /// </summary>
     public partial class EditorWindow : Window
     {
+        public EditorVM EditorVM;
         public EditorWindow()
         {
             InitializeComponent();
+            EditorVM = new EditorVM();
+            TopContainer.DataContext = EditorVM;
         }
     }
 }

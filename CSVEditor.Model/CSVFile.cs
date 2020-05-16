@@ -90,9 +90,9 @@ namespace CSVEditor.Model
             ColumnConfigurations = new ObservableCollection<CsvColumnConfiguration>();
         }
 
-        public CsvFile(string absFilePath)
+        public CsvFile(string absFilePath, BackgroundWorker worker = null)
         {
-            var transformedFile = FileProcessingServices.CsvFileFromAbsPath(absFilePath, blockIdentifiers, delimiters);
+            var transformedFile = FileProcessingServices.CsvFileFromAbsPath(absFilePath, blockIdentifiers, delimiters, worker);
             AbsPath = transformedFile.AbsPath;
             HeaderIndex = transformedFile.HeaderIndex;
             HeadersStrings = transformedFile.HeadersStrings;

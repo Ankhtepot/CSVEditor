@@ -16,16 +16,7 @@
         MinWidth="600"
         >
 
-    <Window.Resources>
-        <vm:EditorVM x:Key="EditorVM"/>
-        <converters:BoolToGitRepoFoundConverter x:Key="BoolToGitRepoFoundConverter"/>
-        <converters:AbsPathToFileNameConverter x:Key="AbsPathToFileNameConverter"/>
-        <converters:AbsPathToRawTextConverter x:Key="AbsPathToRawTextConverter"/>
-        <converters:WorkStatusToEnabledConverter x:Key="WorkStatusToEnabledConverter"/>
-        <converters:WorkStatusToVisibilityConverter x:Key="WorkStatusToVisibilityConverter"/>
-    </Window.Resources>
-
-    <Grid DataContext="{StaticResource EditorVM}" VerticalAlignment="Stretch">
+    <Grid x:Name="TopContainer" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -50,7 +41,7 @@
                 </Grid.RowDefinitions>
 
                 <!--#region column 0: Work Indication -->
-                <uc:ProgressInfoControl WorkStatus="{Binding WorkingStatus, Mode=TwoWay}"
+                <uc:ProgressInfoControl WorkStatus="{Binding WorkingStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Progress="{Binding WorkProgress}"
                                         Grid.Column="0"
                                         HorizontalAlignment="Left"
@@ -222,7 +213,7 @@
                                 <Border Style="{StaticResource BaseBorderStyle}"
                                         Grid.Row="1"
                                         >
-                                    <TextBox Text="{Binding SelectedFile, Converter={StaticResource AbsPathToRawTextConverter}}"
+                                    <TextBox Text="{Binding AsyncVM.SelectedFileRaw}"
                                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                                                 />
                                 </Border>

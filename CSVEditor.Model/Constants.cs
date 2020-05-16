@@ -17,5 +17,6 @@ namespace CSVEditor.Model
         public const string ERROR_WORK_STATUS = "Last task stopped with and error.";
         public const string COMPLETED_WORK_STATUS = "Task completed successfuly.";
         public const string UNKNOWN_STATE = "Unknown state...";
+        public const string PROCESSING_FILE = "Processing File";
     }
 }

@@ -109,10 +109,8 @@ namespace CSVEditor.ViewModel
                 return string.IsNullOrEmpty(selectedFile) ? Constants.NO_FILE_SELECTED : selectedFile;
             }
             set
-            {
-                selectedFile = value;
-                Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
-                ProcessSelectedFile();
+            {                
+                ProcessSelectedFile(value);
                 OnPropertyChanged(nameof(SelectedFile));
             }
         }
@@ -125,11 +123,19 @@ namespace CSVEditor.ViewModel
             set { selectedCsvFile = value; OnPropertyChanged(); }
         }
 
+        private AsyncVM asyncVM;
+
+        public AsyncVM AsyncVM
+        {
+            get { return asyncVM; }
+            set { asyncVM = value; OnPropertyChanged(); }
+        }
+
         public ObservableCollection<CsvFile> CsvFiles { get; set; }
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        
 
         //*******************************
         //********** Commands ***********
@@ -144,15 +150,17 @@ namespace CSVEditor.ViewModel
 
         public EditorVM()
         {
+            AsyncVM = new AsyncVM(this);
+
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsGitRepo = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             WorkingStatus = WorkStatus.Idle;
+            CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
+            CsvFilesStructure.Add(DEFAULT_DIRECTORY);
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CancelActiveWorkerAsyncCommand = new CancelActiveWorkerAsyncCommand(this);
-            CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
-            CsvFilesStructure.Add(DEFAULT_DIRECTORY);
         }
 
         //*******************************
@@ -177,13 +185,18 @@ namespace CSVEditor.ViewModel
             ActiveWorker?.CancelAsync();
         }
 
-        public void ProcessSelectedFile()
+        public void ProcessSelectedFile(string value)
         {
-            if(File.Exists(SelectedFile))
+            if(File.Exists(value))
             {
+                selectedFile = value;
+                Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
                 new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
+                AsyncVM.SetRawTextFromAbsPath(SelectedFile);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

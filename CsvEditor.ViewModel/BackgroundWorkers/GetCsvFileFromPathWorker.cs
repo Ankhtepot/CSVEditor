@@ -12,14 +12,19 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
         protected override void _DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
-            worker.ReportProgress(100);
+            worker.ReportProgress(VM.WorkProgress + 100);
             VM.WorkingStatus = WorkStatus.Working;
-            VM.SelectedCsvFile = new CsvFile((string)e.Argument);
+            VM.SelectedCsvFile = new CsvFile((string)e.Argument, worker);
+
+            if (worker.CancellationPending == true)
+            {
+                e.Cancel = true;
+            }
         }
 
         protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            VM.WorkProgress = 100;
+            VM.WorkProgress += 100;
         }
     }
 }

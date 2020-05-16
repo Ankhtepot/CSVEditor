@@ -83,6 +83,7 @@ namespace CSVEditor.View.Controls
                         control.Spinner.Spin = false;
                         control.WorkProgressBar.IsIndeterminate = false;
                         control.WorkProgressBar.Value = 0;
+                        control.WorkProgressBar.Visibility = Visibility.Collapsed;
                     };
                     break;
                 case WorkStatus.Working:
@@ -112,12 +113,10 @@ namespace CSVEditor.View.Controls
 
         private static async void resetSpinnerAndProgressBarToIdleStateDelayed(ProgressInfoControl control, string fromState)
         {
+            control.WorkStatus = WorkStatus.Idle;
             control.WorkStatusTextBlock.Text = fromState;
-            control.Spinner.Spin = false;
-            control.WorkProgressBar.IsIndeterminate = false;
-            control.WorkProgressBar.Value = 0;
-            control.WorkProgressBar.Visibility = Visibility.Collapsed;
             await Task.Delay(2000);
+            control.WorkStatusTextBlock.Text = Constants.IDLE_WORK_STATUS;
             control.WorkStatus = WorkStatus.Idle;
         }
     }

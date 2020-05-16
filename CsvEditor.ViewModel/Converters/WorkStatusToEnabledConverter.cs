@@ -17,7 +17,7 @@ namespace CSVEditor.ViewModel.Converters
             }
 
             var status = (WorkStatus)value;
-            return status == WorkStatus.Idle;
+            return status != WorkStatus.Working;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

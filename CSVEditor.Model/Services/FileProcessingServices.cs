@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CSVEditor.Services
 {
@@ -22,19 +24,19 @@ namespace CSVEditor.Services
             return "";
         }
 
-        public static string RemoveFirstLine(string text)
+        public static async Task<string> RemoveFirstLineAsync(string text)
         {
-            string[] lines = text.Split(Environment.NewLine).Skip(1).ToArray();
-            return string.Join(Environment.NewLine, lines);
+            string[] lines = await Task.Run(() => text.Split(Environment.NewLine).Skip(1).ToArray());
+            return await Task.Run(() => string.Join(Environment.NewLine, lines));
         }
 
-        public static CsvFile CsvFileFromAbsPath(string path, ObservableCollection<char> blockIdentifiers, ObservableCollection<char> delimiters)
+        public static CsvFile CsvFileFromAbsPath(string path, ObservableCollection<char> blockIdentifiers, ObservableCollection<char> delimiters, BackgroundWorker worker = null)
         {
             CsvFile result = new CsvFile();
 
             if (File.Exists(path))
             {
-                var text = FileProcessingServices.GetRawFileText(path);
+                var text = GetRawFileText(path);
 
                 if (text == "") return result;
 
@@ -63,10 +65,15 @@ namespace CSVEditor.Services
                     }
 
                     var csvLines = new ObservableCollection<ObservableCollection<string>>();
-                    var columnContents = GetColumnContents(FileProcessingServices.RemoveFirstLine(text), result.Delimiter, blockIdentifiers);
+                    var columnContents = GetColumnContents(RemoveFirstLineAsync(text).Result, result.Delimiter, blockIdentifiers, worker) ?? new ObservableCollection<string>();
 
-                    while (columnContents.Count > 0)
+                    while (columnContents?.Count > 0)
                     {
+                        if(worker?.CancellationPending == true)
+                        {
+                            return null;
+                        }
+
                         ObservableCollection<string> newLine = new ObservableCollection<string>();
                         for (int i = 0; i < result.ColumnCount; i++)
                         {
@@ -90,7 +97,7 @@ namespace CSVEditor.Services
             return result;
         }
 
-        public static ObservableCollection<string> GetColumnContents(string text, char delimiter, ObservableCollection<char> blockIdentifiers)
+        public static ObservableCollection<string> GetColumnContents(string text, char delimiter, ObservableCollection<char> blockIdentifiers, BackgroundWorker worker = null)
         {
             ObservableCollection<string> result = new ObservableCollection<string>();
 
@@ -98,9 +105,14 @@ namespace CSVEditor.Services
 
             while (workingText != string.Empty)
             {
+                if(worker?.CancellationPending == true)
+                {
+                    return null;
+                }
+
                 if (workingText[0] == delimiter)
                 {
-                    result.Add("");
+                    result.Add(""); // Adding empty string as there needs to be an record of empty content between delimiters in a resulting list.
                     workingText = workingText.Remove(0, 1);
                 }
                 else
