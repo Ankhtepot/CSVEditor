@@ -174,8 +174,8 @@
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
                     <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <!--#region RawEdit -->
-                        <TabItem Header="Raw Edit">
+                        <!--#region RawGridEdit -->
+                        <TabItem Header="Raw Grid Edit">
                             <DockPanel >
                                 <uc:FileInfoControl DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center"
                                                     SelectedText="{Binding SelectedText}"
@@ -191,12 +191,10 @@
                                         <RotateTransform Angle="90"/>
                                     </ToggleButton.LayoutTransform>
                                 </ToggleButton>
-                                <DataGrid>
-
-                                </DataGrid>
+                                <uc:CsvFileGridViewerControl InputCsvFile="{Binding SelectedCsvFile}"/>
                             </DockPanel>
                         </TabItem>
-                        <!--#endregion RawEdit-->
+                        <!--#endregion RawGridEdit-->
 
                         <!--#region RawText -->
                         <TabItem Header="Raw File">

@@ -86,7 +86,7 @@ namespace CSVEditor.ViewModel
 
             UpdateProcessingFileTextTask(cts.Token);
             string rawText = await Task.Run(() => GetRawTextTask(cts, path));
-            await Task.Delay(UPDATE_PROGRESS_DELAY);
+            await Task.Delay(UPDATE_PROGRESS_DELAY * 3);
             SelectedFileRaw = rawText;
         }
 
@@ -111,8 +111,8 @@ namespace CSVEditor.ViewModel
                 {
                     await Task.Delay(UPDATE_PROGRESS_DELAY);
                     var dotsCount = SelectedFileRaw.Count<char>(ch => ch == '.');
-
-                    SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", "");
+                    //TODO: fix updating after main task finishes
+                    SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", ""); 
                     Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }
             });
