@@ -17,7 +17,7 @@ namespace CSVEditor.View.Controls.ControlsViewModels
         public CsvFile LocalCsvFile
         {
             get { return csvFile; }
-            set { csvFile = value; TestText = value?.Delimiter.ToString(); OnPropertyChanged(); }
+            set { csvFile = value; OnPropertyChanged(); }
         }
 
         private string testText;

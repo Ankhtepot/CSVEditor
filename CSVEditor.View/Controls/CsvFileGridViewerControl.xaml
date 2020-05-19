@@ -8,6 +8,30 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel x:Name="TopContainer">
         <TextBlock Text="Csv File Grid View Control IS ALIVE!!!"/>
-        <TextBlock Text="{Binding TestText}"/>
+        <!--<DataGrid x:Name="CsvFileDataGrid" 
+                  CanUserResizeColumns="True" 
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding LocalCsvFile.Lines}"
+                  >
+            --><!--<DataGridTemplateColumn>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>--><!--            
+        </DataGrid>-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Test Text:" Grid.Column="0"/>
+            <TextBlock Text="{Binding TestText}" Grid.Column="1"/>
+        </Grid>
+        <ListView x:Name="OutterListView">
+            
+        </ListView>
     </StackPanel>
 </UserControl>

@@ -34,8 +34,27 @@ namespace CSVEditor.View.Controls
 
         private static void InputCsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            var control = (CsvFileGridViewerControl)d;
+            var grid = control.OutterListView;
             var newValue = (CsvFile)e.NewValue;
-            ((CsvFileGridViewerControl)d).ControlVM.LocalCsvFile = (CsvFile)e.NewValue;
+            control.ControlVM.LocalCsvFile = newValue;
+            control.ControlVM.TestText = control.ControlVM.LocalCsvFile?.Lines?[0][0];
+            //control.OutterListView.ItemsSource = control.ControlVM.LocalCsvFile?.Lines?[0];
+            var csvFile = control.ControlVM.LocalCsvFile ?? null;
+
+            if (csvFile != null)
+            {
+                GridView grdView = new GridView();
+                for (int i = 0; i < csvFile.HeadersStrings.Count; i++)
+                {
+                    GridViewColumn newColumn = new GridViewColumn();
+                    newColumn.DisplayMemberBinding = new Binding(csvFile.Lines[0][i]);
+                    newColumn.Header = csvFile.HeadersStrings[i];
+                    newColumn.Width = 120;
+                    grdView.Columns.Add(newColumn);
+                }
+                control.OutterListView.View = grdView;
+            }
         }
 
         public CsvFileGridViewerControl()
