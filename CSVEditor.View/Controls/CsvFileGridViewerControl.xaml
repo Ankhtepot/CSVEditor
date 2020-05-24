@@ -6,32 +6,24 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel x:Name="TopContainer">
-        <TextBlock Text="Csv File Grid View Control IS ALIVE!!!"/>
-        <!--<DataGrid x:Name="CsvFileDataGrid" 
-                  CanUserResizeColumns="True" 
-                  AutoGenerateColumns="False"
-                  ItemsSource="{Binding LocalCsvFile.Lines}"
-                  >
-            --><!--<DataGridTemplateColumn>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>--><!--            
-        </DataGrid>-->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Label Content="Test Text:" Grid.Column="0"/>
-            <TextBlock Text="{Binding TestText}" Grid.Column="1"/>
-        </Grid>
-        <ListView x:Name="OutterListView">
-            
+    <Grid x:Name="TopContainer"
+          HorizontalAlignment="Stretch"
+          >
+        <ListView x:Name="GridListView">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="BorderBrush" Value="Black"></Setter>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    
+                </GridView>
+            </ListView.View>
         </ListView>
-    </StackPanel>
+    </Grid>
 </UserControl>
