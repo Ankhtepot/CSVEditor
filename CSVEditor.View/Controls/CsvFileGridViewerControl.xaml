@@ -6,8 +6,24 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel x:Name="TopContainer">
-        <TextBlock Text="Csv File Grid View Control IS ALIVE!!!"/>
-        <TextBlock Text="{Binding TestText}"/>
-    </StackPanel>
+    <Grid x:Name="TopContainer"
+          HorizontalAlignment="Stretch"
+          >
+        <ListView x:Name="GridListView">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="BorderBrush" Value="Black"></Setter>
+                    <Setter Property="BorderThickness" Value="1"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
 </UserControl>
