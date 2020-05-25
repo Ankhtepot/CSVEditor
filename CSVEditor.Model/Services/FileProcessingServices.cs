@@ -5,8 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace CSVEditor.Services
 {
@@ -30,7 +30,7 @@ namespace CSVEditor.Services
             return await Task.Run(() => string.Join(Environment.NewLine, lines));
         }
 
-        public static CsvFile CsvFileFromAbsPath(string path, ObservableCollection<char> blockIdentifiers, ObservableCollection<char> delimiters, BackgroundWorker worker = null)
+        public static CsvFile CsvFileFromAbsPath(string path, List<char> blockIdentifiers, List<char> delimiters, BackgroundWorker worker = null)
         {
             CsvFile result = new CsvFile();
 
@@ -92,14 +92,16 @@ namespace CSVEditor.Services
 
                     result.Lines = csvLines;
                 }
-            }            
+            }
+
+            var jsoned = JsonSerializer.Serialize<CsvFile>(result);
 
             return result;
         }
 
-        public static ObservableCollection<string> GetColumnContents(string text, char delimiter, ObservableCollection<char> blockIdentifiers, BackgroundWorker worker = null)
+        public static ObservableCollection<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)
         {
-            ObservableCollection<string> result = new ObservableCollection<string>();
+            var result = new ObservableCollection<string>();
 
             var workingText = text;
 
@@ -140,7 +142,7 @@ namespace CSVEditor.Services
             return result;
         }
 
-        public static char IdentifyCsvDelimiter(string line, ObservableCollection<char> blockIdentifiers, ObservableCollection<char> delimiters)
+        public static char IdentifyCsvDelimiter(string line, List<char> blockIdentifiers, List<char> delimiters)
         {
             foreach (char letter in line)
             {

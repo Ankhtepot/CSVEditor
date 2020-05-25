@@ -45,7 +45,6 @@ namespace CSVEditor.View.Controls
             var gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newValue.Lines;
             control.ControlVM.LocalCsvFile = newValue;
-            control.ControlVM.TestText = control.ControlVM.LocalCsvFile?.Lines?[0][0];
             var csvFile = control.ControlVM.LocalCsvFile ?? null;
             
             if (csvFile != null)

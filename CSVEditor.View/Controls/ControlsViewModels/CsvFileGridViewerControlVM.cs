@@ -17,22 +17,12 @@ namespace CSVEditor.View.Controls.ControlsViewModels
         public CsvFile LocalCsvFile
         {
             get { return csvFile; }
-            set { csvFile = value; TestText = value?.Delimiter.ToString(); OnPropertyChanged(); }
+            set { csvFile = value; OnPropertyChanged(); }
         }
-
-        private string testText;
-
-        public string TestText
-        {
-            get { return testText; }
-            set { testText = value; OnPropertyChanged(); }
-        }
-
 
         public CsvFileGridViewerControlVM()
         {
             LocalCsvFile = DEFAULT_FILE;
-            TestText = "Test Text";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
