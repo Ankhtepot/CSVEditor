@@ -18,12 +18,18 @@ namespace CSVEditor.ViewModel
 
         private string rootRepositoryPath;
 
+        public static AppOptions AppOptions;
+
+        public static string BaseAppPath;
+
         public string RootRepositoryPath
         {
             get => rootRepositoryPath;
             set
             {
-                rootRepositoryPath = value; OnPropertyChanged(nameof(RootRepositoryPath));
+                rootRepositoryPath = value;
+                if(value != null && AppOptions != null) AppOptions.LastRootPath = value;
+                OnPropertyChanged(nameof(RootRepositoryPath));
             }
         }
 
@@ -36,7 +42,6 @@ namespace CSVEditor.ViewModel
         }        
 
         private bool isEditing;
-
         public bool IsEditing
         {
             get { return isEditing; }
@@ -44,7 +49,6 @@ namespace CSVEditor.ViewModel
         }
 
         private string selectedText;
-
         public string SelectedText
         {
             get { return selectedText; }
@@ -56,7 +60,6 @@ namespace CSVEditor.ViewModel
 
         //TODO: remove if not neccesarry
         private DirectoryWithCsv selectedDirectory;
-
         public DirectoryWithCsv SelectedDirectory
         {
             get { return selectedDirectory; }
@@ -69,7 +72,6 @@ namespace CSVEditor.ViewModel
         }
 
         private string selectedFile;
-
         public string SelectedFile
         {
             get
@@ -84,15 +86,17 @@ namespace CSVEditor.ViewModel
         }
 
         private CsvFile selectedCsvFile;
-
         public CsvFile SelectedCsvFile
         {
             get { return selectedCsvFile; }
-            set { selectedCsvFile = value; OnPropertyChanged(); }
+            set { 
+                selectedCsvFile = value;
+                if (value != null && AppOptions != null) AppOptions.LastSelectedCsvFile = value;
+                OnPropertyChanged(); 
+            }
         }
 
         private AsyncVM asyncVM;
-
         public AsyncVM AsyncVM
         {
             get { return asyncVM; }
@@ -102,8 +106,6 @@ namespace CSVEditor.ViewModel
         public ObservableCollection<CsvFile> CsvFiles { get; set; }
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
-
-        
 
         //*******************************
         //********** Commands ***********
@@ -118,6 +120,7 @@ namespace CSVEditor.ViewModel
 
         public EditorVM()
         {
+            BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             AsyncVM = new AsyncVM(this);
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
@@ -129,6 +132,8 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CancelActiveWorkerAsyncCommand = new CancelActiveWorkerAsyncCommand(this);
+
+            AppOptions = new AppOptions();
         }
 
         //*******************************
@@ -145,7 +150,7 @@ namespace CSVEditor.ViewModel
 
             CsvFilesStructure.Clear();
 
-            new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);
+            new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);            
         }       
 
         public void ProcessSelectedFile(string value)
@@ -156,6 +161,8 @@ namespace CSVEditor.ViewModel
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
                 new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
                 AsyncVM.SetRawTextFromAbsPath(SelectedFile);
+
+                AppOptions.LastSelectedFilePath = SelectedFile;                
             }
         }
 

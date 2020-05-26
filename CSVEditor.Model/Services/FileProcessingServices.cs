@@ -64,7 +64,7 @@ namespace CSVEditor.Services
                         result.ColumnConfigurations.Add(new CsvColumnConfiguration());
                     }
 
-                    var csvLines = new ObservableCollection<ObservableCollection<string>>();
+                    var csvLines = new List<List<string>>();
                     var columnContents = GetColumnContents(RemoveFirstLineAsync(text).Result, result.Delimiter, blockIdentifiers, worker) ?? new ObservableCollection<string>();
 
                     while (columnContents?.Count > 0)
@@ -74,7 +74,7 @@ namespace CSVEditor.Services
                             return null;
                         }
 
-                        ObservableCollection<string> newLine = new ObservableCollection<string>();
+                        var newLine = new List<string>();
                         for (int i = 0; i < result.ColumnCount; i++)
                         {
                             if (columnContents.Count > 0)
@@ -92,9 +92,7 @@ namespace CSVEditor.Services
 
                     result.Lines = csvLines;
                 }
-            }
-
-            var jsoned = JsonSerializer.Serialize<CsvFile>(result);
+            }            
 
             return result;
         }

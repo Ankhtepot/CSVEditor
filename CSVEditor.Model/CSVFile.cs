@@ -56,19 +56,41 @@ namespace CSVEditor.Model
         }
 
 
-        public ObservableCollection<ObservableCollection<string>> Lines;
+        public List<List<string>> lines;
+        public List<List<string>> Lines
+        {
+            get { return lines; }
+            set { lines = value; OnPropertyChanged(); }
+        }
 
-        public ObservableCollection<CsvColumnConfiguration> ColumnConfigurations;
+        public List<CsvColumnConfiguration> columnConfigurations;
+        public List<CsvColumnConfiguration> ColumnConfigurations
+        {
+            get { return columnConfigurations; }
+            set { columnConfigurations = value; OnPropertyChanged(); }
+        }
 
         private static List<char> delimiters = new List<char> { ',', ';', ':' };
 
+        public static List<char> Delimiters
+        {
+            get { return delimiters; }
+            set { delimiters = value; }
+        }
+
         private static List<char> blockIdentifiers = new List<char> { '\"', '\'' };
 
-        public CsvFile() : this("", 0, ',','"', new ObservableCollection<ObservableCollection<string>>())
+        public static List<char> BlockIdentifiers
+        {
+            get { return blockIdentifiers; }
+            set { blockIdentifiers = value; }
+        }
+
+        public CsvFile() : this("", 0, ',','"', new List<List<string>>())
         {
         }
 
-        public CsvFile(string fullName, int headerIndex, char delimiter, char blockIdentifier, ObservableCollection<ObservableCollection<string>> lines)
+        public CsvFile(string fullName, int headerIndex, char delimiter, char blockIdentifier, List<List<string>> lines)
         {
             AbsPath = fullName ?? throw new ArgumentNullException(nameof(fullName));
             HeaderIndex = headerIndex;
@@ -77,7 +99,7 @@ namespace CSVEditor.Model
             BlockIdentifier = blockIdentifier;
             ColumnCount = HeadersStrings?.Count ?? 0;
             Lines = lines ?? throw new ArgumentNullException(nameof(lines));
-            ColumnConfigurations = new ObservableCollection<CsvColumnConfiguration>();
+            ColumnConfigurations = new List<CsvColumnConfiguration>();
         }
 
         public CsvFile(string absFilePath, BackgroundWorker worker = null)
@@ -99,8 +121,8 @@ namespace CSVEditor.Model
             char delimiter,
             char blockIdentifier,
             int columnCount,
-            ObservableCollection<ObservableCollection<string>> lines,
-            ObservableCollection<CsvColumnConfiguration> columnConfigurations)
+            List<List<string>> lines,
+            List<CsvColumnConfiguration> columnConfigurations)
         {
             AbsPath = absPath ?? throw new ArgumentNullException(nameof(absPath));
             HeaderIndex = headerIndex;
@@ -132,27 +154,9 @@ namespace CSVEditor.Model
             delimiters.Add(newDelimiter);
         }
 
-        public static void SetDelimiters(List<char> newDelimitersList)
-        {
-            delimiters = newDelimitersList;
-        }
-
         public static void AddBlockIdentifier(char newBlockIdentifier)
         {
             blockIdentifiers.Add(newBlockIdentifier);
-        }
-
-        public static void SetBlockIdentifier(List<char> newBlockIdentifiers)
-        {
-            blockIdentifiers = newBlockIdentifiers;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)
@@ -164,13 +168,21 @@ namespace CSVEditor.Model
                    Delimiter == file.Delimiter &&
                    BlockIdentifier == file.BlockIdentifier &&
                    ColumnCount == file.ColumnCount &&
-                   EqualityComparer<ObservableCollection<ObservableCollection<string>>>.Default.Equals(Lines, file.Lines) &&
-                   EqualityComparer<ObservableCollection<CsvColumnConfiguration>>.Default.Equals(ColumnConfigurations, file.ColumnConfigurations);
+                   EqualityComparer<List<List<string>>>.Default.Equals(Lines, file.Lines) &&
+                   EqualityComparer<List<CsvColumnConfiguration>>.Default.Equals(ColumnConfigurations, file.ColumnConfigurations);
         }
 
         public override int GetHashCode()
         {
             return HashCode.Combine(AbsPath, HeaderIndex, HeadersStrings, Delimiter, BlockIdentifier, ColumnCount, Lines, ColumnConfigurations);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
