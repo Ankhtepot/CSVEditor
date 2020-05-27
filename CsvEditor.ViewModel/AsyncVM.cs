@@ -111,7 +111,7 @@ namespace CSVEditor.ViewModel
                 {
                     await Task.Delay(UPDATE_PROGRESS_DELAY);
                     var dotsCount = SelectedFileRaw.Count<char>(ch => ch == '.');
-                    //TODO: fix updating after main task finishes
+                    //TODO: check and fix updating after main task finishes if its broken
                     SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", ""); 
                     Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }

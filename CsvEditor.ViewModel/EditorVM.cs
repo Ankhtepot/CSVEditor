@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.Services;
 using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using CSVEditor.ViewModel.Commands;
@@ -14,6 +15,8 @@ namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
+        public const string OPTIONS_FILE_NAME = "options.json";
+
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
 
         private string rootRepositoryPath;
@@ -22,6 +25,7 @@ namespace CSVEditor.ViewModel
 
         public static string BaseAppPath;
 
+
         public string RootRepositoryPath
         {
             get => rootRepositoryPath;
@@ -29,7 +33,7 @@ namespace CSVEditor.ViewModel
             {
                 rootRepositoryPath = value;
                 if(value != null && AppOptions != null) AppOptions.LastRootPath = value;
-                OnPropertyChanged(nameof(RootRepositoryPath));
+                OnPropertyChanged();
             }
         }
 
@@ -38,14 +42,14 @@ namespace CSVEditor.ViewModel
         public bool IsGitRepo
         {
             get { return isGitRepo; }
-            set { isGitRepo = value; OnPropertyChanged(nameof(IsGitRepo)); }
+            set { isGitRepo = value; OnPropertyChanged(); }
         }        
 
         private bool isEditing;
         public bool IsEditing
         {
             get { return isEditing; }
-            set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); }
+            set { isEditing = value; OnPropertyChanged(); }
         }
 
         private string selectedText;
@@ -54,7 +58,7 @@ namespace CSVEditor.ViewModel
             get { return selectedText; }
             set
             {
-                selectedText = value; OnPropertyChanged(nameof(SelectedText));
+                selectedText = value; OnPropertyChanged();
             }
         }
 
@@ -67,7 +71,7 @@ namespace CSVEditor.ViewModel
             {
                 selectedDirectory = value;
                 Console.WriteLine("Selected Directory: " + selectedDirectory?.DirectoryAbsolutePath);
-                OnPropertyChanged(nameof(SelectedDirectory));
+                OnPropertyChanged();
             }
         }
 
@@ -81,7 +85,7 @@ namespace CSVEditor.ViewModel
             set
             {                
                 ProcessSelectedFile(value);
-                OnPropertyChanged(nameof(SelectedFile));
+                OnPropertyChanged();
             }
         }
 
@@ -133,7 +137,7 @@ namespace CSVEditor.ViewModel
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
             CancelActiveWorkerAsyncCommand = new CancelActiveWorkerAsyncCommand(this);
 
-            AppOptions = new AppOptions();
+            setAppOptions();            
         }
 
         //*******************************
@@ -153,16 +157,35 @@ namespace CSVEditor.ViewModel
             new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);            
         }       
 
-        public void ProcessSelectedFile(string value)
+        public void ProcessSelectedFile(string value, bool needsProcessing = true)
         {
             if(File.Exists(value))
             {
                 selectedFile = value;
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
-                new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
+                if (needsProcessing)
+                {
+                    new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
+                }
+                
                 AsyncVM.SetRawTextFromAbsPath(SelectedFile);
 
                 AppOptions.LastSelectedFilePath = SelectedFile;                
+            }
+        }
+
+        private void setAppOptions()
+        {
+            AppOptions = new AppOptions();
+
+            var loadedOptions = JsonServices.LoadAppOptions(Path.Combine(BaseAppPath, OPTIONS_FILE_NAME));
+
+            if (loadedOptions != null)
+            {
+                RootRepositoryPath = loadedOptions.LastRootPath;
+                ProcessSelectedFile(loadedOptions.LastSelectedFilePath, false);
+                SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
+                IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
             }
         }
 

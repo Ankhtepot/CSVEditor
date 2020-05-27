@@ -11,10 +11,12 @@ namespace CSVEditor.Model.Services
         public static bool SaveAppOptions(AppOptions options, string fullPath)
         {
             var jsoned = JsonSerializer.Serialize(options);
+            //var jsoned = JsonConvert.SerializeObject(options);
 
             try
             {
-                File.WriteAllText(fullPath + "\\options.json", jsoned);
+                File.WriteAllText(fullPath, jsoned);
+                Console.WriteLine($"Options saved to: {fullPath}");
             }
             catch (Exception e)
             {
@@ -25,6 +27,22 @@ namespace CSVEditor.Model.Services
             return true;
         }
 
-        //public static bool LoadAppOptions
+        public static AppOptions LoadAppOptions(string fullPath)
+        {
+            AppOptions loadedOptions = null;
+
+            try
+            {
+                var loadedOptionsJson = File.ReadAllText(fullPath);
+                loadedOptions = JsonSerializer.Deserialize<AppOptions>(loadedOptionsJson);
+                Console.WriteLine($"Options loaded from: {fullPath}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error loading options:" + e.Message);
+            }
+
+            return loadedOptions;
+        }
     }
 }
