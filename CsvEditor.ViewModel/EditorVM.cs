@@ -100,6 +100,14 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        private int selectedItemIndex;
+
+        public int SelectedItemIndex
+        {
+            get { return selectedItemIndex; }
+            set { selectedItemIndex = value; OnPropertyChanged(); }
+        }
+
         private AsyncVM asyncVM;
         public AsyncVM AsyncVM
         {

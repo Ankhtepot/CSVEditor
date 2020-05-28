@@ -1,18 +1,15 @@
 ﻿using CSVEditor.Model;
-using CSVEditor.View.Controls.ControlsViewModels;
+using CSVEditor.Model.Services;
+using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Media3D;
 
 namespace CSVEditor.View.Controls
 {
@@ -20,17 +17,14 @@ namespace CSVEditor.View.Controls
     /// Interaction logic for CsvFileGridViewerControl.xaml
     /// </summary>
     public partial class CsvFileGridViewerControl : UserControl
-    {        
-        private CsvFileGridViewerControlVM ControlVM;
-
+    {
         public CsvFile InputCsvFile
         {
             get { return (CsvFile)GetValue(InputCsvFileProperty); }
-            set { SetValue(InputCsvFileProperty, value); ControlVM.LocalCsvFile = InputCsvFile; }
+            set { SetValue(InputCsvFileProperty, value); }
         }
-
         public static readonly DependencyProperty InputCsvFileProperty =
-            DependencyProperty.Register("InputCsvFile", typeof(CsvFile), typeof(CsvFileGridViewerControl), new PropertyMetadata(CsvFileGridViewerControlVM.DEFAULT_FILE, InputCsvFileChanged));        
+            DependencyProperty.Register("InputCsvFile", typeof(CsvFile), typeof(CsvFileGridViewerControl), new PropertyMetadata(new CsvFile(), InputCsvFileChanged));
 
         private static void InputCsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -44,8 +38,7 @@ namespace CSVEditor.View.Controls
 
             var gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newValue.Lines;
-            control.ControlVM.LocalCsvFile = newValue;
-            var csvFile = control.ControlVM.LocalCsvFile ?? null;
+            var csvFile = newValue ?? null;
             
             if (csvFile != null)
             {
@@ -96,8 +89,21 @@ namespace CSVEditor.View.Controls
         public CsvFileGridViewerControl()
         {
             InitializeComponent();
-            ControlVM = new CsvFileGridViewerControlVM();
-            TopContainer.DataContext = ControlVM;
+        }
+
+        void OnListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Handled)
+                return;
+
+            ListViewItem item = MyVisualTreeHelper.FindParent<ListViewItem>((DependencyObject)e.OriginalSource);
+            if (item == null)
+                return;
+
+            if (item.Focusable && !item.IsFocused)
+                item.Focus();
         }
     }
+
+    
 }

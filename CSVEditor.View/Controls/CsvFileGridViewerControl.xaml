@@ -6,10 +6,25 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="ItemContextMenu">
+            <MenuItem Header="Edit This Line"/>
+            <MenuItem Header="Delete This Line"/>
+            <Separator/>
+            <MenuItem Header="Add New Line Above This Line"/>
+            <MenuItem Header="Add New Line Above This Line"/>
+            <MenuItem Header="Add New Line to the Beggining of File"/>
+            <MenuItem Header="Add New Line to the End of File"/>
+        </ContextMenu>    
+    </UserControl.Resources>
+    
     <Grid x:Name="TopContainer"
           HorizontalAlignment="Stretch"
           >
-        <ListView x:Name="GridListView">
+        <ListView x:Name="GridListView"
+                  SelectedIndex="{Binding SelectedItemIndex}"
+                  >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -17,6 +32,8 @@
                     <Setter Property="BorderThickness" Value="1"></Setter>
                     <Setter Property="VerticalContentAlignment" Value="Top"/>
                     <Setter Property="Margin" Value="0"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnListViewItem_PreviewMouseLeftButtonDown" />
+                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
