@@ -1,7 +1,6 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
-using CSVEditor.ViewModel.Commands;
 using JetBrains.Annotations;
 using Prism.Commands;
 using System;
@@ -123,7 +122,7 @@ namespace CSVEditor.ViewModel
         //********** Commands ***********
         //*******************************
 
-        public LoadRepositoryCommand LoadRepositoryCommand { get; set; }
+        public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
 
         //*******************************
@@ -142,7 +141,7 @@ namespace CSVEditor.ViewModel
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
             CsvFilesStructure.Add(DEFAULT_DIRECTORY);
 
-            LoadRepositoryCommand = new LoadRepositoryCommand(this);
+            LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
 
             setAppOptions();            
@@ -152,22 +151,9 @@ namespace CSVEditor.ViewModel
         //*********** Methods ***********
         //*******************************
 
-        public void LoadRepository()
-        {
-            SelectedFile = null;
-
-            RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath();
-
-            IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
-
-            CsvFilesStructure.Clear();
-
-            new LoadDirectoriesWithCsvWorker(this).RunAsync(RootRepositoryPath);            
-        }       
-
         public void ProcessSelectedFile(string value, bool needsProcessing = true)
         {
-            if(File.Exists(value))
+            if (File.Exists(value))
             {
                 selectedFile = value;
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
@@ -175,10 +161,10 @@ namespace CSVEditor.ViewModel
                 {
                     new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
                 }
-                
+
                 AsyncVM.SetRawTextFromAbsPath(SelectedFile);
 
-                AppOptions.LastSelectedFilePath = SelectedFile;                
+                AppOptions.LastSelectedFilePath = SelectedFile;
             }
         }
 

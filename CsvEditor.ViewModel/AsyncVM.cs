@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using static CSVEditor.Model.Enums;
+using CSVEditor.ViewModel.BackgroundWorkers;
 
 namespace CSVEditor.ViewModel
 {
@@ -116,6 +117,24 @@ namespace CSVEditor.ViewModel
                     Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }
             });
+        }
+
+        public void LoadRepository()
+        {
+            EditorVM.SelectedFile = null;
+
+            EditorVM.RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath();
+
+            EditorVM.IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(EditorVM.RootRepositoryPath);
+
+            EditorVM.CsvFilesStructure.Clear();
+
+            new LoadDirectoriesWithCsvWorker(EditorVM).RunAsync(EditorVM.RootRepositoryPath);
+        }
+
+        public bool LoadRepository_CanExecute()
+        {
+            return WorkingStatus == WorkStatus.Idle;
         }
 
         public void CancelActiveWorkerAsync()

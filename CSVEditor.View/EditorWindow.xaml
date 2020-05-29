@@ -6,7 +6,6 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
-        xmlns:commands="clr-namespace:CSVEditor.ViewModel.Commands;assembly=CSVEditor.ViewModel"
         xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         mc:Ignorable="d"
@@ -67,7 +66,6 @@
                                 Height="28"
                                 Width="60"
                                 Command="{Binding LoadRepositoryCommand}"
-                                CommandParameter="{Binding AsyncVM.WorkingStatus}"
                                 IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                                 Margin="1,0"
                                 >
