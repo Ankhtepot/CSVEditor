@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
              mc:Ignorable="d" 
@@ -29,8 +29,8 @@
                        Style="{StaticResource BigTextBoxStyle}"
                        HorizontalAlignment="Left"/>
             <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="5,2,5,2" VerticalAlignment="Center">
-                <fa:ImageAwesome x:Name="Spinner"
-                                 Icon="Cog" Width="25"
+                <fa:SvgAwesome x:Name="Spinner"
+                                 Icon="Solid_Cog" Width="25"
                                  Margin="2"/>
             </Border>
             <ProgressBar x:Name="WorkProgressBar"

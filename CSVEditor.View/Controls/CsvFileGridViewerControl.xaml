@@ -4,18 +4,43 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
         <ContextMenu x:Key="ItemContextMenu">
-            <MenuItem Header="Edit This Line"/>
-            <MenuItem Header="Delete This Line"/>
+            <MenuItem Header="Edit This Line">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_Edit"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Delete This Line">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_Trash"/>
+                </MenuItem.Icon>
+            </MenuItem>
             <Separator/>
-            <MenuItem Header="Add New Line Above This Line"/>
-            <MenuItem Header="Add New Line Above This Line"/>
-            <MenuItem Header="Add New Line to the Beggining of File"/>
-            <MenuItem Header="Add New Line to the End of File"/>
+            <MenuItem Header="Add New Line to the Beggining of File">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_AngleDoubleUp"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Add New Line Above This Line">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_AngleUp"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Add New Line Bellow This Line">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_AngleDown"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Add New Line to the End of File">
+                <MenuItem.Icon>
+                    <fa:SvgAwesome Icon="Solid_AngleDoubleDown"/>
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>    
     </UserControl.Resources>
     

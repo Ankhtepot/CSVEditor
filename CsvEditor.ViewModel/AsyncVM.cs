@@ -120,6 +120,7 @@ namespace CSVEditor.ViewModel
 
         public void CancelActiveWorkerAsync()
         {
+            Console.WriteLine("Canceling Active Worker: " + ActiveWorker.GetType().Name);
             ActiveWorker?.CancelAsync();
         }
 

@@ -1,9 +1,9 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
-using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using CSVEditor.ViewModel.Commands;
 using JetBrains.Annotations;
+using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -124,7 +124,7 @@ namespace CSVEditor.ViewModel
         //*******************************
 
         public LoadRepositoryCommand LoadRepositoryCommand { get; set; }
-        public CancelActiveWorkerAsyncCommand CancelActiveWorkerAsyncCommand { get; set; }
+        public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
@@ -143,7 +143,7 @@ namespace CSVEditor.ViewModel
             CsvFilesStructure.Add(DEFAULT_DIRECTORY);
 
             LoadRepositoryCommand = new LoadRepositoryCommand(this);
-            CancelActiveWorkerAsyncCommand = new CancelActiveWorkerAsyncCommand(this);
+            CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
 
             setAppOptions();            
         }
