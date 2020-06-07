@@ -28,6 +28,9 @@
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
+    <Style TargetType="Border" x:Key="RoundBordersForButtonStyle" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}">
+        <Setter Property="CornerRadius" Value="5"/>
+    </Style>
     <!-- TextBlock -->
     <Style TargetType="TextBlock" x:Key="BaseTextBlockStyle">
         <Setter Property="Margin" Value="5"/>

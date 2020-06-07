@@ -13,6 +13,7 @@
         Height="450" 
         Width="1000"
         MinWidth="600"
+        MinHeight="400"
         >
 
     <Grid x:Name="TopContainer" VerticalAlignment="Stretch">
@@ -172,27 +173,80 @@
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
                     <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <!--#region GridView -->
-                        <TabItem Header="Grid View">
-                            <DockPanel >
-                                <uc:FileInfoControl DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Center"
+                        <!--#region Overview -->
+                        <TabItem Header="Overview">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                
+                                <uc:FileInfoControl Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                                     SelectedText="{Binding SelectedText}"
                                                     FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
                                                     />
-
-                                <ToggleButton Content="Edit"
-                                        Height="30"
-                                        HorizontalAlignment="Left"
-                                        DockPanel.Dock="Left"
-                                        >
-                                    <ToggleButton.LayoutTransform>
-                                        <RotateTransform Angle="90"/>
-                                    </ToggleButton.LayoutTransform>
-                                </ToggleButton>
-                                <uc:CsvFileGridViewerControl InputCsvFile="{Binding SelectedCsvFile}"/>
-                            </DockPanel>
+                                <uc:CsvFileGridViewerControl Grid.Row="1"
+                                    InputCsvFile="{Binding SelectedCsvFile}"/>
+                            </Grid>
                         </TabItem>
-                        <!--#endregion GridView-->
+                        <!--#endregion Overview-->
+                            
+                        <!--#region Line Editor-->
+                        <TabItem Header="Line Editor">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                
+                                <uc:FileInfoControl Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                                    SelectedText="{Binding SelectedText}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
+                                                    />
+                                <DockPanel Grid.Row="1">
+                                    <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
+                                            <Label  Content="Navigation Placeholder" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1">
+                                            <Label Grid.Column="1" Content="File Ops Placeholder" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                    <Button Content="Edit Column Configurations"
+                                            Height="30"
+                                            HorizontalAlignment="Left"
+                                            DockPanel.Dock="Left"
+                                            Margin="1"
+                                        >
+                                        <Button.LayoutTransform>
+                                            <RotateTransform Angle="90"/>
+                                        </Button.LayoutTransform>
+                                        <Button.Resources>
+                                            <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                                        </Button.Resources>
+                                    </Button>
+
+                                    <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
+                                        <Label  Content="Content Grid Placeholder" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <!--#endregion Line Editor-->
 
                         <!--#region RawText -->
                         <TabItem Header="Raw File">
