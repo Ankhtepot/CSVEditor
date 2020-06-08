@@ -8,14 +8,11 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class FileInfoControl : UserControl
     {
-
-
         public string SelectedText
         {
             get { return (string)GetValue(SelectedTextProperty); }
             set { SetValue(SelectedTextProperty, value); }
         }
-
         public static readonly DependencyProperty SelectedTextProperty =
             DependencyProperty.Register("SelectedText", typeof(string), typeof(FileInfoControl), new PropertyMetadata("", SelectedTextChanged));
 
@@ -34,7 +31,6 @@ namespace CSVEditor.View.Controls
             get { return (string)GetValue(FileInfoTextProperty); }
             set { SetValue(FileInfoTextProperty, value); }
         }
-
         public static readonly DependencyProperty FileInfoTextProperty =
             DependencyProperty.Register("FileInfoText", typeof(string), typeof(FileInfoControl), new PropertyMetadata("", FileInfoTextChanged));
 

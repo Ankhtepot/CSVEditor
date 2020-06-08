@@ -44,11 +44,11 @@ namespace CSVEditor.ViewModel
             set { isGitRepo = value; OnPropertyChanged(); }
         }        
 
-        private bool isEditing;
-        public bool IsEditing
+        private bool isLineEditMode;
+        public bool IsLineEditMode
         {
-            get { return isEditing; }
-            set { isEditing = value; OnPropertyChanged(); }
+            get { return isLineEditMode; }
+            set { isLineEditMode = value; OnPropertyChanged(); }
         }
 
         private string selectedText;
@@ -104,7 +104,11 @@ namespace CSVEditor.ViewModel
         public int SelectedItemIndex
         {
             get { return selectedItemIndex; }
-            set { selectedItemIndex = value; OnPropertyChanged(); }
+            set 
+            {
+                selectedItemIndex = value; 
+                OnPropertyChanged();
+            }
         }
 
         private AsyncVM asyncVM;
@@ -124,6 +128,7 @@ namespace CSVEditor.ViewModel
 
         public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
+        public DelegateCommand SwitchEditModeCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
@@ -135,6 +140,7 @@ namespace CSVEditor.ViewModel
             AsyncVM = new AsyncVM(this);
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
+            IsLineEditMode = false;
             IsGitRepo = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             AsyncVM.WorkingStatus = WorkStatus.Idle;
@@ -143,9 +149,10 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
+            SwitchEditModeCommand = new DelegateCommand(SwitchLineEditMode);
 
             setAppOptions();            
-        }
+        }        
 
         //*******************************
         //*********** Methods ***********
@@ -153,9 +160,10 @@ namespace CSVEditor.ViewModel
 
         public void ProcessSelectedFile(string value, bool needsProcessing = true)
         {
+            selectedFile = value;
+
             if (File.Exists(value))
             {
-                selectedFile = value;
                 Console.WriteLine("MainVM.SelectedCsvFile: " + selectedFile);
                 if (needsProcessing)
                 {
@@ -165,6 +173,12 @@ namespace CSVEditor.ViewModel
                 AsyncVM.SetRawTextFromAbsPath(SelectedFile);
 
                 AppOptions.LastSelectedFilePath = SelectedFile;
+            }
+            else
+            {
+                SelectedCsvFile = new CsvFile();
+                AsyncVM.SelectedFileRaw = Constants.NO_FILE_SELECTED;
+                AppOptions.LastSelectedFilePath = null;
             }
         }
 
@@ -181,6 +195,16 @@ namespace CSVEditor.ViewModel
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
             }
+        }
+
+        private void SwitchLineEditMode()
+        {
+            SetLineEditMode(!IsLineEditMode);
+        }
+
+        private void SetLineEditMode(bool lineEditMode)
+        {
+            IsLineEditMode = lineEditMode;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

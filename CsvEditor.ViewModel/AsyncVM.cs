@@ -122,6 +122,7 @@ namespace CSVEditor.ViewModel
         public void LoadRepository()
         {
             EditorVM.SelectedFile = null;
+            EditorVM.SelectedCsvFile = null;
 
             EditorVM.RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath();
 

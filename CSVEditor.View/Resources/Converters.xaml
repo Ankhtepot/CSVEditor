@@ -9,5 +9,6 @@
     <converters:AbsPathToRawTextConverter x:Key="AbsPathToRawTextConverter"/>
     <converters:WorkStatusToEnabledConverter x:Key="WorkStatusToEnabledConverter"/>
     <converters:WorkStatusToVisibilityConverter x:Key="WorkStatusToVisibilityConverter"/>
-
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:SelectedCsvFileToVisibilityConverter x:Key="SelectedCsvFileToVisibilityConverter"/>
 </ResourceDictionary>

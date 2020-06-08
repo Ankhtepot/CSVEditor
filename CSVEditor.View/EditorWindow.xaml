@@ -195,7 +195,9 @@
                         <!--#endregion Overview-->
                             
                         <!--#region Line Editor-->
-                        <TabItem Header="Line Editor">
+                        <TabItem Header="Line Editor"
+                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}"
+                                 >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     
@@ -231,6 +233,7 @@
                                             HorizontalAlignment="Left"
                                             DockPanel.Dock="Left"
                                             Margin="1"
+                                            Command="{Binding SwitchEditModeCommand}"
                                         >
                                         <Button.LayoutTransform>
                                             <RotateTransform Angle="90"/>
@@ -241,7 +244,18 @@
                                     </Button>
 
                                     <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
-                                        <Label  Content="Content Grid Placeholder" HorizontalAlignment="Center"/>
+                                        <StackPanel x:Name="LineEditorWrapper">
+                                            <uc:LineEditControl SelectedLineIndex="{Binding SelectedItemIndex}"
+                                                                CsvFile="{Binding SelectedCsvFile}"
+                                                                Visibility="{Binding IsLineEditMode,
+                                                                Converter={StaticResource BoolToVisibilityConverter}}"
+                                                               />   
+                                            <Label Content="Content Grid Placeholder EDIT CONFIGURATION" HorizontalAlignment="Center"
+                                                   Visibility="{Binding IsLineEditMode,
+                                                    Converter={StaticResource BoolToVisibilityConverter},
+                                                    ConverterParameter=false}"
+                                                   />
+                                        </StackPanel>
                                     </Border>
                                 </DockPanel>
                             </Grid>

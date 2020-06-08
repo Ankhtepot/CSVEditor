@@ -43,8 +43,10 @@ namespace CSVEditor.View.Controls
 
             if (control == null || newValue == null)
             {
-                return;
+                return;                
             }
+
+            Console.WriteLine($"LineEditControl, new CsvFile set.");
         }
 
         private static void SelectedLineIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -56,6 +58,8 @@ namespace CSVEditor.View.Controls
             {
                 return;
             }
+
+            Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
         }
 
         public LineEditControl()
