@@ -1,9 +1,6 @@
 ﻿using JetBrains.Annotations;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.Model
@@ -32,11 +29,11 @@ namespace CSVEditor.Model
             }
         }
 
-        public CsvColumnConfiguration() : this (FieldType.TextBlock, "", "")
+        public CsvColumnConfiguration() : this (FieldType.TextBlock, "")
         {
         }
 
-        public CsvColumnConfiguration(FieldType type, string content, string uRI = "")
+        public CsvColumnConfiguration(FieldType type, string uRI = "")
         {
             Type = type;
             URI = uRI;

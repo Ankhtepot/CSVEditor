@@ -4,9 +4,11 @@ using CSVEditor.ViewModel.BackgroundWorkers;
 using JetBrains.Annotations;
 using Prism.Commands;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using static CSVEditor.Model.Enums;
 
@@ -16,7 +18,7 @@ namespace CSVEditor.ViewModel
     {
         public const string OPTIONS_FILE_NAME = "options.json";
 
-        public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files..." });
+        public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
 
         private string rootRepositoryPath;
 
@@ -31,7 +33,7 @@ namespace CSVEditor.ViewModel
             set
             {
                 rootRepositoryPath = value;
-                if(value != null && AppOptions != null) AppOptions.LastRootPath = value;
+                if (value != null && AppOptions != null) AppOptions.LastRootPath = value;
                 OnPropertyChanged();
             }
         }
@@ -42,7 +44,7 @@ namespace CSVEditor.ViewModel
         {
             get { return isGitRepo; }
             set { isGitRepo = value; OnPropertyChanged(); }
-        }        
+        }
 
         private bool isLineEditMode;
         public bool IsLineEditMode
@@ -82,7 +84,7 @@ namespace CSVEditor.ViewModel
                 return string.IsNullOrEmpty(selectedFile) ? Constants.NO_FILE_SELECTED : selectedFile;
             }
             set
-            {                
+            {
                 ProcessSelectedFile(value);
                 OnPropertyChanged();
             }
@@ -92,10 +94,11 @@ namespace CSVEditor.ViewModel
         public CsvFile SelectedCsvFile
         {
             get { return selectedCsvFile; }
-            set { 
+            set
+            {
                 selectedCsvFile = value;
                 if (value != null && AppOptions != null) AppOptions.LastSelectedCsvFile = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged();
             }
         }
 
@@ -104,9 +107,9 @@ namespace CSVEditor.ViewModel
         public int SelectedItemIndex
         {
             get { return selectedItemIndex; }
-            set 
+            set
             {
-                selectedItemIndex = value; 
+                selectedItemIndex = value;
                 OnPropertyChanged();
             }
         }
@@ -151,8 +154,8 @@ namespace CSVEditor.ViewModel
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
             SwitchEditModeCommand = new DelegateCommand(SwitchLineEditMode);
 
-            setAppOptions();            
-        }        
+            setAppOptions();
+        }
 
         //*******************************
         //*********** Methods ***********
@@ -194,6 +197,9 @@ namespace CSVEditor.ViewModel
                 ProcessSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
+                CsvFilesStructure.Clear();
+                loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
+                AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList();
             }
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace CSVEditor.Model
 {
@@ -11,18 +9,30 @@ namespace CSVEditor.Model
         public CsvFile LastSelectedCsvFile { get; set; }
         public List<char> Delimiters { get; set; }
         public List<char> BlockIdentifiers { get; set; }
+        public List<DirectoryWithCsv> LastCsvFilesStructure { get; set; }
 
-        public AppOptions() : this("","",new CsvFile(), CsvFile.Delimiters, CsvFile.BlockIdentifiers)
+        public AppOptions() : this("",
+            "",
+            null,
+            CsvFile.Delimiters,
+            CsvFile.BlockIdentifiers,
+            new List<DirectoryWithCsv>() { new DirectoryWithCsv() })
         {
         }
 
-        public AppOptions(string lastRootPath, string lastSelectedFilePath, CsvFile lastSelectedCsvFile, List<char> delimiters, List<char> blockIdentifiers)
+        public AppOptions(string lastRootPath,
+            string lastSelectedFilePath,
+            CsvFile lastSelectedCsvFile,
+            List<char> delimiters,
+            List<char> blockIdentifiers,
+            List<DirectoryWithCsv> lastCsvFilesStructure)
         {
             LastRootPath = lastRootPath;
             LastSelectedFilePath = lastSelectedFilePath;
             LastSelectedCsvFile = lastSelectedCsvFile;
             Delimiters = delimiters;
             BlockIdentifiers = blockIdentifiers;
+            LastCsvFilesStructure = lastCsvFilesStructure;
         }
     }
 }

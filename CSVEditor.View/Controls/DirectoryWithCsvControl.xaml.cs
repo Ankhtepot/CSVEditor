@@ -22,7 +22,7 @@ namespace CSVEditor.View.Controls
             set { SetValue(directoryProperty, value); }
         }
 
-        private static DirectoryWithCsv defaultRecord = new DirectoryWithCsv("Directory", new ObservableCollection<string> { "Files" });
+        private static DirectoryWithCsv defaultRecord = new DirectoryWithCsv("Directory", new List<string> { "Files" });
 
         // Using a DependencyProperty as the backing store for Directory.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty directoryProperty =

@@ -1,16 +1,7 @@
 ﻿using CSVEditor.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVEditor.View.Controls
 {
@@ -36,6 +27,11 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty SelectedLineIndexProperty =
             DependencyProperty.Register("SelectedLineIndex", typeof(int), typeof(LineEditControl), new PropertyMetadata(0, SelectedLineIndexChanged));
 
+        public LineEditControl()
+        {
+            InitializeComponent();
+        }
+
         private static void CsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (LineEditControl)d;
@@ -60,11 +56,6 @@ namespace CSVEditor.View.Controls
             }
 
             Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
-        }
-
-        public LineEditControl()
-        {
-            InitializeComponent();
-        }
+        }        
     }
 }

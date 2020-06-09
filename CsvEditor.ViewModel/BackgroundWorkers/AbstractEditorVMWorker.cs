@@ -1,5 +1,4 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.Interfaces;
+﻿using CSVEditor.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using static CSVEditor.Model.Enums;
@@ -39,7 +38,7 @@ namespace CSVEditor.ViewModel.Abstracts
 
         protected abstract void _ProgressChanged(object sender, ProgressChangedEventArgs e);        
 
-        private void _Completed(object sender, RunWorkerCompletedEventArgs e)
+        protected virtual void _Completed(object sender, RunWorkerCompletedEventArgs e)
         {
             var resultInfo = "";
             if (e.Cancelled == true)

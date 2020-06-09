@@ -58,28 +58,35 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
                         worker.ReportProgress((int)currentProgress);
                     }
                 }
-            });            
+            });
         }
 
-    protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
-    {
-        if (e.UserState == null)
+        protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            if (e.UserState == null)
+            {
+                VM.AsyncVM.WorkProgress = e.ProgressPercentage;
+                return;
+            }
+
+            var foundDirectoryWithCsv = e.UserState as DirectoryWithCsv;
             VM.AsyncVM.WorkProgress = e.ProgressPercentage;
-            return;
+            if (foundDirectoryWithCsv != null)
+            {
+                VM.CsvFilesStructure.Add(foundDirectoryWithCsv);
+            }
+
+            if (VM.CsvFilesStructure.Count == 0)
+            {
+                VM.CsvFilesStructure.Add(VM.DEFAULT_DIRECTORY);
+            }
         }
 
-        var foundDirectoryWithCsv = e.UserState as DirectoryWithCsv;
-        VM.AsyncVM.WorkProgress = e.ProgressPercentage;
-        if (foundDirectoryWithCsv != null)
-        {
-            VM.CsvFilesStructure.Add(foundDirectoryWithCsv);
-        }
 
-        if (VM.CsvFilesStructure.Count == 0)
+        protected override void _Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            VM.CsvFilesStructure.Add(VM.DEFAULT_DIRECTORY);
+            base._Completed(sender, e);
+            EditorVM.AppOptions.LastCsvFilesStructure = VM.CsvFilesStructure.ToList();
         }
     }
-}
 }

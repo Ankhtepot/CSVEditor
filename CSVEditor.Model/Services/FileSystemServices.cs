@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -64,11 +63,6 @@ namespace CSVEditor.ViewModel
 
             IEnumerable<string> directories = getDirectoriesFromPath(rootPath, worker) ?? new List<string>();
 
-            //if(directories == null)
-            //{
-            //    directories = new List<string>();
-            //}
-
             foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
                 //Console.WriteLine("Scanning directory: " + directory);
@@ -104,10 +98,10 @@ namespace CSVEditor.ViewModel
 
         public static DirectoryWithCsv ScanDirectory(string rootPath, string path)
         {
-            ObservableCollection<string> csvFiles = null;
+            List<string> csvFiles = null;
             try
             {
-                csvFiles = new ObservableCollection<string>(
+                csvFiles = new List<string>(
                        Directory.GetFiles(path, "*.csv", SearchOption.TopDirectoryOnly));
             }
             catch (UnauthorizedAccessException)

@@ -130,7 +130,7 @@ namespace CSVEditor.ViewModel
 
             EditorVM.CsvFilesStructure.Clear();
 
-            new LoadDirectoriesWithCsvWorker(EditorVM).RunAsync(EditorVM.RootRepositoryPath);
+            new LoadDirectoriesWithCsvWorker(EditorVM).RunAsync(EditorVM.RootRepositoryPath);            
         }
 
         public bool LoadRepository_CanExecute()
