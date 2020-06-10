@@ -199,7 +199,8 @@ namespace CSVEditor.ViewModel
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
                 CsvFilesStructure.Clear();
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
-                AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList();
+                AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
+                SelectedItemIndex = 0;
             }
         }
 

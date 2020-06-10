@@ -244,7 +244,7 @@
                                     </Button>
 
                                     <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
-                                        <StackPanel x:Name="LineEditorWrapper">
+                                        <Grid x:Name="LineEditorWrapper">
                                             <uc:LineEditControl SelectedLineIndex="{Binding SelectedItemIndex}"
                                                                 CsvFile="{Binding SelectedCsvFile}"
                                                                 Visibility="{Binding IsLineEditMode,
@@ -255,7 +255,7 @@
                                                     Converter={StaticResource BoolToVisibilityConverter},
                                                     ConverterParameter=false}"
                                                    />
-                                        </StackPanel>
+                                        </Grid>
                                     </Border>
                                 </DockPanel>
                             </Grid>
