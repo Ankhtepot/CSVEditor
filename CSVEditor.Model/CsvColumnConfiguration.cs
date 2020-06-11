@@ -29,7 +29,7 @@ namespace CSVEditor.Model
             }
         }
 
-        public CsvColumnConfiguration() : this (FieldType.TextBlock, "")
+        public CsvColumnConfiguration() : this (FieldType.TextBox, "")
         {
         }
 

@@ -7,21 +7,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <!--<UserControl.Resources>
-        <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="HeaderTextBlockStyle">
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Width" Value="30"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Background" Value="LightCoral"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <!--<Setter Property="HorizontalAlignment" Value="Center"/>-->
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Grid" x:Key="HeaderGridStyle">
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Background" Value="LightCoral"/>
         </Style>
-    </UserControl.Resources>-->
+    </UserControl.Resources>
 
-    <!--<Grid VerticalAlignment="Stretch">-->
         <ScrollViewer HorizontalScrollBarVisibility ="Auto"
                   VerticalScrollBarVisibility="Auto"
                   >
             <Grid x:Name="TopContainer">
-                <Label Content="Content Grid Placeholder EDIT LINE" HorizontalAlignment="Center"/>
+                <!--<Label Content="Content Grid Placeholder EDIT LINE" HorizontalAlignment="Center"/>-->
             </Grid>
         </ScrollViewer>
-    <!--</Grid>-->
 </UserControl>

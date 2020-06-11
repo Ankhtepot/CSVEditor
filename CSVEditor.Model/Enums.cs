@@ -9,7 +9,7 @@ namespace CSVEditor.Model
         public enum FieldType
         {
             TextArea,
-            TextBlock,
+            TextBox,
             Image,
             URI,
             Select
