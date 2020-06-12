@@ -18,7 +18,7 @@ namespace CSVEditor.View
     {
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            JsonServices.SaveAppOptions(EditorVM.AppOptions, Path.Combine(EditorVM.BaseAppPath, EditorVM.OPTIONS_FILE_NAME));
+            JsonServices.SerializeJson(EditorVM.AppOptions, Path.Combine(EditorVM.BaseAppPath, EditorVM.OPTIONS_FILE_NAME), "App Options");
         }
     }
 }

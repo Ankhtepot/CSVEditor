@@ -59,9 +59,9 @@ namespace CSVEditor.View.Controls
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };
 
-            mainGrid.ShowGridLines = true;
+            //mainGrid.ShowGridLines = true;
 
-            mainGrid = VM.SetMainGridForNewCsvFile(csvFile, mainGrid, control.SelectedLineIndex);
+            mainGrid = VM.GetMainGridForNewCsvFile(csvFile, mainGrid, control.SelectedLineIndex);
 
             topContainer.Children.Add(mainGrid);
         }

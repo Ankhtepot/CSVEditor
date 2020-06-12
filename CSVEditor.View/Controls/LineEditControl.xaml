@@ -14,8 +14,11 @@
             <Setter Property="Background" Value="LightCoral"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <!--<Setter Property="HorizontalAlignment" Value="Center"/>-->
+            <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}" x:Key="LeftAlignedHeaderTextBoxStyle">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
         <Style TargetType="Grid" x:Key="HeaderGridStyle">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -25,8 +28,8 @@
     </UserControl.Resources>
 
         <ScrollViewer HorizontalScrollBarVisibility ="Auto"
-                  VerticalScrollBarVisibility="Auto"
-                  >
+                      VerticalScrollBarVisibility="Auto"
+                      >
             <Grid x:Name="TopContainer">
                 <!--<Label Content="Content Grid Placeholder EDIT LINE" HorizontalAlignment="Center"/>-->
             </Grid>

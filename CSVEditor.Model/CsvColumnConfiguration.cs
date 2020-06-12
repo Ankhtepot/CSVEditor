@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using static CSVEditor.Model.Enums;
 
@@ -7,9 +6,8 @@ namespace CSVEditor.Model
 {
     public class CsvColumnConfiguration : INotifyPropertyChanged
     {
-        private Enums.FieldType type;
-
-        public Enums.FieldType Type {
+        private FieldType type;
+        public FieldType Type {
             get { return type; }
             set
             {
@@ -19,7 +17,6 @@ namespace CSVEditor.Model
         }
 
         private string uRI;
-
         public string URI {
             get { return uRI; }
             set
@@ -41,7 +38,6 @@ namespace CSVEditor.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

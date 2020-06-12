@@ -97,7 +97,7 @@ namespace CSVEditor.ViewModel
             set
             {
                 selectedCsvFile = value;
-                if (value != null && AppOptions != null) AppOptions.LastSelectedCsvFile = value;
+                if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
                 OnPropertyChanged();
             }
         }
@@ -189,7 +189,7 @@ namespace CSVEditor.ViewModel
         {
             AppOptions = new AppOptions();
 
-            var loadedOptions = JsonServices.LoadAppOptions(Path.Combine(BaseAppPath, OPTIONS_FILE_NAME));
+            var loadedOptions = JsonServices.DeserializeJson<AppOptions>(Path.Combine(BaseAppPath, OPTIONS_FILE_NAME), "App Options");
 
             if (loadedOptions != null)
             {

@@ -10,8 +10,8 @@ namespace Classes.Resources
         /// <summary>
         /// Generic method to parse JSON file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
+        /// <typeparam name="T">Type to deserialize</typeparam>
+        /// <param name="fileName">File Name</param>
         /// <returns></returns>
         public static List<T> ParseJson<T>(string fileName)
         {

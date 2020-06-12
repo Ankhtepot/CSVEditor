@@ -1,6 +1,8 @@
 ﻿using CSVEditor.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,15 +17,17 @@ namespace CSVEditor.View.Controls
         public ResourceDictionary Resources { get; set; }
         public int LineIndex { get; set; }
 
-        private const double MaxColumnWidth = 500d;
-        private const double MinColumnWidth = 30d;
+        private const double MAX_COLUMN_WIDTH = 500d;
+        private const double MIN_COLUMN_WIDTH = 30d;
+        private const double IMAGE_WIDTH = 200d;
+        private const double IMAGE_HEIGHT = 150d;
 
         public LineEditControlViewModel(ResourceDictionary resources)
         {
             Resources = resources;
         }
 
-        public Grid SetMainGridForNewCsvFile(CsvFile csvFile, Grid grid, int lineIndex)
+        public Grid GetMainGridForNewCsvFile(CsvFile csvFile, Grid grid, int lineIndex)
         {
             CsvFile = csvFile;
             MainGrid = grid;
@@ -70,12 +74,16 @@ namespace CSVEditor.View.Controls
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition()
                 {
                     Width = GridLength.Auto,
-                    MaxWidth = MaxColumnWidth,
-                    MinWidth = MinColumnWidth
+                    MaxWidth = MAX_COLUMN_WIDTH,
+                    MinWidth = MIN_COLUMN_WIDTH
                 });
             }
 
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) }); // data
+            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() 
+            {
+                Width = new GridLength(1, GridUnitType.Auto),
+                
+            }); // data
         }
 
         private void AddHadersColumnContentToGrid()
@@ -100,7 +108,7 @@ namespace CSVEditor.View.Controls
 
         private void AddDataColumnContentToGrid()
         {
-            MainGrid.Children.Add(BuildHeader(2, "Data"));
+            MainGrid.Children.Add(BuildHeader(2, "Data", "LeftAlignedHeaderTextBoxStyle"));
 
             for (int i = 1; i < MainGrid.RowDefinitions.Count; i++)
             {
@@ -115,16 +123,57 @@ namespace CSVEditor.View.Controls
 
         private UIElement CreateDataCellElement(FieldType type, int columnNr)
         {
-            return new TextBox() { Text = CsvFile.Lines[LineIndex][columnNr]};
+            var lineData = CsvFile.Lines[LineIndex];
+            var newElement = new UIElement();
+            var elementMargin = new Thickness(2d);
+
+            return type switch
+            {
+                FieldType.TextBox => new TextBox() 
+                {
+                    Margin = elementMargin,
+                    Text = lineData[columnNr] 
+                },
+                FieldType.TextArea => new TextBox()
+                {
+                    Margin = elementMargin,
+                    Text = lineData[columnNr],
+                    TextWrapping = TextWrapping.Wrap
+                },
+                FieldType.Select => new ComboBox()
+                {
+                    Margin = elementMargin,
+                    ItemsSource = GetColumnDistinctValues(columnNr)
+                },
+                FieldType.Image => new Image()
+                {
+                    Margin = elementMargin,
+                    Height = IMAGE_HEIGHT,
+                    Width = IMAGE_WIDTH,
+                    //TODO: add loading image from path
+                },
+                FieldType.URI => new TextBox()
+                {
+                    Margin = elementMargin,
+                },
+                _ => throw new NotSupportedException($"Element type \"{type}\" not supported.")
+            };
+             
         }
 
-        public UIElement BuildHeader(int columnNumber, string text)
+        private List<string> GetColumnDistinctValues(int columnNr)
+        {
+            return CsvFile.Lines.Select(Line => Line[columnNr]).Distinct().ToList();
+        }
+
+        //TODO: Use constants instead direct strings both in xaml and here
+        public UIElement BuildHeader(int columnNumber, string text, string headerStyle = "HeaderTextBlockStyle")
         {
             var wrapperGrid = new Grid();
             wrapperGrid.Style = (Style)Resources["HeaderGridStyle"];
 
             var newHeader = new TextBlock();
-            newHeader.Style = (Style)Resources["HeaderTextBlockStyle"];
+            newHeader.Style = (Style)Resources[headerStyle];
             newHeader.Text = text;
             
 

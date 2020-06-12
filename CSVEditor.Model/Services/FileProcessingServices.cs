@@ -58,18 +58,14 @@ namespace CSVEditor.Services
                 {
                     result.ColumnCount = result.HeadersStrings.Count;
                     result.AbsPath = path;
-
-                    for (int i = 0; i < result.ColumnCount; i++)
-                    {
-                        result.ColumnConfigurations.Add(new CsvColumnConfiguration());
-                    }
+                    ResolveCsvFileConfiguration(result);
 
                     var csvLines = new List<List<string>>();
                     var columnContents = GetColumnContents(RemoveFirstLineAsync(text).Result, result.Delimiter, blockIdentifiers, worker) ?? new ObservableCollection<string>();
 
                     while (columnContents?.Count > 0)
                     {
-                        if(worker?.CancellationPending == true)
+                        if (worker?.CancellationPending == true)
                         {
                             return null;
                         }
@@ -81,7 +77,7 @@ namespace CSVEditor.Services
                             {
                                 newLine.Add(columnContents[0]);
                                 columnContents.RemoveAt(0);
-                            } 
+                            }
                             else
                             {
                                 break;
@@ -95,6 +91,14 @@ namespace CSVEditor.Services
             }            
 
             return result;
+        }
+
+        private static void ResolveCsvFileConfiguration(CsvFile result)
+        {
+            for (int i = 0; i < result.ColumnCount; i++)
+            {
+                result.ColumnConfigurations.Add(new CsvColumnConfiguration());
+            }
         }
 
         public static ObservableCollection<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)

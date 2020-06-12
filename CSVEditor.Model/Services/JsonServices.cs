@@ -8,41 +8,45 @@ namespace CSVEditor.Model.Services
 {
     public class JsonServices
     {
-        public static bool SaveAppOptions(AppOptions options, string fullPath)
+        public static bool SerializeJson<T>(T source, string fullPath, string referencedName = "")
         {
-            var jsoned = JsonSerializer.Serialize(options);
-            //var jsoned = JsonConvert.SerializeObject(options);
+            var jsonedSource = JsonSerializer.Serialize(source);
 
             try
             {
-                File.WriteAllText(fullPath, jsoned);
-                Console.WriteLine($"Options saved to: {fullPath}");
+                File.WriteAllText(fullPath, jsonedSource);
+                Console.WriteLine($"{referencedName} saved to: {fullPath}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error saving options:" + e.Message);
+                Console.WriteLine($"Error saving {referencedName}: {e.Message}");
                 return false;
             }
 
             return true;
         }
 
-        public static AppOptions LoadAppOptions(string fullPath)
+        public static T DeserializeJson<T>(string fullPath, string referencedName = "")
         {
-            AppOptions loadedOptions = null;
+            T deserializedJson = default(T);
 
             try
             {
-                var loadedOptionsJson = File.ReadAllText(fullPath);
-                loadedOptions = JsonSerializer.Deserialize<AppOptions>(loadedOptionsJson);
-                Console.WriteLine($"Options loaded from: {fullPath}");
+                var loadedJson = File.ReadAllText(fullPath);
+                deserializedJson = JsonSerializer.Deserialize<T>(loadedJson);
+                Console.WriteLine($"{referencedName} loaded from: {fullPath}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error loading options:" + e.Message);
+                Console.WriteLine($"Error loading {referencedName}: {e.Message}");
             }
 
-            return loadedOptions;
+            return deserializedJson;
+        }
+
+        public static List<CsvFileConfiguration> LoadCsvFilesConfigurations(string fullPath)
+        {
+            return null;
         }
     }
 }

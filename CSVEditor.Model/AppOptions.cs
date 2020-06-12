@@ -11,7 +11,8 @@ namespace CSVEditor.Model
         public List<char> BlockIdentifiers { get; set; }
         public List<DirectoryWithCsv> LastCsvFilesStructure { get; set; }
 
-        public AppOptions() : this("",
+        public AppOptions() : this(
+            "",
             "",
             null,
             CsvFile.Delimiters,
@@ -20,7 +21,8 @@ namespace CSVEditor.Model
         {
         }
 
-        public AppOptions(string lastRootPath,
+        public AppOptions(
+            string lastRootPath,
             string lastSelectedFilePath,
             CsvFile lastSelectedCsvFile,
             List<char> delimiters,
