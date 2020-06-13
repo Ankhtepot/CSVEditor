@@ -33,7 +33,6 @@ namespace CSVEditor.View.Controls
         public LineEditControl()
         {
             InitializeComponent();
-            VM = new LineEditControlViewModel(Resources);
         }
 
         private static void CsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -46,24 +45,17 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
+            VM = new LineEditControlViewModel(
+                control.Resources,
+                control.CsvFile as CsvFile,
+                control.SelectedLineIndex);
+
             Console.WriteLine($"LineEditControl, new CsvFile set.");
-
-            var csvFile = control.CsvFile as CsvFile;
-
 
             var topContainer = control.TopContainer as Grid;
             topContainer.Children.Clear();
 
-            var mainGrid = new Grid()
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-            };
-
-            //mainGrid.ShowGridLines = true;
-
-            mainGrid = VM.GetMainGridForNewCsvFile(csvFile, mainGrid, control.SelectedLineIndex);
-
-            topContainer.Children.Add(mainGrid);
+            topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }
 
         private static void SelectedLineIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

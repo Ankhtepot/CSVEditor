@@ -250,7 +250,7 @@
                                                                 Visibility="{Binding IsLineEditMode,
                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
                                                                />   
-                                            <Label Content="Content Grid Placeholder EDIT CONFIGURATION" HorizontalAlignment="Center"
+                                            <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}"
                                                    Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter},
                                                     ConverterParameter=false}"

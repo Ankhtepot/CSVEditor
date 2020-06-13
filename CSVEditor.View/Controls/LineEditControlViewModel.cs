@@ -1,9 +1,7 @@
 ﻿using CSVEditor.Model;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using static CSVEditor.Model.Enums;
@@ -12,56 +10,51 @@ namespace CSVEditor.View.Controls
 {
     public class LineEditControlViewModel
     {
-        public CsvFile CsvFile { get; set; }
-        public Grid MainGrid { get; set; }
-        public ResourceDictionary Resources { get; set; }
-        public int LineIndex { get; set; }
-
         private const double MAX_COLUMN_WIDTH = 500d;
         private const double MIN_COLUMN_WIDTH = 30d;
         private const double IMAGE_WIDTH = 200d;
         private const double IMAGE_HEIGHT = 150d;
 
-        public LineEditControlViewModel(ResourceDictionary resources)
+        public CsvFile CsvFile { get; set; }
+        public Grid MainGrid { get; set; }
+        public ResourceDictionary Resources { get; set; }
+        public int LineIndex { get; set; }
+        private int rowsCount { get => CsvFile.HeadersStrings.Count + 1; }
+
+        public LineEditControlViewModel(ResourceDictionary resources, CsvFile csvFile, int lineIndex = -1)
         {
             Resources = resources;
-        }
-
-        public Grid GetMainGridForNewCsvFile(CsvFile csvFile, Grid grid, int lineIndex)
-        {
             CsvFile = csvFile;
-            MainGrid = grid;
             LineIndex = lineIndex;
 
-            AddColumnsAndRowsDefinitionsToGrid(csvFile.HeadersStrings.Count);
-            AddColumnNumberContentToGrid();
-            AddHadersColumnContentToGrid();
-            AddDataColumnContentToGrid();
+            MainGrid = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
+
+            
+        }
+
+        public Grid GetEditLinesGridForNewCsvFile()
+        {
+            AddColumnsAndRowsDefinitionsToGrid(3);
+            AddColumnContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
+            AddColumnContent(1, HeadersColumnCreationMethod, "Fields");
+            AddColumnContent(2, (i) => CreateDataCellElement(FieldType.TextBox, i - 1), "Data", "LeftAlignedHeaderTextBoxStyle");
 
             return MainGrid;
         }
 
-        public void AddColumnNumberContentToGrid()
+        public Grid GetEditConfigurationsGridForNewCsvFile()
         {
-            MainGrid.Children.Add(BuildHeader(0, "Column\nNumber"));
+            AddColumnsAndRowsDefinitionsToGrid(4);
+            AddColumnContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
+            AddColumnContent(1, HeadersColumnCreationMethod, "Column\nNames");
 
-            for (int i = 1; i < MainGrid.RowDefinitions.Count; i++) //  from 1 because index 0 is header row
-            {
-                var newLineNumber = new TextBlock()
-                {
-                    Padding = new Thickness(5),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    Text = $"#{i}",
-                };
-
-                Grid.SetColumn(newLineNumber, 0);
-                Grid.SetRow(newLineNumber, i);
-
-                MainGrid.Children.Add(newLineNumber);
-            }
+            return MainGrid;
         }
 
-        private void AddColumnsAndRowsDefinitionsToGrid(int rowsCount)
+        private void AddColumnsAndRowsDefinitionsToGrid(int columnCount)
         {
 
             for (int i = 0; i < rowsCount + 1; i++) // +1 for header line
@@ -69,7 +62,7 @@ namespace CSVEditor.View.Controls
                 MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
             }
 
-            for (int i = 0; i < 2; i++) // columnNumber / fields
+            for (int i = 0; i < columnCount; i++) // columnNumber / fields
             {
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition()
                 {
@@ -78,46 +71,40 @@ namespace CSVEditor.View.Controls
                     MinWidth = MIN_COLUMN_WIDTH
                 });
             }
-
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() 
-            {
-                Width = new GridLength(1, GridUnitType.Auto),
-                
-            }); // data
         }
 
-        private void AddHadersColumnContentToGrid()
+        private UIElement RowNumberColumnCreationMethod(int count)
         {
-            MainGrid.Children.Add(BuildHeader(1, "Field"));
-
-            for (int i = 1; i < MainGrid.RowDefinitions.Count; i++)
+            return new TextBlock()
             {
-                var newLineNumber = new TextBlock()
-                {
-                    Padding = new Thickness(5),
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Text = $"{CsvFile.HeadersStrings[i - 1]}", //  -1 because index 0 is header
-                };
-
-                Grid.SetColumn(newLineNumber, 1);
-                Grid.SetRow(newLineNumber, i);
-
-                MainGrid.Children.Add(newLineNumber);
-            }
+                Padding = new Thickness(5),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Text = $"#{count}",
+            };
         }
 
-        private void AddDataColumnContentToGrid()
+        private UIElement HeadersColumnCreationMethod(int count)
         {
-            MainGrid.Children.Add(BuildHeader(2, "Data", "LeftAlignedHeaderTextBoxStyle"));
-
-            for (int i = 1; i < MainGrid.RowDefinitions.Count; i++)
+            return new TextBlock()
             {
-                var newElement = CreateDataCellElement(FieldType.TextBox, i - 1);
+                Padding = new Thickness(5),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Text = $"{CsvFile.HeadersStrings[count - 1]}", //  -1 because index 0 is header
+            };
+        }
 
-                Grid.SetColumn(newElement, 2);
-                Grid.SetRow(newElement, i);
+        private void AddColumnContent(int columnNr, Func<int, UIElement> creationMethod, string headerName, string columnHeaderStyle = "HeaderTextBlockStyle")
+        {
+            MainGrid.Children.Add(BuildHeader(columnNr, headerName, columnHeaderStyle));
 
-                MainGrid.Children.Add(newElement);
+            for (int i = 1; i < rowsCount; i++)
+            {
+                var newCellElement = creationMethod(i);
+
+                Grid.SetColumn(newCellElement, columnNr);
+                Grid.SetRow(newCellElement, i);
+
+                MainGrid.Children.Add(newCellElement);
             }
         }
 
