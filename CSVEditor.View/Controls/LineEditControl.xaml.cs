@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.ViewModel;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,7 @@ namespace CSVEditor.View.Controls
     {
         private static readonly CsvFile DEFAULT_CSV_FILE = new CsvFile();
 
-        private static LineEditControlViewModel VM;
+        private static EditGridControlViewModel VM;
 
         public CsvFile CsvFile
         {
@@ -45,16 +46,16 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            VM = new LineEditControlViewModel(
+            VM = new EditGridControlViewModel(
                 control.Resources,
                 control.CsvFile as CsvFile,
+                control.DataContext as EditorVM,
                 control.SelectedLineIndex);
 
             Console.WriteLine($"LineEditControl, new CsvFile set.");
 
             var topContainer = control.TopContainer as Grid;
             topContainer.Children.Clear();
-
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }
 
@@ -74,6 +75,15 @@ namespace CSVEditor.View.Controls
             }
 
             Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
+        }
+
+        private void TopContainer_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue == true)
+            {
+                TopContainer.Children.Clear();
+                TopContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
+            }
         }
     }
 }

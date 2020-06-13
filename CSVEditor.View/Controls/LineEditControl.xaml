@@ -30,7 +30,8 @@
         <ScrollViewer HorizontalScrollBarVisibility ="Auto"
                       VerticalScrollBarVisibility="Auto"
                       >
-            <Grid x:Name="TopContainer">
+            <Grid x:Name="TopContainer"
+                  IsVisibleChanged="TopContainer_IsVisibleChanged">
             </Grid>
         </ScrollViewer>
 </UserControl>

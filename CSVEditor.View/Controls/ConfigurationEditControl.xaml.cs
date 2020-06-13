@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,7 @@ namespace CSVEditor.View.Controls
     {
         private static readonly CsvFile DEFAULT_CSV_FILE = new CsvFile();
 
-        private static LineEditControlViewModel VM;
+        private static EditGridControlViewModel VM;
 
         public CsvFile CsvFile
         {
@@ -46,9 +47,10 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            VM = new LineEditControlViewModel(
+            VM = new EditGridControlViewModel(
                 control.Resources,
-                control.CsvFile as CsvFile);
+                control.CsvFile as CsvFile,
+                control.DataContext as EditorVM);
 
             Console.WriteLine($"ConfigurationEditControl, new CsvFile set.");
 
