@@ -71,7 +71,6 @@ namespace CSVEditor.Model
         }
 
         private static List<char> delimiters = new List<char> { ',', ';', ':' };
-
         public static List<char> Delimiters
         {
             get { return delimiters; }
@@ -79,7 +78,6 @@ namespace CSVEditor.Model
         }
 
         private static List<char> blockIdentifiers = new List<char> { '\"', '\'' };
-
         public static List<char> BlockIdentifiers
         {
             get { return blockIdentifiers; }

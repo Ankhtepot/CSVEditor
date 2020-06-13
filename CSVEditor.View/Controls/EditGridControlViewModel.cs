@@ -28,7 +28,7 @@ namespace CSVEditor.View.Controls
             Resources = resources;
             CsvFile = csvFile;
             LineIndex = lineIndex;
-            Context = context;            
+            Context = context;
         }
 
         private void SetupNewGrid()
@@ -70,7 +70,7 @@ namespace CSVEditor.View.Controls
             for (int i = 0; i < rowsCount + 1; i++) // +1 for header line
             {
                 MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            }            
+            }
         }
 
         private void AddColumnDefinitionToGrid()
@@ -174,38 +174,55 @@ namespace CSVEditor.View.Controls
             var newElement = new UIElement();
             var elementMargin = new Thickness(2d);
 
-            return type switch
+            switch (type)
             {
-                FieldType.TextBox => new TextBox()
-                {
-                    Margin = elementMargin,
-                    Text = lineData[columnNr]
-                },
-                FieldType.TextArea => new TextBox()
-                {
-                    Margin = elementMargin,
-                    Text = lineData[columnNr],
-                    TextWrapping = TextWrapping.Wrap
-                },
-                FieldType.Select => new ComboBox()
-                {
-                    Margin = elementMargin,
-                    ItemsSource = GetColumnDistinctValues(columnNr)
-                },
-                FieldType.Image => new Image()
-                {
-                    Margin = elementMargin,
-                    Height = IMAGE_HEIGHT,
-                    Width = IMAGE_WIDTH,
-                    //TODO: add loading image from path
-                },
-                FieldType.URI => new TextBox()
-                {
-                    Margin = elementMargin,
-                },
-                _ => throw new NotSupportedException($"Element type \"{type}\" not supported.")
+                case FieldType.TextBox:
+                    {
+                        newElement = new TextBox()
+                        {
+                            Margin = elementMargin,
+                            Text = lineData[columnNr],
+                            Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
+                        };
+                        (newElement as TextBox).TextChanged += TextBox_TextChanged;
+                        return newElement;
+                    };
+                case FieldType.TextArea:
+                    return new TextBox()
+                    {
+                        Margin = elementMargin,
+                        Text = lineData[columnNr],
+                        AcceptsReturn = true
+                    };
+                case FieldType.Select:
+                    return new ComboBox()
+                    {
+                        Margin = elementMargin,
+                        ItemsSource = GetColumnDistinctValues(columnNr)
+                    };
+                case FieldType.Image:
+                    return new Image()
+                    {
+                        Margin = elementMargin,
+                        Height = IMAGE_HEIGHT,
+                        Width = IMAGE_WIDTH,
+                        //TODO: add loading image from path
+                    };
+                case FieldType.URI:
+                    return new TextBox()
+                    {
+                        Margin = elementMargin,
+                    };
+                default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
             };
+        }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            var tagData = (ElementLocationTag)textBox.Tag;
+            Context.SelectedCsvFile.Lines[tagData.rowNumber][tagData.columnNumber] = textBox.Text;
+            CsvFile.Lines[tagData.rowNumber][tagData.columnNumber] = textBox.Text;
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)
