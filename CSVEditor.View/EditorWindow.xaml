@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
@@ -172,9 +173,9 @@
 
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
-                    <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
                         <!--#region Overview -->
-                        <TabItem Header="Overview">
+                        <TabItem Header="Overview" x:Name="OverviewTab">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -188,7 +189,7 @@
                                                     SelectedText="{Binding SelectedText}"
                                                     FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
                                                     />
-                                <uc:CsvFileGridViewerControl Grid.Row="1"
+                                <uc:CsvFileGridViewerControl Grid.Row="1" x:Name="CsvFileGridVIewer"
                                     InputCsvFile="{Binding SelectedCsvFile}"/>
                             </Grid>
                         </TabItem>

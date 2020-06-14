@@ -1,15 +1,10 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
-using JetBrains.Annotations;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 
 namespace CSVEditor.View.Controls
 {
@@ -55,6 +50,7 @@ namespace CSVEditor.View.Controls
                     dataTemplate.VisualTree = borderFactory;                    
 
                     var newBinding = new Binding($"[{i}]");
+
                     textBlockFactory.SetBinding(TextBlock.TextProperty, newBinding);
                     textBlockFactory.SetValue(ForegroundProperty, new SolidColorBrush(Colors.Red));
                     textBlockFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);

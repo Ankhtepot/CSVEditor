@@ -15,4 +15,10 @@
     <ProjectReference Include="..\CSVEditor.ViewModel\CSVEditor.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\CSVEditor.Model\DLLs\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

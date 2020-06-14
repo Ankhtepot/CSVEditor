@@ -123,7 +123,7 @@ namespace CSVEditor.Services
                 if (blockIdentifiers.Contains(workingText[0]))
                 {
                     var endOfBlockIndex = workingText.IndexOf(char.ToString(workingText[0]) + char.ToString(delimiter), 1) + 1;
-                    result.Add(workingText.Substring(0, endOfBlockIndex));
+                    result.Add(workingText.Substring(1, endOfBlockIndex - 2)); //to not include blockIdentifier in text
                     workingText = workingText.Remove(0, endOfBlockIndex + 1);
                 }
                 else

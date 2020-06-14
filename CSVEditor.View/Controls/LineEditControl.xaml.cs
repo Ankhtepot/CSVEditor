@@ -55,8 +55,8 @@ namespace CSVEditor.View.Controls
             Console.WriteLine($"LineEditControl, new CsvFile set.");
 
             var topContainer = control.TopContainer as Grid;
-            topContainer.Children.Clear();
-            topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
+            
+            BuildGrid(topContainer);
         }
 
         private static void SelectedLineIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -74,16 +74,24 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
+            VM.LineIndex = control.SelectedLineIndex;
             Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
+
+            BuildGrid(control.TopContainer);
         }
 
         private void TopContainer_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue == true)
             {
-                TopContainer.Children.Clear();
-                TopContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
+                BuildGrid(TopContainer);
             }
+        }
+
+        private static void BuildGrid(Grid topContainer)
+        {
+            topContainer.Children.Clear();
+            topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }
     }
 }

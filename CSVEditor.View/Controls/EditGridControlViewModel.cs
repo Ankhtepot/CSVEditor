@@ -23,7 +23,7 @@ namespace CSVEditor.View.Controls
         public EditorVM Context
         {
             get { return context; }
-            set 
+            set
             {
                 context = value;
                 OnPropertyChanged();
@@ -186,7 +186,10 @@ namespace CSVEditor.View.Controls
             var lineData = CsvFile.Lines[LineIndex];
             var newElement = new UIElement();
             var elementMargin = new Thickness(2d);
-            var binding = new Binding();
+            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
+            binding.Source = Context;
+            binding.Mode = BindingMode.TwoWay;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
             switch (type)
             {
@@ -195,23 +198,23 @@ namespace CSVEditor.View.Controls
                         newElement = new TextBox()
                         {
                             Margin = elementMargin,
-                            //Text = lineData[columnNr],
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
-                        //(newElement as TextBox).TextChanged += TextBox_TextChanged;
-                        binding.Source = Context;
-                        binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
-                        binding.Mode = BindingMode.TwoWay;
-                        binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                        (newElement as TextBox).SetBinding(TextBox.TextProperty, binding);
+                        var newTextBox = newElement as TextBox;
+                        
+                        newTextBox.SetBinding(TextBox.TextProperty, binding);
                         return newElement;
                     };
                 case FieldType.TextArea:
-                    return new TextBox()
                     {
-                        Margin = elementMargin,
-                        Text = lineData[columnNr],
-                        AcceptsReturn = true
+                        newElement = new TextBox()
+                        {
+                            Margin = elementMargin,
+                            Text = lineData[columnNr],
+                            AcceptsReturn = true
+                        };
+                        (newElement as TextBox).SetBinding(TextBox.TextProperty, binding);
+                        return newElement;
                     };
                 case FieldType.Select:
                     return new ComboBox()
@@ -234,14 +237,6 @@ namespace CSVEditor.View.Controls
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
             };
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = (TextBox)sender;
-            var tagData = (ElementLocationTag)textBox.Tag;
-            Context.SelectedCsvFile.Lines[tagData.rowNumber][tagData.columnNumber] = textBox.Text;
-            CsvFile.Lines[tagData.rowNumber][tagData.columnNumber] = textBox.Text;
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)

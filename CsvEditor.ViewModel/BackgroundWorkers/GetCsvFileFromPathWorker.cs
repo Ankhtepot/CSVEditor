@@ -20,7 +20,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             {
                 e.Cancel = true;
             }
-        }
+        }        
 
         protected override void _ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
