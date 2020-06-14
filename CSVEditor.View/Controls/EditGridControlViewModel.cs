@@ -2,21 +2,34 @@
 using CSVEditor.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.View.Controls
 {
-    public class EditGridControlViewModel
+    public class EditGridControlViewModel : INotifyPropertyChanged
     {
         private const double MAX_COLUMN_WIDTH = 500d;
         private const double MIN_COLUMN_WIDTH = 30d;
         private const double IMAGE_WIDTH = 200d;
         private const double IMAGE_HEIGHT = 150d;
 
-        public EditorVM Context { get; set; }
+        private EditorVM context;
+        public EditorVM Context
+        {
+            get { return context; }
+            set 
+            {
+                context = value;
+                OnPropertyChanged();
+            }
+        }
+
         public CsvFile CsvFile { get; set; }
         public Grid MainGrid { get; set; }
         public ResourceDictionary Resources { get; set; }
@@ -173,6 +186,7 @@ namespace CSVEditor.View.Controls
             var lineData = CsvFile.Lines[LineIndex];
             var newElement = new UIElement();
             var elementMargin = new Thickness(2d);
+            var binding = new Binding();
 
             switch (type)
             {
@@ -181,10 +195,15 @@ namespace CSVEditor.View.Controls
                         newElement = new TextBox()
                         {
                             Margin = elementMargin,
-                            Text = lineData[columnNr],
+                            //Text = lineData[columnNr],
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
-                        (newElement as TextBox).TextChanged += TextBox_TextChanged;
+                        //(newElement as TextBox).TextChanged += TextBox_TextChanged;
+                        binding.Source = Context;
+                        binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
+                        binding.Mode = BindingMode.TwoWay;
+                        binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                        (newElement as TextBox).SetBinding(TextBox.TextProperty, binding);
                         return newElement;
                     };
                 case FieldType.TextArea:
@@ -247,6 +266,13 @@ namespace CSVEditor.View.Controls
             wrapperGrid.Children.Add(newHeader);
 
             return wrapperGrid;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

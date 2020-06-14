@@ -221,14 +221,20 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
+                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1"
+                                                Visibility="{Binding IsLineEditMode,
+                                                    Converter={StaticResource BoolToVisibilityConverter}}"
+                                                >
                                             <Label  Content="Navigation Placeholder" HorizontalAlignment="Center"/>
                                         </Border>
-                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1">
+                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1"
+                                                Visibility="{Binding IsLineEditMode,
+                                                    Converter={StaticResource BoolToVisibilityConverter}}"
+                                                >
                                             <Label Grid.Column="1" Content="File Ops Placeholder" HorizontalAlignment="Center"/>
                                         </Border>
                                     </Grid>
-                                    <Button Content="Edit Column Configurations"
+                                    <Button Content="{Binding IsLineEditMode, Converter={StaticResource EditModeToTextConverter}}"
                                             Height="30"
                                             HorizontalAlignment="Left"
                                             DockPanel.Dock="Left"

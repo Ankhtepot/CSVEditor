@@ -7,6 +7,8 @@ namespace CSVEditor.Model
 {
     public class Constants
     {
+        public const string EDIT_COLUMN_CONFIGURATIONS = "Edit Column Configurations";
+        public const string EDIT_LINES = "Edit Lines";
         public const string LOAD_REPOSITORY_PLACEHOLDER = "Load Repository...";
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";
         public const string NO_FILE_SELECTED = "No file selected.";

@@ -15,9 +15,9 @@ namespace CSVEditor.Model
         {
             get 
             {
-                return string.IsNullOrEmpty(AbsoluteFilePath) && File.Exists(AbsoluteFilePath)
-                    ? ""
-                    : Path.GetFileName(AbsoluteFilePath);                
+                return !string.IsNullOrEmpty(AbsoluteFilePath) && File.Exists(AbsoluteFilePath)
+                    ? Path.GetFileName(AbsoluteFilePath)
+                    : "";                
             } 
         }
     }
