@@ -144,9 +144,12 @@ namespace CSVEditor.View.Controls
 
         private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var columnNumber = (int)((ComboBox)sender).Tag;
             var context = ((ComboBox)sender).DataContext as EditorVM;
-            context.SelectedCsvFile.ColumnConfigurations[(int)((ComboBox)sender).Tag].Type = (FieldType)e.AddedItems[0];
-            CsvFile.ColumnConfigurations[(int)((ComboBox)sender).Tag].Type = (FieldType)e.AddedItems[0];
+            var newValue = (FieldType)e.AddedItems[0];
+
+            context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
+            CsvFile.ColumnConfigurations[columnNumber].Type = newValue;
         }
 
         private UIElement UriColumnCreationMethod(int count)

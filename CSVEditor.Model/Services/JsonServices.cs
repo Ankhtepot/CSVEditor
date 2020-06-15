@@ -10,7 +10,9 @@ namespace CSVEditor.Model.Services
     {
         public static bool SerializeJson<T>(T source, string fullPath, string referencedName = "")
         {
-            var jsonedSource = JsonSerializer.Serialize(source);
+            var options = new JsonSerializerOptions() { WriteIndented = true };
+
+            var jsonedSource = JsonSerializer.Serialize(source, options);
 
             try
             {

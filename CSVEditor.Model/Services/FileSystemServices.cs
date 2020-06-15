@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CSVEditor.Model;
+using CSVEditor.Model.Services;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CSVEditor.ViewModel
@@ -115,6 +116,6 @@ namespace CSVEditor.ViewModel
             return (csvFiles != null && csvFiles.Count > 0) 
                 ? new DirectoryWithCsv(directoryPath, csvFiles) 
                 : null;
-        }
+        }        
     }
 }

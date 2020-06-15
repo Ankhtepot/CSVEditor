@@ -16,7 +16,9 @@ namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
-        public const string OPTIONS_FILE_NAME = "options.json";
+        public const string APP_OPTIONS_FILE_NAME = "options.json";
+        public const string CSV_CONFIGURATIONS_FILE_NAME = "csv_conf.json";
+        public const string CONFIGURATION_FOLDER_NAME = "config";
 
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
 
@@ -25,7 +27,7 @@ namespace CSVEditor.ViewModel
         public static AppOptions AppOptions;
 
         public static string BaseAppPath;
-
+        public static string ConfigurationFolderPath;
 
         public string RootRepositoryPath
         {
@@ -85,7 +87,7 @@ namespace CSVEditor.ViewModel
             }
             set
             {
-                ProcessSelectedFile(value);
+                SetSelectedFile(value);
                 OnPropertyChanged();
             }
         }
@@ -96,8 +98,7 @@ namespace CSVEditor.ViewModel
             get { return selectedCsvFile; }
             set
             {
-                selectedCsvFile = value;
-                if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
+                SetSelectedCsvFile(value);
                 OnPropertyChanged();
             }
         }
@@ -125,6 +126,8 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
+        private ObservableCollection<CsvFileConfiguration> FileConfigurations { get; set; } //TODO List or ObsCollection? Manage update on change in ConfigEditor
+
         //*******************************
         //********** Commands ***********
         //*******************************
@@ -140,6 +143,7 @@ namespace CSVEditor.ViewModel
         public EditorVM()
         {
             BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            ConfigurationFolderPath = Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME);
             AsyncVM = new AsyncVM(this);
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
@@ -161,7 +165,7 @@ namespace CSVEditor.ViewModel
         //*********** Methods ***********
         //*******************************
 
-        public void ProcessSelectedFile(string value, bool needsProcessing = true)
+        public void SetSelectedFile(string value, bool needsProcessing = true)
         {
             selectedFile = value;
 
@@ -185,22 +189,101 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        private void SetSelectedCsvFile(CsvFile value)
+        {
+            if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
+            value.columnConfigurations = ResolveCsvFileConfiguration(
+                value.columnConfigurations,
+                value.AbsPath,
+                Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME));
+            selectedCsvFile = value;
+        }
+
+        private List<CsvColumnConfiguration> ResolveCsvFileConfiguration(
+            List<CsvColumnConfiguration> currentFileConfigurations,
+            string currentFileAbsPath,
+            string configurationsFilePath)
+        {
+            ResolveFileConfigurationsFile(currentFileConfigurations, currentFileAbsPath, configurationsFilePath);
+
+            return GetConfigurationForCurrentFile(currentFileConfigurations, currentFileAbsPath);
+        }
+
+        private void ResolveFileConfigurationsFile(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath, string configurationsFilePath)
+        {
+            if (FileConfigurations == null) // if configuration file wasn't loaded yet
+            {
+                FileConfigurations = new ObservableCollection<CsvFileConfiguration>();
+
+                var configurations = JsonServices.DeserializeJson<List<CsvFileConfiguration>>(configurationsFilePath, "Csv file configurations");
+
+                if (configurations == null) // if configuration file dosn't exist
+                {
+                    Console.WriteLine($"Creating new {CSV_CONFIGURATIONS_FILE_NAME}");
+
+                    var newFileConfiguration = new CsvFileConfiguration()
+                    {
+                        AbsoluteFilePath = currentFileAbsPath,
+                        ColumnConfigurations = currentFileConfigurations
+                    };
+
+                    var newFileConfigurations = new List<CsvFileConfiguration>() { newFileConfiguration };
+
+                    JsonServices.SerializeJson(
+                        newFileConfigurations,
+                        Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME),
+                        "Csv files configurations");
+
+                    FileConfigurations.Add(newFileConfiguration);
+                }
+                else // if configuration file already exists
+                {
+                    FileConfigurations.Clear();
+                    configurations.ForEach(configuration => FileConfigurations.Add(configuration));
+                }
+            }
+        }
+
+        private List<CsvColumnConfiguration> GetConfigurationForCurrentFile(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
+        {
+            var foundConfiguration = FileConfigurations
+                .Where(conf => conf.AbsoluteFilePath == currentFileAbsPath)
+                .FirstOrDefault().ColumnConfigurations;
+
+            return foundConfiguration != null
+                ? foundConfiguration
+                : currentFileConfigurations;
+        }
+
         private void setAppOptions()
         {
             AppOptions = new AppOptions();
 
-            var loadedOptions = JsonServices.DeserializeJson<AppOptions>(Path.Combine(BaseAppPath, OPTIONS_FILE_NAME), "App Options");
+            CheckConfigDirectory();
+
+            var loadedOptions = JsonServices.DeserializeJson<AppOptions>(
+                Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
+                "App Options");
 
             if (loadedOptions != null)
             {
                 RootRepositoryPath = loadedOptions.LastRootPath;
-                ProcessSelectedFile(loadedOptions.LastSelectedFilePath, false);
+                SetSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
                 CsvFilesStructure.Clear();
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
                 AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
                 SelectedItemIndex = 0;
+            }
+        }
+
+        private void CheckConfigDirectory()
+        {
+            if (!Directory.Exists(Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME)))
+            {
+                Console.WriteLine($"Creating new {CONFIGURATION_FOLDER_NAME} directory in {BaseAppPath}");
+                Directory.CreateDirectory(Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME));
             }
         }
 

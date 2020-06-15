@@ -52,7 +52,7 @@ namespace CSVEditor.View.Controls
                 control.DataContext as EditorVM,
                 control.SelectedLineIndex);
 
-            Console.WriteLine($"LineEditControl, new CsvFile set.");
+            //Console.WriteLine($"LineEditControl, new CsvFile set.");
 
             var topContainer = control.TopContainer as Grid;
             
@@ -70,12 +70,12 @@ namespace CSVEditor.View.Controls
 
             if (control == null || control.CsvFile == null)
             {
-                Console.WriteLine($"LineEditControl:SelectedLineIndexChanged CsvFileSelected not selected or control is null.");
+                //Console.WriteLine($"LineEditControl:SelectedLineIndexChanged CsvFileSelected not selected or control is null.");
                 return;
             }
 
             VM.LineIndex = control.SelectedLineIndex;
-            Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
+            //Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
 
             BuildGrid(control.TopContainer);
         }

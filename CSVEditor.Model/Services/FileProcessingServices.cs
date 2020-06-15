@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,7 +7,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Text.Json;
 
 namespace CSVEditor.Services
 {
@@ -30,7 +30,11 @@ namespace CSVEditor.Services
             return await Task.Run(() => string.Join(Environment.NewLine, lines));
         }
 
-        public static CsvFile CsvFileFromAbsPath(string path, List<char> blockIdentifiers, List<char> delimiters, BackgroundWorker worker = null)
+        public static CsvFile CsvFileFromAbsPath(
+            string path,
+            List<char> blockIdentifiers,
+            List<char> delimiters,
+            BackgroundWorker worker = null)
         {
             CsvFile result = new CsvFile();
 
@@ -58,7 +62,11 @@ namespace CSVEditor.Services
                 {
                     result.ColumnCount = result.HeadersStrings.Count;
                     result.AbsPath = path;
-                    ResolveCsvFileConfiguration(result);
+
+                    for (int i = 0; i < result.ColumnCount; i++)
+                    {
+                        result.ColumnConfigurations.Add(new CsvColumnConfiguration());
+                    }
 
                     var csvLines = new List<List<string>>();
                     var columnContents = GetColumnContents(RemoveFirstLineAsync(text).Result, result.Delimiter, blockIdentifiers, worker) ?? new ObservableCollection<string>();
@@ -91,15 +99,7 @@ namespace CSVEditor.Services
             }            
 
             return result;
-        }
-
-        private static void ResolveCsvFileConfiguration(CsvFile result)
-        {
-            for (int i = 0; i < result.ColumnCount; i++)
-            {
-                result.ColumnConfigurations.Add(new CsvColumnConfiguration());
-            }
-        }
+        }       
 
         public static ObservableCollection<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)
         {

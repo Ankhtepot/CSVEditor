@@ -1,12 +1,6 @@
 ﻿using CSVEditor.Model.Services;
 using CSVEditor.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace CSVEditor.View
@@ -18,7 +12,9 @@ namespace CSVEditor.View
     {
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            JsonServices.SerializeJson(EditorVM.AppOptions, Path.Combine(EditorVM.BaseAppPath, EditorVM.OPTIONS_FILE_NAME), "App Options");
+            JsonServices.SerializeJson(EditorVM.AppOptions,
+                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.APP_OPTIONS_FILE_NAME),
+                "App Options");
         }
     }
 }
