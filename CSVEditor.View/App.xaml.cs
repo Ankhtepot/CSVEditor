@@ -15,6 +15,10 @@ namespace CSVEditor.View
             JsonServices.SerializeJson(EditorVM.AppOptions,
                 Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.APP_OPTIONS_FILE_NAME),
                 "App Options");
+
+            JsonServices.SerializeJson(EditorVM.FileConfigurations,
+                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.CSV_CONFIGURATIONS_FILE_NAME),
+                "Csv file configurations");
         }
     }
 }

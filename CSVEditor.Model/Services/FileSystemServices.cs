@@ -49,7 +49,7 @@ namespace CSVEditor.ViewModel
                     {
                         return true;
                     }
-                } 
+                }
             }
 
             return false;
@@ -78,7 +78,7 @@ namespace CSVEditor.ViewModel
 
         private static List<string> getDirectoriesFromPath(string path, BackgroundWorker worker = null)
         {
-            if(worker != null && worker.CancellationPending)
+            if (worker != null && worker.CancellationPending)
             {
                 return null;
             }
@@ -92,7 +92,7 @@ namespace CSVEditor.ViewModel
             catch (UnauthorizedAccessException e)
             {
                 Console.WriteLine($"Insufficient rights to scan direcotry at \"{path}\".");
-            }            
+            }
 
             return directories;
         }
@@ -113,9 +113,25 @@ namespace CSVEditor.ViewModel
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
             directoryPath = directoryPath == "." ? Constants.ROOT_DIRECTORY : directoryPath;
 
-            return (csvFiles != null && csvFiles.Count > 0) 
-                ? new DirectoryWithCsv(directoryPath, csvFiles) 
+            return (csvFiles != null && csvFiles.Count > 0)
+                ? new DirectoryWithCsv(directoryPath, csvFiles)
                 : null;
-        }        
+        }
+
+        public static List<CsvFileConfiguration> LoadFileConfigurationsFile(string configurationsFilePath)
+        {
+            try
+            {
+                return JsonServices.DeserializeJson<List<CsvFileConfiguration>>(configurationsFilePath, "Csv file configurations");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Creating new {Path.GetFileName(configurationsFilePath)} in {configurationsFilePath}");
+
+                File.Create(configurationsFilePath);
+
+                return null;
+            }
+        }
     }
 }

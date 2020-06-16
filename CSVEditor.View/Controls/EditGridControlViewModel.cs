@@ -3,21 +3,29 @@ using CSVEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.View.Controls
 {
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
-        private const double MAX_COLUMN_WIDTH = 500d;
-        private const double MIN_COLUMN_WIDTH = 30d;
-        private const double IMAGE_WIDTH = 200d;
-        private const double IMAGE_HEIGHT = 150d;
+        public const string HEADER_TEXT_BOX_STYLE = "HeaderTextBlockStyle";
+        public const string LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE = "LeftAlignedHeaderTextBoxStyle";
+        public const string HEADER_GRID_STYLE = "HeaderGridStyle";
+
+        public double MaxColumnWidth { get; set; } = 500d;
+        public double MinColumnWidth { get; set; } = 30d;
+        public double ImageWidth { get; set; } = 200d;
+        public double ImageHeight { get; set; } = 150d;
+        public Thickness ElementMargin { get; set; } = new Thickness(2d);
 
         private EditorVM context;
         public EditorVM Context
@@ -59,7 +67,7 @@ namespace CSVEditor.View.Controls
             AddRowsDefinitionsToGrid();
             AddColumnContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
             AddColumnContent(1, HeadersColumnCreationMethod, "Fields");
-            AddColumnContent(2, (i) => CreateDataCellElement(CsvFile.ColumnConfigurations[i].Type, i), "Data", "LeftAlignedHeaderTextBoxStyle");
+            AddColumnContent(2, (i) => CreateDataCellElement(CsvFile.ColumnConfigurations[i].Type, i), "Data", LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE);
 
             return MainGrid;
         }
@@ -73,7 +81,7 @@ namespace CSVEditor.View.Controls
             AddColumnContent(1, HeadersColumnCreationMethod, "Column\nName");
             AddColumnContent(2, HeaderSelectionColumnCreationMethod, "Displayed\nColumn");
             AddColumnContent(3, ItemTypeSelectionColumnCreationMethod, "Field\nType");
-            AddColumnContent(4, UriColumnCreationMethod, "URI", "LeftAlignedHeaderTextBoxStyle");
+            AddColumnContent(4, UriColumnCreationMethod, "URI", LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE);
 
             return MainGrid;
         }
@@ -91,8 +99,8 @@ namespace CSVEditor.View.Controls
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition()
             {
                 Width = GridLength.Auto,
-                MaxWidth = MAX_COLUMN_WIDTH,
-                MinWidth = MIN_COLUMN_WIDTH
+                MaxWidth = MaxColumnWidth,
+                MinWidth = MinColumnWidth
             });
         }
 
@@ -150,6 +158,7 @@ namespace CSVEditor.View.Controls
 
             context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
             CsvFile.ColumnConfigurations[columnNumber].Type = newValue;
+            context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
         }
 
         private UIElement UriColumnCreationMethod(int count)
@@ -159,7 +168,7 @@ namespace CSVEditor.View.Controls
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Text = "TESTTESTTEST",// CsvFile.ColumnConfigurations[count - 1].URI,
-                MinWidth = MIN_COLUMN_WIDTH
+                MinWidth = MinColumnWidth
             };
         }
 
@@ -167,7 +176,7 @@ namespace CSVEditor.View.Controls
             int columnNr,
             Func<int, UIElement> creationMethod,
             string headerName,
-            string columnHeaderStyle = "HeaderTextBlockStyle")
+            string columnHeaderStyle = HEADER_TEXT_BOX_STYLE)
         {
             AddColumnDefinitionToGrid();
 
@@ -186,60 +195,75 @@ namespace CSVEditor.View.Controls
 
         private UIElement CreateDataCellElement(FieldType type, int columnNr)
         {
-            var lineData = CsvFile.Lines[LineIndex];
-            var newElement = new UIElement();
-            var elementMargin = new Thickness(2d);
-            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
-            binding.Source = Context;
-            binding.Mode = BindingMode.TwoWay;
-            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            var columnContent = CsvFile.Lines[LineIndex][columnNr];
 
             switch (type)
             {
                 case FieldType.TextBox:
                     {
-                        newElement = new TextBox()
+                        var newElement = new TextBox()
                         {
-                            Margin = elementMargin,
+                            Margin = ElementMargin,
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
                         var newTextBox = newElement as TextBox;
                         
-                        newTextBox.SetBinding(TextBox.TextProperty, binding);
+                        newTextBox.SetBinding(TextBox.TextProperty, getBaseBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.TextArea:
                     {
-                        newElement = new TextBox()
+                        var newElement = new TextBox()
                         {
-                            Margin = elementMargin,
-                            Text = lineData[columnNr],
+                            Margin = ElementMargin,
+                            Text = columnContent,
                             AcceptsReturn = true
                         };
-                        (newElement as TextBox).SetBinding(TextBox.TextProperty, binding);
+                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.Select:
                     return new ComboBox()
                     {
-                        Margin = elementMargin,
+                        Margin = ElementMargin,
                         ItemsSource = GetColumnDistinctValues(columnNr)
                     };
                 case FieldType.Image:
-                    return new Image()
-                    {
-                        Margin = elementMargin,
-                        Height = IMAGE_HEIGHT,
-                        Width = IMAGE_WIDTH,
-                        //TODO: add loading image from path
-                    };
+                    return BuildImageElement(columnContent);
                 case FieldType.URI:
                     return new TextBox()
                     {
-                        Margin = elementMargin,
+                        Margin = ElementMargin,
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
             };
+        }
+
+        private Binding getBaseBinding(int columnNr)
+        {
+            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
+            binding.Source = Context;
+            binding.Mode = BindingMode.TwoWay;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            return binding;
+        }
+
+        private UIElement BuildImageElement(string imagePath)
+        {
+            var path = Regex.Replace(imagePath, "\r", "");
+            path = Regex.Replace(path, "/", @"\");
+            path = Path.Combine(Context.RootRepositoryPath, path);
+
+            var newImage = new Image()
+            {
+                Margin = ElementMargin,
+                Height = ImageHeight,
+                Width = ImageWidth,
+                //Source = new BitmapImage(new Uri(path)) //TODO: Fix path creation
+            };
+
+            return newImage;
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)
@@ -247,11 +271,10 @@ namespace CSVEditor.View.Controls
             return CsvFile.Lines.Select(Line => Line[columnNr]).Distinct().ToList();
         }
 
-        //TODO: Use constants instead direct strings both in xaml and here
-        public UIElement BuildHeader(int columnNumber, string text, string headerStyle = "HeaderTextBlockStyle")
+        public UIElement BuildHeader(int columnNumber, string text, string headerStyle = HEADER_TEXT_BOX_STYLE)
         {
             var wrapperGrid = new Grid();
-            wrapperGrid.Style = (Style)Resources["HeaderGridStyle"];
+            wrapperGrid.Style = (Style)Resources[HEADER_GRID_STYLE];
 
             var newHeader = new TextBlock();
             newHeader.Style = (Style)Resources[headerStyle];
