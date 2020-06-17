@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.Services;
 using CSVEditor.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -150,6 +151,33 @@ namespace CSVEditor.View.Controls
             return newComboBox;
         }
 
+        private UIElement UriColumnCreationMethod(int count)
+        {
+            var newUri = new TextBox()
+            {
+                Padding = new Thickness(5),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Text = CsvFile.ColumnConfigurations[count].URI,
+                MinWidth = MinColumnWidth,
+                Tag = count
+            };
+
+            newUri.TextChanged += NewUri_TextChanged;
+
+            return newUri;
+        }
+
+        private void NewUri_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var columnNumber = (int)((TextBox)sender).Tag;
+            var context = ((TextBox)sender).DataContext as EditorVM;
+            var newValue = ((TextBox)sender).Text;
+
+            context.SelectedCsvFile.ColumnConfigurations[columnNumber].URI = newValue;
+            CsvFile.ColumnConfigurations[columnNumber].URI = newValue;
+            context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
+        }
+
         private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var columnNumber = (int)((ComboBox)sender).Tag;
@@ -159,17 +187,6 @@ namespace CSVEditor.View.Controls
             context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
             CsvFile.ColumnConfigurations[columnNumber].Type = newValue;
             context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
-        }
-
-        private UIElement UriColumnCreationMethod(int count)
-        {
-            return new TextBlock()
-            {
-                Padding = new Thickness(5),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Text = "TESTTESTTEST",// CsvFile.ColumnConfigurations[count - 1].URI,
-                MinWidth = MinColumnWidth
-            };
         }
 
         private void AddColumnContent(
@@ -229,7 +246,10 @@ namespace CSVEditor.View.Controls
                         ItemsSource = GetColumnDistinctValues(columnNr)
                     };
                 case FieldType.Image:
-                    return BuildImageElement(columnContent);
+                    {
+
+                        return BuildImageElementControl(columnContent);
+                    }
                 case FieldType.URI:
                     return new TextBox()
                     {
@@ -249,21 +269,38 @@ namespace CSVEditor.View.Controls
             return binding;
         }
 
-        private UIElement BuildImageElement(string imagePath)
+        private UIElement BuildImageElementControl(string imagePath)
         {
             var path = Regex.Replace(imagePath, "\r", "");
             path = Regex.Replace(path, "/", @"\");
-            path = Path.Combine(Context.RootRepositoryPath, path);
+            path = Path.Combine(Context.RootRepositoryPath, path.Substring(1));
 
-            var newImage = new Image()
+            //var wrapGrid = BuildBasicGrid(3, 2);
+
+            //var newImage = new Image()
+            //{
+            //    Margin = ElementMargin,
+            //    Height = ImageHeight,
+            //    Width = ImageWidth,                
+            //};
+
+            BitmapImage newImage;
+
+            if (File.Exists(path))
             {
-                Margin = ElementMargin,
-                Height = ImageHeight,
-                Width = ImageWidth,
-                //Source = new BitmapImage(new Uri(path)) //TODO: Fix path creation
-            };
+                newImage = new BitmapImage(new Uri(path));
+            }
+            else
+            {
+                newImage = ResourceHelper.LoadBitmapFromResource("images/no_image_available.png");
+            }
+            //Grid.SetColumn(newImage, 0);
+            //Grid.SetRow(newImage, 0);
+            //Grid.SetRowSpan(newImage, 3);
 
-            return newImage;
+            //return newImage;
+
+            return new ImageElementControl() { Image = newImage, MaxHeight = ImageHeight};
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)
@@ -287,6 +324,23 @@ namespace CSVEditor.View.Controls
             wrapperGrid.Children.Add(newHeader);
 
             return wrapperGrid;
+        }
+
+        public Grid BuildBasicGrid(int rowCount, int columnCount)
+        {
+            var newGrid = new Grid();
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            }
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                newGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            }
+
+            return newGrid;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

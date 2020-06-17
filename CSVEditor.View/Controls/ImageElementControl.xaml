@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="CSVEditor.View.Controls.ImageElementControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="Border" x:Key="BaseBorderStyle">
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+            <Setter Property="BorderThickness" Value="1"></Setter>
+            <!--<Setter Property="CornerRadius" Value="5"></Setter>-->
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource BaseBorderStyle}"
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="7">
+            <Image Source="/CSVEditor.View;component/images/no_image_available.png"
+                   x:Name="ImageFromSource"/>
+        </Border>
+        <Label Grid.Column="1" Grid.Row="1"
+               Content="Content"/>
+        <TextBox Grid.Column="1" Grid.Row="2"
+                 FontSize="16"
+                 Text="placeholder for cell text"/>
+        <Label Grid.Column="1" Grid.Row="4"
+               Content="Save to:"/>
+        <TextBlock Grid.Column="1" Grid.Row="5"
+                   FontSize="16"
+                   Text="placeholder for URI from configuration"/>
+    </Grid>
+</UserControl>
