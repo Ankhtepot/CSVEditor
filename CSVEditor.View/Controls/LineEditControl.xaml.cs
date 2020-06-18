@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.Services;
 using CSVEditor.ViewModel;
 using System;
 using System.Windows;
@@ -41,7 +42,7 @@ namespace CSVEditor.View.Controls
             var control = (LineEditControl)d;
             var newValue = (CsvFile)e.NewValue;
 
-            if (control == null || newValue == null || control.SelectedLineIndex == -1)
+            if (control == null || newValue == null)
             {
                 return;
             }
@@ -50,7 +51,7 @@ namespace CSVEditor.View.Controls
                 control.Resources,
                 control.CsvFile as CsvFile,
                 control.DataContext as EditorVM,
-                control.SelectedLineIndex);
+                control.SelectedLineIndex < 0 ? 0 : control.SelectedLineIndex);
 
             //Console.WriteLine($"LineEditControl, new CsvFile set.");
 
@@ -75,7 +76,7 @@ namespace CSVEditor.View.Controls
             }
 
             VM.LineIndex = newValue;
-            //Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
+            Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
 
             BuildGrid(control.TopContainer);
         }
