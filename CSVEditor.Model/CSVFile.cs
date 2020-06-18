@@ -63,7 +63,7 @@ namespace CSVEditor.Model
             set { lines = value; OnPropertyChanged(); }
         }
 
-        public List<CsvColumnConfiguration> columnConfigurations;
+        private List<CsvColumnConfiguration> columnConfigurations;
         public List<CsvColumnConfiguration> ColumnConfigurations
         {
             get { return columnConfigurations; }

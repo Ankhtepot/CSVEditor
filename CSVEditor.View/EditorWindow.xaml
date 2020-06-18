@@ -255,12 +255,14 @@
                                             <uc:LineEditControl SelectedLineIndex="{Binding SelectedItemIndex}"
                                                                 CsvFile="{Binding SelectedCsvFile}"
                                                                 Visibility="{Binding IsLineEditMode,
-                                                                Converter={StaticResource BoolToVisibilityConverter}}"
+                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                                                                HorizontalAlignment="Stretch"
                                                                />   
                                             <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}"
-                                                   Visibility="{Binding IsLineEditMode,
-                                                    Converter={StaticResource BoolToVisibilityConverter},
-                                                    ConverterParameter=false}"
+                                                                         Visibility="{Binding IsLineEditMode,
+                                                                          Converter={StaticResource BoolToVisibilityConverter},
+                                                                          ConverterParameter=false}"
+                                                                         HorizontalAlignment="Stretch"
                                                    />
                                         </Grid>
                                     </Border>

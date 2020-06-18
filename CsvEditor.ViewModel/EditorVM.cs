@@ -111,6 +111,7 @@ namespace CSVEditor.ViewModel
             set
             {
                 selectedItemIndex = value;
+                Console.WriteLine($"EditorVM, selectedIndexUpdated to {value}");
                 OnPropertyChanged();
             }
         }
@@ -193,7 +194,7 @@ namespace CSVEditor.ViewModel
         private void setSelectedCsvFile(CsvFile value)
         {
             if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
-            value.columnConfigurations = resolveCsvFileConfiguration(value.columnConfigurations, value.AbsPath);
+            value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
             selectedCsvFile = value;
         }
 

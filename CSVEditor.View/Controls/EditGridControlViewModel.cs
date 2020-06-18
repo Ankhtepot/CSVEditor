@@ -225,7 +225,7 @@ namespace CSVEditor.View.Controls
                         };
                         var newTextBox = newElement as TextBox;
                         
-                        newTextBox.SetBinding(TextBox.TextProperty, getBaseBinding(columnNr));
+                        newTextBox.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.TextArea:
@@ -236,7 +236,7 @@ namespace CSVEditor.View.Controls
                             Text = columnContent,
                             AcceptsReturn = true
                         };
-                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseBinding(columnNr));
+                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.Select:
@@ -248,7 +248,7 @@ namespace CSVEditor.View.Controls
                 case FieldType.Image:
                     {
 
-                        return BuildImageElementControl(columnContent);
+                        return BuildImageElementControl(columnNr, columnContent);
                     }
                 case FieldType.URI:
                     return new TextBox()
@@ -259,7 +259,7 @@ namespace CSVEditor.View.Controls
             };
         }
 
-        private Binding getBaseBinding(int columnNr)
+        private Binding getBaseTwoWayBinding(int columnNr)
         {
             var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
             binding.Source = Context;
@@ -269,38 +269,27 @@ namespace CSVEditor.View.Controls
             return binding;
         }
 
-        private UIElement BuildImageElementControl(string imagePath)
+        private Binding getBaseBinding(int columnNr)
         {
-            var path = Regex.Replace(imagePath, "\r", "");
-            path = Regex.Replace(path, "/", @"\");
-            path = Path.Combine(Context.RootRepositoryPath, path.Substring(1));
+            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
+            binding.Source = Context;
 
-            //var wrapGrid = BuildBasicGrid(3, 2);
+            return binding;
+        }
 
-            //var newImage = new Image()
-            //{
-            //    Margin = ElementMargin,
-            //    Height = ImageHeight,
-            //    Width = ImageWidth,                
-            //};
-
-            BitmapImage newImage;
-
-            if (File.Exists(path))
+        private UIElement BuildImageElementControl(int columnNr, string imageCellContent)
+        {
+            var newImageControl = new ImageElementControl()
             {
-                newImage = new BitmapImage(new Uri(path));
-            }
-            else
-            {
-                newImage = ResourceHelper.LoadBitmapFromResource("images/no_image_available.png");
-            }
-            //Grid.SetColumn(newImage, 0);
-            //Grid.SetRow(newImage, 0);
-            //Grid.SetRowSpan(newImage, 3);
+                DataContext = Context,
+                
+                MaxHeight = ImageHeight
+            };
 
-            //return newImage;
+            newImageControl.ColumnNr = columnNr;
+            newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
 
-            return new ImageElementControl() { Image = newImage, MaxHeight = ImageHeight};
+            return newImageControl;
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)
@@ -329,6 +318,8 @@ namespace CSVEditor.View.Controls
         public Grid BuildBasicGrid(int rowCount, int columnCount)
         {
             var newGrid = new Grid();
+
+            newGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 
             for (int i = 0; i < rowCount; i++)
             {
