@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 using CSVEditor.Model;
 using CSVEditor.Model.Services;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -132,6 +133,22 @@ namespace CSVEditor.ViewModel
 
                 return null;
             }
+        }
+
+        public static BitmapImage SetBitmapImageFromPath(string path)
+        {
+            BitmapImage newImage;
+
+            if (File.Exists(path))
+            {
+                newImage = new BitmapImage(new Uri(path));
+            }
+            else
+            {
+                newImage = ResourceHelper.LoadBitmapFromResource("images/no_image_available.png");
+            }
+
+            return newImage;
         }
     }
 }

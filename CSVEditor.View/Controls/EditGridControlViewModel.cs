@@ -22,7 +22,7 @@ namespace CSVEditor.View.Controls
         public const string LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE = "LeftAlignedHeaderTextBoxStyle";
         public const string HEADER_GRID_STYLE = "HeaderGridStyle";
 
-        public double MaxColumnWidth { get; set; } = 500d;
+        public double MaxColumnWidth { get; set; } = 1000d;
         public double MinColumnWidth { get; set; } = 30d;
         public double ImageWidth { get; set; } = 200d;
         public double ImageHeight { get; set; } = 150d;
@@ -66,9 +66,13 @@ namespace CSVEditor.View.Controls
             SetupNewGrid();
 
             AddRowsDefinitionsToGrid();
-            AddColumnContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
-            AddColumnContent(1, HeadersColumnCreationMethod, "Fields");
-            AddColumnContent(2, (i) => CreateDataCellElement(CsvFile.ColumnConfigurations[i].Type, i), "Data", LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE);
+            AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
+            AddColumnWithContent(1, HeadersColumnCreationMethod, "Fields");
+            AddColumnWithContent(2,
+                (i) => CreateDataCellElement(CsvFile.ColumnConfigurations[i].Type, i),
+                "Data",
+                LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE,
+                true);
 
             return MainGrid;
         }
@@ -78,11 +82,11 @@ namespace CSVEditor.View.Controls
             SetupNewGrid();
 
             AddRowsDefinitionsToGrid();
-            AddColumnContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
-            AddColumnContent(1, HeadersColumnCreationMethod, "Column\nName");
-            AddColumnContent(2, HeaderSelectionColumnCreationMethod, "Displayed\nColumn");
-            AddColumnContent(3, ItemTypeSelectionColumnCreationMethod, "Field\nType");
-            AddColumnContent(4, UriColumnCreationMethod, "URI", LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE);
+            AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
+            AddColumnWithContent(1, HeadersColumnCreationMethod, "Column\nName");
+            AddColumnWithContent(2, HeaderSelectionColumnCreationMethod, "Displayed\nColumn");
+            AddColumnWithContent(3, ItemTypeSelectionColumnCreationMethod, "Field\nType");
+            AddColumnWithContent(4, UriColumnCreationMethod, "URI", LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE, true);
 
             return MainGrid;
         }
@@ -95,14 +99,22 @@ namespace CSVEditor.View.Controls
             }
         }
 
-        private void AddColumnDefinitionToGrid()
+        private void AddColumnDefinitionToGrid(bool isLastColumn = false)
         {
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition()
+            var newDefinition = new ColumnDefinition()
             {
-                Width = GridLength.Auto,
-                MaxWidth = MaxColumnWidth,
+                Width = isLastColumn
+                  ? new GridLength(1, GridUnitType.Star)
+                  : GridLength.Auto,
                 MinWidth = MinColumnWidth
-            });
+            };
+
+            if (!isLastColumn)
+            {
+                newDefinition.MaxWidth = MaxColumnWidth;
+            }
+
+            MainGrid.ColumnDefinitions.Add(newDefinition);
         }
 
         private UIElement RowNumberColumnCreationMethod(int count)
@@ -189,13 +201,15 @@ namespace CSVEditor.View.Controls
             context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
         }
 
-        private void AddColumnContent(
+        private void AddColumnWithContent(
             int columnNr,
             Func<int, UIElement> creationMethod,
             string headerName,
-            string columnHeaderStyle = HEADER_TEXT_BOX_STYLE)
+            string columnHeaderStyle = HEADER_TEXT_BOX_STYLE,
+            bool isLastColumn = false
+            )
         {
-            AddColumnDefinitionToGrid();
+            AddColumnDefinitionToGrid(isLastColumn);
 
             MainGrid.Children.Add(BuildHeader(columnNr, headerName, columnHeaderStyle));
 

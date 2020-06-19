@@ -50,7 +50,7 @@ namespace CSVEditor.View.Controls
         private static void ImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (ImageElementControl)d;
-            var imageCellContent = (string)e.NewValue;            
+            var imageCellContent = (string)e.NewValue;
 
             if (control == null || imageCellContent == null)
             {
@@ -59,20 +59,7 @@ namespace CSVEditor.View.Controls
 
             var Context = control.DataContext as EditorVM;
 
-            var path = Regex.Replace(imageCellContent, "\r", "");
-            path = Regex.Replace(path, "/", @"\");
-            path = Path.Combine(Context.RootRepositoryPath, path.Substring(1));
-
-            BitmapImage newImage;
-
-            if (File.Exists(path))
-            {
-                newImage = new BitmapImage(new Uri(path));
-            }
-            else
-            {
-                newImage = ResourceHelper.LoadBitmapFromResource("images/no_image_available.png");
-            }
+            var newImage = GetImageSource(imageCellContent, Context.RootRepositoryPath);
 
             var cellContentBinding = new Binding($"SelectedCsvFile.Lines[{control.LineIndex}][{control.ColumnNr}]");
             cellContentBinding.Source = Context;
@@ -84,9 +71,29 @@ namespace CSVEditor.View.Controls
             control.ImageFromSource.Source = newImage;
         }
 
+        private static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath)
+        {
+            string path = ConvertContentPathToSystemPath(cellContent);
+            path = Path.Combine(rootRepositoryPath, path.Substring(1));
+
+            return FileSystemServices.SetBitmapImageFromPath(path);
+        }
+
+        public static string ConvertContentPathToSystemPath(string imageCellContent)
+        {
+            var path = Regex.Replace(imageCellContent, "\r", "");
+            path = Regex.Replace(path, "/", @"\");
+            return path;
+        }
+
         public ImageElementControl()
         {
             InitializeComponent();
+        }
+
+        private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+           
         }
     }
 }

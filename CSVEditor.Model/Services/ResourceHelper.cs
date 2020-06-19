@@ -26,7 +26,7 @@ namespace CSVEditor.Model.Services
             {
                 pathInApplication = pathInApplication.Substring(1);
             }
-            return new BitmapImage(new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute));
+            return new BitmapImage(new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute));
         }
     }
 }
