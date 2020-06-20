@@ -7,6 +7,7 @@ namespace CSVEditor.Model
         public string LastRootPath { get; set; }
         public string LastSelectedFilePath { get; set; }
         public CsvFile LastSelectedCsvFile { get; set; }
+        public VisualConfig VisualConfig { get; set; }
         public List<char> Delimiters { get; set; }
         public List<char> BlockIdentifiers { get; set; }
         public List<DirectoryWithCsv> LastCsvFilesStructure { get; set; }
@@ -15,6 +16,7 @@ namespace CSVEditor.Model
             "",
             "",
             null,
+            new VisualConfig(),
             CsvFile.Delimiters,
             CsvFile.BlockIdentifiers,
             new List<DirectoryWithCsv>() { new DirectoryWithCsv() })
@@ -25,6 +27,7 @@ namespace CSVEditor.Model
             string lastRootPath,
             string lastSelectedFilePath,
             CsvFile lastSelectedCsvFile,
+            VisualConfig visulaConfig,
             List<char> delimiters,
             List<char> blockIdentifiers,
             List<DirectoryWithCsv> lastCsvFilesStructure)
@@ -32,6 +35,7 @@ namespace CSVEditor.Model
             LastRootPath = lastRootPath;
             LastSelectedFilePath = lastSelectedFilePath;
             LastSelectedCsvFile = lastSelectedCsvFile;
+            VisualConfig = visulaConfig;
             Delimiters = delimiters;
             BlockIdentifiers = blockIdentifiers;
             LastCsvFilesStructure = lastCsvFilesStructure;

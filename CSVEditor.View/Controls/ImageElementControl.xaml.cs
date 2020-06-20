@@ -21,6 +21,8 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class ImageElementControl : UserControl
     {
+        public static readonly string ROOT_DIRECTORY = "Root Directory";
+
         public string ImageCellContent
         {
             get { return (string)GetValue(ImageCellContentProperty); }
@@ -66,12 +68,16 @@ namespace CSVEditor.View.Controls
             cellContentBinding.Mode = BindingMode.TwoWay;
             cellContentBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            control.UriContentTextBlock.Text = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
+            var configUri = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
+
+            control.UriContentTextBlock.Text = string.IsNullOrEmpty(configUri) 
+                ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}" 
+                : configUri;
             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
             control.ImageFromSource.Source = newImage;
         }
 
-        private static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath)
+        public static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath)
         {
             string path = ConvertContentPathToSystemPath(cellContent);
             path = Path.Combine(rootRepositoryPath, path.Substring(1));
@@ -93,7 +99,17 @@ namespace CSVEditor.View.Controls
 
         private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-           
+            ImageFromSource.Source = GetImageSource(((TextBox)sender).Text, (DataContext as EditorVM).RootRepositoryPath);
+        }
+
+        private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void ImageFromSource_Drop(object sender, DragEventArgs e)
+        {
+
         }
     }
 }

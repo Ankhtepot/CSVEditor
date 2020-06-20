@@ -36,19 +36,25 @@
                 Grid.Column="0"
                 Grid.Row="0"
                 Grid.RowSpan="7">
-            <Image x:Name="ImageFromSource"/>
+            <Image x:Name="ImageFromSource"
+                   AllowDrop="True"
+                   PreviewDrop="ImageFromSource_PreviewDrop"
+                   Drop="ImageFromSource_Drop"
+                   />
         </Border>
         <Label Grid.Column="1" Grid.Row="1"
                Content="Content"/>
         <TextBox Grid.Column="1" Grid.Row="2"
                  x:Name="CellContentTextBox"
                  FontSize="16"
+                 Margin="3"
                  TextChanged="CellContentTextBox_TextChanged">
         </TextBox>
         <Label Grid.Column="1" Grid.Row="4"
                Content="Save to:"/>
         <TextBlock Grid.Column="1" Grid.Row="5"
                    x:Name="UriContentTextBlock"
-                   FontSize="16"/>
+                   FontSize="16"
+                   Margin="3"/>
     </Grid>
 </UserControl>

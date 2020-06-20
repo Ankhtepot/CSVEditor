@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
@@ -65,19 +66,6 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        //TODO: remove if not neccesarry
-        private DirectoryWithCsv selectedDirectory;
-        public DirectoryWithCsv SelectedDirectory
-        {
-            get { return selectedDirectory; }
-            set
-            {
-                selectedDirectory = value;
-                Console.WriteLine("Selected Directory: " + selectedDirectory?.DirectoryAbsolutePath);
-                OnPropertyChanged();
-            }
-        }
-
         private string selectedFile;
         public string SelectedFile
         {
@@ -104,7 +92,6 @@ namespace CSVEditor.ViewModel
         }
 
         private int selectedItemIndex;
-
         public int SelectedItemIndex
         {
             get { return selectedItemIndex; }
@@ -160,8 +147,10 @@ namespace CSVEditor.ViewModel
             SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);
 
             FileConfigurations = FileSystemServices.LoadFileConfigurationsFile(Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME));
+            Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
             setAppOptions();
-        }
+            SetVisuals(AppOptions.VisualConfig);
+        }       
 
         //*******************************
         //*********** Methods ***********
@@ -269,7 +258,20 @@ namespace CSVEditor.ViewModel
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
                 AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
                 SelectedItemIndex = 0;
+                AppOptions.VisualConfig = loadedOptions.VisualConfig;
             }
+        }
+
+        private void SetVisuals(VisualConfig visualConfig)
+        {
+            Application.Current.MainWindow.Width = visualConfig.MainWindowWidth;
+            Application.Current.MainWindow.Height = visualConfig.MainWindowHeight;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AppOptions.VisualConfig.MainWindowWidth = e.NewSize.Width;
+            AppOptions.VisualConfig.MainWindowHeight = e.NewSize.Height;
         }
 
         private void checkConfigDirectory()

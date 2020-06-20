@@ -238,7 +238,7 @@ namespace CSVEditor.View.Controls
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
                         var newTextBox = newElement as TextBox;
-                        
+
                         newTextBox.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
@@ -254,14 +254,20 @@ namespace CSVEditor.View.Controls
                         return newElement;
                     };
                 case FieldType.Select:
-                    return new ComboBox()
                     {
-                        Margin = ElementMargin,
-                        ItemsSource = GetColumnDistinctValues(columnNr)
+                        var columnDistinctValues = GetColumnDistinctValues(columnNr);
+
+                        return new ComboBox()
+                        {
+                            Margin = ElementMargin,
+                            ItemsSource = columnDistinctValues,
+                            SelectedIndex = columnDistinctValues.FindIndex(record => record == columnContent),
+                            MaxWidth = MaxColumnWidth,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                        };
                     };
                 case FieldType.Image:
                     {
-
                         return BuildImageElementControl(columnNr, columnContent);
                     }
                 case FieldType.URI:
@@ -296,11 +302,10 @@ namespace CSVEditor.View.Controls
             var newImageControl = new ImageElementControl()
             {
                 DataContext = Context,
-                
-                MaxHeight = ImageHeight
+                MaxHeight = ImageHeight,
+                ColumnNr = columnNr
             };
 
-            newImageControl.ColumnNr = columnNr;
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
 
             return newImageControl;

@@ -20,6 +20,5 @@ namespace CSVEditor.Model.Services
 
             return source;
         }
-
     }
 }
