@@ -59,5 +59,10 @@ namespace CSVEditor.View.Controls
 
             topContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            VM.QueryForRelativePathToRootPathCommand.Execute();
+        }
     }
 }

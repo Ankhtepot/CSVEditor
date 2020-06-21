@@ -60,27 +60,30 @@ namespace CSVEditor.View.Controls
             }
 
             var Context = control.DataContext as EditorVM;
-
-            var newImage = GetImageSource(imageCellContent, Context.RootRepositoryPath);
+            var configUri = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
+            var newImage = GetImageSource(imageCellContent, Context.RootRepositoryPath, configUri);
 
             var cellContentBinding = new Binding($"SelectedCsvFile.Lines[{control.LineIndex}][{control.ColumnNr}]");
             cellContentBinding.Source = Context;
             cellContentBinding.Mode = BindingMode.TwoWay;
             cellContentBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            var configUri = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
+            
 
             control.UriContentTextBlock.Text = string.IsNullOrEmpty(configUri) 
                 ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}" 
                 : configUri;
+
             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
+
             control.ImageFromSource.Source = newImage;
         }
 
-        public static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath)
+        public static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath, string configUri)
         {
             string path = ConvertContentPathToSystemPath(cellContent);
-            path = Path.Combine(rootRepositoryPath, path.Substring(1));
+            string uriPath = configUri;
+            path = Path.Combine(string.IsNullOrEmpty(configUri) ? rootRepositoryPath : uriPath, path);
 
             return FileSystemServices.SetBitmapImageFromPath(path);
         }
@@ -89,6 +92,10 @@ namespace CSVEditor.View.Controls
         {
             var path = Regex.Replace(imageCellContent, "\r", "");
             path = Regex.Replace(path, "/", @"\");
+            if (!char.IsLetterOrDigit(path[0]))
+            {
+                path = path.Substring(1);
+            }
             return path;
         }
 
@@ -99,7 +106,12 @@ namespace CSVEditor.View.Controls
 
         private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ImageFromSource.Source = GetImageSource(((TextBox)sender).Text, (DataContext as EditorVM).RootRepositoryPath);
+            var Context = DataContext as EditorVM;
+            var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
+            ImageFromSource.Source = GetImageSource(
+                ((TextBox)sender).Text,                
+                Context.RootRepositoryPath,
+                uriText);
         }
 
         private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)

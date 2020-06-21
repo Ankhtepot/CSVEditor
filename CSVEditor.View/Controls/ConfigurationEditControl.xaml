@@ -25,6 +25,13 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Background" Value="LightCoral"/>
         </Style>
+        <ContextMenu x:Key="UriTextBoxContextMenu" x:Shared="true">
+            <MenuItem Command="ApplicationCommands.Copy" />
+            <MenuItem Command="ApplicationCommands.Cut" />
+            <MenuItem Command="ApplicationCommands.Paste" />
+            <Separator/>
+            <MenuItem Header="Select relative save path." Click="MenuItem_Click" />
+        </ContextMenu>
     </UserControl.Resources>
 
     <ScrollViewer HorizontalScrollBarVisibility ="Auto"

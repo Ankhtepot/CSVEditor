@@ -29,6 +29,36 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        public static string QueryUserForPath(string initialDirectory = "")
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
+            {
+                dialog.InitialDirectory = initialDirectory;
+            }
+
+            CommonFileDialogResult result = CommonFileDialogResult.None;
+            try
+            {
+                result = dialog.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while reading directory path: {e.Message}");
+                return null;
+            }
+
+            if (result == CommonFileDialogResult.Ok)
+            {
+                return dialog.FileName;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
             List<string> rootPathDirectories = new List<string>();

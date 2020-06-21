@@ -122,7 +122,7 @@ namespace CSVEditor.ViewModel
 
         public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
-        public DelegateCommand SwitchEditModeCommand { get; set; }
+        public DelegateCommand SwitchEditModeCommand { get; set; }        
 
         //*******************************
         //********* Constructor *********
@@ -144,7 +144,7 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
-            SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);
+            SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);            
 
             FileConfigurations = FileSystemServices.LoadFileConfigurationsFile(Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME));
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;

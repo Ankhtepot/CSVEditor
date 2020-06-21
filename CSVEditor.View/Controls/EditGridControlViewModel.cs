@@ -1,26 +1,29 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
 using CSVEditor.ViewModel;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.View.Controls
 {
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
+        private int rowsCount { get => CsvFile.HeadersStrings.Count + 1; }
+        
+        private TextBox lastTextBoxWithContextMenuClosed;
+
         public const string HEADER_TEXT_BOX_STYLE = "HeaderTextBlockStyle";
         public const string LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE = "LeftAlignedHeaderTextBoxStyle";
         public const string HEADER_GRID_STYLE = "HeaderGridStyle";
+        public const string URI_TEXT_BOX_CONTEXT_MENU = "UriTextBoxContextMenu";
 
         public double MaxColumnWidth { get; set; } = 1000d;
         public double MinColumnWidth { get; set; } = 30d;
@@ -42,8 +45,9 @@ namespace CSVEditor.View.Controls
         public CsvFile CsvFile { get; set; }
         public Grid MainGrid { get; set; }
         public ResourceDictionary Resources { get; set; }
-        public int LineIndex { get; set; }
-        private int rowsCount { get => CsvFile.HeadersStrings.Count + 1; }
+        public int LineIndex { get; set; }        
+
+        public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
 
         public EditGridControlViewModel(ResourceDictionary resources, CsvFile csvFile, EditorVM context, int lineIndex = -1)
         {
@@ -51,6 +55,14 @@ namespace CSVEditor.View.Controls
             CsvFile = csvFile;
             LineIndex = lineIndex;
             Context = context;
+
+            QueryForRelativePathToRootPathCommand = new DelegateCommand(queryForRelativePathToRootPath);
+        }
+
+        private void queryForRelativePathToRootPath()
+        {
+            var text = FileSystemServices.QueryUserForPath(CsvFile.AbsPath);
+            lastTextBoxWithContextMenuClosed.Text = text;
         }
 
         private void SetupNewGrid()
@@ -170,10 +182,12 @@ namespace CSVEditor.View.Controls
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Text = CsvFile.ColumnConfigurations[count].URI,
-                MinWidth = MinColumnWidth,
+                MinWidth = MinColumnWidth * 3,
                 Tag = count
             };
 
+            newUri.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
+            newUri.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
             newUri.TextChanged += NewUri_TextChanged;
 
             return newUri;
