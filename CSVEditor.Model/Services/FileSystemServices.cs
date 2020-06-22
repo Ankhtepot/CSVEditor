@@ -13,6 +13,7 @@ namespace CSVEditor.ViewModel
 {
     public class FileSystemServices
     {
+        private static readonly string[] BASE_IMAGE_FILE_EXTENSIONS = { ".png", ".jpg", ".jpeg" };
         public static string QueryUserForRootRepositoryPath()
         {
             var dialog = new CommonOpenFileDialog();
@@ -179,6 +180,22 @@ namespace CSVEditor.ViewModel
             }
 
             return newImage;
+        }
+
+        public static bool IsImageFile(string fileAbsPath, string[] fileExtensions = null)
+        {
+            fileExtensions ??= BASE_IMAGE_FILE_EXTENSIONS;
+
+            try
+            {
+                return fileExtensions.Contains(Path.GetExtension(fileAbsPath));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}");           
+            }
+
+            return false;
         }
     }
 }

@@ -39,7 +39,6 @@
             <Image x:Name="ImageFromSource"
                    AllowDrop="True"
                    PreviewDrop="ImageFromSource_PreviewDrop"
-                   Drop="ImageFromSource_Drop"
                    />
         </Border>
         <Label Grid.Column="1" Grid.Row="1"

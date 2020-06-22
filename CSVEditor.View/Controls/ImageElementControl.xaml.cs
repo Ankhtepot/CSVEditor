@@ -1,18 +1,13 @@
-﻿using CSVEditor.Model.Services;
+﻿using CSVEditor.Model;
 using CSVEditor.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace CSVEditor.View.Controls
 {
@@ -22,6 +17,8 @@ namespace CSVEditor.View.Controls
     public partial class ImageElementControl : UserControl
     {
         public static readonly string ROOT_DIRECTORY = "Root Directory";
+
+        public static string lastAcceptedImageSavePath;
 
         public string ImageCellContent
         {
@@ -46,8 +43,6 @@ namespace CSVEditor.View.Controls
         }
         public static readonly DependencyProperty LineIndexProperty =
             DependencyProperty.Register("LineIndex", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
-
-
 
         private static void ImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -116,12 +111,44 @@ namespace CSVEditor.View.Controls
 
         private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)
         {
+            var handleOK = false;
 
+            string newImageFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            
+            if (FileSystemServices.IsImageFile(newImageFile))
+            {
+                lastAcceptedImageSavePath ??= lastAcceptedImageSavePath = (DataContext as EditorVM).RootRepositoryPath;
+
+                var Context = DataContext as EditorVM;
+                var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
+
+                var newImageFileName = Path.GetFileName(newImageFile);
+
+                var selectedSavePath = string.IsNullOrEmpty(uriText)
+                    ? FileSystemServices.QueryUserForPath(lastAcceptedImageSavePath)
+                    : uriText;
+
+                selectedSavePath ??= lastAcceptedImageSavePath;
+
+                ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
+
+                handleOK = false;
+            }
+
+            e.Handled = handleOK;
         }
 
-        private void ImageFromSource_Drop(object sender, DragEventArgs e)
+        private void ResolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)
         {
+            var cellContentPath = Path.Combine(fileSavePath, fileName);
+            var Context = DataContext as EditorVM;
+            var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
+            cellContentPath = string.IsNullOrEmpty(uriText)
+                ? cellContentPath.Replace(Context.RootRepositoryPath, "")
+                : cellContentPath.Replace(uriText + "\\", "");
+
+            CellContentTextBox.Text = cellContentPath;
         }
     }
 }
