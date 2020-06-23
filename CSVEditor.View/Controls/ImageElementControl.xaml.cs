@@ -18,7 +18,7 @@ namespace CSVEditor.View.Controls
     {
         public static readonly string ROOT_DIRECTORY = "Root Directory";
 
-        public static string lastAcceptedImageSavePath;
+        private static string lastAcceptedImageSavePath;
 
         public string ImageCellContent
         {
@@ -44,6 +44,11 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty LineIndexProperty =
             DependencyProperty.Register("LineIndex", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
 
+        public ImageElementControl()
+        {
+            InitializeComponent();
+        }
+
         private static void ImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (ImageElementControl)d;
@@ -63,10 +68,8 @@ namespace CSVEditor.View.Controls
             cellContentBinding.Mode = BindingMode.TwoWay;
             cellContentBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            
-
-            control.UriContentTextBlock.Text = string.IsNullOrEmpty(configUri) 
-                ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}" 
+            control.UriContentTextBlock.Text = string.IsNullOrEmpty(configUri)
+                ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}"
                 : configUri;
 
             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
@@ -85,18 +88,20 @@ namespace CSVEditor.View.Controls
 
         public static string ConvertContentPathToSystemPath(string imageCellContent)
         {
-            var path = Regex.Replace(imageCellContent, "\r", "");
-            path = Regex.Replace(path, "/", @"\");
-            if (!char.IsLetterOrDigit(path[0]))
-            {
-                path = path.Substring(1);
-            }
-            return path;
-        }
+            var path = "";
 
-        public ImageElementControl()
-        {
-            InitializeComponent();
+            if (!string.IsNullOrEmpty(imageCellContent))
+            {
+                path = Regex.Replace(imageCellContent, "\r", "");
+                path = Regex.Replace(path, "/", @"\");
+
+                if (!char.IsLetterOrDigit(path[0]))
+                {
+                    path = path.Substring(1);
+                } 
+            }
+
+            return path;
         }
 
         private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -111,8 +116,6 @@ namespace CSVEditor.View.Controls
 
         private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)
         {
-            var handleOK = false;
-
             string newImageFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
             
             if (FileSystemServices.IsImageFile(newImageFile))
@@ -125,28 +128,51 @@ namespace CSVEditor.View.Controls
                 var newImageFileName = Path.GetFileName(newImageFile);
 
                 var selectedSavePath = string.IsNullOrEmpty(uriText)
-                    ? FileSystemServices.QueryUserForPath(lastAcceptedImageSavePath)
+                    ? FileSystemServices.QueryUserForPath(lastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
                     : uriText;
 
-                selectedSavePath ??= lastAcceptedImageSavePath;
+                if (selectedSavePath == null)
+                {
+                    e.Handled = false;
+                    return;
+                }
 
-                ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
-
-                handleOK = false;
+                if (saveDraggedFile(newImageFile, selectedSavePath))
+                {
+                    resolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
+                };
             }
 
-            e.Handled = handleOK;
+            e.Handled = true;
         }
 
-        private void ResolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)
+        private bool saveDraggedFile(string newImageFile, string selectedSavePath)
+        {
+            var newFileName = Path.GetFileName(newImageFile);
+
+            var title = "Confirm Saving Image File";
+            var message = $"Are you sure you want to save file {newFileName} to:\n{selectedSavePath} ?";
+            var icon = MessageBoxImage.Warning;
+            var buttons = MessageBoxButton.OKCancel;
+
+            if (MessageBox.Show(message, title, buttons, icon) == MessageBoxResult.OK)
+            {
+                File.Copy(newImageFile, Path.Combine(selectedSavePath, newFileName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private void resolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)
         {
             var cellContentPath = Path.Combine(fileSavePath, fileName);
             var Context = DataContext as EditorVM;
             var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
             cellContentPath = string.IsNullOrEmpty(uriText)
-                ? cellContentPath.Replace(Context.RootRepositoryPath, "")
-                : cellContentPath.Replace(uriText + "\\", "");
+                ? cellContentPath.Replace(Context.RootRepositoryPath, "").Replace("\\", "/")
+                : cellContentPath.Replace(uriText + "\\", "").Replace("\\", "/");
 
             CellContentTextBox.Text = cellContentPath;
         }

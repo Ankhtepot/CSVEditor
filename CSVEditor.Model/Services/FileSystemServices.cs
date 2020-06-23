@@ -14,11 +14,17 @@ namespace CSVEditor.ViewModel
     public class FileSystemServices
     {
         private static readonly string[] BASE_IMAGE_FILE_EXTENSIONS = { ".png", ".jpg", ".jpeg" };
-        public static string QueryUserForRootRepositoryPath()
+
+        public static string QueryUserForRootRepositoryPath(string title = "")
         {
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
             var result = dialog.ShowDialog();
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                dialog.Title = title;
+            }
 
             if (result == CommonFileDialogResult.Ok)
             {
@@ -30,10 +36,16 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public static string QueryUserForPath(string initialDirectory = "")
+        public static string QueryUserForPath(string initialDirectory = "", string title = "")
         {
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
+
+            if(!string.IsNullOrEmpty(title))
+            {
+                dialog.Title = title;
+            }
+
             if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
             {
                 dialog.InitialDirectory = initialDirectory;
@@ -192,7 +204,7 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}");           
+                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}");
             }
 
             return false;

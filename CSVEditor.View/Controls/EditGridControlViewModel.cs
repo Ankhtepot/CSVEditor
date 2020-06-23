@@ -61,11 +61,11 @@ namespace CSVEditor.View.Controls
 
         private void queryForRelativePathToRootPath()
         {
-            var text = FileSystemServices.QueryUserForPath(CsvFile.AbsPath);
+            var text = FileSystemServices.QueryUserForPath(CsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
             lastTextBoxWithContextMenuClosed.Text = text;
         }
 
-        private void SetupNewGrid()
+        private void setupNewGrid()
         {
             MainGrid = new Grid()
             {
@@ -75,7 +75,7 @@ namespace CSVEditor.View.Controls
 
         public Grid GetEditLinesGridForNewCsvFile()
         {
-            SetupNewGrid();
+            setupNewGrid();
 
             AddRowsDefinitionsToGrid();
             AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
@@ -91,7 +91,7 @@ namespace CSVEditor.View.Controls
 
         public Grid GetEditConfigurationsGridForNewCsvFile()
         {
-            SetupNewGrid();
+            setupNewGrid();
 
             AddRowsDefinitionsToGrid();
             AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");

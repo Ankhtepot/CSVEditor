@@ -226,7 +226,7 @@
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                                 >
-                                            <Label  Content="Navigation Placeholder" HorizontalAlignment="Center"/>
+                                            <uc:LineNavigationBarControl HorizontalAlignment="Center" Margin="0,5"/>
                                         </Border>
                                         <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1"
                                                 Visibility="{Binding IsLineEditMode,

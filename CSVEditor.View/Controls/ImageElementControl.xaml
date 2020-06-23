@@ -12,7 +12,6 @@
         <Style TargetType="Border" x:Key="BaseBorderStyle">
             <Setter Property="BorderBrush" Value="Black"></Setter>
             <Setter Property="BorderThickness" Value="1"></Setter>
-            <!--<Setter Property="CornerRadius" Value="5"></Setter>-->
             <Setter Property="Margin" Value="5"/>
         </Style>
     </UserControl.Resources>
@@ -39,7 +38,16 @@
             <Image x:Name="ImageFromSource"
                    AllowDrop="True"
                    PreviewDrop="ImageFromSource_PreviewDrop"
-                   />
+                   Stretch="Fill">
+                <Image.ToolTip>
+                    <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Image Source="{Binding Source}" Stretch="UniformToFill" MaxHeight="500"/>
+                        </Border>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+                   
         </Border>
         <Label Grid.Column="1" Grid.Row="1"
                Content="Content"/>
