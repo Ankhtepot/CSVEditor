@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using CSVEditor.Model;
 using CSVEditor.Model.Services;
@@ -213,6 +214,38 @@ namespace CSVEditor.ViewModel
             catch (Exception e)
             {
                 Console.WriteLine($"Error reading file extension for file: {fileAbsPath}");
+            }
+
+            return false;
+        }
+
+        public static bool SaveDraggedFile(string newImageFile, string selectedSavePath)
+        {
+            var newFileName = Path.GetFileName(newImageFile);
+
+            var title = "Confirm Saving Image File";
+            var message = $"Are you sure you want to save file {newFileName} to:\n{selectedSavePath} ?";
+            var messageOverwrite = $"File {newFileName} already exists at :\n{selectedSavePath} .\nDo you want to overwrite this file?";
+            var icon = MessageBoxImage.Question;
+            var buttons = MessageBoxButton.OKCancel;
+            var fullNewFilePath = Path.Combine(selectedSavePath, newFileName);
+
+            if (File.Exists(fullNewFilePath))
+            {
+                //TODO: if file already exists, pop up windows with preview and ask if user wants to replace that file.
+                if (MessageBox.Show(messageOverwrite, title, buttons, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    File.Copy(newImageFile, fullNewFilePath, true);
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (MessageBox.Show(message, title, buttons, icon) == MessageBoxResult.OK)
+            {
+                File.Copy(newImageFile, fullNewFilePath);
+                return true;
             }
 
             return false;

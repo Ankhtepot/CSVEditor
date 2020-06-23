@@ -20,6 +20,10 @@
       <HintPath>..\..\..\DLLs\WindowsAPICodePack\Windows API Code Pack 1.1\binaries\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
       <Private>true</Private>
     </Reference>
+    <Reference Include="System.Windows.Data">
+      <HintPath>DLLs\System.Windows.Data.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

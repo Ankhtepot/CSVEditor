@@ -98,7 +98,7 @@ namespace CSVEditor.View.Controls
                 if (!char.IsLetterOrDigit(path[0]))
                 {
                     path = path.Substring(1);
-                } 
+                }
             }
 
             return path;
@@ -109,7 +109,7 @@ namespace CSVEditor.View.Controls
             var Context = DataContext as EditorVM;
             var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
             ImageFromSource.Source = GetImageSource(
-                ((TextBox)sender).Text,                
+                ((TextBox)sender).Text,
                 Context.RootRepositoryPath,
                 uriText);
         }
@@ -117,7 +117,7 @@ namespace CSVEditor.View.Controls
         private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)
         {
             string newImageFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            
+
             if (FileSystemServices.IsImageFile(newImageFile))
             {
                 lastAcceptedImageSavePath ??= lastAcceptedImageSavePath = (DataContext as EditorVM).RootRepositoryPath;
@@ -137,31 +137,13 @@ namespace CSVEditor.View.Controls
                     return;
                 }
 
-                if (saveDraggedFile(newImageFile, selectedSavePath))
+                if (FileSystemServices.SaveDraggedFile(newImageFile, selectedSavePath))
                 {
                     resolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
                 };
             }
 
             e.Handled = true;
-        }
-
-        private bool saveDraggedFile(string newImageFile, string selectedSavePath)
-        {
-            var newFileName = Path.GetFileName(newImageFile);
-
-            var title = "Confirm Saving Image File";
-            var message = $"Are you sure you want to save file {newFileName} to:\n{selectedSavePath} ?";
-            var icon = MessageBoxImage.Warning;
-            var buttons = MessageBoxButton.OKCancel;
-
-            if (MessageBox.Show(message, title, buttons, icon) == MessageBoxResult.OK)
-            {
-                File.Copy(newImageFile, Path.Combine(selectedSavePath, newFileName));
-                return true;
-            }
-
-            return false;
         }
 
         private void resolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)
