@@ -144,17 +144,25 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
-            SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);            
+            SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);
 
-            FileConfigurations = FileSystemServices.LoadFileConfigurationsFile(Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME));
+            FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
             setAppOptions();
             SetVisuals(AppOptions.VisualConfig);
-        }       
+        }
+
+
 
         //*******************************
         //*********** Methods ***********
         //*******************************
+
+        private static List<CsvFileConfiguration> initializeFileConfigurations()
+        {
+            List<CsvFileConfiguration> loadedconfiguration = FileSystemServices.LoadFileConfigurationsFile(Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME));
+            return loadedconfiguration == null ? new List<CsvFileConfiguration>() : loadedconfiguration;
+        }
 
         private void setSelectedFile(string value, bool needsProcessing = true)
         {
@@ -183,7 +191,7 @@ namespace CSVEditor.ViewModel
         private void setSelectedCsvFile(CsvFile value)
         {
             if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
-            value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
+            if (value != null) value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
             selectedCsvFile = value;
         }
 
@@ -210,11 +218,12 @@ namespace CSVEditor.ViewModel
 
         private List<CsvColumnConfiguration> findFileConfiguration(string fileAbsPath)
         {
-            return FileConfigurations
+            return FileConfigurations?
                 .Where(conf => conf.AbsoluteFilePath == fileAbsPath)
                 .DefaultIfEmpty()?
                 .FirstOrDefault()?.ColumnConfigurations;
         }
+
         public void addNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
         {
             FileConfigurations.Add(new CsvFileConfiguration()

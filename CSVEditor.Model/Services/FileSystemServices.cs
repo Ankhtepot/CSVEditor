@@ -137,6 +137,10 @@ namespace CSVEditor.ViewModel
             {
                 Console.WriteLine($"Insufficient rights to scan direcotry at \"{path}\".");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Unexpected error occured while reading directories at: \"{path}\"");
+            }
 
             return directories;
         }
@@ -152,6 +156,10 @@ namespace CSVEditor.ViewModel
             catch (UnauthorizedAccessException)
             {
                 Console.WriteLine($"Insufficient rights to read all files in \"{path}\".");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Unexpected error occured while scanning directories at: \"{path}\"");
             }
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
