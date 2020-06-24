@@ -33,6 +33,7 @@
                                             Height="25"/>
             </Button>
             <Button x:Name="OneBackButton"
+                    Click="OneBackButton_Click"
                     Width="50"
                     Grid.Column="1">
                 <iconPacks:PackIconBoxIcons Kind="RegularLeftArrowAlt"
@@ -63,13 +64,17 @@
                            Margin="15,0,0,0"
                            FontSize="20"/>
             </Border>
-            <Button Width="50"
+            <Button x:Name="OneForwardButton"
+                    Click="OneForwardButton_Click"
+                    Width="50"
                     Grid.Column="5">
                 <iconPacks:PackIconBoxIcons Kind="RegularRightArrowAlt"
                                             Width="30"
                                             Height="25"/>
             </Button>
-            <Button Width="50"
+            <Button x:Name="LastLineButton"
+                    Click="LastLineButton_Click"
+                    Width="50"
                     Grid.Column="6">
                 <iconPacks:PackIconBoxIcons Kind="SolidArrowToRight"
                                             Width="30"

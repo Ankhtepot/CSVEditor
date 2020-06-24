@@ -85,7 +85,34 @@ namespace CSVEditor.View.Controls
 
         private void ToBeginningButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Continue here
+            if (InputIndex > 0)
+            {
+                InputIndex = 0; 
+            }
+        }
+
+        private void OneBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (InputIndex > 0)
+            {
+                InputIndex -= 1;
+            }
+        }
+
+        private void OneForwardButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (InputIndex < LinesCount - 1)
+            {
+                InputIndex += 1;
+            }
+        }
+
+        private void LastLineButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (InputIndex < LinesCount - 1)
+            {
+                InputIndex = LinesCount - 1; 
+            }
         }
     }
 }
