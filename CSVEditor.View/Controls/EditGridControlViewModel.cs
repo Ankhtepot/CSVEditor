@@ -320,8 +320,10 @@ namespace CSVEditor.View.Controls
                 ColumnNr = columnNr
             };
 
+            var itemIndexbinding = new Binding("SelectedItemIndex");
+            itemIndexbinding.Source = Context;
+
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
-            newImageControl.SetBinding(ImageElementControl.LineIndexProperty, getBaseBinding(Context.SelectedItemIndex));
 
             return newImageControl;
         }

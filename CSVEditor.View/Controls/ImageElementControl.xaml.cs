@@ -1,12 +1,9 @@
-﻿using CSVEditor.Model;
-using CSVEditor.ViewModel;
-using System;
+﻿using CSVEditor.ViewModel;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace CSVEditor.View.Controls
@@ -36,14 +33,6 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty ColumnNrProperty =
             DependencyProperty.Register("ColumnNr", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
 
-        public int LineIndex
-        {
-            get { return (int)GetValue(LineIndexProperty); }
-            set { SetValue(LineIndexProperty, value); }
-        }
-        public static readonly DependencyProperty LineIndexProperty =
-            DependencyProperty.Register("LineIndex", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
-
         public ImageElementControl()
         {
             InitializeComponent();
@@ -63,7 +52,7 @@ namespace CSVEditor.View.Controls
             var configUri = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
             var newImage = GetImageSource(imageCellContent, Context.RootRepositoryPath, configUri);
 
-            var cellContentBinding = new Binding($"SelectedCsvFile.Lines[{control.LineIndex}][{control.ColumnNr}]");
+            var cellContentBinding = new Binding($"SelectedCsvFile.Lines[{Context.SelectedItemIndex}][{control.ColumnNr}]");
             cellContentBinding.Source = Context;
             cellContentBinding.Mode = BindingMode.TwoWay;
             cellContentBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
