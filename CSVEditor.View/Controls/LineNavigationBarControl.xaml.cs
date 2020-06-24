@@ -112,5 +112,7 @@ namespace CSVEditor.View.Controls
                 InputIndex = LinesCount - 1; 
             }
         }
+
+        //TODO: Add Text Change
     }
 }

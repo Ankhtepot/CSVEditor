@@ -219,13 +219,14 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="40"/>
+                                            <RowDefinition Height="Auto" MaxHeight="40"/>
                                         </Grid.RowDefinitions>
 
                                         <Border Style="{StaticResource BaseBorderStyle}" 
                                                 Grid.Column="0" 
                                                 Margin="1"
                                                 Background="AntiqueWhite"
+                                                MaxHeight="38"
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                                 >
