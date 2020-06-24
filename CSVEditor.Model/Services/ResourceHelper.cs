@@ -15,7 +15,7 @@ namespace CSVEditor.Model.Services
         /// <param name="pathInApplication">Path without starting slash</param>
         /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
         /// <returns></returns>
-        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly assembly = null)
+        public static Uri LoadBitmapUriSourceFromResource(string pathInApplication, Assembly assembly = null)
         {
             if (assembly == null)
             {
@@ -26,7 +26,7 @@ namespace CSVEditor.Model.Services
             {
                 pathInApplication = pathInApplication.Substring(1);
             }
-            return new BitmapImage(new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute));
+            return new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute);
         }
     }
 }

@@ -321,6 +321,7 @@ namespace CSVEditor.View.Controls
             };
 
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
+            newImageControl.SetBinding(ImageElementControl.LineIndexProperty, getBaseBinding(Context.SelectedItemIndex));
 
             return newImageControl;
         }

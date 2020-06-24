@@ -189,16 +189,20 @@ namespace CSVEditor.ViewModel
 
         public static BitmapImage SetBitmapImageFromPath(string path)
         {
-            BitmapImage newImage;
+            BitmapImage newImage = new BitmapImage();
+            newImage.BeginInit();
+            newImage.CacheOption = BitmapCacheOption.OnLoad;
 
             if (File.Exists(path))
             {
-                newImage = new BitmapImage(new Uri(path));
+                newImage.UriSource = new Uri(path);
             }
             else
             {
-                newImage = ResourceHelper.LoadBitmapFromResource("images/no_image_available.png");
+                newImage.UriSource = ResourceHelper.LoadBitmapUriSourceFromResource("images/no_image_available.png");
             }
+
+            newImage.EndInit();
 
             return newImage;
         }

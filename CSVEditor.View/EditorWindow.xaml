@@ -215,18 +215,25 @@
                                 <DockPanel Grid.Row="1">
                                     <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="40"/>
                                         </Grid.RowDefinitions>
 
-                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1"
+                                        <Border Style="{StaticResource BaseBorderStyle}" 
+                                                Grid.Column="0" 
+                                                Margin="1"
+                                                Background="AntiqueWhite"
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                                 >
-                                            <uc:LineNavigationBarControl HorizontalAlignment="Center" Margin="0,5"/>
+                                            <Viewbox HorizontalAlignment="Center">
+                                                <uc:LineNavigationBarControl InputIndex="{Binding SelectedItemIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                             LinesCount="{Binding SelectedCsvFile.Lines.Count}"
+                                                                             Margin="5,5"/>
+                                            </Viewbox>
                                         </Border>
                                         <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1"
                                                 Visibility="{Binding IsLineEditMode,
