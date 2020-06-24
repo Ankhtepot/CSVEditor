@@ -42,8 +42,6 @@ namespace CSVEditor.View.Controls
             InitializeComponent();
 
             NumberTextBox.Text = 1.ToString();
-
-            //VM = new LineNavigationBarControlViewModel(this);
         }
 
         private static void InputIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
