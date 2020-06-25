@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSVEditor.Model.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -113,6 +114,14 @@ namespace CSVEditor.View.Controls
             }
         }
 
-        //TODO: Add Text Change
+        private void NumberTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int newInput;
+
+            if(int.TryParse(NumberTextBox.Text, out newInput))
+            {
+                InputIndex = (newInput - 1).Clamp(0, LinesCount - 1);
+            }
+        }
     }
 }

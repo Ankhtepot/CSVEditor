@@ -52,7 +52,7 @@ namespace CSVEditor.View.Controls
                     var newBinding = new Binding($"[{i}]");
 
                     textBlockFactory.SetBinding(TextBlock.TextProperty, newBinding);
-                    textBlockFactory.SetValue(ForegroundProperty, new SolidColorBrush(Colors.Red));
+                    textBlockFactory.SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
                     textBlockFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
                     textBlockFactory.SetValue(VerticalAlignmentProperty, VerticalAlignment.Top);
 
@@ -99,7 +99,21 @@ namespace CSVEditor.View.Controls
             if (item.Focusable && !item.IsFocused)
                 item.Focus();
         }
-    }
 
-    
+        private void ListView_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ScrollToSelectedItem((ListView)sender);
+            
+        }
+
+        private void ListView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ScrollToSelectedItem((ListView)sender);
+        }
+
+        private void ScrollToSelectedItem(ListView listView)
+        {
+            listView.ScrollIntoView(listView.SelectedItem);
+        }
+    }
 }

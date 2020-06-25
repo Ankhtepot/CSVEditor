@@ -105,7 +105,7 @@ namespace CSVEditor.Services
         {
             var result = new ObservableCollection<string>();
 
-            var workingText = text;
+            var workingText = text.Replace("\r", "");
 
             while (workingText != string.Empty)
             {
@@ -136,6 +136,12 @@ namespace CSVEditor.Services
                     var newContent = delimiterIndex == -1
                         ? workingText
                         : workingText.Substring(0, delimiterIndex);
+
+                    if (newContent.LastChar() == '\n')
+                    {
+                        newContent = newContent.Remove(newContent.Length - 1, 1);
+                    }
+
                     result.Add(newContent);
                     workingText = workingText.Remove(0, delimiterIndex == -1 ? workingText.Length : delimiterIndex + 1);
                 }

@@ -12,4 +12,5 @@
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <converters:SelectedCsvFileToVisibilityConverter x:Key="SelectedCsvFileToVisibilityConverter"/>
     <converters:EditModeToTextConverter x:Key="EditModeToTextConverter"/>
+    <converters:NumberToIntArrayFromOneConverter x:Key="NumberToIntArrayFromOneConverter"/>
 </ResourceDictionary>

@@ -47,7 +47,6 @@ namespace CSVEditor.Model
             set { blockIdentifier = value; OnPropertyChanged(); }
         }
 
-
         private int columnCount;
         public int ColumnCount
         {
@@ -55,8 +54,7 @@ namespace CSVEditor.Model
             set { columnCount = value; OnPropertyChanged(); }
         }
 
-
-        public List<List<string>> lines;
+        private List<List<string>> lines;
         public List<List<string>> Lines
         {
             get { return lines; }

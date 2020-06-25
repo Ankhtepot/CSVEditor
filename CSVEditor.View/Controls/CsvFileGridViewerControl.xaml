@@ -47,8 +47,59 @@
     <Grid x:Name="TopContainer"
           HorizontalAlignment="Stretch"
           >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView x:Name="LineNumberListView" Grid.Column="0"
+                  ItemsSource="{Binding SelectedCsvFile.Lines.Count, Converter={StaticResource NumberToIntArrayFromOneConverter}}"
+                  SelectedIndex="{Binding SelectedItemIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectionChanged="ListView_SelectedIndexChanged"
+                  IsVisibleChanged="ListView_IsVisibleChanged"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" HorizontalAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                        <GridViewColumn.Header>
+                            <TextBlock TextAlignment="Center"
+                                       MinWidth="30">
+                                <Run Text="Line"/>
+                                <LineBreak/>
+                                <Run Text="Nr."/>
+                            </TextBlock>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Background" Value="LightBlue" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    </Style.Resources>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        
         <ListView x:Name="GridListView"
                   SelectedIndex="{Binding SelectedItemIndex}"
+                  Grid.Column="1"
+                  SelectionChanged="ListView_SelectedIndexChanged"
+                  IsVisibleChanged="ListView_IsVisibleChanged"
                   >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -59,6 +110,16 @@
                     <Setter Property="Margin" Value="0"/>
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnListViewItem_PreviewMouseLeftButtonDown" />
                     <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Background" Value="LightBlue" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    </Style.Resources>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>

@@ -26,6 +26,12 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
         {
             VM.AsyncVM.WorkProgress += 100;
         }
+
+        protected override void _Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            base._Completed(sender, e);
+            VM.SelectedItemIndex = 0;
+        }
     }
 }
 

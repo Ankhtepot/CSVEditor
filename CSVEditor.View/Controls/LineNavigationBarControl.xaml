@@ -46,6 +46,7 @@
                      FontSize="18"
                      Margin="5,2"
                      PreviewTextInput="NumberTextBox_PreviewTextInput"
+                     TextChanged="NumberTextBox_TextChanged"
                      >
             </TextBox>
             <TextBlock Width="50"
