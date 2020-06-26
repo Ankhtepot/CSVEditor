@@ -1,11 +1,8 @@
 ﻿using CSVEditor.Model;
 using JetBrains.Annotations;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,21 +13,19 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class DirectoryWithCsvControl : UserControl, INotifyPropertyChanged
     {
+        private static readonly DirectoryWithCsv DefaultRecord = new DirectoryWithCsv("Directory", new List<string> { "Files" });
+
+        public List<string> CsvFiles = new List<string>();
+
         public DirectoryWithCsv DirectoryData
         {
             get { return (DirectoryWithCsv)GetValue(directoryProperty); }
             set { SetValue(directoryProperty, value); }
         }
-
-        private static DirectoryWithCsv defaultRecord = new DirectoryWithCsv("Directory", new List<string> { "Files" });
-
-        // Using a DependencyProperty as the backing store for Directory.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty directoryProperty =
-            DependencyProperty.Register("DirectoryData", typeof(DirectoryWithCsv), typeof(DirectoryWithCsvControl), new PropertyMetadata(defaultRecord, SetRecord));
+            DependencyProperty.Register("DirectoryData", typeof(DirectoryWithCsv), typeof(DirectoryWithCsvControl), new PropertyMetadata(DefaultRecord, DirectoryDataChanged));
 
-        public List<string> CsvFiles = new List<string>();
-
-        private static void SetRecord(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void DirectoryDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             DirectoryWithCsvControl control = d as DirectoryWithCsvControl;
 

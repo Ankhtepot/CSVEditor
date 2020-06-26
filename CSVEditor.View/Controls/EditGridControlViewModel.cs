@@ -179,7 +179,7 @@ namespace CSVEditor.View.Controls
         {
             var newUri = new TextBox()
             {
-                Padding = new Thickness(5),
+                Margin = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Text = CsvFile.ColumnConfigurations[count].URI,
                 MinWidth = MinColumnWidth * 3,
@@ -195,9 +195,10 @@ namespace CSVEditor.View.Controls
 
         private void NewUri_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var columnNumber = (int)((TextBox)sender).Tag;
-            var context = ((TextBox)sender).DataContext as EditorVM;
-            var newValue = ((TextBox)sender).Text;
+            var textBox = (TextBox)sender;
+            var columnNumber = (int)textBox.Tag;
+            var context = textBox.DataContext as EditorVM;
+            var newValue = textBox.Text;
 
             context.SelectedCsvFile.ColumnConfigurations[columnNumber].URI = newValue;
             CsvFile.ColumnConfigurations[columnNumber].URI = newValue;
@@ -248,6 +249,7 @@ namespace CSVEditor.View.Controls
                     {
                         var newElement = new TextBox()
                         {
+                            Name = $"DataCellTextBoxRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
@@ -260,6 +262,7 @@ namespace CSVEditor.View.Controls
                     {
                         var newElement = new TextBox()
                         {
+                            Name = $"DataCellTextAreaRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                             Text = columnContent,
                             AcceptsReturn = true
@@ -285,9 +288,17 @@ namespace CSVEditor.View.Controls
                         return BuildImageElementControl(columnNr, columnContent);
                     }
                 case FieldType.URI:
-                    return new TextBox()
                     {
-                        Margin = ElementMargin,
+                        var newElement = new UriTextBoxControl()
+                        {
+                            Name = $"DataCellUriRow{LineIndex}Column{columnNr}",
+                            Margin = ElementMargin,
+                            Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
+                        };
+                        var newTextBox = newElement as UriTextBoxControl;
+
+                        newTextBox.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        return newElement;
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
             };

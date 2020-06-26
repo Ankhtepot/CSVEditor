@@ -14,8 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="{Binding SelectedText}" 
-               x:Name="SelectedTextLabel"
+        <Label x:Name="SelectedTextLabel"
                 Grid.Row="0" 
                 Grid.Column="0" 
                 Margin="10,0,0,0"
@@ -23,7 +22,6 @@
         <TextBlock Grid.Column="1" 
                    x:Name="FileInfoTextBox"
                     Grid.Row="0"  
-                    Text="{Binding FileInfoText}"
                     VerticalAlignment="Center"
                     TextWrapping="Wrap"
                     Margin="0,0,10,0"

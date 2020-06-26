@@ -43,7 +43,7 @@
 
                 <!--#region column 0: Work Indication -->
                 <uc:ProgressInfoControl WorkStatus="{Binding AsyncVM.WorkingStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        Progress="{Binding WorkProgress}"
+                                        Progress="{Binding AsyncVM.WorkProgress}"
                                         Grid.Column="0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -132,11 +132,10 @@
                                    Grid.Row="0"/>
                         <ListBox Grid.Row="1"
                                  ItemsSource="{Binding CsvFilesStructure}"
-                                 SelectedItem="{Binding SelectedDirectory}"
                                  x:Name="DirectoryListBoxOutter"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  VerticalAlignment="Stretch"
-                                 IsEnabled="{Binding AsynvVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
+                                 IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                                  >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">

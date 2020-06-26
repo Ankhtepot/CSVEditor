@@ -114,7 +114,7 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<CsvFile> CsvFiles { get; set; }
 
-        public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }        
+        public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
         //*******************************
         //********** Commands ***********
@@ -122,7 +122,7 @@ namespace CSVEditor.ViewModel
 
         public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
-        public DelegateCommand SwitchEditModeCommand { get; set; }        
+        public DelegateCommand SwitchEditModeCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
