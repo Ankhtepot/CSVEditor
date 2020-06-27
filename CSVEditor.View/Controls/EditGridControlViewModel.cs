@@ -16,7 +16,7 @@ namespace CSVEditor.View.Controls
 {
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
-        private int rowsCount { get => CsvFile.HeadersStrings.Count + 1; }
+        private int rowsCount { get => Context.SelectedCsvFile.HeadersStrings.Count + 1; }
         
         private TextBox lastTextBoxWithContextMenuClosed;
 
@@ -30,30 +30,16 @@ namespace CSVEditor.View.Controls
         public double ImageWidth { get; set; } = 200d;
         public double ImageHeight { get; set; } = 150d;
         public Thickness ElementMargin { get; set; } = new Thickness(2d);
-
-        private EditorVM context;
-        public EditorVM Context
-        {
-            get { return context; }
-            set
-            {
-                context = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public CsvFile CsvFile { get; set; }
+        public EditorVM Context { get; set; }
         public Grid MainGrid { get; set; }
         public ResourceDictionary Resources { get; set; }
-        public int LineIndex { get; set; }        
+        public int LineIndex { get => Context.SelectedItemIndex; }        
 
         public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
 
-        public EditGridControlViewModel(ResourceDictionary resources, CsvFile csvFile, EditorVM context, int lineIndex = -1)
+        public EditGridControlViewModel(ResourceDictionary resources, EditorVM context)
         {
             Resources = resources;
-            CsvFile = csvFile;
-            LineIndex = lineIndex;
             Context = context;
 
             QueryForRelativePathToRootPathCommand = new DelegateCommand(queryForRelativePathToRootPath);
@@ -61,7 +47,7 @@ namespace CSVEditor.View.Controls
 
         private void queryForRelativePathToRootPath()
         {
-            var text = FileSystemServices.QueryUserForPath(CsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
+            var text = FileSystemServices.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
             lastTextBoxWithContextMenuClosed.Text = text;
         }
 
@@ -74,14 +60,19 @@ namespace CSVEditor.View.Controls
         }
 
         public Grid GetEditLinesGridForNewCsvFile()
-        {
+        {            
             setupNewGrid();
+
+            if (LineIndex == -1)
+            {
+                return MainGrid;
+            }
 
             AddRowsDefinitionsToGrid();
             AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
             AddColumnWithContent(1, HeadersColumnCreationMethod, "Fields");
             AddColumnWithContent(2,
-                (i) => CreateDataCellElement(CsvFile.ColumnConfigurations[i].Type, i),
+                (i) => CreateDataCellElement(Context.SelectedCsvFile.ColumnConfigurations[i].Type, i),
                 "Data",
                 LEFT_ALIGNED_HEADER_TEXT_BOX_STYLE,
                 true);
@@ -145,7 +136,7 @@ namespace CSVEditor.View.Controls
             {
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = $"{CsvFile.HeadersStrings[count]}",
+                Text = $"{Context.SelectedCsvFile.HeadersStrings[count]}",
             };
         }
 
@@ -166,7 +157,7 @@ namespace CSVEditor.View.Controls
             {
                 Tag = count,
                 ItemsSource = Enum.GetValues(typeof(FieldType)),
-                SelectedIndex = (int)Enum.Parse(typeof(FieldType), CsvFile.ColumnConfigurations[count].Type.ToString()),
+                SelectedIndex = (int)Enum.Parse(typeof(FieldType), Context.SelectedCsvFile.ColumnConfigurations[count].Type.ToString()),
                 Margin = new Thickness(5)
             };
 
@@ -181,7 +172,7 @@ namespace CSVEditor.View.Controls
             {
                 Margin = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Text = CsvFile.ColumnConfigurations[count].URI,
+                Text = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
                 MinWidth = MinColumnWidth * 3,
                 Tag = count
             };
@@ -197,23 +188,19 @@ namespace CSVEditor.View.Controls
         {
             var textBox = (TextBox)sender;
             var columnNumber = (int)textBox.Tag;
-            var context = textBox.DataContext as EditorVM;
             var newValue = textBox.Text;
 
-            context.SelectedCsvFile.ColumnConfigurations[columnNumber].URI = newValue;
-            CsvFile.ColumnConfigurations[columnNumber].URI = newValue;
-            context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
+            Context.SelectedCsvFile.ColumnConfigurations[columnNumber].URI = newValue;
+            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath);
         }
 
         private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var columnNumber = (int)((ComboBox)sender).Tag;
-            var context = ((ComboBox)sender).DataContext as EditorVM;
             var newValue = (FieldType)e.AddedItems[0];
 
-            context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
-            CsvFile.ColumnConfigurations[columnNumber].Type = newValue;
-            context.UpdateFileConfigurations(CsvFile.ColumnConfigurations, CsvFile.AbsPath);
+            Context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
+            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath);
         }
 
         private void AddColumnWithContent(
@@ -241,7 +228,7 @@ namespace CSVEditor.View.Controls
 
         private UIElement CreateDataCellElement(FieldType type, int columnNr)
         {
-            var columnContent = CsvFile.Lines[LineIndex][columnNr];
+            var columnContent = Context.SelectedCsvFile.Lines[LineIndex][columnNr];
 
             switch (type)
             {
@@ -251,11 +238,9 @@ namespace CSVEditor.View.Controls
                         {
                             Name = $"DataCellTextBoxRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
-                            Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
-                        var newTextBox = newElement as TextBox;
 
-                        newTextBox.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.TextArea:
@@ -264,7 +249,6 @@ namespace CSVEditor.View.Controls
                         {
                             Name = $"DataCellTextAreaRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
-                            Text = columnContent,
                             AcceptsReturn = true
                         };
                         (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
@@ -295,9 +279,8 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin,
                             Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
-                        var newTextBox = newElement as UriTextBoxControl;
 
-                        newTextBox.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        (newElement as UriTextBoxControl).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
@@ -341,7 +324,7 @@ namespace CSVEditor.View.Controls
 
         private List<string> GetColumnDistinctValues(int columnNr)
         {
-            return CsvFile.Lines.Select(Line => Line[columnNr]).Distinct().ToList();
+            return Context.SelectedCsvFile.Lines.Select(Line => Line[columnNr]).Distinct().ToList();
         }
 
         public UIElement BuildHeader(int columnNumber, string text, string headerStyle = HEADER_TEXT_BOX_STYLE)

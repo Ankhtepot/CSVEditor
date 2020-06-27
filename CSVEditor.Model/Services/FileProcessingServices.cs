@@ -91,15 +91,26 @@ namespace CSVEditor.Services
                                 break;
                             }
                         }
+                        
                         csvLines.Add(newLine);
                     }
 
+                    FillUpLastLineIfNecesarry(csvLines[csvLines.Count - 1], result.ColumnCount);
                     result.Lines = csvLines;
                 }
             }            
 
             return result;
-        }       
+        }
+
+        private static void FillUpLastLineIfNecesarry(List<string> list, int columnCount)
+        {
+            if (list.Count < columnCount)
+            {
+                list.Add("<added extra>");
+                FillUpLastLineIfNecesarry(list, columnCount);
+            }
+        }
 
         public static ObservableCollection<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)
         {

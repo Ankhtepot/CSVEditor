@@ -191,7 +191,10 @@ namespace CSVEditor.ViewModel
         private void setSelectedCsvFile(CsvFile value)
         {
             if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
-            if (value != null) value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
+            if (value != null)
+            {
+                value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
+            }
             selectedCsvFile = value;
         }
 

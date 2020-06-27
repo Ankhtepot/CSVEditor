@@ -96,10 +96,10 @@
         </ListView>
         
         <ListView x:Name="GridListView"
-                  SelectedIndex="{Binding SelectedItemIndex}"
-                  Grid.Column="1"
+                  SelectedIndex="{Binding SelectedItemIndex, Mode=TwoWay}"                  
                   SelectionChanged="ListView_SelectedIndexChanged"
                   IsVisibleChanged="ListView_IsVisibleChanged"
+                  Grid.Column="1"
                   >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

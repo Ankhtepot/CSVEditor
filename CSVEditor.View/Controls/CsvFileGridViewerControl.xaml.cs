@@ -1,10 +1,12 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
+using CSVEditor.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System;
 
 namespace CSVEditor.View.Controls
 {
@@ -13,6 +15,8 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class CsvFileGridViewerControl : UserControl
     {
+        private static string lastCreatedCsvFileAbsPath = "";
+
         public CsvFile InputCsvFile
         {
             get { return (CsvFile)GetValue(InputCsvFileProperty); }
@@ -24,62 +28,63 @@ namespace CSVEditor.View.Controls
         private static void InputCsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (CsvFileGridViewerControl)d;
-            var newValue = (CsvFile)e.NewValue;
+            var newCsvFile = (CsvFile)e.NewValue;
 
-            if (control == null || newValue == null)
+            if (control == null || newCsvFile == null || lastCreatedCsvFileAbsPath == newCsvFile.AbsPath)
             {
                 return;
             }
 
+            lastCreatedCsvFileAbsPath = newCsvFile.AbsPath;
+
             var gridView = (GridView)control.GridListView.View;
-            control.GridListView.ItemsSource = newValue.Lines;
-            var csvFile = newValue ?? null;
-            
-            if (csvFile != null)
+            control.GridListView.ItemsSource = newCsvFile.Lines;
+
+            gridView.Columns.Clear();
+            for (int i = 0; i < newCsvFile.HeadersStrings.Count; i++)
             {
-                gridView.Columns.Clear();
-                for (int i = 0; i < csvFile.HeadersStrings.Count; i++)
-                {
-                    var gridViewColumn = new GridViewColumn();
-                    var dataTemplate = new DataTemplate();
+                var gridViewColumn = new GridViewColumn();
+                var dataTemplate = new DataTemplate();
 
-                    var gridFactory = new FrameworkElementFactory(typeof(Grid));
-                    var borderFactory = new FrameworkElementFactory(typeof(Border));
-                    var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+                var gridFactory = new FrameworkElementFactory(typeof(Grid));
+                var borderFactory = new FrameworkElementFactory(typeof(Border));
+                var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
 
-                    dataTemplate.VisualTree = borderFactory;                    
+                dataTemplate.VisualTree = borderFactory;
 
-                    var newBinding = new Binding($"[{i}]");
+                var newBinding = new Binding($"[{i}]");
 
-                    textBlockFactory.SetBinding(TextBlock.TextProperty, newBinding);
-                    textBlockFactory.SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
-                    textBlockFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
-                    textBlockFactory.SetValue(VerticalAlignmentProperty, VerticalAlignment.Top);
+                textBlockFactory.SetBinding(TextBlock.TextProperty, newBinding);
+                textBlockFactory.SetValue(NameProperty, $"GridViewTextBlockDataTemplateKey{dataTemplate.DataTemplateKey}Column{i}");
+                textBlockFactory.SetValue(ForegroundProperty, new SolidColorBrush(Colors.Black));
+                textBlockFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+                textBlockFactory.SetValue(VerticalAlignmentProperty, VerticalAlignment.Top);
 
-                    gridFactory.SetValue(WidthProperty, double.NaN);
-                    gridFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
-                    gridFactory.SetValue(MarginProperty, new Thickness(6, 2, 6, 2));
-                    gridFactory.AppendChild(textBlockFactory);
+                gridFactory.SetValue(WidthProperty, double.NaN);
+                gridFactory.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+                gridFactory.SetValue(MarginProperty, new Thickness(6, 2, 6, 2));
+                gridFactory.AppendChild(textBlockFactory);
 
-                    borderFactory.SetValue(BorderBrushProperty, Brushes.Gray);
-                    borderFactory.SetValue(BorderThicknessProperty, new Thickness(1,0,1,1));
-                    borderFactory.SetValue(MarginProperty, new Thickness(-6,-2,-8,-2));
-                    borderFactory.SetValue(HeightProperty, double.NaN);
+                borderFactory.SetValue(BorderBrushProperty, Brushes.Gray);
+                borderFactory.SetValue(BorderThicknessProperty, new Thickness(1, 0, 1, 1));
+                borderFactory.SetValue(MarginProperty, new Thickness(-6, -2, -8, -2));
+                borderFactory.SetValue(HeightProperty, double.NaN);
 
-                    borderFactory.AppendChild(gridFactory);
+                borderFactory.AppendChild(gridFactory);
 
-                    var newHeader = new GridViewColumnHeader();
-                    newHeader.Content = csvFile.HeadersStrings[i];
-                    newHeader.Width = double.NaN;
+                var newHeader = new GridViewColumnHeader();
+                newHeader.Content = newCsvFile.HeadersStrings[i];
+                newHeader.Width = double.NaN;
 
-                    gridViewColumn.CellTemplate = dataTemplate;
-                    gridViewColumn.Header = newHeader;
-                    gridViewColumn.Width = double.NaN;
-                    gridViewColumn.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+                gridViewColumn.CellTemplate = dataTemplate;
+                gridViewColumn.Header = newHeader;
+                gridViewColumn.Width = double.NaN;
+                gridViewColumn.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
 
-                    gridView.Columns.Add(gridViewColumn);
-                }
+                gridView.Columns.Add(gridViewColumn);
             }
+
+            control.GridListView.SelectedIndex = Math.Max(0, (control.DataContext as EditorVM).SelectedItemIndex);
         }
 
         public CsvFileGridViewerControl()
@@ -103,7 +108,6 @@ namespace CSVEditor.View.Controls
         private void ListView_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
         {
             ScrollToSelectedItem((ListView)sender);
-            
         }
 
         private void ListView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

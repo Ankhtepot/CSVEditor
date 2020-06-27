@@ -1,17 +1,9 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVEditor.View.Controls
 {
@@ -49,10 +41,9 @@ namespace CSVEditor.View.Controls
 
             VM = new EditGridControlViewModel(
                 control.Resources,
-                control.CsvFile as CsvFile,
                 control.DataContext as EditorVM);
 
-            Console.WriteLine($"ConfigurationEditControl, new CsvFile set.");
+            Console.WriteLine($"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM).SelectedCsvFile.AbsPath)}");
 
             var topContainer = control.TopContainer as Grid;
             topContainer.Children.Clear();

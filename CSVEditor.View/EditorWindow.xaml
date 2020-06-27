@@ -3,11 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:CSVEditor.View"
-        xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
-        xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         mc:Ignorable="d"
         Title="CSV Editor" 
@@ -260,12 +256,11 @@
                                     <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
                                         <Grid x:Name="LineEditorWrapper">
                                             <uc:LineEditControl SelectedLineIndex="{Binding SelectedItemIndex}"
-                                                                CsvFile="{Binding SelectedCsvFile}"
                                                                 Visibility="{Binding IsLineEditMode,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                                                 HorizontalAlignment="Stretch"
                                                                />   
-                                            <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}"
+                                            <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}" 
                                                                          Visibility="{Binding IsLineEditMode,
                                                                           Converter={StaticResource BoolToVisibilityConverter},
                                                                           ConverterParameter=false}"

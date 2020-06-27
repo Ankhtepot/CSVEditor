@@ -12,17 +12,7 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class LineEditControl : UserControl
     {
-        private static readonly CsvFile DEFAULT_CSV_FILE = new CsvFile();
-
         private static EditGridControlViewModel VM;
-
-        public CsvFile CsvFile
-        {
-            get { return (CsvFile)GetValue(CsvFileProperty); }
-            set { SetValue(CsvFileProperty, value); }
-        }
-        public static readonly DependencyProperty CsvFileProperty =
-            DependencyProperty.Register("CsvFile", typeof(CsvFile), typeof(LineEditControl), new PropertyMetadata(DEFAULT_CSV_FILE, CsvFileChanged));
 
         public int SelectedLineIndex
         {
@@ -37,60 +27,39 @@ namespace CSVEditor.View.Controls
             InitializeComponent();
         }
 
-        private static void CsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var control = (LineEditControl)d;
-            var newValue = (CsvFile)e.NewValue;
-
-            if (control == null || newValue == null)
-            {
-                return;
-            }
-
-            VM = new EditGridControlViewModel(
-                control.Resources,
-                control.CsvFile as CsvFile,
-                control.DataContext as EditorVM,
-                control.SelectedLineIndex < 0 ? 0 : control.SelectedLineIndex);
-
-            //Console.WriteLine($"LineEditControl, new CsvFile set.");
-
-            var topContainer = control.TopContainer as Grid;
-            
-            BuildGrid(topContainer);
-        }
-
         private static void SelectedLineIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (LineEditControl)d;
-            var newValue = (int)e.NewValue;
-            if (newValue == -1)
-            {
-                newValue = 0;
-            }
+            control.TopContainer.Children.Clear();
 
-            if (control == null || control.CsvFile == null)
+            if (control == null || !control.IsVisible)
             {
-                //Console.WriteLine($"LineEditControl:SelectedLineIndexChanged CsvFileSelected not selected or control is null.");
                 return;
             }
 
-            VM.LineIndex = newValue;
-            Console.WriteLine($"LineEditControl, new SelectedLIneIndex =  {newValue}.");
-
-            BuildGrid(control.TopContainer);
+            BuildGrid(control.TopContainer, control.Resources);
         }
 
         private void TopContainer_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            TopContainer.Children.Clear();
+
             if ((bool)e.NewValue == true)
             {
-                BuildGrid(TopContainer);
+                BuildGrid(TopContainer, Resources);
             }
         }
 
-        private static void BuildGrid(Grid topContainer)
+        private static void BuildGrid(Grid topContainer, ResourceDictionary resources)
         {
+            var Context = topContainer.DataContext as EditorVM;
+
+            VM = new EditGridControlViewModel(
+               resources,
+               Context);
+
+            Console.WriteLine($"LineEditControl, building new Grid for Index =  {Context.SelectedItemIndex}.");
+
             topContainer.Children.Clear();
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }
