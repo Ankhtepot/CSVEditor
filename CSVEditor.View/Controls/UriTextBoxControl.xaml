@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="50"
-             DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Mode=OneWay}">
+             d:DesignHeight="100" d:DesignWidth="300">
 
     <UserControl.Resources>
         <Style TargetType="TextBox" x:Key="UriLinkTextBoxStyle">
@@ -20,10 +19,40 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
-    <Grid>
-        <TextBox Name="UriTextBox"
-                 Text="{Binding Text}"
-                 Style="{StaticResource UriLinkTextBoxStyle}"/>
-    </Grid>
+
+    <Border Style="{StaticResource BaseBorderStyle}" Margin="0,5,5,5">
+        <Grid x:Name="TopContainer" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Name="UriTextBox"
+                     Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource UriLinkTextBoxStyle}"
+                     MouseDoubleClick="UriTextBox_MouseDoubleClick"
+                     Grid.Row="0"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Margin="2"/>
+            <Button Name="OpenUriButton"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="2">
+                <TextBlock>
+                     <Run Text="&#xE774;"
+                         FontFamily="Segoe MDL2 Assets" />
+                     <Run Text="Open Link" />
+                </TextBlock>
+            </Button>
+            <TextBlock Text="{Binding OpenLinkHintText}"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       Margin="2"/>
+        </Grid>
+    </Border>
 </UserControl>

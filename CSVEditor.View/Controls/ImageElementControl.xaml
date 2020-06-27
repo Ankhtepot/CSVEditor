@@ -9,59 +9,59 @@
              x:Name="ImageElementControlRoot">
     
     <UserControl.Resources>
-        <Style TargetType="Border" x:Key="BaseBorderStyle">
-            <Setter Property="BorderBrush" Value="Black"></Setter>
-            <Setter Property="BorderThickness" Value="1"></Setter>
+        <Style TargetType="Border" x:Key="SquareBaseBorderStyle" BasedOn="{StaticResource BaseBorderStyle}">
             <Setter Property="Margin" Value="5"/>
         </Style>
     </UserControl.Resources>
-    
-    <Grid Margin ="0,0,20,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
-        </Grid.RowDefinitions>
 
-        <Border Style="{StaticResource BaseBorderStyle}"
+    <Border Style="{StaticResource BaseBorderStyle}" Margin="0,5,5,5">
+        <Grid Margin ="0,0,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <Border Style="{StaticResource SquareBaseBorderStyle}"
                 Grid.Column="0"
                 Grid.Row="0"
                 Grid.RowSpan="7">
-            <Image x:Name="ImageFromSource"
+                <Image x:Name="ImageFromSource"
                    AllowDrop="True"
                    PreviewDrop="ImageFromSource_PreviewDrop"
                    Stretch="Fill">
-                <Image.ToolTip>
-                    <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <Image Source="{Binding Source}" Stretch="UniformToFill" MaxHeight="500"/>
-                        </Border>
-                    </ToolTip>
-                </Image.ToolTip>
-            </Image>
-                   
-        </Border>
-        <Label Grid.Column="1" Grid.Row="1"
+                    <Image.ToolTip>
+                        <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Image Source="{Binding Source}" Stretch="UniformToFill" MaxHeight="500"/>
+                            </Border>
+                        </ToolTip>
+                    </Image.ToolTip>
+                </Image>
+
+            </Border>
+            <Label Grid.Column="1" Grid.Row="1"
                Content="Content"/>
-        <TextBox Grid.Column="1" Grid.Row="2"
+            <TextBox Grid.Column="1" Grid.Row="2"
                  x:Name="CellContentTextBox"
                  FontSize="16"
                  Margin="3"
                  TextChanged="CellContentTextBox_TextChanged">
-        </TextBox>
-        <Label Grid.Column="1" Grid.Row="4"
+            </TextBox>
+            <Label Grid.Column="1" Grid.Row="4"
                Content="Save to:"/>
-        <TextBlock Grid.Column="1" Grid.Row="5"
+            <TextBlock Grid.Column="1" Grid.Row="5"
                    x:Name="UriContentTextBlock"
                    FontSize="16"
                    Margin="3"/>
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

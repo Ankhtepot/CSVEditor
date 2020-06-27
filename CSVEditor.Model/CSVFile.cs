@@ -111,6 +111,18 @@ namespace CSVEditor.Model
             ColumnConfigurations = transformedFile.ColumnConfigurations;
         }
 
+        public CsvFile(CsvFile originalCsvFile)
+        {
+            AbsPath = originalCsvFile.AbsPath;
+            HeaderIndex = originalCsvFile.HeaderIndex;
+            HeadersStrings = new List<string>(originalCsvFile.HeadersStrings);
+            Delimiter = originalCsvFile.Delimiter;
+            BlockIdentifier = originalCsvFile.BlockIdentifier;
+            ColumnCount = originalCsvFile.ColumnCount;
+            Lines = new List<List<string>>(originalCsvFile.Lines);
+            ColumnConfigurations = new List<CsvColumnConfiguration>(originalCsvFile.ColumnConfigurations);
+        }
+
         public CsvFile(string absPath,
             int headerIndex,
             List<string> headersStrings,

@@ -277,10 +277,9 @@ namespace CSVEditor.View.Controls
                         {
                             Name = $"DataCellUriRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
-                            Tag = new ElementLocationTag() { rowNumber = columnNr, columnNumber = LineIndex }
                         };
 
-                        (newElement as UriTextBoxControl).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        (newElement as UriTextBoxControl).SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");

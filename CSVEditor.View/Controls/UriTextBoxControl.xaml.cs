@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class UriTextBoxControl : UserControl, INotifyPropertyChanged
     {
+        public string OpenLinkHintText { get; set; } = "You can also double click on the text to open the link.";
+
         private bool isTextValidUri;
         public bool IsTextValidUri
         {
@@ -41,10 +44,10 @@ namespace CSVEditor.View.Controls
             DependencyProperty.Register("Text", typeof(string), typeof(UriTextBoxControl), new PropertyMetadata("", TextChanged));        
 
         public UriTextBoxControl()
-        {
-            IsTextValidUri = false;
-            Text = "";
+        {            
             InitializeComponent();
+            IsTextValidUri = false;
+            TopContainer.DataContext = this;
         }
 
         private static void TextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -58,6 +61,7 @@ namespace CSVEditor.View.Controls
             }
 
             control.IsTextValidUri = newText.IsValidURL();
+            control.UriTextBox.Text = newText;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -65,6 +69,23 @@ namespace CSVEditor.View.Controls
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void UriTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (IsTextValidUri)
+            {
+                var linkText = UriTextBox.Text;
+
+                try
+                {
+                    Process.Start(new ProcessStartInfo(linkText) { UseShellExecute = true});
+                }
+                catch (Exception error)
+                {
+                    Console.WriteLine($"Error opening link: \"{linkText}\" | Error message: {error.Message}");
+                }
+            }
         }
     }
 }

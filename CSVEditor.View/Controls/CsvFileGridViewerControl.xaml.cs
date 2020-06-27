@@ -15,7 +15,7 @@ namespace CSVEditor.View.Controls
     /// </summary>
     public partial class CsvFileGridViewerControl : UserControl
     {
-        private static string lastCreatedCsvFileAbsPath = "";
+        private static CsvFile lastOpenedCsvFile = new CsvFile();
 
         public CsvFile InputCsvFile
         {
@@ -30,12 +30,14 @@ namespace CSVEditor.View.Controls
             var control = (CsvFileGridViewerControl)d;
             var newCsvFile = (CsvFile)e.NewValue;
 
-            if (control == null || newCsvFile == null || lastCreatedCsvFileAbsPath == newCsvFile.AbsPath)
+            if (control == null 
+                || newCsvFile == null 
+                || (lastOpenedCsvFile.AbsPath == newCsvFile.AbsPath && lastOpenedCsvFile == newCsvFile))
             {
                 return;
             }
 
-            lastCreatedCsvFileAbsPath = newCsvFile.AbsPath;
+            lastOpenedCsvFile = new CsvFile(newCsvFile);
 
             var gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newCsvFile.Lines;
