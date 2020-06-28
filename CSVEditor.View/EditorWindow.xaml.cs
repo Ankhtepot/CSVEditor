@@ -1,6 +1,7 @@
 ﻿using CSVEditor.Model.Services;
 using CSVEditor.View.Controls;
 using CSVEditor.ViewModel;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +16,7 @@ namespace CSVEditor.View
         public EditorVM EditorVM;
 
         public delegate void SetMainTabSelectedTabIndexEvent(int tabIndex);
+        public delegate void RebuildConfigurationGridEvent();
         public EditorWindow()
         {
             InitializeComponent();
@@ -40,6 +42,11 @@ namespace CSVEditor.View
         public void SetMainTabSelectedTabIndex(int TabIndex)
         {
             MainTabControl.SelectedIndex = TabIndex.Clamp(0, MainTabControl.Items.Count - 1);
+        }
+
+        public void RebuildConfigurationGrid()
+        {
+            ConfigurationEditControl.RebuildGrid(ConfigurationEditGrid.TopContainer);
         }
     }
 }

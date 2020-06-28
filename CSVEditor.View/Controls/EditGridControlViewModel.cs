@@ -1,5 +1,6 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.Services;
+using CSVEditor.View.Controls.DataCellElements;
 using CSVEditor.ViewModel;
 using Prism.Commands;
 using System;
@@ -168,20 +169,27 @@ namespace CSVEditor.View.Controls
 
         private UIElement UriColumnCreationMethod(int count)
         {
-            var newUri = new TextBox()
+            switch (Context.SelectedCsvFile.ColumnConfigurations[count].Type) 
             {
-                Margin = new Thickness(5),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Text = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
-                MinWidth = MinColumnWidth * 3,
-                Tag = count
-            };
+                case (FieldType.Image):
+                {
+                    var newUri = new TextBox()
+                    {
+                        Margin = new Thickness(5),
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Text = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
+                        MinWidth = MinColumnWidth * 3,
+                        Tag = count
+                    };
 
-            newUri.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
-            newUri.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
-            newUri.TextChanged += NewUri_TextChanged;
+                    newUri.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
+                    newUri.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
+                    newUri.TextChanged += NewUri_TextChanged;
 
-            return newUri;
+                    return newUri;
+                };
+                default: return null;
+            }
         }
 
         private void NewUri_TextChanged(object sender, TextChangedEventArgs e)
@@ -201,6 +209,7 @@ namespace CSVEditor.View.Controls
 
             Context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
             Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath);
+            RebuildConfigurationGridEvent?.Invoke();
         }
 
         private void AddColumnWithContent(
@@ -219,10 +228,13 @@ namespace CSVEditor.View.Controls
             {
                 var newCellElement = creationMethod(i - 1); //  -1 because index 0 is header
 
-                Grid.SetColumn(newCellElement, columnNr);
-                Grid.SetRow(newCellElement, i);
+                if (newCellElement != null)
+                {
+                    Grid.SetColumn(newCellElement, columnNr);
+                    Grid.SetRow(newCellElement, i);
 
-                MainGrid.Children.Add(newCellElement);
+                    MainGrid.Children.Add(newCellElement); 
+                }
             }
         }
 
@@ -260,7 +272,8 @@ namespace CSVEditor.View.Controls
 
                         var newElement = new SelectElementControl()
                         {
-                            ComboBoxSource = columnDistinctValues
+                            ComboBoxSource = columnDistinctValues,
+                            Margin = ElementMargin
                         };
                         newElement.SetBinding(SelectElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
 
@@ -281,6 +294,17 @@ namespace CSVEditor.View.Controls
                         newElement.SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
+                case FieldType.Date:
+                    {
+                        var newElement = new DateElementControl()
+                        {
+                            Name = $"DataCellDateRow{LineIndex}Column{columnNr}",
+                            Margin = ElementMargin
+                        };
+
+                        newElement.SetBinding(DateElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
+                        return newElement;
+                    }
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
             };
         }
@@ -360,6 +384,13 @@ namespace CSVEditor.View.Controls
             }
 
             return newGrid;
+        }
+
+        public EditorWindow.RebuildConfigurationGridEvent RebuildConfigurationGridEvent = null;
+
+        public void RebuildConfigurationGrid(EditorWindow.RebuildConfigurationGridEvent rebuildConfigurationGrid)
+        {
+            RebuildConfigurationGridEvent = rebuildConfigurationGrid;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

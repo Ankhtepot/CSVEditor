@@ -9,7 +9,7 @@
     <Border Style="{StaticResource BaseLeftAlignedBorderStyle}">
         <Grid Name="TopContainer">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="200"/>
+                <ColumnDefinition Width="Auto" MinWidth="150"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 

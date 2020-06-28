@@ -281,7 +281,8 @@
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                                                 HorizontalAlignment="Stretch"
                                                                />
-                                            <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}" 
+                                            <uc:ConfigurationEditControl x:Name="ConfigurationEditGrid" 
+                                                                         CsvFile="{Binding SelectedCsvFile}" 
                                                                          Visibility="{Binding IsLineEditMode,
                                                                           Converter={StaticResource BoolToVisibilityConverter},
                                                                           ConverterParameter=false}"

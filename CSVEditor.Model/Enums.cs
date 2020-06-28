@@ -8,11 +8,12 @@ namespace CSVEditor.Model
     {
         public enum FieldType
         {
-            TextBox = 0,
-            TextArea = 1,
-            Image = 2,
-            URI = 3,
-            Select = 4
+            TextBox,
+            TextArea,
+            Image,
+            URI,
+            Select,
+            Date
         }
 
         public enum WorkStatus 
