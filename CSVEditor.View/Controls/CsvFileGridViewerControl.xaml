@@ -69,9 +69,7 @@
                         <GridViewColumn.Header>
                             <TextBlock TextAlignment="Center"
                                        MinWidth="30">
-                                <Run Text="Line"/>
-                                <LineBreak/>
-                                <Run Text="Nr."/>
+                                <Run Text="Line:"/>
                             </TextBlock>
                         </GridViewColumn.Header>
                     </GridViewColumn>
@@ -109,6 +107,7 @@
                     <Setter Property="VerticalContentAlignment" Value="Top"/>
                     <Setter Property="Margin" Value="0"/>
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnListViewItem_PreviewMouseLeftButtonDown" />
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
                     <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True" >

@@ -58,7 +58,7 @@
                     </Grid.RowDefinitions>
 
                     <!--<Border Style="{StaticResource LeftRoundedBorderStyle}" VerticalAlignment="Center">-->
-                        <Button Grid.Column="0"
+                    <Button Grid.Column="0"
                                 Content="LOAD"
                                 HorizontalAlignment="Left"
                                 Height="28"
@@ -67,10 +67,10 @@
                                 IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                                 Margin="1,0"
                                 >
-                            <Button.Resources>
-                                <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}"/>
-                            </Button.Resources>
-                        </Button>
+                        <Button.Resources>
+                            <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}"/>
+                        </Button.Resources>
+                    </Button>
                     <!--</Border>-->
                     <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center" Margin="0.5">
                         <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
@@ -122,7 +122,7 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        
+
                         <TextBlock Text="Loaded CSV files" 
                                    Margin="10,0"
                                    Grid.Row="0"/>
@@ -168,45 +168,66 @@
 
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
-                    <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
+                    <TabControl x:Name="MainTabControl"
+                                VerticalAlignment="Stretch" 
+                                HorizontalAlignment="Stretch" 
+                                SelectionChanged="TabControl_SelectionChanged" >
                         <!--#region Overview -->
                         <TabItem Header="Overview" x:Name="OverviewTab">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="61*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                
-                                <uc:FileInfoControl Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+
+                                <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}" Grid.ColumnSpan="2" Margin="0,0,0,284" Grid.RowSpan="2"
                                                     />
-                                <uc:CsvFileGridViewerControl Grid.Row="1" x:Name="CsvFileGridVIewer"
-                                    InputCsvFile="{Binding SelectedCsvFile}"/>
+                                <uc:CsvFileGridViewerControl Grid.Row="1" 
+                                                             x:Name="CsvFileGridVIewer"
+                                                             InputCsvFile="{Binding SelectedCsvFile}" 
+                                                             Grid.ColumnSpan="2"/>
                             </Grid>
                         </TabItem>
                         <!--#endregion Overview-->
-                            
+
                         <!--#region Line Editor-->
                         <TabItem Header="Line Editor"
                                  Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}"
                                  >
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    
+
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                
-                                <uc:FileInfoControl Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                                                    SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
-                                                    />
+
+                                <Grid Grid.Row="0" Background="Beige">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <uc:FileInfoControl Grid.Column="1"
+                                                        VerticalAlignment="Stretch" HorizontalAlignment="Left"                                                        
+                                                        SelectedText="{Binding SelectedText}"
+                                                        FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
+                                                        MaxWidth="300"
+                                                        />
+                                    <Border Style="{StaticResource BaseLeftAlignedBorderStyle}"                                             
+                                            Grid.Column="0"
+                                            Background="AntiqueWhite">
+                                        <TextBlock Text="{Binding IsLineEditMode, Converter={StaticResource EditModeToTitleConverter}}"
+                                                   Style="{StaticResource BigTextBlockStyle}"/>
+                                    </Border>
+                                </Grid>
                                 <DockPanel Grid.Row="1">
                                     <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
@@ -259,7 +280,7 @@
                                                                 Visibility="{Binding IsLineEditMode,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                                                 HorizontalAlignment="Stretch"
-                                                               />   
+                                                               />
                                             <uc:ConfigurationEditControl CsvFile="{Binding SelectedCsvFile}" 
                                                                          Visibility="{Binding IsLineEditMode,
                                                                           Converter={StaticResource BoolToVisibilityConverter},

@@ -19,7 +19,7 @@ namespace CSVEditor.ViewModel
     {
         public const string APP_OPTIONS_FILE_NAME = "options.json";
         public const string CSV_CONFIGURATIONS_FILE_NAME = "csv_conf.json";
-        public const string CONFIGURATION_FOLDER_NAME = "config";
+        public const string CONFIGURATION_FOLDER_NAME = "config";        
 
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
 

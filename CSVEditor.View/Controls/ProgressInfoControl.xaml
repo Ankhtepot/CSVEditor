@@ -26,7 +26,7 @@
 
             <TextBlock Grid.Column="1" 
                        x:Name="WorkStatusTextBlock"
-                       Style="{StaticResource BigTextBoxStyle}"
+                       Style="{StaticResource BigTextBlockStyle}"
                        HorizontalAlignment="Left"/>
             <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="5,2,5,2" VerticalAlignment="Center">
                 <fa:SvgAwesome x:Name="Spinner"

@@ -121,5 +121,17 @@ namespace CSVEditor.View.Controls
         {
             listView.ScrollIntoView(listView.SelectedItem);
         }
+
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SetMainTabSelectedTabIndexEvent?.Invoke(1);
+        }
+
+        public EditorWindow.SetMainTabSelectedTabIndexEvent SetMainTabSelectedTabIndexEvent = null;
+
+        public void SetMainTabSelectedTabIndex(EditorWindow.SetMainTabSelectedTabIndexEvent setMainTabSelectedTabIndex)
+        {
+            SetMainTabSelectedTabIndexEvent = setMainTabSelectedTabIndex;
+        }
     }
 }

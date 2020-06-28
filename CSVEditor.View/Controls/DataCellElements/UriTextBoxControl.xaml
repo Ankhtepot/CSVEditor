@@ -20,7 +20,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border Style="{StaticResource BaseBorderStyle}" Margin="0,5,5,5">
+    <Border Style="{StaticResource BaseLeftAlignedBorderStyle}">
         <Grid x:Name="TopContainer" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -40,6 +40,8 @@
                      Grid.ColumnSpan="2"
                      Margin="2"/>
             <Button Name="OpenUriButton"
+                    Click="OpenUriButton_Click"
+                    IsEnabled="{Binding IsTextValidUri}"
                     Grid.Row="1"
                     Grid.Column="0"
                     Margin="2">

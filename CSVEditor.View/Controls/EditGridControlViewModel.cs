@@ -240,7 +240,7 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin,
                         };
 
-                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.TextArea:
@@ -251,21 +251,20 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin,
                             AcceptsReturn = true
                         };
-                        (newElement as TextBox).SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
+                        newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 case FieldType.Select:
                     {
                         var columnDistinctValues = GetColumnDistinctValues(columnNr);
 
-                        return new ComboBox()
+                        var newElement = new SelectElementControl()
                         {
-                            Margin = ElementMargin,
-                            ItemsSource = columnDistinctValues,
-                            SelectedIndex = columnDistinctValues.FindIndex(record => record == columnContent),
-                            MaxWidth = MaxColumnWidth,
-                            HorizontalAlignment = HorizontalAlignment.Left,
+                            ComboBoxSource = columnDistinctValues
                         };
+                        newElement.SetBinding(SelectElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
+
+                        return newElement;
                     };
                 case FieldType.Image:
                     {
@@ -279,7 +278,7 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin,
                         };
 
-                        (newElement as UriTextBoxControl).SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
+                        newElement.SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");

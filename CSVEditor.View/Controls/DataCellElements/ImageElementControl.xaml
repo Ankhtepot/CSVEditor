@@ -12,9 +12,16 @@
         <Style TargetType="Border" x:Key="SquareBaseBorderStyle" BasedOn="{StaticResource BaseBorderStyle}">
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <ContextMenu x:Key="ImageTextBoxContextMenu" x:Shared="true">
+            <MenuItem Command="ApplicationCommands.Copy" />
+            <MenuItem Command="ApplicationCommands.Cut" />
+            <MenuItem Command="ApplicationCommands.Paste" />
+            <Separator/>
+            <MenuItem Header="Select another file." Click="SelectFileMenuItem_Click" />
+        </ContextMenu>
     </UserControl.Resources>
 
-    <Border Style="{StaticResource BaseBorderStyle}" Margin="0,5,5,5">
+    <Border Style="{StaticResource BaseLeftAlignedBorderStyle}">
         <Grid Margin ="0,0,20,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -35,9 +42,10 @@
                 Grid.Row="0"
                 Grid.RowSpan="7">
                 <Image x:Name="ImageFromSource"
-                   AllowDrop="True"
-                   PreviewDrop="ImageFromSource_PreviewDrop"
-                   Stretch="Fill">
+                       MouseDown="ImageFromSource_MouseDown"
+                       AllowDrop="True"
+                       PreviewDrop="ImageFromSource_PreviewDrop"
+                       Stretch="Fill">
                     <Image.ToolTip>
                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -50,14 +58,16 @@
             </Border>
             <Label Grid.Column="1" Grid.Row="1"
                Content="Content"/>
-            <TextBox Grid.Column="1" Grid.Row="2"
-                 x:Name="CellContentTextBox"
-                 FontSize="16"
-                 Margin="3"
-                 TextChanged="CellContentTextBox_TextChanged">
+            <TextBox x:Name="CellContentTextBox"
+                     ContextMenu="{StaticResource ImageTextBoxContextMenu}" 
+                     Grid.Column="1" 
+                     Grid.Row="2"
+                     FontSize="16"
+                     Margin="3"
+                     TextChanged="CellContentTextBox_TextChanged">
             </TextBox>
             <Label Grid.Column="1" Grid.Row="4"
-               Content="Save to:"/>
+               Content="Base Path:"/>
             <TextBlock Grid.Column="1" Grid.Row="5"
                    x:Name="UriContentTextBlock"
                    FontSize="16"

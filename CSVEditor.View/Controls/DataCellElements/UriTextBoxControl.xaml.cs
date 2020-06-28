@@ -1,19 +1,11 @@
 ﻿using CSVEditor.Model.Services;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVEditor.View.Controls
 {
@@ -61,17 +53,19 @@ namespace CSVEditor.View.Controls
             }
 
             control.IsTextValidUri = newText.IsValidURL();
-            control.UriTextBox.Text = newText;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         private void UriTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenUriLink();
+        }
+
+        private void OpenUriButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenUriLink();
+        }
+
+        private void OpenUriLink()
         {
             if (IsTextValidUri)
             {
@@ -79,13 +73,20 @@ namespace CSVEditor.View.Controls
 
                 try
                 {
-                    Process.Start(new ProcessStartInfo(linkText) { UseShellExecute = true});
+                    Process.Start(new ProcessStartInfo(linkText) { UseShellExecute = true });
                 }
                 catch (Exception error)
                 {
                     Console.WriteLine($"Error opening link: \"{linkText}\" | Error message: {error.Message}");
                 }
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CSVEditor.View.Controls;
+﻿using CSVEditor.Model.Services;
+using CSVEditor.View.Controls;
 using CSVEditor.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,11 +13,15 @@ namespace CSVEditor.View
     public partial class EditorWindow : Window
     {
         public EditorVM EditorVM;
+
+        public delegate void SetMainTabSelectedTabIndexEvent(int tabIndex);
         public EditorWindow()
         {
             InitializeComponent();
             EditorVM = new EditorVM();
             TopContainer.DataContext = EditorVM;
+
+            CsvFileGridVIewer.SetMainTabSelectedTabIndex(SetMainTabSelectedTabIndex);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -25,12 +30,16 @@ namespace CSVEditor.View
             var control = (TabControl)sender;
             if (control.SelectedIndex == 0)
             {
-                var binding = new Binding("SelectedCsvFile");
-                binding.Source = EditorVM;
                 CsvFileGridVIewer.InputCsvFile = null;
-                CsvFileGridVIewer.InputCsvFile = EditorVM.SelectedCsvFile;
-                BindingOperations.SetBinding(CsvFileGridVIewer, CsvFileGridViewerControl.InputCsvFileProperty, binding);
+                BindingOperations.SetBinding(CsvFileGridVIewer,
+                    CsvFileGridViewerControl.InputCsvFileProperty,
+                    new Binding("SelectedCsvFile") { Source = EditorVM});
             }
+        }
+
+        public void SetMainTabSelectedTabIndex(int TabIndex)
+        {
+            MainTabControl.SelectedIndex = TabIndex.Clamp(0, MainTabControl.Items.Count - 1);
         }
     }
 }

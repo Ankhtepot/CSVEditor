@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using CSVEditor.Model;
 using CSVEditor.Model.Services;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CSVEditor.ViewModel
@@ -71,6 +72,23 @@ namespace CSVEditor.ViewModel
             {
                 return null;
             }
+        }
+
+        public static string QueryUserToSelectFile(string path, string title = "", string filter = "All files (*.*)|*.*")
+        {
+            var fileDialog = new OpenFileDialog()
+            {
+                Filter = filter,
+                CheckPathExists = true,
+                InitialDirectory = Directory.Exists(path) ? path : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                return fileDialog.FileName;
+            }
+
+            return null;
         }
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
@@ -253,6 +271,24 @@ namespace CSVEditor.ViewModel
             }
 
             return false;
+        }
+
+        public static string ConvertContentPathToSystemPath(string imageCellContent)
+        {
+            var path = "";
+
+            if (!string.IsNullOrEmpty(imageCellContent))
+            {
+                path = Regex.Replace(imageCellContent, "\r", "");
+                path = Regex.Replace(path, "/", @"\");
+
+                if (!char.IsLetterOrDigit(path[0]))
+                {
+                    path = path.Substring(1);
+                }
+            }
+
+            return path;
         }
     }
 }
