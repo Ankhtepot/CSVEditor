@@ -160,7 +160,8 @@ namespace CSVEditor.View.Controls
                 Tag = count,
                 ItemsSource = Enum.GetValues(typeof(FieldType)),
                 SelectedIndex = (int)Enum.Parse(typeof(FieldType), Context.SelectedCsvFile.ColumnConfigurations[count].Type.ToString()),
-                Margin = new Thickness(5)
+                Margin = new Thickness(5),
+                Height = 25
             };
 
             newComboBox.SelectionChanged += FieldTypeComboBox_SelectionChanged;
@@ -176,7 +177,7 @@ namespace CSVEditor.View.Controls
                     {
                         var newUri = BuildConfigUriCell(Constants.IMAGE_URI_LABEL_TEXT, count);
                         newUri.TextBox.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
-                        newUri.TextBox.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = (sender as LabeledTextBoxControl).TextBox;
+                        newUri.TextBox.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
 
                         return newUri;
                     };
@@ -192,11 +193,10 @@ namespace CSVEditor.View.Controls
         {
             var newUri = new LabeledTextBoxControl()
             {
-                Margin = new Thickness(5),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Tag = columnNr
+                HorizontalAlignment = HorizontalAlignment.Left,                
             };
 
+            newUri.TextBox.Tag = columnNr;
             newUri.TextBox.TextChanged += NewUri_TextChanged;
             newUri.LabelContent = labelContent;
             newUri.Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI;

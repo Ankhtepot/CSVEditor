@@ -12,13 +12,19 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
             <Label Content="{Binding LabelContent}"
-                   Grid.Column="0"/>
+                   Grid.Column="0"
+                   Margin="2,0,2,0"/>
             <TextBox x:Name="TextBox" 
                      Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      MinWidth="100"
-                     Grid.Column="1"/>
+                     Height="20"
+                     Grid.Column="1"
+                     Margin="2,0,2,0"/>
         </Grid>
     </Border>
 </UserControl>
