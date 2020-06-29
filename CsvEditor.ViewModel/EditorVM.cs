@@ -98,9 +98,12 @@ namespace CSVEditor.ViewModel
             get { return selectedItemIndex; }
             set
             {
-                selectedItemIndex = value;
-                Console.WriteLine($"EditorVM, selectedIndexUpdated to {value}");
-                OnPropertyChanged();
+                if (selectedItemIndex != value)
+                {
+                    selectedItemIndex = value;
+                    Console.WriteLine($"EditorVM, selectedIndexUpdated to {value}");
+                    OnPropertyChanged(); 
+                }
             }
         }
 
