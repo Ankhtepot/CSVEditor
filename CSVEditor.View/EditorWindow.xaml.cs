@@ -35,18 +35,13 @@ namespace CSVEditor.View
                 CsvFileGridVIewer.InputCsvFile = null;
                 BindingOperations.SetBinding(CsvFileGridVIewer,
                     CsvFileGridViewerControl.InputCsvFileProperty,
-                    new Binding("SelectedCsvFile") { Source = EditorVM});
+                    new Binding("SelectedCsvFile") { Source = EditorVM });
             }
         }
 
         public void SetMainTabSelectedTabIndex(int TabIndex)
         {
             MainTabControl.SelectedIndex = TabIndex.Clamp(0, MainTabControl.Items.Count - 1);
-        }
-
-        public void RebuildConfigurationGrid()
-        {
-            ConfigurationEditControl.RebuildGrid(ConfigurationEditGrid.TopContainer);
         }
     }
 }

@@ -14,7 +14,10 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             BackgroundWorker worker = (BackgroundWorker)sender;
             worker.ReportProgress(VM.AsyncVM.WorkProgress + 100);
             VM.AsyncVM.WorkingStatus = WorkStatus.Working;
-            VM.SelectedCsvFile = new CsvFile((string)e.Argument, worker);
+
+            CsvFile loadedCsvFile = new CsvFile((string)e.Argument, worker);
+            VM.SelectedCsvFile = loadedCsvFile;
+            EditorVM.AppOptions.LastLoadedUneditedCsvFile = loadedCsvFile;
 
             if (worker.CancellationPending == true)
             {

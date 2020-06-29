@@ -29,10 +29,12 @@ namespace CSVEditor.View.Controls
         public ConfigurationEditControl()
         {
             InitializeComponent();
+
+            EditorVM.ConfiguraitonUpdated += RebuildGrid;
         }
 
         private static void CsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
+        {           
             var control = (ConfigurationEditControl)d;
             var newValue = (CsvFile)e.NewValue;
 
@@ -43,11 +45,13 @@ namespace CSVEditor.View.Controls
 
             VM = new EditGridControlViewModel(
                 control.Resources,
-                control.DataContext as EditorVM);
+                control.DataContext as EditorVM,
+                control.TopContainer);
 
             Console.WriteLine($"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM).SelectedCsvFile.AbsPath)}");
 
-            RebuildGrid(control.TopContainer);
+            control.TopContainer.Children.Clear();
+            control.TopContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -55,10 +59,11 @@ namespace CSVEditor.View.Controls
             VM.QueryForRelativePathToRootPathCommand.Execute();
         }
 
-        public static void RebuildGrid(Grid topContainer)
+        private static void RebuildGrid(Grid topContainer)
         {
             topContainer.Children.Clear();
             topContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());
+            Console.WriteLine($"COnfigurationEditControl: RebuildGrid Executed.");
         }        
     }
 }

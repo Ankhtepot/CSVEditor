@@ -10,10 +10,12 @@ namespace CSVEditor.Model
         public const string CANCELED_WORK_STATUS = "Last task was cancelled.";
         public const string COMPLETED_WORK_STATUS = "Task completed successfuly.";
         public const string CONFIGURATION_EDITOR_TITLE = "Configuration Editor";
+        public const string DATE_URI_LABEL_TEXT = "Set Formating for Generated Date:";
         public const string EDIT_COLUMN_CONFIGURATIONS = "Edit Column Configurations";
         public const string EDIT_LINES = "Edit Lines";
         public const string ERROR_WORK_STATUS = "Last task stopped with and error.";
         public const string IDLE_WORK_STATUS = "No task in progress.";
+        public const string IMAGE_URI_LABEL_TEXT = "Set Relative Path to Save Image Files to:";
         public const string LINE_EDITOR_TITLE = "Line Editor";
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";
         public const string LOAD_REPOSITORY_PLACEHOLDER = "Load Repository...";

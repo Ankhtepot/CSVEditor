@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using static CSVEditor.Model.Enums;
 
 namespace CSVEditor.ViewModel
@@ -116,6 +117,9 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
+        public static Action<Grid> ConfiguraitonUpdated;
+        public Action ConfigurationUpdated;
+
         //*******************************
         //********** Commands ***********
         //*******************************
@@ -151,8 +155,6 @@ namespace CSVEditor.ViewModel
             setAppOptions();
             SetVisuals(AppOptions.VisualConfig);
         }
-
-
 
         //*******************************
         //*********** Methods ***********
@@ -236,7 +238,7 @@ namespace CSVEditor.ViewModel
             });
         }
 
-        public void UpdateFileConfigurations(List<CsvColumnConfiguration> newConfiguration, string fileAbsPath)
+        public void UpdateFileConfigurations(List<CsvColumnConfiguration> newConfiguration, string fileAbsPath, Grid mainGridContainer = null)
         {
             if (findFileConfiguration(fileAbsPath) == null)
             {
@@ -248,6 +250,13 @@ namespace CSVEditor.ViewModel
             var configToUpdateIndex = FileConfigurations.FindIndex(config => config.AbsoluteFilePath == fileAbsPath);
 
             FileConfigurations[configToUpdateIndex].ColumnConfigurations = newConfiguration;
+
+            ConfigurationUpdated?.Invoke();
+
+            if (mainGridContainer != null)
+            {
+                ConfiguraitonUpdated?.Invoke(mainGridContainer); 
+            }
         }
 
         private void setAppOptions()

@@ -1,6 +1,6 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.Services;
+﻿using Constants = CSVEditor.Model.Constants;
 using CSVEditor.View.Controls.DataCellElements;
+using CSVEditor.View.Controls.EditGridCellElements;
 using CSVEditor.ViewModel;
 using Prism.Commands;
 using System;
@@ -18,7 +18,7 @@ namespace CSVEditor.View.Controls
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
         private int rowsCount { get => Context.SelectedCsvFile.HeadersStrings.Count + 1; }
-        
+
         private TextBox lastTextBoxWithContextMenuClosed;
 
         public const string HEADER_TEXT_BOX_STYLE = "HeaderTextBlockStyle";
@@ -33,15 +33,16 @@ namespace CSVEditor.View.Controls
         public Thickness ElementMargin { get; set; } = new Thickness(2d);
         public EditorVM Context { get; set; }
         public Grid MainGrid { get; set; }
+        public Grid MainGridContainer { get; set; }
         public ResourceDictionary Resources { get; set; }
-        public int LineIndex { get => Context.SelectedItemIndex; }        
-
+        public int LineIndex { get => Context.SelectedItemIndex; }
         public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
 
-        public EditGridControlViewModel(ResourceDictionary resources, EditorVM context)
+        public EditGridControlViewModel(ResourceDictionary resources, EditorVM context, Grid mainGridContainer = null)
         {
             Resources = resources;
             Context = context;
+            MainGridContainer = mainGridContainer;
 
             QueryForRelativePathToRootPathCommand = new DelegateCommand(queryForRelativePathToRootPath);
         }
@@ -61,7 +62,7 @@ namespace CSVEditor.View.Controls
         }
 
         public Grid GetEditLinesGridForNewCsvFile()
-        {            
+        {
             setupNewGrid();
 
             if (LineIndex == -1)
@@ -169,27 +170,38 @@ namespace CSVEditor.View.Controls
 
         private UIElement UriColumnCreationMethod(int count)
         {
-            switch (Context.SelectedCsvFile.ColumnConfigurations[count].Type) 
+            switch (Context.SelectedCsvFile.ColumnConfigurations[count].Type)
             {
                 case (FieldType.Image):
-                {
-                    var newUri = new TextBox()
                     {
-                        Margin = new Thickness(5),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Text = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
-                        MinWidth = MinColumnWidth * 3,
-                        Tag = count
+                        var newUri = BuildConfigUriCell(Constants.IMAGE_URI_LABEL_TEXT, count);
+                        newUri.TextBox.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
+                        newUri.TextBox.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = (sender as LabeledTextBoxControl).TextBox;
+
+                        return newUri;
                     };
-
-                    newUri.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
-                    newUri.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
-                    newUri.TextChanged += NewUri_TextChanged;
-
-                    return newUri;
-                };
+                case (FieldType.Date):
+                    {
+                        return BuildConfigUriCell(Constants.DATE_URI_LABEL_TEXT, count);
+                    };
                 default: return null;
             }
+        }
+
+        private LabeledTextBoxControl BuildConfigUriCell(string labelContent, int columnNr)
+        {
+            var newUri = new LabeledTextBoxControl()
+            {
+                Margin = new Thickness(5),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Tag = columnNr
+            };
+
+            newUri.TextBox.TextChanged += NewUri_TextChanged;
+            newUri.LabelContent = labelContent;
+            newUri.Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI;
+
+            return newUri;
         }
 
         private void NewUri_TextChanged(object sender, TextChangedEventArgs e)
@@ -208,8 +220,7 @@ namespace CSVEditor.View.Controls
             var newValue = (FieldType)e.AddedItems[0];
 
             Context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
-            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath);
-            RebuildConfigurationGridEvent?.Invoke();
+            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath, MainGridContainer);
         }
 
         private void AddColumnWithContent(
@@ -233,7 +244,7 @@ namespace CSVEditor.View.Controls
                     Grid.SetColumn(newCellElement, columnNr);
                     Grid.SetRow(newCellElement, i);
 
-                    MainGrid.Children.Add(newCellElement); 
+                    MainGrid.Children.Add(newCellElement);
                 }
             }
         }
@@ -384,13 +395,6 @@ namespace CSVEditor.View.Controls
             }
 
             return newGrid;
-        }
-
-        public EditorWindow.RebuildConfigurationGridEvent RebuildConfigurationGridEvent = null;
-
-        public void RebuildConfigurationGrid(EditorWindow.RebuildConfigurationGridEvent rebuildConfigurationGrid)
-        {
-            RebuildConfigurationGridEvent = rebuildConfigurationGrid;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

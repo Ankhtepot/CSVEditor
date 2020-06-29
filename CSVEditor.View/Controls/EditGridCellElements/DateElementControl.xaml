@@ -12,6 +12,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="150"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBox Name="DateTextBox"
@@ -19,20 +20,29 @@
                      Margin="2"
                      HorizontalAlignment="Stretch"
                      Grid.Column="0"/>
-            <Button Name="GenerateDateButton"
+            <Button Name="GenerateDateFromNowButton"
                     MinWidth="200"
                     Margin="2"
                     Grid.Column="1">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconRPGAwesome Kind="Cog"/>
                     <TextBlock VerticalAlignment="Center"
-                               FontWeight="Bold">
-                        <Run Text=" Use Generated Date: "/>
-                        <Run Text="{Binding GeneratedText}"/>
-                    </TextBlock>
+                               FontWeight="Bold"
+                               Text=" Generate Date from NOW  "/>
                 </StackPanel>
             </Button>
-                    
+            <Button Name="GenerateDateFromPickerButton"
+                    MinWidth="200"
+                    Margin="2"
+                    Grid.Column="2">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconBoxIcons Kind="RegularCalendar" />
+                    <TextBlock VerticalAlignment="Center"
+                               FontWeight="Bold"
+                               Text=" Pick and Generate Date.  "/>
+                </StackPanel>
+            </Button>
+
         </Grid>
     </Border>
 </UserControl>
