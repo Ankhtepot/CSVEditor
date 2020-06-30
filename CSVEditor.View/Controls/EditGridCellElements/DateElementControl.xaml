@@ -7,6 +7,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="400">
+
     <Border Style="{StaticResource BaseLeftAlignedBorderStyle}">
         <Grid Name="TopContainer">
             <Grid.ColumnDefinitions>
@@ -20,7 +21,24 @@
                      Margin="2"
                      HorizontalAlignment="Stretch"
                      Grid.Column="0"/>
+            <Viewbox Grid.Column="2">
+                <DatePicker SelectedDateChanged="DatePicker_SelectedDateChanged"
+                            SelectedDateFormat="Short"
+                            VerticalAlignment="Center"
+                            FirstDayOfWeek="Monday"
+                            Margin="2"
+                            MinWidth="100">
+                    <DatePicker.BorderBrush>
+                        <LinearGradientBrush StartPoint="0, 0" EndPoint="1,1">
+                            <GradientStop Color="Blue" Offset="0"/>
+                            <GradientStop Color="Coral" Offset="0.3"/>
+                            <GradientStop Color="Blue" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </DatePicker.BorderBrush> 
+                </DatePicker>
+            </Viewbox>
             <Button Name="GenerateDateFromNowButton"
+                    Command="{Binding GenerateDateFromNowCommand}"
                     MinWidth="200"
                     Margin="2"
                     Grid.Column="1">
@@ -28,20 +46,21 @@
                     <iconPacks:PackIconRPGAwesome Kind="Cog"/>
                     <TextBlock VerticalAlignment="Center"
                                FontWeight="Bold"
-                               Text=" Generate Date from NOW  "/>
+                               Text=" Generate Date from TODAY  "/>
                 </StackPanel>
             </Button>
-            <Button Name="GenerateDateFromPickerButton"
+            <!--<Button Name="GenerateDateFromPickerButton"
                     MinWidth="200"
                     Margin="2"
-                    Grid.Column="2">
+                    Grid.Column="2"
+                    Command="{Binding GenerateDateFromPickerCommand}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconBoxIcons Kind="RegularCalendar" />
                     <TextBlock VerticalAlignment="Center"
                                FontWeight="Bold"
                                Text=" Pick and Generate Date.  "/>
                 </StackPanel>
-            </Button>
+            </Button>-->
 
         </Grid>
     </Border>

@@ -32,10 +32,7 @@ namespace CSVEditor.View
             var control = (TabControl)sender;
             if (control.SelectedIndex == 0)
             {
-                CsvFileGridVIewer.InputCsvFile = null;
-                BindingOperations.SetBinding(CsvFileGridVIewer,
-                    CsvFileGridViewerControl.InputCsvFileProperty,
-                    new Binding("SelectedCsvFile") { Source = EditorVM });
+                CsvFileGridViewerControl.BuildGrid(CsvFileGridVIewer, EditorVM.SelectedCsvFile);
             }
         }
 

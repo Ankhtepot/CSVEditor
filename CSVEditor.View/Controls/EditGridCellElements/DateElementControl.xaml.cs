@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Prism.Commands;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVEditor.View.Controls.DataCellElements
 {
@@ -26,11 +18,61 @@ namespace CSVEditor.View.Controls.DataCellElements
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(DateElementControl), new PropertyMetadata(""));
 
+        public string DateFormat
+        {
+            get { return (string)GetValue(DateFormatProperty); }
+            set { SetValue(DateFormatProperty, value); }
+        }
+        public static readonly DependencyProperty DateFormatProperty =
+            DependencyProperty.Register("DateFormat", typeof(string), typeof(DateElementControl), new PropertyMetadata(""));       
+
+        public DelegateCommand GenerateDateFromNowCommand { get; set; }
+        public DelegateCommand GenerateDateFromPickerCommand { get; set; }
 
         public DateElementControl()
         {
             InitializeComponent();
             TopContainer.DataContext = this;
+
+            GenerateDateFromNowCommand = new DelegateCommand(GenerateDateFromNow);
+            GenerateDateFromPickerCommand = new DelegateCommand(GenerateDateFromPicker);
+        }
+
+        private void GenerateDateFromNow()
+        {
+            GenerateDate(new DateTime((DateTime.Now).Ticks));
+        }
+
+        private void GenerateDateFromPicker()
+        {
+            GenerateDate(new DateTime(2019, 5, 6));
+        }
+
+        private void GenerateDate(DateTime dateTime)
+        {
+            Text = dateTime.ToString(DateFormat);
+        }
+
+        private static void DateFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (DateElementControl)d;
+            var newText = (string)e.NewValue;
+
+            if (control == null)
+            {
+                return;
+            }
+
+            if(string.IsNullOrEmpty(newText))
+            {
+                control.DateFormat = "MMMM dd";
+            }
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var newDate = (DateTime)e.AddedItems[0];
+            Text = newDate.ToString(DateFormat);
         }
     }
 }

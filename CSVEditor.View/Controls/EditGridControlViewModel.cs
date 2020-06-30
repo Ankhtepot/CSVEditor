@@ -310,7 +310,8 @@ namespace CSVEditor.View.Controls
                         var newElement = new DateElementControl()
                         {
                             Name = $"DataCellDateRow{LineIndex}Column{columnNr}",
-                            Margin = ElementMargin
+                            Margin = ElementMargin,
+                            DateFormat = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI,
                         };
 
                         newElement.SetBinding(DateElementControl.TextProperty, getBaseTwoWayBinding(columnNr));

@@ -30,8 +30,8 @@ namespace CSVEditor.View.Controls
             var control = (CsvFileGridViewerControl)d;
             var newCsvFile = (CsvFile)e.NewValue;
 
-            if (control == null 
-                || newCsvFile == null 
+            if (control == null
+                || newCsvFile == null
                 || (lastOpenedCsvFile.AbsPath == newCsvFile.AbsPath && lastOpenedCsvFile == newCsvFile))
             {
                 return;
@@ -39,6 +39,11 @@ namespace CSVEditor.View.Controls
 
             lastOpenedCsvFile = new CsvFile(newCsvFile);
 
+            BuildGrid(control, newCsvFile);
+        }
+
+        public static void BuildGrid(CsvFileGridViewerControl control, CsvFile newCsvFile)
+        {
             var gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newCsvFile.Lines;
 
@@ -86,7 +91,10 @@ namespace CSVEditor.View.Controls
                 gridView.Columns.Add(gridViewColumn);
             }
 
-            control.GridListView.SelectedIndex = Math.Max(0, (control.DataContext as EditorVM).SelectedItemIndex);
+            if (control.GridListView.SelectedIndex == -1)
+            {
+                control.GridListView.SelectedIndex = 0;
+            }
         }
 
         public CsvFileGridViewerControl()
