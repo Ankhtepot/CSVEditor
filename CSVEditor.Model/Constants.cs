@@ -20,6 +20,7 @@ namespace CSVEditor.Model
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";
         public const string LOAD_REPOSITORY_PLACEHOLDER = "Load Repository...";
         public const string NO_FILE_SELECTED = "No file selected.";
+        public const string OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP = "Open help window to guide you how to set date format right.";
         public const string PROCESSING_FILE = "Processing File";
         public const string REPLACE_IMAGE_FILE = "Replace image file";
         public const string ROOT_DIRECTORY = "Root directory";

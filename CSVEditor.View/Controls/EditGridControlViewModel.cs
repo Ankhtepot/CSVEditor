@@ -12,6 +12,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using static CSVEditor.Model.Enums;
+using CSVEditor.Services;
+using CSVEditor.Model.Services;
 
 namespace CSVEditor.View.Controls
 {
@@ -37,6 +39,7 @@ namespace CSVEditor.View.Controls
         public ResourceDictionary Resources { get; set; }
         public int LineIndex { get => Context.SelectedItemIndex; }
         public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
+        public DelegateCommand<string> OpenDateFilterGuideWindowCommand { get; set; }
 
         public EditGridControlViewModel(ResourceDictionary resources, EditorVM context, Grid mainGridContainer = null)
         {
@@ -44,10 +47,17 @@ namespace CSVEditor.View.Controls
             Context = context;
             MainGridContainer = mainGridContainer;
 
-            QueryForRelativePathToRootPathCommand = new DelegateCommand(queryForRelativePathToRootPath);
+            QueryForRelativePathToRootPathCommand = new DelegateCommand(QueryForRelativePathToRootPath);
+            OpenDateFilterGuideWindowCommand = new DelegateCommand<string>(OpenDateFilterGuideWindow);
         }
 
-        private void queryForRelativePathToRootPath()
+        private void OpenDateFilterGuideWindow(string uriText)
+        {
+            var dateGuideWindow = new DateGuideWindow(uriText);
+            var result = dateGuideWindow.ShowDialog();
+        }
+
+        private void QueryForRelativePathToRootPath()
         {
             var text = FileSystemServices.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
             lastTextBoxWithContextMenuClosed.Text = text;
@@ -183,7 +193,42 @@ namespace CSVEditor.View.Controls
                     };
                 case (FieldType.Date):
                     {
-                        return BuildConfigUriCell(Constants.DATE_URI_LABEL_TEXT, count);
+                        var wrapperGrid = BuildBasicGrid(1, 2);
+
+                        var uriCell = BuildConfigUriCell(Constants.DATE_URI_LABEL_TEXT, count);
+                        uriCell.Margin = ElementMargin;
+                        Grid.SetColumn(uriCell, 0);
+                        Grid.SetRow(uriCell, 0);
+                        wrapperGrid.Children.Add(uriCell);
+
+                        var uriCellTextBinding = new Binding("Text")
+                        {
+                            Source = uriCell.DataContext,
+                            Mode = BindingMode.TwoWay
+                        };
+
+                        var filterInfoButton = new Button()
+                        {
+                            Content = new Image()
+                            {
+                                Source = ResourceHelper.GetBitmapImageFromResources("images/question-mark-160071_small.png", 20, 20),
+                                Width = 20,
+                                Height = 20,
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center,
+                            },
+                            Width = 25,
+                            Height = 25,
+                            Command = OpenDateFilterGuideWindowCommand,
+                            CommandParameter = uriCellTextBinding,
+                            ToolTip = Constants.OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP,
+                            Margin = ElementMargin
+                        };
+                        Grid.SetColumn(filterInfoButton, 1);
+                        Grid.SetRow(filterInfoButton, 0);
+                        wrapperGrid.Children.Add(filterInfoButton);
+                        
+                        return wrapperGrid;
                     };
                 default: return null;
             }
@@ -197,9 +242,9 @@ namespace CSVEditor.View.Controls
             };
 
             newUri.TextBox.Tag = columnNr;
+            newUri.Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI;
             newUri.TextBox.TextChanged += NewUri_TextChanged;
             newUri.LabelContent = labelContent;
-            newUri.Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI;
 
             return newUri;
         }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="images\no_image_available.png" />
+    <None Remove="images\question-mark-160071_small.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
     <Resource Include="images\no_image_available.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="images\question-mark-160071_small.png" />
   </ItemGroup>
 
   <ItemGroup>

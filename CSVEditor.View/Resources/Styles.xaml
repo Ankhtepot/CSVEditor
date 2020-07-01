@@ -49,5 +49,22 @@
         <Setter Property="Background" Value="MistyRose"/>
         <Setter Property="BorderBrush" Value="Red"/>
     </Style>
+    <!-- DatePicker -->
+    <Style TargetType="DatePicker" x:Key="BaseDatePickerStyle">
+        <Setter Property="SelectedDateFormat" Value="Short"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FirstDayOfWeek" Value="Monday"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0, 0" EndPoint="1,1">
+                    <GradientStop Color="Blue" Offset="0"/>
+                    <GradientStop Color="Coral" Offset="0.3"/>
+                    <GradientStop Color="Blue" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

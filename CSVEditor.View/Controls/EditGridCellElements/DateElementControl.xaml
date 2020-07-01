@@ -23,19 +23,7 @@
                      Grid.Column="0"/>
             <Viewbox Grid.Column="2">
                 <DatePicker SelectedDateChanged="DatePicker_SelectedDateChanged"
-                            SelectedDateFormat="Short"
-                            VerticalAlignment="Center"
-                            FirstDayOfWeek="Monday"
-                            Margin="2"
-                            MinWidth="100">
-                    <DatePicker.BorderBrush>
-                        <LinearGradientBrush StartPoint="0, 0" EndPoint="1,1">
-                            <GradientStop Color="Blue" Offset="0"/>
-                            <GradientStop Color="Coral" Offset="0.3"/>
-                            <GradientStop Color="Blue" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </DatePicker.BorderBrush> 
-                </DatePicker>
+                            Style="{StaticResource BaseDatePickerStyle}"/>
             </Viewbox>
             <Button Name="GenerateDateFromNowButton"
                     Command="{Binding GenerateDateFromNowCommand}"

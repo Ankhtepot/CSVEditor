@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace CSVEditor.Model.Services
@@ -26,7 +26,18 @@ namespace CSVEditor.Model.Services
             {
                 pathInApplication = pathInApplication.Substring(1);
             }
+
             return new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute);
+        }
+
+        public static BitmapImage GetBitmapImageFromResources(string resourcePath, int width, int height, Assembly assembly = null)
+        {
+            BitmapImage bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.UriSource = LoadBitmapUriSourceFromResource(resourcePath, assembly);
+            bitmapImage.EndInit();
+            
+            return bitmapImage;
         }
     }
 }
