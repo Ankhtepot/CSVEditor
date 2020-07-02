@@ -14,4 +14,6 @@
     <converters:EditModeToTextConverter x:Key="EditModeToTextConverter"/>
     <converters:NumberToIntArrayFromOneConverter x:Key="NumberToIntArrayFromOneConverter"/>
     <converters:EditModeToTitleConverter x:Key="EditModeToTitleConverter"/>
+    <converters:DateFormatToFormatedDateConverter x:Key="DateFormatToFormatedDateConverter"/>
+    <converters:DateAndDateFormatToResultTextConverter x:Key="DateAndDateFormatToResultTextConverter"/>
 </ResourceDictionary>

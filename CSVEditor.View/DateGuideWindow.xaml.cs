@@ -1,15 +1,7 @@
 ﻿using CSVEditor.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CSVEditor.View
 {
@@ -19,11 +11,18 @@ namespace CSVEditor.View
     public partial class DateGuideWindow : Window
     {
         private DateGuideVM VM;
+        
         public DateGuideWindow(string inputUriText)
         {
             InitializeComponent();
             VM = new DateGuideVM(inputUriText);
             TopContainer.DataContext = VM;
+            VM.ChosenTime = DateTime.Now;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            VM.InputUriText = ((ComboBox)sender).SelectedItem as string;
         }
     }
 }

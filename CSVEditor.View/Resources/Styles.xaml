@@ -49,6 +49,11 @@
         <Setter Property="Background" Value="MistyRose"/>
         <Setter Property="BorderBrush" Value="Red"/>
     </Style>
+    <Style TargetType="Button" x:Key="AcceptButtonStyle">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="LightGreen"/>
+        <Setter Property="BorderBrush" Value="Green"/>
+    </Style>
     <!-- DatePicker -->
     <Style TargetType="DatePicker" x:Key="BaseDatePickerStyle">
         <Setter Property="SelectedDateFormat" Value="Short"/>

@@ -7,56 +7,128 @@
         mc:Ignorable="d"
         Title="Date Format Guide" Height="450" Width="800"
         SizeToContent="WidthAndHeight">
-    <Grid x:Name="TopContainer"
-          Margin="50">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Border Style="{StaticResource BaseBorderStyle}">
+        <Grid x:Name="TopContainer"
+          Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Name="DateFormatInputTextBox"
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Name="DateFormatInputTextBox"
                      Text="{Binding InputUriText}"
                      MinWidth="150"
                      Grid.Column="0"
                      Margin="2"/>
-            <ComboBox Grid.Column="1"
-                      Margin="2"/>
-            <DatePicker Style="{StaticResource BaseDatePickerStyle}"
-                    Grid.Column="2"
+                <ComboBox Name="DateFormatComboBox"
+                      ItemsSource="{Binding DateFormatExamples, Mode=OneWay}"
+                      SelectionChanged="ComboBox_SelectionChanged"
+                      IsEditable="True"
+                      IsReadOnly="True"
+                      Text=" -- Select Date Format -- "
+                      Grid.Column="1"
+                      Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding}"
+                                       Grid.Column="0"
+                                       VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource BaseBorderStyle}"
+                                    Margin="5,0"
+                                    Grid.Column="1">
+                                    <TextBlock Text=" ==>"
+                                           Padding="10,0"/>
+                                </Border>
+                                <TextBlock Grid.Column="2"
+                                       VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource DateFormatToFormatedDateConverter}">
+                                            <Binding Path="."/>
+                                            <Binding Path="SelectedDate" ElementName="MainDatePicker"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <DatePicker Name="MainDatePicker" 
+                        Style="{StaticResource BaseDatePickerStyle}"
+                        SelectedDateFormat="Long"
+                        Grid.Column="2"
+                        SelectedDate="{Binding ChosenTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Margin="2"/>
-        </Grid>
+            </Grid>
 
-        <TextBlock Text="PLACEHOLDER RESULT TEXT"
-                   HorizontalAlignment="Center"
-                   Margin="0,20,0,20"
-                   Grid.Row="1"/>
+            <TextBlock HorizontalAlignment="Center"
+                   Margin="0, 20, 0, 5"
+                   FontSize="16"
+                   Grid.Row="1">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource DateAndDateFormatToResultTextConverter}">
+                        <Binding Path="Text" ElementName="DateFormatInputTextBox"/>
+                        <Binding Path="SelectedDate" ElementName="MainDatePicker"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Center"
+                   Margin="0, 0, 0, 20"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   Grid.Row="2">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource DateFormatToFormatedDateConverter}" ConverterParameter='"  |  "'>
+                        <Binding Path="Text" ElementName="DateFormatInputTextBox"/>
+                        <Binding Path="SelectedDate" ElementName="MainDatePicker"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
 
-            <Button Content="Use this format"
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource AcceptButtonStyle}"
+                    Content="Use this format"
                     Grid.Column="0"
                     HorizontalAlignment="Right"
                     Margin="2,2,50,2"
                     Padding="10,5,10,5"
-                    MinWidth="130"/>
-            <Button Content="Cancel"
+                    MinWidth="130">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+                <Button Style="{StaticResource CancelButtonStyle}"
+                    Content="Cancel"
                     Grid.Column="1"
                     HorizontalAlignment="Left"
                     Padding="10,5,10,5"
                     Margin="50,2,2,2"
-                    MinWidth="130"/>
+                    MinWidth="130">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>

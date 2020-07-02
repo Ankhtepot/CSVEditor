@@ -207,20 +207,15 @@ namespace CSVEditor.View.Controls
                             Mode = BindingMode.TwoWay
                         };
 
-                        var filterInfoButton = new Button()
+                        var filterInfoButton = new ImageButtonControl()
                         {
-                            Content = new Image()
-                            {
-                                Source = ResourceHelper.GetBitmapImageFromResources("images/question-mark-160071_small.png", 20, 20),
-                                Width = 20,
-                                Height = 20,
-                                HorizontalAlignment = HorizontalAlignment.Center,
-                                VerticalAlignment = VerticalAlignment.Center,
-                            },
-                            Width = 25,
-                            Height = 25,
+                            Width = 20,
+                            Height = 20,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            ImageSource = ResourceHelper.GetBitmapImageFromResources("images/question-mark-160071_small.png", 20, 20),
                             Command = OpenDateFilterGuideWindowCommand,
-                            CommandParameter = uriCellTextBinding,
+                            CommandParameter = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
                             ToolTip = Constants.OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP,
                             Margin = ElementMargin
                         };

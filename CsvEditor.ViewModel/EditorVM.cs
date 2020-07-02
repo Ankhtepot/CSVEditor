@@ -315,7 +315,7 @@ namespace CSVEditor.ViewModel
         private void setLineEditMode(bool lineEditMode)
         {
             IsLineEditMode = lineEditMode;
-        }
+        }        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
