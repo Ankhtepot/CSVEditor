@@ -14,6 +14,7 @@ using System.Windows.Data;
 using static CSVEditor.Model.Enums;
 using CSVEditor.Services;
 using CSVEditor.Model.Services;
+using CSVEditor.Model.HelperClasses;
 
 namespace CSVEditor.View.Controls
 {
@@ -51,10 +52,20 @@ namespace CSVEditor.View.Controls
             OpenDateFilterGuideWindowCommand = new DelegateCommand<string>(OpenDateFilterGuideWindow);
         }
 
-        private void OpenDateFilterGuideWindow(string uriText)
+        private void OpenDateFilterGuideWindow(string parameterInfo)
         {
-            var dateGuideWindow = new DateGuideWindow(uriText);
-            var result = dateGuideWindow.ShowDialog();
+            var parameters = parameterInfo.Split('|');
+            var dateGuideWindow = new DateGuideWindow(
+                new CellInfo() 
+                {
+                    Content = parameters[0],
+                    ColumnNr = int.Parse(parameters[1])
+                });
+
+            dateGuideWindow.ShowDialog();
+            CellInfo returnValue = dateGuideWindow.WindowResult;
+
+            UpdateFileConfigurations(returnValue.Content, returnValue.ColumnNr, MainGridContainer);
         }
 
         private void QueryForRelativePathToRootPath()
@@ -215,14 +226,14 @@ namespace CSVEditor.View.Controls
                             VerticalAlignment = VerticalAlignment.Center,
                             ImageSource = ResourceHelper.GetBitmapImageFromResources("images/question-mark-160071_small.png", 20, 20),
                             Command = OpenDateFilterGuideWindowCommand,
-                            CommandParameter = Context.SelectedCsvFile.ColumnConfigurations[count].URI,
+                            CommandParameter = $"{Context.SelectedCsvFile.ColumnConfigurations[count].URI}|{count}",
                             ToolTip = Constants.OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP,
                             Margin = ElementMargin
                         };
                         Grid.SetColumn(filterInfoButton, 1);
                         Grid.SetRow(filterInfoButton, 0);
                         wrapperGrid.Children.Add(filterInfoButton);
-                        
+
                         return wrapperGrid;
                     };
                 default: return null;
@@ -233,7 +244,7 @@ namespace CSVEditor.View.Controls
         {
             var newUri = new LabeledTextBoxControl()
             {
-                HorizontalAlignment = HorizontalAlignment.Left,                
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
 
             newUri.TextBox.Tag = columnNr;
@@ -250,17 +261,40 @@ namespace CSVEditor.View.Controls
             var columnNumber = (int)textBox.Tag;
             var newValue = textBox.Text;
 
-            Context.SelectedCsvFile.ColumnConfigurations[columnNumber].URI = newValue;
-            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath);
+            UpdateFileConfigurations(newValue, columnNumber);
         }
 
         private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var columnNumber = (int)((ComboBox)sender).Tag;
             var newValue = (FieldType)e.AddedItems[0];
+            
+            UpdateFileConfigurations(newValue, columnNumber, MainGridContainer);
+        }
 
-            Context.SelectedCsvFile.ColumnConfigurations[columnNumber].Type = newValue;
-            Context.UpdateFileConfigurations(Context.SelectedCsvFile.ColumnConfigurations, Context.SelectedCsvFile.AbsPath, MainGridContainer);
+        private void UpdateFileConfigurations(object updatedValue, int columnNr, Grid mainGridContainer = null)
+        {
+            var shouldUpdate = false;
+
+            if (updatedValue is FieldType newType) 
+            {
+                Context.SelectedCsvFile.ColumnConfigurations[columnNr].Type = newType;
+                shouldUpdate = true;
+            }
+
+            if (updatedValue is string newUri)
+            {
+                Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI = newUri;
+                shouldUpdate = true;
+            }
+
+            if (shouldUpdate)
+            {
+                Context.UpdateFileConfigurations(mainGridContainer);
+                return;
+            }
+
+            Console.WriteLine("Configuration wasnt updated, newValue not recognized");
         }
 
         private void AddColumnWithContent(

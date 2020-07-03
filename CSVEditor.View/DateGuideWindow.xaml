@@ -106,24 +106,28 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Style="{StaticResource AcceptButtonStyle}"
-                    Content="Use this format"
-                    Grid.Column="0"
-                    HorizontalAlignment="Right"
-                    Margin="2,2,50,2"
-                    Padding="10,5,10,5"
-                    MinWidth="130">
+                <Button x:Name="AcceptButton"
+                        Click="AcceptButton_Click"
+                        Style="{StaticResource AcceptButtonStyle}"
+                        Content="Use this format"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Margin="2,2,50,2"
+                        Padding="10,5,10,5"
+                        MinWidth="130">
                     <Button.Resources>
                         <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
                     </Button.Resources>
                 </Button>
-                <Button Style="{StaticResource CancelButtonStyle}"
-                    Content="Cancel"
-                    Grid.Column="1"
-                    HorizontalAlignment="Left"
-                    Padding="10,5,10,5"
-                    Margin="50,2,2,2"
-                    MinWidth="130">
+                <Button x:Name="CancelButton"
+                        Click="CancelButton_Click"
+                        Style="{StaticResource CancelButtonStyle}"
+                        Content="Cancel"
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Padding="10,5,10,5"
+                        Margin="50,2,2,2"
+                        MinWidth="130">
                     <Button.Resources>
                         <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
                     </Button.Resources>

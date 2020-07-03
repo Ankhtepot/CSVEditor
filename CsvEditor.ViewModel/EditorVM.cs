@@ -241,18 +241,18 @@ namespace CSVEditor.ViewModel
             });
         }
 
-        public void UpdateFileConfigurations(List<CsvColumnConfiguration> newConfiguration, string fileAbsPath, Grid mainGridContainer = null)
+        public void UpdateFileConfigurations(Grid mainGridContainer = null)
         {
-            if (findFileConfiguration(fileAbsPath) == null)
+            if (findFileConfiguration(SelectedCsvFile.AbsPath) == null)
             {
                 throw new InvalidDataException("Error in file configuration process - configuration NOT FOUND, which should not happen on update.");
             }
 
-            Console.WriteLine($"Updating configuration for {fileAbsPath} in {nameof(FileConfigurations)}");
+            Console.WriteLine($"Updating configuration for {SelectedCsvFile.AbsPath} in {nameof(FileConfigurations)}");
 
-            var configToUpdateIndex = FileConfigurations.FindIndex(config => config.AbsoluteFilePath == fileAbsPath);
+            var configToUpdateIndex = FileConfigurations.FindIndex(config => config.AbsoluteFilePath == SelectedCsvFile.AbsPath);
 
-            FileConfigurations[configToUpdateIndex].ColumnConfigurations = newConfiguration;
+            FileConfigurations[configToUpdateIndex].ColumnConfigurations = SelectedCsvFile.ColumnConfigurations;
 
             ConfigurationUpdated?.Invoke();
 
