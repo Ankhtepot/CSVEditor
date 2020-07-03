@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using JetBrains.Annotations;
@@ -12,7 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel
 {

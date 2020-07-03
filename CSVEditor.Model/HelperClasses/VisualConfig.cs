@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace CSVEditor.Model
+namespace CSVEditor.Model.HelperClasses
 {
     public class VisualConfig : INotifyPropertyChanged
     {

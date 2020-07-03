@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 
-namespace CSVEditor.Model
+namespace CSVEditor.Model.HelperClasses
 {
     public class CsvColumnConfiguration : INotifyPropertyChanged
     {

@@ -1,10 +1,8 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel.Converters
 {

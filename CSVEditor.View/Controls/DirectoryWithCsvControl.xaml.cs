@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.ComponentModel;

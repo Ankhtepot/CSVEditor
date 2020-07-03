@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using System;
 using System.Globalization;
 using System.Windows.Data;

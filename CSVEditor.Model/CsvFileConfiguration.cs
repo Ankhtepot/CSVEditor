@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CSVEditor.Model.HelperClasses;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace CSVEditor.Model
 {

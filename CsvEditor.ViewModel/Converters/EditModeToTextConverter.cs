@@ -1,8 +1,6 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
 namespace CSVEditor.ViewModel.Converters

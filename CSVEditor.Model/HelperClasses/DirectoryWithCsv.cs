@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace CSVEditor.Model
+namespace CSVEditor.Model.HelperClasses
 {
     public class DirectoryWithCsv : INotifyPropertyChanged
     {

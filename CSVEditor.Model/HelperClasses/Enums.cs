@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CSVEditor.Model
+namespace CSVEditor.Model.HelperClasses
 {
     public class Enums
     {

@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.Services;
 using CSVEditor.ViewModel.Abstracts;
 using JetBrains.Annotations;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 using CSVEditor.ViewModel.BackgroundWorkers;
 
 namespace CSVEditor.ViewModel

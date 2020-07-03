@@ -1,4 +1,5 @@
 ﻿using CSVEditor.Model;
+using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using System;
 using System.Collections.Generic;

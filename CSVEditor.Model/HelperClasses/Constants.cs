@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace CSVEditor.Model
+﻿namespace CSVEditor.Model.HelperClasses
 {
     public class Constants
     {

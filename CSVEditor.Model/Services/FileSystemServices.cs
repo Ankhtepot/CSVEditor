@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using CSVEditor.Model;
+using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;

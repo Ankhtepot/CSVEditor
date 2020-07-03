@@ -1,10 +1,10 @@
-﻿using CSVEditor.Model;
+﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.ViewModel.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel.BackgroundWorkers
 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CSVEditor.Model.HelperClasses;
 
 namespace CSVEditor.Model
 {

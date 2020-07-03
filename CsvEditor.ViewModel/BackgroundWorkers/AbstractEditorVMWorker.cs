@@ -1,7 +1,7 @@
 ﻿using CSVEditor.Model.Interfaces;
 using System;
 using System.ComponentModel;
-using static CSVEditor.Model.Enums;
+using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel.Abstracts
 {
