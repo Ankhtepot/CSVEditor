@@ -291,5 +291,14 @@ namespace CSVEditor.ViewModel
 
             return path;
         }
+
+        public static void ValidateConfigDirectory(string baseAppPath, string configurationFolderName)
+        {
+            if (!Directory.Exists(Path.Combine(baseAppPath, configurationFolderName)))
+            {
+                Console.WriteLine($"Creating new {configurationFolderName} directory in {baseAppPath}");
+                Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
+            }
+        }
     }
 }

@@ -152,7 +152,7 @@ namespace CSVEditor.ViewModel
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
-            SwitchEditModeCommand = new DelegateCommand(switchLineEditMode);
+            SwitchEditModeCommand = new DelegateCommand(SwitchLineEditMode);
 
             FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -255,11 +255,13 @@ namespace CSVEditor.ViewModel
 
             FileConfigurations[configToUpdateIndex].ColumnConfigurations = SelectedCsvFile.ColumnConfigurations;
 
-            ConfigurationUpdated?.Invoke();
-
             if (mainGridContainer != null)
             {
                 ConfiguraitonUpdated?.Invoke(mainGridContainer); 
+            }
+            else
+            {
+                ConfigurationUpdated?.Invoke();
             }
         }
 
@@ -267,7 +269,7 @@ namespace CSVEditor.ViewModel
         {
             AppOptions = new AppOptions();
 
-            checkConfigDirectory();
+            FileSystemServices.ValidateConfigDirectory(BaseAppPath, CONFIGURATION_FOLDER_NAME);
 
             var loadedOptions = JsonServices.DeserializeJson<AppOptions>(
                 Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
@@ -299,21 +301,12 @@ namespace CSVEditor.ViewModel
             AppOptions.VisualConfig.MainWindowHeight = e.NewSize.Height;
         }
 
-        private void checkConfigDirectory()
+        private void SwitchLineEditMode()
         {
-            if (!Directory.Exists(Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME)))
-            {
-                Console.WriteLine($"Creating new {CONFIGURATION_FOLDER_NAME} directory in {BaseAppPath}");
-                Directory.CreateDirectory(Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME));
-            }
+            SetLineEditMode(!IsLineEditMode);
         }
 
-        private void switchLineEditMode()
-        {
-            setLineEditMode(!IsLineEditMode);
-        }
-
-        private void setLineEditMode(bool lineEditMode)
+        private void SetLineEditMode(bool lineEditMode)
         {
             IsLineEditMode = lineEditMode;
         }        

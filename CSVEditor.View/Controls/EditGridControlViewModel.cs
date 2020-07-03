@@ -65,7 +65,10 @@ namespace CSVEditor.View.Controls
             dateGuideWindow.ShowDialog();
             CellInfo returnValue = dateGuideWindow.WindowResult;
 
-            UpdateFileConfigurations(returnValue.Content, returnValue.ColumnNr, MainGridContainer);
+            if (returnValue.Content != parameters[0])
+            {
+                UpdateFileConfigurations(returnValue.Content, returnValue.ColumnNr, MainGridContainer); 
+            }
         }
 
         private void QueryForRelativePathToRootPath()
@@ -276,13 +279,13 @@ namespace CSVEditor.View.Controls
         {
             var shouldUpdate = false;
 
-            if (updatedValue is FieldType newType) 
+            if (updatedValue is FieldType newType && newType != Context.SelectedCsvFile.ColumnConfigurations[columnNr].Type) 
             {
                 Context.SelectedCsvFile.ColumnConfigurations[columnNr].Type = newType;
                 shouldUpdate = true;
             }
 
-            if (updatedValue is string newUri)
+            if (updatedValue is string newUri && newUri != Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI)
             {
                 Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI = newUri;
                 shouldUpdate = true;
@@ -294,7 +297,10 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            Console.WriteLine("Configuration wasnt updated, newValue not recognized");
+            if (updatedValue !is string && updatedValue !is FieldType)
+            {
+                Console.WriteLine("Configuration wasnt updated, newValue not recognized"); 
+            }
         }
 
         private void AddColumnWithContent(
