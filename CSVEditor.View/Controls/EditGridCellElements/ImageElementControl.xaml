@@ -16,7 +16,7 @@
             <MenuItem Command="ApplicationCommands.Copy" />
             <MenuItem Command="ApplicationCommands.Cut" />
             <MenuItem Command="ApplicationCommands.Paste" />
-            <Separator/>
+            <Separator Style="{StaticResource MenuSeparatorStyle}"/>
             <MenuItem Header="Select another file." Click="SelectFileMenuItem_Click" />
         </ContextMenu>
     </UserControl.Resources>

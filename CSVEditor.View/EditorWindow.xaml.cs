@@ -16,29 +16,33 @@ namespace CSVEditor.View
         public EditorVM EditorVM;
 
         public delegate void SetMainTabSelectedTabIndexEvent(int tabIndex);
-        public delegate void RebuildConfigurationGridEvent();
         public EditorWindow()
         {
             InitializeComponent();
             EditorVM = new EditorVM();
+            EditorVM.OnChangeTabRequested += SetMainTabSelectedTabIndex;
+            //EditorVM.OnRebuildCsvFileGridViewerRequested += RebuildCsvFileGridViewer;
             TopContainer.DataContext = EditorVM;
 
-            CsvFileGridVIewer.SetMainTabSelectedTabIndex(SetMainTabSelectedTabIndex);
+            CsvFileGridViewer.SetMainTabSelectedTabIndex(SetMainTabSelectedTabIndex);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //TODO: Find better solution for updating CsvFileGridViewer and trigger it only after changing something in LineEditor
-            var control = (TabControl)sender;
-            if (control.SelectedIndex == 0)
-            {
-                CsvFileGridViewerControl.BuildGrid(CsvFileGridVIewer, EditorVM.SelectedCsvFile);
-            }
+            RebuildCsvFileGridViewer();
         }
 
         public void SetMainTabSelectedTabIndex(int TabIndex)
         {
             MainTabControl.SelectedIndex = TabIndex.Clamp(0, MainTabControl.Items.Count - 1);
+        }
+
+        private void RebuildCsvFileGridViewer()
+        {
+            if (MainTabControl.SelectedIndex == 0) // means, OverView Tab of MainTabControl is selected
+            {
+                CsvFileGridViewerControl.BuildGrid(CsvFileGridViewer, EditorVM.SelectedCsvFile);
+            }
         }
     }
 }

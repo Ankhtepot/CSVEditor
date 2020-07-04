@@ -117,4 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExitAndSaveText" xml:space="preserve">
+    <value>Save and Close Csv Editor</value>
+  </data>
+  <data name="ExitAppText" xml:space="preserve">
+    <value>Close Csv Editor</value>
+  </data>
+  <data name="FileText" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="LoadDirectoryText" xml:space="preserve">
+    <value>Load Directory</value>
+  </data>
+  <data name="LoadText" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="SaveAsText" xml:space="preserve">
+    <value>Save as...</value>
+  </data>
+  <data name="SaveText" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectPromptComboBoxText" xml:space="preserve">
+    <value>-- Select value --</value>
+  </data>
 </root>

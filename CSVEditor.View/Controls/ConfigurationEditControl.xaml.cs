@@ -30,7 +30,7 @@ namespace CSVEditor.View.Controls
         {
             InitializeComponent();
 
-            EditorVM.ConfiguraitonUpdated += RebuildGrid;
+            EditorVM.OnConfiguraitonUpdated += RebuildGrid;
         }
 
         private static void CsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

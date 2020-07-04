@@ -10,15 +10,17 @@ namespace CSVEditor.ViewModel.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var newValue = (bool)value;
-            var newParameter = (string)parameter;
-
-            if (!string.IsNullOrEmpty(newParameter) && Regex.IsMatch(newParameter, "[Ff]alse"))
+            if (value is bool newValue)
             {
-                return newValue ? Visibility.Visible : Visibility.Collapsed;
+                if (parameter is string newParameter && Regex.IsMatch(newParameter, "[Ff]alse"))
+                {
+                    return newValue ? Visibility.Visible : Visibility.Collapsed;
+                }
+
+                return newValue ? Visibility.Collapsed : Visibility.Visible;
             }
 
-            return newValue ? Visibility.Collapsed : Visibility.Visible;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

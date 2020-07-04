@@ -300,5 +300,22 @@ namespace CSVEditor.ViewModel
                 Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
             }
         }
+
+        public static void SaveTextFile(string fileName, string fileContent)
+        {
+            try
+            {
+                if (!Directory.Exists(fileName))
+                {
+                    Directory.CreateDirectory(fileName);
+                }
+
+                File.WriteAllText(fileName, fileContent);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error writing to path \"{fileName}\". Error: {e.Message}.");
+            }
+        }
     }
 }

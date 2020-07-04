@@ -40,7 +40,7 @@ namespace CSVEditor.View.Controls
         public ResourceDictionary Resources { get; set; }
         public int LineIndex { get => Context.SelectedItemIndex; }
         public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
-        public DelegateCommand<string> OpenDateFilterGuideWindowCommand { get; set; }
+        public DelegateCommand<string> OpenDateFilterGuideWindowCommand { get; set; }        
 
         public EditGridControlViewModel(ResourceDictionary resources, EditorVM context, Grid mainGridContainer = null)
         {
@@ -438,7 +438,11 @@ namespace CSVEditor.View.Controls
 
         private List<string> GetColumnDistinctValues(int columnNr)
         {
-            return Context.SelectedCsvFile.Lines.Select(Line => Line[columnNr]).Distinct().ToList();
+            return Context.SelectedCsvFile.Lines
+                .Select(Line => Line[columnNr])
+                .Where(record => !string.IsNullOrEmpty(record))
+                .Distinct()
+                .ToList();
         }
 
         public UIElement BuildHeader(int columnNumber, string text, string headerStyle = HEADER_TEXT_BOX_STYLE)

@@ -42,7 +42,8 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            control.SourceComboBox.SelectedIndex = Math.Max(0, control.ComboBoxSource.FindIndex(record => record == newText));
+            var foundIndex = control.ComboBoxSource.FindIndex(record => record == newText);
+            control.SourceComboBox.SelectedIndex = foundIndex == -1 || control.ComboBoxSource.Count == 0 ? 0 : foundIndex;
         }
 
         private void SourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

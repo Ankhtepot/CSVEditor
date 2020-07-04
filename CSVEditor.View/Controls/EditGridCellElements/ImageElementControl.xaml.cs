@@ -61,7 +61,7 @@ namespace CSVEditor.View.Controls
                 ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}"
                 : configUri;
 
-            control.CellContentTextBox.Text = imageCellContent;
+             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
 
             control.ImageFromSource.Source = newImage;
         }

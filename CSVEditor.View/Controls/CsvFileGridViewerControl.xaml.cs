@@ -44,6 +44,11 @@ namespace CSVEditor.View.Controls
 
         public static void BuildGrid(CsvFileGridViewerControl control, CsvFile newCsvFile)
         {
+            if(newCsvFile == null)
+            {
+                return;
+            }
+
             var gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newCsvFile.Lines;
 

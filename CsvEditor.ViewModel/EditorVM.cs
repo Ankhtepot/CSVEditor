@@ -121,8 +121,11 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
-        public static Action<Grid> ConfiguraitonUpdated;
-        public Action ConfigurationUpdated;
+        public static Action<Grid> OnConfiguraitonUpdated;
+        public Action OnConfigurationUpdated;
+        public Action OnCsvFileUpdated;
+        public Action<int> OnChangeTabRequested;
+        //public Action OnRebuildCsvFileGridViewerRequested;
 
         //*******************************
         //********** Commands ***********
@@ -131,6 +134,12 @@ namespace CSVEditor.ViewModel
         public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
         public DelegateCommand SwitchEditModeCommand { get; set; }
+        public DelegateCommand AddLineUpCommand { get; set; }
+        public DelegateCommand AddLineDownCommand { get; set; }
+        public DelegateCommand AddLineToTopCommand { get; set; }
+        public DelegateCommand AddLineToBottomCommand { get; set; }
+        public DelegateCommand EditLineCommand { get; set; }
+        public DelegateCommand DeleteLineCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
@@ -153,16 +162,64 @@ namespace CSVEditor.ViewModel
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
             SwitchEditModeCommand = new DelegateCommand(SwitchLineEditMode);
+            AddLineUpCommand = new DelegateCommand(AddLineUp);
+            AddLineDownCommand = new DelegateCommand(AddLineDown);
+            AddLineToTopCommand = new DelegateCommand(AddLineToTop);
+            AddLineToBottomCommand = new DelegateCommand(AddLineToBottom);
+            EditLineCommand = new DelegateCommand(EditLine);
+            DeleteLineCommand = new DelegateCommand(DeleteLine);
 
             FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
             setAppOptions();
             SetVisuals(AppOptions.VisualConfig);
-        }
+        }        
 
         //*******************************
         //*********** Methods ***********
         //*******************************
+
+        public void addNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
+        {
+            FileConfigurations.Add(new CsvFileConfiguration()
+            {
+                AbsoluteFilePath = fileAbsPath,
+                ColumnConfigurations = currentFileConfigurations
+            });
+        }
+
+        public void UpdateFileConfigurations(Grid mainGridContainer = null)
+        {
+            if (findFileConfiguration(SelectedCsvFile.AbsPath) == null)
+            {
+                throw new InvalidDataException("Error in file configuration process - configuration NOT FOUND, which should not happen on update.");
+            }
+
+            Console.WriteLine($"Updating configuration for {SelectedCsvFile.AbsPath} in {nameof(FileConfigurations)}");
+
+            var configToUpdateIndex = FileConfigurations.FindIndex(config => config.AbsoluteFilePath == SelectedCsvFile.AbsPath);
+
+            FileConfigurations[configToUpdateIndex].ColumnConfigurations = SelectedCsvFile.ColumnConfigurations;
+
+            if (mainGridContainer != null)
+            {
+                OnConfiguraitonUpdated?.Invoke(mainGridContainer); 
+            }
+            else
+            {
+                OnConfigurationUpdated?.Invoke();
+            }
+        }
+
+        public void SaveCurrentCsvFile()
+        {
+            if (AppOptions.LastLoadedUneditedCsvFile == SelectedCsvFile)
+            {
+                Console.WriteLine("Not saving, there is no change.");
+            }
+
+
+        }
 
         private static List<CsvFileConfiguration> initializeFileConfigurations()
         {
@@ -233,38 +290,6 @@ namespace CSVEditor.ViewModel
                 .FirstOrDefault()?.ColumnConfigurations;
         }
 
-        public void addNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
-        {
-            FileConfigurations.Add(new CsvFileConfiguration()
-            {
-                AbsoluteFilePath = fileAbsPath,
-                ColumnConfigurations = currentFileConfigurations
-            });
-        }
-
-        public void UpdateFileConfigurations(Grid mainGridContainer = null)
-        {
-            if (findFileConfiguration(SelectedCsvFile.AbsPath) == null)
-            {
-                throw new InvalidDataException("Error in file configuration process - configuration NOT FOUND, which should not happen on update.");
-            }
-
-            Console.WriteLine($"Updating configuration for {SelectedCsvFile.AbsPath} in {nameof(FileConfigurations)}");
-
-            var configToUpdateIndex = FileConfigurations.FindIndex(config => config.AbsoluteFilePath == SelectedCsvFile.AbsPath);
-
-            FileConfigurations[configToUpdateIndex].ColumnConfigurations = SelectedCsvFile.ColumnConfigurations;
-
-            if (mainGridContainer != null)
-            {
-                ConfiguraitonUpdated?.Invoke(mainGridContainer); 
-            }
-            else
-            {
-                ConfigurationUpdated?.Invoke();
-            }
-        }
-
         private void setAppOptions()
         {
             AppOptions = new AppOptions();
@@ -309,11 +334,57 @@ namespace CSVEditor.ViewModel
         private void SetLineEditMode(bool lineEditMode)
         {
             IsLineEditMode = lineEditMode;
-        }        
+        }
+
+        private void DeleteLine()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EditLine()
+        {
+            OnChangeTabRequested?.Invoke(1);
+        }
+
+        private void AddLineUp()
+        {
+            AddLine(SelectedItemIndex);
+        }
+
+        private void AddLineDown()
+        {
+            AddLine(SelectedItemIndex + 1);
+        }
+
+        private void AddLineToBottom()
+        {
+            AddLine(SelectedCsvFile.Lines.Count);
+        }
+
+        private void AddLineToTop()
+        {
+            AddLine(0);
+        }
+
+        private void AddLine(int index)
+        {
+            List<string> newLine = new List<string>();
+
+            for (int i = 0; i < SelectedCsvFile.ColumnCount; i++)
+            {
+                newLine.Add("");
+            }
+
+            var updatedCsvFile = new CsvFile(SelectedCsvFile);
+            updatedCsvFile.Lines.Insert(index, newLine);
+            SelectedCsvFile = updatedCsvFile;
+            SelectedItemIndex = index;
+
+            OnChangeTabRequested?.Invoke(1);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

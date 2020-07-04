@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             xmlns:p="clr-namespace:CSVEditor.View.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="400">
     <Border Style="{StaticResource BaseLeftAlignedBorderStyle}">
@@ -19,6 +20,9 @@
             <ComboBox Name="SourceComboBox" 
                       ItemsSource="{Binding ComboBoxSource}"
                       SelectionChanged="SourceComboBox_SelectionChanged"
+                      IsEditable="True"
+                      IsReadOnly="True"
+                      Text="{x:Static p:Resources.SelectPromptComboBoxText}"
                       Grid.Column="1"
                       Margin="2"/>
         </Grid>
