@@ -26,80 +26,92 @@
         </Grid.RowDefinitions>
 
         <!-- #region MainMenu -->
-        <Menu Grid.Row="0">
-            <MenuItem Header="{x:Static p:Resources.LoadText}" 
+        <Border Grid.Row="0"
+                Style="{StaticResource BaseBorderStyle}">
+            <Menu Margin="5,0,0,0">
+                <MenuItem Header="{x:Static p:Resources.FileText}" 
+                      IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                       BorderBrush="Black">
-                <MenuItem.Icon >
-                    <iconPacks:PackIconBoxIcons Kind="RegularSave" />
-                </MenuItem.Icon>
-                
-                <MenuItem Header="{x:Static p:Resources.LoadDirectoryText}"
-                          Command="{Binding LoadRepositoryCommand}"
-                          IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconBoxIcons Kind="RegularFile"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-                <MenuItem Header="{x:Static p:Resources.SaveText}">
-                    <MenuItem.Icon>
+                    <MenuItem.Icon >
                         <iconPacks:PackIconBoxIcons Kind="RegularSave" />
                     </MenuItem.Icon>
+
+                    <MenuItem Header="{x:Static p:Resources.LoadDirectoryText}"
+                          Command="{Binding LoadRepositoryCommand}"
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularFile"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <MenuItem Header="{x:Static p:Resources.SaveText}"
+                              Command="{Binding SaveCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularSave" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.ExitAndSaveText}"
+                              Command="{Binding SaveAndExitCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconUnicons Kind="SignOutAlt" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <MenuItem Header="{x:Static p:Resources.ExitAppText}"
+                              Command="{Binding ExitCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="ExitRun" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.SaveAsText}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentSaveCogOutline" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-                <MenuItem Header="{x:Static p:Resources.ExitAndSaveText}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ExitToApp" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.ExitAppText}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ExitRun" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-            
-            <MenuItem Header="Edit"
+
+                <MenuItem Header="{x:Static p:Resources.EditText}"
+                      IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
                       BorderBrush="Black">
-                <MenuItem Header="Edit This Line">
                     <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_Edit"/>
+                        <iconPacks:PackIconBoxIcons Kind="RegularEdit" />
                     </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
+                              Command="{Binding EditLineCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_Edit"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
+                              Command="{Binding AddLineToTopCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_AngleDoubleUp"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.AddLineUpText}"
+                              Command="{Binding AddLineUpCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_AngleUp"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.AddLineDownText}"
+                              Command="{Binding AddLineDownCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_AngleDown"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
+                              Command="{Binding AddLineToBottomCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_AngleDoubleDown"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
+                              Command="{Binding DeleteLineCommand}">
+                        <MenuItem.Icon>
+                            <fa:SvgAwesome Icon="Solid_Trash"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-                <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-                <MenuItem Header="Add New Line to the Beggining of File">
-                    <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_AngleDoubleUp"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Add New Line Above This Line">
-                    <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_AngleUp"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Add New Line Bellow This Line">
-                    <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_AngleDown"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Add New Line to the End of File">
-                    <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_AngleDoubleDown"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-                <MenuItem Header="Delete This Line">
-                    <MenuItem.Icon>
-                        <fa:SvgAwesome Icon="Solid_Trash"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
+            </Menu>
+        </Border>
         <!-- #endregion MainMenu -->
 
         <!--#region Control Bar -->

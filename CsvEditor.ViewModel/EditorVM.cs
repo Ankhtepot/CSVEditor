@@ -2,7 +2,6 @@
 using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
-using JetBrains.Annotations;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
@@ -111,6 +110,12 @@ namespace CSVEditor.ViewModel
             {
                 if (selectedItemIndex != value)
                 {
+                    //AddLineDownCommand.RaiseCanExecuteChanged();
+                    //AddLineUpCommand.RaiseCanExecuteChanged();
+                    //AddLineToTopCommand.RaiseCanExecuteChanged();
+                    //AddLineToBottomCommand.RaiseCanExecuteChanged();
+                    //EditLineCommand.RaiseCanExecuteChanged();
+                    //DeleteLineCommand.RaiseCanExecuteChanged();
                     selectedItemIndex = value;
                     Console.WriteLine($"EditorVM, selectedIndexUpdated to {value}");
                     OnPropertyChanged(); 
@@ -150,6 +155,9 @@ namespace CSVEditor.ViewModel
         public DelegateCommand AddLineToBottomCommand { get; set; }
         public DelegateCommand EditLineCommand { get; set; }
         public DelegateCommand DeleteLineCommand { get; set; }
+        public DelegateCommand SaveCommand { get; set; }
+        public DelegateCommand SaveAndExitCommand { get; set; }
+        public DelegateCommand ExitCommand { get; set; }
 
         //*******************************
         //********* Constructor *********
@@ -179,12 +187,15 @@ namespace CSVEditor.ViewModel
             AddLineToBottomCommand = new DelegateCommand(AddLineToBottom);
             EditLineCommand = new DelegateCommand(EditLine);
             DeleteLineCommand = new DelegateCommand(DeleteLine);
+            SaveCommand = new DelegateCommand(SaveCurrentCsvFile);
+            SaveAndExitCommand = new DelegateCommand(SaveAndExit);
+            ExitCommand = new DelegateCommand(ExitApp);
 
             FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
             setAppOptions();
             SetVisuals(AppOptions.VisualConfig);
-        }        
+        }
 
         //*******************************
         //*********** Methods ***********
@@ -222,14 +233,42 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public void SaveCurrentCsvFile()
+        public static void SaveCurrentCsvFile()
         {
-            //if (AppOptions.LastLoadedUneditedCsvFile == SelectedCsvFile)
-            //{
-            //    Console.WriteLine("Not saving, there is no change.");
-            //}
+           
+        }
 
+        public static void SaveConfiguration()
+        {
+            JsonServices.SerializeJson(FileConfigurations,
+                Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME),
+                "Csv file configurations");
+        }
 
+        public static void SaveAppOptions()
+        {
+            JsonServices.SerializeJson(AppOptions,
+                Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
+                "App Options");
+            
+        }
+
+        public static void SaveOnExit()
+        {
+            SaveConfiguration();
+            SaveAppOptions();
+            SaveCurrentCsvFile();
+        }
+
+        private void SaveAndExit()
+        {
+            SaveCurrentCsvFile();
+            ExitApp();
+        }
+
+        private void ExitApp()
+        {
+            Application.Current.Shutdown();
         }
 
         private static List<CsvFileConfiguration> initializeFileConfigurations()
@@ -325,7 +364,8 @@ namespace CSVEditor.ViewModel
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
                 AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
                 SelectedItemIndex = 0;
-                AppOptions.VisualConfig = loadedOptions.VisualConfig;
+                AppOptions.VisualConfig = loadedOptions.VisualConfig ?? new VisualConfig();
+                AppOptions.SaveOptions = loadedOptions.SaveOptions ?? new SaveOptions();
             }
         }
 
@@ -353,7 +393,7 @@ namespace CSVEditor.ViewModel
 
         private void DeleteLine()
         {
-            throw new NotImplementedException();
+            DeleteLine(SelectedItemIndex);
         }
 
         private void EditLine()
@@ -396,6 +436,14 @@ namespace CSVEditor.ViewModel
             SelectedItemIndex = index;
 
             RequestChangeTab?.Invoke(1);
+        }
+
+        private void DeleteLine(int index)
+        {
+            var updatedCsvFile = new CsvFile(SelectedCsvFile);
+            updatedCsvFile.Lines.RemoveAt(index);            
+            SelectedCsvFile = updatedCsvFile;
+            SelectedItemIndex = index.Clamp(0, updatedCsvFile.Lines.Count - 1);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

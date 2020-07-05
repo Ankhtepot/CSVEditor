@@ -61,11 +61,74 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Line Bellow This Line.
+        /// </summary>
+        public static string AddLineDownText {
+            get {
+                return ResourceManager.GetString("AddLineDownText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Line to the End of File.
+        /// </summary>
+        public static string AddLineToBottom {
+            get {
+                return ResourceManager.GetString("AddLineToBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Line to the Beggining of File.
+        /// </summary>
+        public static string AddLineToTopText {
+            get {
+                return ResourceManager.GetString("AddLineToTopText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Line Above This Line.
+        /// </summary>
+        public static string AddLineUpText {
+            get {
+                return ResourceManager.GetString("AddLineUpText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete This Line.
+        /// </summary>
+        public static string DeleteLineText {
+            get {
+                return ResourceManager.GetString("DeleteLineText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edited.
         /// </summary>
         public static string EditedText {
             get {
                 return ResourceManager.GetString("EditedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string EditText {
+            get {
+                return ResourceManager.GetString("EditText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit this line.
+        /// </summary>
+        public static string EditThisLineText {
+            get {
+                return ResourceManager.GetString("EditThisLineText", resourceCulture);
             }
         }
         
@@ -133,11 +196,20 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save.
+        ///   Looks up a localized string similar to Save....
         /// </summary>
         public static string SaveText {
             get {
                 return ResourceManager.GetString("SaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Options.
+        /// </summary>
+        public static string SaveWindowTitle {
+            get {
+                return ResourceManager.GetString("SaveWindowTitle", resourceCulture);
             }
         }
         

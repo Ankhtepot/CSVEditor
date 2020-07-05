@@ -117,8 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddLineDownText" xml:space="preserve">
+    <value>Add New Line Bellow This Line</value>
+  </data>
+  <data name="AddLineToBottom" xml:space="preserve">
+    <value>Add New Line to the End of File</value>
+  </data>
+  <data name="AddLineToTopText" xml:space="preserve">
+    <value>Add New Line to the Beggining of File</value>
+  </data>
+  <data name="AddLineUpText" xml:space="preserve">
+    <value>Add New Line Above This Line</value>
+  </data>
+  <data name="DeleteLineText" xml:space="preserve">
+    <value>Delete This Line</value>
+  </data>
   <data name="EditedText" xml:space="preserve">
     <value>Edited</value>
+  </data>
+  <data name="EditText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditThisLineText" xml:space="preserve">
+    <value>Edit this line</value>
   </data>
   <data name="ExitAndSaveText" xml:space="preserve">
     <value>Save and Close Csv Editor</value>
@@ -142,7 +163,10 @@
     <value>Save as...</value>
   </data>
   <data name="SaveText" xml:space="preserve">
-    <value>Save</value>
+    <value>Save...</value>
+  </data>
+  <data name="SaveWindowTitle" xml:space="preserve">
+    <value>Save Options</value>
   </data>
   <data name="SelectPromptComboBoxText" xml:space="preserve">
     <value>-- Select value --</value>
