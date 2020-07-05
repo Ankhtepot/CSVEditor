@@ -44,7 +44,6 @@ namespace CSVEditor.ViewModel
         }
 
         private bool isGitRepo;
-
         public bool IsGitRepo
         {
             get { return isGitRepo; }
@@ -56,6 +55,17 @@ namespace CSVEditor.ViewModel
         {
             get { return isLineEditMode; }
             set { isLineEditMode = value; OnPropertyChanged(); }
+        }
+
+        private bool isFileEdited;
+        public bool IsFileEdited
+        {
+            get { return isFileEdited; }
+            set 
+            {
+                isFileEdited = value;
+                OnPropertyChanged(); 
+            }
         }
 
         private string selectedText;
@@ -88,7 +98,7 @@ namespace CSVEditor.ViewModel
             get { return selectedCsvFile; }
             set
             {
-                setSelectedCsvFile(value);
+                SetSelectedCsvFile(value);
                 OnPropertyChanged();
             }
         }
@@ -123,9 +133,9 @@ namespace CSVEditor.ViewModel
 
         public static Action<Grid> OnConfiguraitonUpdated;
         public Action OnConfigurationUpdated;
+        public Action OnCsvFileSet;
         public Action OnCsvFileUpdated;
-        public Action<int> OnChangeTabRequested;
-        //public Action OnRebuildCsvFileGridViewerRequested;
+        public Action<int> RequestChangeTab;
 
         //*******************************
         //********** Commands ***********
@@ -153,6 +163,7 @@ namespace CSVEditor.ViewModel
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsLineEditMode = false;
+            IsFileEdited = false;
             IsGitRepo = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             AsyncVM.WorkingStatus = WorkStatus.Idle;
@@ -213,10 +224,10 @@ namespace CSVEditor.ViewModel
 
         public void SaveCurrentCsvFile()
         {
-            if (AppOptions.LastLoadedUneditedCsvFile == SelectedCsvFile)
-            {
-                Console.WriteLine("Not saving, there is no change.");
-            }
+            //if (AppOptions.LastLoadedUneditedCsvFile == SelectedCsvFile)
+            //{
+            //    Console.WriteLine("Not saving, there is no change.");
+            //}
 
 
         }
@@ -251,7 +262,7 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private void setSelectedCsvFile(CsvFile value)
+        private void SetSelectedCsvFile(CsvFile value)
         {
             if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
             if (value != null)
@@ -259,6 +270,9 @@ namespace CSVEditor.ViewModel
                 value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
             }
             selectedCsvFile = value;
+            IsFileEdited = false;
+
+            OnCsvFileSet?.Invoke();
         }
 
         private List<CsvColumnConfiguration> resolveCsvFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
@@ -303,6 +317,7 @@ namespace CSVEditor.ViewModel
             if (loadedOptions != null)
             {
                 RootRepositoryPath = loadedOptions.LastRootPath;
+                
                 setSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
@@ -343,7 +358,7 @@ namespace CSVEditor.ViewModel
 
         private void EditLine()
         {
-            OnChangeTabRequested?.Invoke(1);
+            RequestChangeTab?.Invoke(1);
         }
 
         private void AddLineUp()
@@ -380,7 +395,7 @@ namespace CSVEditor.ViewModel
             SelectedCsvFile = updatedCsvFile;
             SelectedItemIndex = index;
 
-            OnChangeTabRequested?.Invoke(1);
+            RequestChangeTab?.Invoke(1);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

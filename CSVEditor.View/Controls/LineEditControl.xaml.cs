@@ -53,14 +53,14 @@ namespace CSVEditor.View.Controls
         private static void BuildGrid(Grid topContainer, ResourceDictionary resources)
         {
             var Context = topContainer.DataContext as EditorVM;
+            topContainer.Children.Clear();
 
             VM = new EditGridControlViewModel(
                resources,
                Context);
 
             Console.WriteLine($"LineEditControl, building new Grid for Index =  {Context.SelectedItemIndex}.");
-
-            topContainer.Children.Clear();
+            
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }
     }

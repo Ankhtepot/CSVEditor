@@ -61,6 +61,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edited.
+        /// </summary>
+        public static string EditedText {
+            get {
+                return ResourceManager.GetString("EditedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save and Close Csv Editor.
         /// </summary>
         public static string ExitAndSaveText {
@@ -102,6 +111,15 @@ namespace CSVEditor.View.Properties {
         public static string LoadText {
             get {
                 return ResourceManager.GetString("LoadText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Edited.
+        /// </summary>
+        public static string NotEditedText {
+            get {
+                return ResourceManager.GetString("NotEditedText", resourceCulture);
             }
         }
         

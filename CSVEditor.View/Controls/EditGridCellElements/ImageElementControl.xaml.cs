@@ -61,7 +61,7 @@ namespace CSVEditor.View.Controls
                 ? $"{ROOT_DIRECTORY}: {Context.RootRepositoryPath}"
                 : configUri;
 
-             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
+            control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
 
             control.ImageFromSource.Source = newImage;
         }
@@ -78,11 +78,15 @@ namespace CSVEditor.View.Controls
         private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var Context = DataContext as EditorVM;
-            var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
-            ImageFromSource.Source = GetImageSource(
-                ((TextBox)sender).Text,
-                Context.RootRepositoryPath,
-                uriText);
+            if (ColumnNr < Context.SelectedCsvFile.ColumnCount)
+            {
+                var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;                
+
+                ImageFromSource.Source = GetImageSource(
+                    ((TextBox)sender).Text,
+                    Context.RootRepositoryPath,
+                    uriText); 
+            }
         }
 
         private void ImageFromSource_PreviewDrop(object sender, DragEventArgs e)

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EditedText" xml:space="preserve">
+    <value>Edited</value>
+  </data>
   <data name="ExitAndSaveText" xml:space="preserve">
     <value>Save and Close Csv Editor</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="LoadText" xml:space="preserve">
     <value>Load</value>
+  </data>
+  <data name="NotEditedText" xml:space="preserve">
+    <value>Not Edited</value>
   </data>
   <data name="SaveAsText" xml:space="preserve">
     <value>Save as...</value>

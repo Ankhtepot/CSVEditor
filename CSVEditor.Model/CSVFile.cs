@@ -142,6 +142,11 @@ namespace CSVEditor.Model
 
         public static CsvFile Copy(CsvFile other)
         {
+            if (other == null || other !is CsvFile)
+            {
+                return null;
+            }
+
             return new CsvFile()
             {
                 AbsPath = other.AbsPath,
@@ -167,7 +172,7 @@ namespace CSVEditor.Model
 
         public override bool Equals(object obj)
         {
-            return obj is CsvFile file &&
+            var result = obj is CsvFile file &&
                    AbsPath == file.AbsPath &&
                    HeaderIndex == file.HeaderIndex &&
                    EqualityComparer<List<string>>.Default.Equals(HeadersStrings, file.HeadersStrings) &&
@@ -176,6 +181,8 @@ namespace CSVEditor.Model
                    ColumnCount == file.ColumnCount &&
                    EqualityComparer<List<List<string>>>.Default.Equals(Lines, file.Lines) &&
                    EqualityComparer<List<CsvColumnConfiguration>>.Default.Equals(ColumnConfigurations, file.ColumnConfigurations);
+
+            return result;
         }
 
         public override int GetHashCode()

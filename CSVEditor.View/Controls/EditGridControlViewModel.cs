@@ -342,7 +342,7 @@ namespace CSVEditor.View.Controls
                             Name = $"DataCellTextBoxRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                         };
-
+                        newElement.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newElement.Text);
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
@@ -354,6 +354,7 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin,
                             AcceptsReturn = true
                         };
+                        newElement.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newElement.Text);
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
                     };
@@ -367,7 +368,7 @@ namespace CSVEditor.View.Controls
                             Margin = ElementMargin
                         };
                         newElement.SetBinding(SelectElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
-
+                        newElement.ContentTextBox.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newElement.ContentTextBox.Text);
                         return newElement;
                     };
                 case FieldType.Image:
@@ -381,8 +382,8 @@ namespace CSVEditor.View.Controls
                             Name = $"DataCellUriRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                         };
-
                         newElement.SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
+                        newElement.UriTextBox.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newElement.UriTextBox.Text);
                         return newElement;
                     };
                 case FieldType.Date:
@@ -395,6 +396,7 @@ namespace CSVEditor.View.Controls
                         };
 
                         newElement.SetBinding(DateElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
+                        newElement.DateTextBox.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newElement.DateTextBox.Text);
                         return newElement;
                     }
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
@@ -432,6 +434,7 @@ namespace CSVEditor.View.Controls
             itemIndexbinding.Source = Context;
 
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
+            newImageControl.CellContentTextBox.TextChanged += (sender, e) => CheckIsCsvFileEdited(LineIndex, columnNr, newImageControl.CellContentTextBox.Text);
 
             return newImageControl;
         }
@@ -480,6 +483,17 @@ namespace CSVEditor.View.Controls
             }
 
             return newGrid;
+        }
+
+        private void CheckIsCsvFileEdited(int lineNr, int columnNr, string newValue)
+        {
+
+            if (Context.SelectedCsvFile.Lines.Count > lineNr 
+                && Context.SelectedCsvFile.ColumnCount > columnNr
+                && Context.IsFileEdited != true)
+            {
+                Context.IsFileEdited = true;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

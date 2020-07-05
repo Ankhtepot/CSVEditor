@@ -15,12 +15,14 @@ namespace CSVEditor.View
     {
         public EditorVM EditorVM;
 
+        public static LineEditControl lineEditControl;
+
         public delegate void SetMainTabSelectedTabIndexEvent(int tabIndex);
         public EditorWindow()
         {
             InitializeComponent();
             EditorVM = new EditorVM();
-            EditorVM.OnChangeTabRequested += SetMainTabSelectedTabIndex;
+            EditorVM.RequestChangeTab += SetMainTabSelectedTabIndex;
             //EditorVM.OnRebuildCsvFileGridViewerRequested += RebuildCsvFileGridViewer;
             TopContainer.DataContext = EditorVM;
 
@@ -40,9 +42,11 @@ namespace CSVEditor.View
         private void RebuildCsvFileGridViewer()
         {
             if (MainTabControl.SelectedIndex == 0) // means, OverView Tab of MainTabControl is selected
-            {
-                CsvFileGridViewerControl.BuildGrid(CsvFileGridViewer, EditorVM.SelectedCsvFile);
+            {                
+                CsvFileGridViewerControl.BuildGrid(CsvFileGridViewer, EditorVM.SelectedCsvFile, LineEditorWrapper);
             }
         }
+
+
     }
 }

@@ -55,6 +55,9 @@
         <Setter Property="Padding" Value="10,0"/>
         <Setter Property="Margin" Value="0,0,0,3"/>
     </Style>
+    <Style x:Key="LowTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="Margin" Value="5,0"/>
+    </Style>
     <!-- Button -->
     <Style TargetType="Button" x:Key="CancelButtonStyle">
         <Setter Property="Foreground" Value="Red"/>

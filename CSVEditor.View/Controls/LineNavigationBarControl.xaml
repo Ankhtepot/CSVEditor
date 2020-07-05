@@ -40,14 +40,18 @@
                                             Width="30"
                                             Height="25"/>
             </Button>
-            <TextBox x:Name="NumberTextBox" Grid.Column="2"
+            <TextBox x:Name="NumberTextBox" 
+                     Grid.Column="2"
                      Width="50"
                      Height="25"
                      FontSize="18"
                      Margin="5,2"
                      PreviewTextInput="NumberTextBox_PreviewTextInput"
                      TextChanged="NumberTextBox_TextChanged"
+                     TextBlock.LineHeight="21"
+                     TextBlock.LineStackingStrategy="BlockLineHeight"
                      >
+                
             </TextBox>
             <TextBlock Width="50"
                        Text="  Of "

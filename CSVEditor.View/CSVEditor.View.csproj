@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Controls\LineEditControl.xaml.cs~RFe30db0c.TMP" />
     <None Remove="images\no_image_available.png" />
     <None Remove="images\question-mark-160071_small.png" />
   </ItemGroup>

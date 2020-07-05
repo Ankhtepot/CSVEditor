@@ -358,7 +358,8 @@
 
                                     <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
                                         <Grid x:Name="LineEditorWrapper">
-                                            <uc:LineEditControl SelectedLineIndex="{Binding SelectedItemIndex}"
+                                            <uc:LineEditControl x:Name="LineEdit"
+                                                                SelectedLineIndex="{Binding SelectedItemIndex}"
                                                                 Visibility="{Binding IsLineEditMode,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                                                 HorizontalAlignment="Stretch"

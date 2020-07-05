@@ -14,7 +14,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox x:Name="ContentTextBox"
+                     Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="0"
                      Margin="2"/>
             <ComboBox Name="SourceComboBox" 

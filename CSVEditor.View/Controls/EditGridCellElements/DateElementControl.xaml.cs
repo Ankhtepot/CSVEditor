@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using CSVEditor.ViewModel;
+using Prism.Commands;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,6 +69,7 @@ namespace CSVEditor.View.Controls.DataCellElements
                 control.DateFormat = "MMMM dd";
             }
         }
+        public Action EditedStatusChnaged;
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {

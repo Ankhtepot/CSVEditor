@@ -17,7 +17,6 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
 
             CsvFile loadedCsvFile = new CsvFile((string)e.Argument, worker);
             VM.SelectedCsvFile = loadedCsvFile;
-            EditorVM.AppOptions.LastLoadedUneditedCsvFile = loadedCsvFile;
 
             if (worker.CancellationPending == true)
             {

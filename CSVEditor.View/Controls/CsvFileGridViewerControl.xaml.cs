@@ -42,11 +42,17 @@ namespace CSVEditor.View.Controls
             BuildGrid(control, newCsvFile);
         }
 
-        public static void BuildGrid(CsvFileGridViewerControl control, CsvFile newCsvFile)
+        public static void BuildGrid(CsvFileGridViewerControl control, CsvFile newCsvFile, Grid lineEditorWrapper = null)
         {
             if(newCsvFile == null)
             {
                 return;
+            }
+
+            if (lineEditorWrapper != null)
+            {
+                var lineEdit = lineEditorWrapper.FindName("LineEdit") as LineEditControl;
+                lineEdit.TopContainer.Children.Clear();
             }
 
             var gridView = (GridView)control.GridListView.View;
