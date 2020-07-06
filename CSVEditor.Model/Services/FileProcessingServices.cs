@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CSVEditor.Services
@@ -22,6 +24,7 @@ namespace CSVEditor.Services
                     return stream.ReadToEnd();
                 }
             }
+
             return "";
         }
 
@@ -141,6 +144,10 @@ namespace CSVEditor.Services
                     var endOfBlockIndex = workingText.IndexOf(char.ToString(workingText[0]) + char.ToString(delimiter), 1) + 1;
                     result.Add(workingText.Substring(1, endOfBlockIndex - 2)); //to not include blockIdentifier in text
                     workingText = workingText.Remove(0, endOfBlockIndex + 1);
+                    //if (endOfBlockIndex == 0)
+                    //{
+                    //    endOfBlockIndex = workingText.LastIndexOf(char.ToString(workingText[0]));
+                    //}
                 }
                 else
                 {
@@ -164,6 +171,49 @@ namespace CSVEditor.Services
             }
 
             return result;
+        }
+
+        public static string CsvLineToString(List<string> line, char delimiter, char blockIdentifier)
+        {
+            var stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < line.Count; i++)
+            {
+                if (line[i].All(c => !Regex.Match(c.ToString(), @"[-\,;':\n ]").Success)) // TODO - FIX THIS!
+                {
+                    stringBuilder.Append($"{blockIdentifier}{line[i]}{blockIdentifier}");
+                }
+                else
+                {
+                    stringBuilder.Append(line[i]);
+                }
+
+                if (i < line.Count -1)
+                {
+                    stringBuilder.Append(delimiter);
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public static string HeadersLineToStringLine(CsvFile csvFile)
+        {
+            var stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < csvFile.HeadersStrings.Count; i++)
+            {
+                if (i < csvFile.HeadersStrings.Count - 1)
+                {
+                    stringBuilder.Append($"{csvFile.HeadersStrings[i]}{csvFile.Delimiter}");
+                }
+                else // for last header string
+                {
+                    stringBuilder.Append($"{csvFile.HeadersStrings[i]}\r\n");
+                }
+            }
+
+            return stringBuilder.ToString();
         }
 
         public static char IdentifyCsvDelimiter(string line, List<char> blockIdentifiers, List<char> delimiters)

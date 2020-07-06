@@ -305,7 +305,7 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                if (!Directory.Exists(fileName))
+                if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 {
                     Directory.CreateDirectory(fileName);
                 }

@@ -1,7 +1,6 @@
 ﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.Services;
 using CSVEditor.ViewModel.Abstracts;
-using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using static CSVEditor.Model.HelperClasses.Enums;
 using CSVEditor.ViewModel.BackgroundWorkers;
+using CSVEditor.Model;
+using System.Text;
 
 namespace CSVEditor.ViewModel
 {
@@ -142,9 +143,57 @@ namespace CSVEditor.ViewModel
             ActiveWorker?.CancelAsync();
         }
 
+        public async Task<string> CsvFileToTextTask(CsvFile csvFile)
+        {
+            WorkingStatus = WorkStatus.Working;
+
+            if (csvFile.Lines.Count < 1)
+            {
+                WorkingStatus = WorkStatus.Done;
+                Console.WriteLine("Converting Csv File to text: ERROR: File has no lines to convert.");
+            }
+
+            var progressStep = 100d / csvFile.Lines.Count;
+            WorkProgress = 0;
+
+            var progress = new Progress<int>(lineNr =>
+            {
+                WorkProgress = (int)((lineNr + 1) * progressStep); // +1 for headers line
+            });
+
+            var csvText = await Task.Run(() => ConvertCsvFileToTextTask(csvFile, progress));
+
+            WorkingStatus = WorkStatus.Done;
+
+            return csvText;
+        }
+
+        private string ConvertCsvFileToTextTask(CsvFile csvFile, IProgress<int> progress)
+        {
+            return Task.Run(async () =>
+            {
+                var stringBuilder = new StringBuilder(FileProcessingServices.HeadersLineToStringLine(csvFile));
+
+                for (int i = 0; i < csvFile.Lines.Count; i++)
+                {
+                    var processedLine = await Task.Run(() => FileProcessingServices.CsvLineToString(csvFile.Lines[i], csvFile.Delimiter, csvFile.BlockIdentifier));
+
+                    progress.Report(i + 1);
+
+                    stringBuilder.Append(processedLine);
+
+                    if (i < csvFile.Lines.Count - 1)
+                    {
+                        stringBuilder.Append("\r\n");
+                    }
+                }
+
+                return stringBuilder.ToString();
+            }).Result;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

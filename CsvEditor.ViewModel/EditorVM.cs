@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static CSVEditor.Model.HelperClasses.Enums;
@@ -229,19 +230,24 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public void SaveCurrentCsvFile()
+        public async void SaveCurrentCsvFile()
         {
             var saveOptions = AppOptions.SaveOptions;
             if (IsFileEdited)
             {
                 if (saveOptions.RememberSetting)
                 {
+                    
+
                     if (saveOptions.SaveModeSetting == SaveMode.AlternativePath )
                     {
-                        FileSystemServices.SaveTextFile(saveOptions.AlternativePath, CsvFile.ToPlainText(SelectedCsvFile));
+                        
                     }
                 }
             }
+
+            var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
+            FileSystemServices.SaveTextFile("D:\\Csharp\\WPF\\Backups\\test.csv", csvText);
         }
 
         public static void SaveConfiguration()
