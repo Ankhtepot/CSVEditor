@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CSVEditor.Model.Services
 {
@@ -14,6 +15,11 @@ namespace CSVEditor.Model.Services
             var Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
             var Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             return Rgx.IsMatch(URL);
+        }
+
+        public static bool ContainsAny(this string text, List<char> chars)
+        {
+
         }
     }
 }

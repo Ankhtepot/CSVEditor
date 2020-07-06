@@ -179,7 +179,7 @@ namespace CSVEditor.Services
 
             for (int i = 0; i < line.Count; i++)
             {
-                if (line[i].All(c => !Regex.Match(c.ToString(), @"[-\,;':\n ]").Success)) // TODO - FIX THIS!
+                if (line[i].Contains(delimiter) || line[i].All(c => !Regex.IsMatch(c.ToString(), @"[a-zA-Z0-9 /]"))) // TODO - FIX THIS!
                 {
                     stringBuilder.Append($"{blockIdentifier}{line[i]}{blockIdentifier}");
                 }
