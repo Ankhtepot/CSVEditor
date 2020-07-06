@@ -96,7 +96,11 @@ namespace CSVEditor.Services
                         csvLines.Add(newLine);
                     }
 
-                    FillUpLastLineIfNecesarry(csvLines[csvLines.Count - 1], result.ColumnCount);
+                    if (csvLines.Count > 0)
+                    {
+                        FillUpLastLineIfNecesarry(csvLines[csvLines.Count - 1], result.ColumnCount); 
+                    }
+
                     result.Lines = csvLines;
                 }
             }            

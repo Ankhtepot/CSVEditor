@@ -32,7 +32,6 @@ namespace CSVEditor.ViewModel
         }
 
         private WorkStatus workingStatus;
-
         public WorkStatus WorkingStatus
         {
             get { return workingStatus; }
@@ -40,12 +39,11 @@ namespace CSVEditor.ViewModel
             {
                 workingStatus = value;
                 Console.WriteLine($"EditorVM:Working status = {value}");
-                OnPropertyChanged(nameof(WorkingStatus));
+                OnPropertyChanged();
             }
         }
 
         private int workProgress;
-
         public int WorkProgress
         {
             get { return workProgress; }

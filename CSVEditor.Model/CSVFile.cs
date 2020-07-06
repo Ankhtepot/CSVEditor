@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CSVEditor.Services;
-using JetBrains.Annotations;
 using CSVEditor.Model.HelperClasses;
 
 namespace CSVEditor.Model
@@ -66,14 +65,14 @@ namespace CSVEditor.Model
             set { columnConfigurations = value; OnPropertyChanged(); }
         }
 
-        private static List<char> delimiters = new List<char> { ',', ';', ':' };
+        private static List<char> delimiters = new List<char> { ',', ';', ':'};
         public static List<char> Delimiters
         {
             get { return delimiters; }
             set { delimiters = value; }
         }
 
-        private static List<char> blockIdentifiers = new List<char> { '\"', '\'' };
+        private static List<char> blockIdentifiers = new List<char> { '\"', '\''};
         public static List<char> BlockIdentifiers
         {
             get { return blockIdentifiers; }
@@ -160,6 +159,12 @@ namespace CSVEditor.Model
             };
         }
 
+        public static string ToPlainText(CsvFile csvFile)
+        {
+            var columnCount = csvFile.ColumnCount;
+            return "<not processed>";
+        }
+
         public static void AddDelimiter(char newDelimiter)
         {
             delimiters.Add(newDelimiter);
@@ -188,14 +193,13 @@ namespace CSVEditor.Model
         public override int GetHashCode()
         {
             return HashCode.Combine(AbsPath, HeaderIndex, HeadersStrings, Delimiter, BlockIdentifier, ColumnCount, Lines, ColumnConfigurations);
-        }
+        }        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        }       
     }
 }

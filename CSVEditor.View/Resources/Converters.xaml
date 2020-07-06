@@ -16,4 +16,5 @@
     <converters:EditModeToTitleConverter x:Key="EditModeToTitleConverter"/>
     <converters:DateFormatToFormatedDateConverter x:Key="DateFormatToFormatedDateConverter"/>
     <converters:DateAndDateFormatToResultTextConverter x:Key="DateAndDateFormatToResultTextConverter"/>
+    <converters:FileMenuEnabledConverter x:Key="FileMenuEnabledConverter"/>
 </ResourceDictionary>

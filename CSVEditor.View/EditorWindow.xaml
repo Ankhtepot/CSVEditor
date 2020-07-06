@@ -66,11 +66,18 @@
                 </MenuItem>
 
                 <MenuItem Header="{x:Static p:Resources.EditText}"
-                      IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
+                      
                       BorderBrush="Black">
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{StaticResource FileMenuEnabledConverter}">
+                            <Binding Path="AsyncVM.WorkingStatus"/>
+                            <Binding Path="SelectedCsvFile"/>
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
                     <MenuItem.Icon>
                         <iconPacks:PackIconBoxIcons Kind="RegularEdit" />
                     </MenuItem.Icon>
+                    
                     <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                               Command="{Binding EditLineCommand}">
                         <MenuItem.Icon>
@@ -173,8 +180,25 @@
                 <!--#endregion-->
 
                 <!--#region column 2: GitRepo control -->
-                <Border Grid.Column="2" Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Center" HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
+                <Border Style="{StaticResource BaseBorderStyle}"
+                        Grid.Column="2"
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource }"
+                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Style="{StaticResource LowTextBlockStyle}"
+                                   Text="{x:Static p:Resources.NotEditedText}"/>
+                        </Border>
+                        <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource WarningColorResource }"
+                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}">
+                            <TextBlock Style="{StaticResource LowTextBlockStyle}"
+                                   Text="{x:Static p:Resources.EditedText}"/>
+                        </Border>
+                        <Border  Style="{StaticResource BaseBorderStyle}">
+                            <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
+                        </Border>
+                    </StackPanel>
                 </Border>
                 <!--#endregion-->
 

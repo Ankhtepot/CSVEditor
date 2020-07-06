@@ -12,9 +12,9 @@
         <Setter Property="Background" Value="Gray"></Setter>
     </Style>
     <Style TargetType="Border" x:Key="RightRoundedBorderStyle" BasedOn="{StaticResource LeftRoundedBorderStyle}">
-        <Setter Property="CornerRadius" Value="0,10,10,0"></Setter>
+        <Setter Property="CornerRadius" Value="0,15,15,0"></Setter>
         <Setter Property="Margin" Value="0,5,5,5"></Setter>
-        <Setter Property="Background" Value="Azure"></Setter>
+        <Setter Property="Background" Value="{DynamicResource LightColorResource}"></Setter>
     </Style>
     <!-- -->
     <Style TargetType="Border" x:Key="BaseBorderStyle">
@@ -61,7 +61,7 @@
     <!-- Button -->
     <Style TargetType="Button" x:Key="CancelButtonStyle">
         <Setter Property="Foreground" Value="Red"/>
-        <Setter Property="Background" Value="MistyRose"/>
+        <Setter Property="Background" Value="{DynamicResource WarningColorResource}"/>
         <Setter Property="BorderBrush" Value="Red"/>
     </Style>
     <Style TargetType="Button" x:Key="AcceptButtonStyle">
@@ -101,5 +101,13 @@
     <Style TargetType="Separator" x:Key="MenuSeparatorStyle">
         <Setter Property="Background" Value="Black"/>
     </Style>
+    <!-- Colors -->
+    <Color x:Key="LightColor">Beige</Color>
+    <Color x:Key="DarkColor">AntiqueWhite</Color>
+    <Color x:Key="WarningColor">MistyRose</Color>
+    <SolidColorBrush x:Key="LightColorResource" Color="{StaticResource LightColor}"/>
+    <SolidColorBrush x:Key="DarkColorResource" Color="{StaticResource DarkColor}"/>
+    <SolidColorBrush x:Key="WarningColorResource" Color="{StaticResource WarningColor}"/>
+
 
 </ResourceDictionary>

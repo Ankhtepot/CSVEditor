@@ -23,8 +23,9 @@ namespace CSVEditor.View
             InitializeComponent();
             EditorVM = new EditorVM();
             EditorVM.RequestChangeTab += SetMainTabSelectedTabIndex;
-            //EditorVM.OnRebuildCsvFileGridViewerRequested += RebuildCsvFileGridViewer;
             TopContainer.DataContext = EditorVM;
+
+            Closing += EditorVM.OnWindowClosing;
 
             CsvFileGridViewer.SetMainTabSelectedTabIndex(SetMainTabSelectedTabIndex);
         }

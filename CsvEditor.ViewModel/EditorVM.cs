@@ -1,6 +1,7 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
+using CSVEditor.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using Prism.Commands;
 using System;
@@ -13,6 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using static CSVEditor.Model.HelperClasses.Enums;
+using static CSVEditor.Model.HelperClasses.SaveOptions;
 
 namespace CSVEditor.ViewModel
 {
@@ -20,7 +22,7 @@ namespace CSVEditor.ViewModel
     {
         public const string APP_OPTIONS_FILE_NAME = "options.json";
         public const string CSV_CONFIGURATIONS_FILE_NAME = "csv_conf.json";
-        public const string CONFIGURATION_FOLDER_NAME = "config";        
+        public const string CONFIGURATION_FOLDER_NAME = "config";
 
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
 
@@ -60,10 +62,10 @@ namespace CSVEditor.ViewModel
         public bool IsFileEdited
         {
             get { return isFileEdited; }
-            set 
+            set
             {
                 isFileEdited = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged();
             }
         }
 
@@ -86,7 +88,7 @@ namespace CSVEditor.ViewModel
             }
             set
             {
-                setSelectedFile(value);
+                SetSelectedFile(value);
                 OnPropertyChanged();
             }
         }
@@ -110,15 +112,9 @@ namespace CSVEditor.ViewModel
             {
                 if (selectedItemIndex != value)
                 {
-                    //AddLineDownCommand.RaiseCanExecuteChanged();
-                    //AddLineUpCommand.RaiseCanExecuteChanged();
-                    //AddLineToTopCommand.RaiseCanExecuteChanged();
-                    //AddLineToBottomCommand.RaiseCanExecuteChanged();
-                    //EditLineCommand.RaiseCanExecuteChanged();
-                    //DeleteLineCommand.RaiseCanExecuteChanged();
                     selectedItemIndex = value;
                     Console.WriteLine($"EditorVM, selectedIndexUpdated to {value}");
-                    OnPropertyChanged(); 
+                    OnPropertyChanged();
                 }
             }
         }
@@ -193,7 +189,7 @@ namespace CSVEditor.ViewModel
 
             FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
-            setAppOptions();
+            SetAppOptions();
             SetVisuals(AppOptions.VisualConfig);
         }
 
@@ -212,7 +208,7 @@ namespace CSVEditor.ViewModel
 
         public void UpdateFileConfigurations(Grid mainGridContainer = null)
         {
-            if (findFileConfiguration(SelectedCsvFile.AbsPath) == null)
+            if (FindFileConfiguration(SelectedCsvFile.AbsPath) == null)
             {
                 throw new InvalidDataException("Error in file configuration process - configuration NOT FOUND, which should not happen on update.");
             }
@@ -225,7 +221,7 @@ namespace CSVEditor.ViewModel
 
             if (mainGridContainer != null)
             {
-                OnConfiguraitonUpdated?.Invoke(mainGridContainer); 
+                OnConfiguraitonUpdated?.Invoke(mainGridContainer);
             }
             else
             {
@@ -233,9 +229,19 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public static void SaveCurrentCsvFile()
+        public void SaveCurrentCsvFile()
         {
-           
+            var saveOptions = AppOptions.SaveOptions;
+            if (IsFileEdited)
+            {
+                if (saveOptions.RememberSetting)
+                {
+                    if (saveOptions.SaveModeSetting == SaveMode.AlternativePath )
+                    {
+                        FileSystemServices.SaveTextFile(saveOptions.AlternativePath, CsvFile.ToPlainText(SelectedCsvFile));
+                    }
+                }
+            }
         }
 
         public static void SaveConfiguration()
@@ -250,14 +256,17 @@ namespace CSVEditor.ViewModel
             JsonServices.SerializeJson(AppOptions,
                 Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
                 "App Options");
-            
         }
 
-        public static void SaveOnExit()
+        public void SaveOnExit()
         {
-            SaveConfiguration();
-            SaveAppOptions();
-            SaveCurrentCsvFile();
+            SaveCurrentCsvFile();            
+            ExitApp();
+        }
+
+        public void OnWindowClosing(object sender, CancelEventArgs e)
+        {
+            ExitApp();
         }
 
         private void SaveAndExit()
@@ -268,6 +277,13 @@ namespace CSVEditor.ViewModel
 
         private void ExitApp()
         {
+            if (IsFileEdited)
+            {
+                //TODO check if hes sure
+            }
+
+            SaveConfiguration();
+            SaveAppOptions();            
             Application.Current.Shutdown();
         }
 
@@ -277,7 +293,7 @@ namespace CSVEditor.ViewModel
             return loadedconfiguration == null ? new List<CsvFileConfiguration>() : loadedconfiguration;
         }
 
-        private void setSelectedFile(string value, bool needsProcessing = true)
+        private void SetSelectedFile(string value, bool needsProcessing = true)
         {
             selectedFile = value;
 
@@ -306,22 +322,23 @@ namespace CSVEditor.ViewModel
             if (AppOptions != null) AppOptions.LastSelectedCsvFile = value;
             if (value != null)
             {
-                value.ColumnConfigurations = resolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
+                value.ColumnConfigurations = ResolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
             }
             selectedCsvFile = value;
+            IsLineEditMode = false;
             IsFileEdited = false;
 
             OnCsvFileSet?.Invoke();
         }
 
-        private List<CsvColumnConfiguration> resolveCsvFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
+        private List<CsvColumnConfiguration> ResolveCsvFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
         {
-            return getConfigurationForCurrentFile(currentFileConfigurations, currentFileAbsPath);
+            return GetConfigurationForCurrentFile(currentFileConfigurations, currentFileAbsPath);
         }
 
-        private List<CsvColumnConfiguration> getConfigurationForCurrentFile(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
+        private List<CsvColumnConfiguration> GetConfigurationForCurrentFile(List<CsvColumnConfiguration> currentFileConfigurations, string currentFileAbsPath)
         {
-            var foundConfiguration = findFileConfiguration(currentFileAbsPath);
+            var foundConfiguration = FindFileConfiguration(currentFileAbsPath);
 
             if (foundConfiguration == null)
             {
@@ -335,7 +352,7 @@ namespace CSVEditor.ViewModel
                 : currentFileConfigurations;
         }
 
-        private List<CsvColumnConfiguration> findFileConfiguration(string fileAbsPath)
+        private List<CsvColumnConfiguration> FindFileConfiguration(string fileAbsPath)
         {
             return FileConfigurations?
                 .Where(conf => conf.AbsoluteFilePath == fileAbsPath)
@@ -343,7 +360,7 @@ namespace CSVEditor.ViewModel
                 .FirstOrDefault()?.ColumnConfigurations;
         }
 
-        private void setAppOptions()
+        private void SetAppOptions()
         {
             AppOptions = new AppOptions();
 
@@ -356,8 +373,8 @@ namespace CSVEditor.ViewModel
             if (loadedOptions != null)
             {
                 RootRepositoryPath = loadedOptions.LastRootPath;
-                
-                setSelectedFile(loadedOptions.LastSelectedFilePath, false);
+
+                SetSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
                 CsvFilesStructure.Clear();
@@ -441,7 +458,7 @@ namespace CSVEditor.ViewModel
         private void DeleteLine(int index)
         {
             var updatedCsvFile = new CsvFile(SelectedCsvFile);
-            updatedCsvFile.Lines.RemoveAt(index);            
+            updatedCsvFile.Lines.RemoveAt(index);
             SelectedCsvFile = updatedCsvFile;
             SelectedItemIndex = index.Clamp(0, updatedCsvFile.Lines.Count - 1);
         }

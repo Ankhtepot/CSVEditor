@@ -136,6 +136,7 @@ namespace CSVEditor.View.Controls
                 : cellContentPath.Replace(uriText + "\\", "").Replace("\\", "/");
 
             CellContentTextBox.Text = cellContentPath;
+            Context.IsFileEdited = true;
         }
 
         private void ImageFromSource_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
