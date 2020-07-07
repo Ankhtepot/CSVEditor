@@ -34,6 +34,11 @@ namespace CSVEditor.Services
             return await Task.Run(() => string.Join(Environment.NewLine, lines));
         }
 
+        public static async Task<string> RemoveFirstLineAsync(string text, string firstLine)
+        {
+            return await Task.Run(() => text.Replace(firstLine + '\n', ""));
+        }
+
         public static CsvFile CsvFileFromAbsPath(
             string path,
             List<char> blockIdentifiers,
@@ -49,13 +54,15 @@ namespace CSVEditor.Services
                 if (text == "") return result;
 
                 string[] lines = text.Split(Environment.NewLine);
+                string firstLine = text.Substring(0, text.IndexOf('\n'));
 
                 var fileIsValid = true;
 
                 try
                 {
                     result.Delimiter = IdentifyCsvDelimiter(lines[0], blockIdentifiers, delimiters);
-                    result.HeadersStrings = lines[0].Split(result.Delimiter).ToList();
+                    //result.HeadersStrings = lines[0].Split(result.Delimiter).ToList();
+                    result.HeadersStrings = firstLine.Split(result.Delimiter).ToList();
                 }
                 catch (InvalidDataException)
                 {
@@ -73,7 +80,7 @@ namespace CSVEditor.Services
                     }
 
                     var csvLines = new List<List<string>>();
-                    var columnContents = GetColumnContents(RemoveFirstLineAsync(text).Result, result.Delimiter, blockIdentifiers, worker) ?? new ObservableCollection<string>();
+                    var columnContents = GetColumnContents(RemoveFirstLineAsync(text, firstLine).Result, result.Delimiter, blockIdentifiers, worker) ?? new List<string>();
 
                     while (columnContents?.Count > 0)
                     {
@@ -120,9 +127,9 @@ namespace CSVEditor.Services
             }
         }
 
-        public static ObservableCollection<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)
+        public static List<string> GetColumnContents(string text, char delimiter, List<char> blockIdentifiers, BackgroundWorker worker = null)
         {
-            var result = new ObservableCollection<string>();
+            var result = new List<string>();
 
             var workingText = text.Replace("\r", "");
 
@@ -142,12 +149,25 @@ namespace CSVEditor.Services
                 if (blockIdentifiers.Contains(workingText[0]))
                 {
                     var endOfBlockIndex = workingText.IndexOf(char.ToString(workingText[0]) + char.ToString(delimiter), 1) + 1;
-                    result.Add(workingText.Substring(1, endOfBlockIndex - 2)); //to not include blockIdentifier in text
-                    workingText = workingText.Remove(0, endOfBlockIndex + 1);
-                    //if (endOfBlockIndex == 0)
-                    //{
-                    //    endOfBlockIndex = workingText.LastIndexOf(char.ToString(workingText[0]));
-                    //}
+                    var endOfTheLine = workingText.IndexOf(char.ToString(workingText[0]) + "\n", 1) + 1;
+
+                    endOfBlockIndex = endOfBlockIndex > endOfTheLine && endOfTheLine != 0 ? endOfTheLine : endOfBlockIndex;
+
+                    if (endOfBlockIndex == 0) // this signifies end of the line
+                    {
+                        endOfBlockIndex = workingText.LastIndexOf(char.ToString(workingText[0]) + Environment.NewLine);
+
+                        if (endOfBlockIndex == -1) //this signifies the end of the file
+                        {
+                            result.Add(workingText.Substring(1, workingText.Length - 2)); //to not include blockIdentifier in text
+                            workingText = "";
+                        }
+                    }
+                    else
+                    {
+                        result.Add(workingText.Substring(1, endOfBlockIndex - 2)); //to not include blockIdentifier in text
+                        workingText = workingText.Remove(0, endOfBlockIndex + 1);
+                    }
                 }
                 else
                 {
@@ -179,7 +199,7 @@ namespace CSVEditor.Services
 
             for (int i = 0; i < line.Count; i++)
             {
-                if (line[i].Contains(delimiter) || line[i].All(c => !Regex.IsMatch(c.ToString(), @"[a-zA-Z0-9 /]"))) // TODO - FIX THIS!
+                if (line[i].ContainsAny(new char[] { delimiter, blockIdentifier, '-', ':', '\\', '.', ',', ';', '&', '\'' })) 
                 {
                     stringBuilder.Append($"{blockIdentifier}{line[i]}{blockIdentifier}");
                 }
@@ -209,7 +229,7 @@ namespace CSVEditor.Services
                 }
                 else // for last header string
                 {
-                    stringBuilder.Append($"{csvFile.HeadersStrings[i]}\r\n");
+                    stringBuilder.Append($"{csvFile.HeadersStrings[i]}{Environment.NewLine}");
                 }
             }
 

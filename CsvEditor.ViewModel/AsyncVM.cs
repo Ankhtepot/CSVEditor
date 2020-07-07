@@ -184,7 +184,7 @@ namespace CSVEditor.ViewModel
 
                     if (i < csvFile.Lines.Count - 1)
                     {
-                        stringBuilder.Append("\r\n");
+                        stringBuilder.Append(Environment.NewLine);
                     }
                 }
 

@@ -17,9 +17,17 @@ namespace CSVEditor.Model.Services
             return Rgx.IsMatch(URL);
         }
 
-        public static bool ContainsAny(this string text, List<char> chars)
+        public static bool ContainsAny(this string text, char[] chars)
         {
+            foreach (var character in chars)
+            {
+                if (text.Contains(character))
+                {
+                    return true;
+                }
+            }
 
+            return false;
         }
     }
 }
