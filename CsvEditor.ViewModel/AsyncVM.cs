@@ -134,7 +134,7 @@ namespace CSVEditor.ViewModel
 
         public bool LoadRepository_CanExecute()
         {
-            return WorkingStatus == WorkStatus.Idle;
+            return WorkingStatus != WorkStatus.Working;
         }
 
         public void CancelActiveWorkerAsync()

@@ -101,6 +101,12 @@ namespace CSVEditor.ViewModel
             set
             {
                 SetSelectedCsvFile(value);
+
+                if (value == null)
+                {
+                    RequestChangeTab?.Invoke(0);
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -313,6 +319,7 @@ namespace CSVEditor.ViewModel
 
                 AsyncVM.SetRawTextFromAbsPath(SelectedFile);
 
+                RequestChangeTab?.Invoke(0);
                 AppOptions.LastSelectedFilePath = SelectedFile;
             }
             else

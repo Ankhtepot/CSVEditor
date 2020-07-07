@@ -28,15 +28,19 @@ namespace CSVEditor.Services
             return "";
         }
 
-        public static async Task<string> RemoveFirstLineAsync(string text)
-        {
-            string[] lines = await Task.Run(() => text.Split(Environment.NewLine).Skip(1).ToArray());
-            return await Task.Run(() => string.Join(Environment.NewLine, lines));
-        }
-
         public static async Task<string> RemoveFirstLineAsync(string text, string firstLine)
         {
-            return await Task.Run(() => text.Replace(firstLine + '\n', ""));
+            return await Task.Run(() =>
+            {
+                text = text.Replace(firstLine + '\n', "");
+
+                if (text[0] == '\n' || text[0] == '\r')
+                {
+                    text.Remove(0);
+                }
+
+                return text;
+            });
         }
 
         public static CsvFile CsvFileFromAbsPath(
@@ -49,7 +53,7 @@ namespace CSVEditor.Services
 
             if (File.Exists(path))
             {
-                var text = GetRawFileText(path);
+                var text = GetRawFileText(path).Replace("\r", "");
 
                 if (text == "") return result;
 
@@ -61,7 +65,6 @@ namespace CSVEditor.Services
                 try
                 {
                     result.Delimiter = IdentifyCsvDelimiter(lines[0], blockIdentifiers, delimiters);
-                    //result.HeadersStrings = lines[0].Split(result.Delimiter).ToList();
                     result.HeadersStrings = firstLine.Split(result.Delimiter).ToList();
                 }
                 catch (InvalidDataException)
@@ -102,18 +105,18 @@ namespace CSVEditor.Services
                                 break;
                             }
                         }
-                        
+
                         csvLines.Add(newLine);
                     }
 
                     if (csvLines.Count > 0)
                     {
-                        FillUpLastLineIfNecesarry(csvLines[csvLines.Count - 1], result.ColumnCount); 
+                        FillUpLastLineIfNecesarry(csvLines[csvLines.Count - 1], result.ColumnCount);
                     }
 
                     result.Lines = csvLines;
                 }
-            }            
+            }
 
             return result;
         }
@@ -135,7 +138,7 @@ namespace CSVEditor.Services
 
             while (workingText != string.Empty)
             {
-                if(worker?.CancellationPending == true)
+                if (worker?.CancellationPending == true)
                 {
                     return null;
                 }
@@ -199,7 +202,7 @@ namespace CSVEditor.Services
 
             for (int i = 0; i < line.Count; i++)
             {
-                if (line[i].ContainsAny(new char[] { delimiter, blockIdentifier, '-', ':', '\\', '.', ',', ';', '&', '\'' })) 
+                if (line[i].ContainsAny(new char[] { delimiter, blockIdentifier, '-', ':', '\\', '.', ',', ';', '&', '\'' }))
                 {
                     stringBuilder.Append($"{blockIdentifier}{line[i]}{blockIdentifier}");
                 }
@@ -208,7 +211,7 @@ namespace CSVEditor.Services
                     stringBuilder.Append(line[i]);
                 }
 
-                if (i < line.Count -1)
+                if (i < line.Count - 1)
                 {
                     stringBuilder.Append(delimiter);
                 }

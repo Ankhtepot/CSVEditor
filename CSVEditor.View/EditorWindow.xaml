@@ -37,8 +37,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem Header="{x:Static p:Resources.LoadDirectoryText}"
-                          Command="{Binding LoadRepositoryCommand}"
-                          >
+                          Command="{Binding LoadRepositoryCommand}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconBoxIcons Kind="RegularFile"/>
                         </MenuItem.Icon>
@@ -316,8 +315,7 @@
 
                         <!--#region Line Editor-->
                         <TabItem Header="Line Editor"
-                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}"
-                                 >
+                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
 
