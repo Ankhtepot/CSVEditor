@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         mc:Ignorable="d"
-        Title="Date Format Guide" Height="450" Width="800"
-        SizeToContent="WidthAndHeight">
+        Title="Date Format Guide" Height="250" Width="800"
+        MinWidth="700"
+        MinHeight="250"
+        MaxHeight="250"
+        SizeToContent="Width">
     <Border Style="{StaticResource BaseBorderStyle}">
         <Grid x:Name="TopContainer"
           Margin="20">

@@ -28,7 +28,8 @@ namespace CSVEditor.View.Controls.DataCellElements
             DependencyProperty.Register("DateFormat", typeof(string), typeof(DateElementControl), new PropertyMetadata(""));       
 
         public DelegateCommand GenerateDateFromNowCommand { get; set; }
-        public DelegateCommand GenerateDateFromPickerCommand { get; set; }
+
+        public Action OnEdited;
 
         public DateElementControl()
         {
@@ -36,22 +37,17 @@ namespace CSVEditor.View.Controls.DataCellElements
             TopContainer.DataContext = this;
 
             GenerateDateFromNowCommand = new DelegateCommand(GenerateDateFromNow);
-            GenerateDateFromPickerCommand = new DelegateCommand(GenerateDateFromPicker);
         }
 
         private void GenerateDateFromNow()
         {
-            GenerateDate(new DateTime((DateTime.Now).Ticks));
-        }
-
-        private void GenerateDateFromPicker()
-        {
-            GenerateDate(new DateTime(2019, 5, 6));
+            GenerateDate(new DateTime((DateTime.Now).Ticks));            
         }
 
         private void GenerateDate(DateTime dateTime)
         {
             Text = dateTime.ToString(DateFormat);
+            OnEdited?.Invoke();
         }
 
         private static void DateFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -69,12 +65,11 @@ namespace CSVEditor.View.Controls.DataCellElements
                 control.DateFormat = "MMMM dd";
             }
         }
-        public Action EditedStatusChnaged;
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             var newDate = (DateTime)e.AddedItems[0];
-            Text = newDate.ToString(DateFormat);
+            GenerateDate(newDate);
         }
     }
 }

@@ -256,13 +256,13 @@ namespace CSVEditor.ViewModel
             if (File.Exists(fullNewFilePath))
             {
                 //TODO: if file already exists, pop up windows with preview and ask if user wants to replace that file.
-                if (MessageBox.Show(messageOverwrite, title, buttons, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                if (MessageBox.Show(messageOverwrite, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
                 {
                     File.Copy(newImageFile, fullNewFilePath, true);
                     return true;
                 }
 
-                return false;
+                return true;
             }
 
             if (MessageBox.Show(message, title, buttons, icon) == MessageBoxResult.OK)

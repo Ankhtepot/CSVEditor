@@ -2,6 +2,7 @@
 {
     public class Constants
     {
+        public const string BASE_FONT_SIZE_KEY = "BaseFontSize";
         public const string CANCELED_WORK_STATUS = "Last task was cancelled.";
         public const string COMPLETED_WORK_STATUS = "Task completed successfuly.";
         public const string CONFIGURATION_EDITOR_TITLE = "Configuration Editor";

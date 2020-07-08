@@ -1,5 +1,6 @@
 ﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.ViewModel;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -166,6 +167,11 @@ namespace CSVEditor.View.Controls
 
                 SaveNewImageSourceFile(selectedImage);
             }
+        }
+
+        private void CellContentTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            (DataContext as EditorVM).IsFileEdited = true;
         }
     }
 }

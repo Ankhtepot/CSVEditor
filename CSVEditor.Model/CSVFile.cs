@@ -159,12 +159,6 @@ namespace CSVEditor.Model
             };
         }
 
-        public static string ToPlainText(CsvFile csvFile)
-        {
-            var columnCount = csvFile.ColumnCount;
-            return "<not processed>";
-        }
-
         public static void AddDelimiter(char newDelimiter)
         {
             delimiters.Add(newDelimiter);

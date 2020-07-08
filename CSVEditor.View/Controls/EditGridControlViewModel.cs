@@ -15,6 +15,7 @@ using static CSVEditor.Model.HelperClasses.Enums;
 using CSVEditor.Model;
 using CSVEditor.Model.Services;
 using CSVEditor.Model.HelperClasses;
+using Microsoft.VisualBasic;
 
 namespace CSVEditor.View.Controls
 {
@@ -148,22 +149,28 @@ namespace CSVEditor.View.Controls
 
         private UIElement RowNumberColumnCreationMethod(int count)
         {
-            return new TextBlock()
+            var newElement = new TextBlock()
             {
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
                 Text = $"#{count + 1}",
             };
+            newElement.SetResourceReference(TextBlock.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
+            return newElement;
         }
 
         private UIElement HeadersColumnCreationMethod(int count)
         {
-            return new TextBlock()
+            var newElement = new TextBlock()
             {
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
                 Text = $"{Context.SelectedCsvFile.HeadersStrings[count]}",
             };
+            newElement.SetResourceReference(TextBlock.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
+            return newElement;
         }
 
         private UIElement HeaderSelectionColumnCreationMethod(int count)
@@ -347,6 +354,7 @@ namespace CSVEditor.View.Controls
                             Name = $"DataCellTextBoxRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                         };
+                        newElement.SetResourceReference(TextBox.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
                         newElement.KeyDown += (sender, e) => Context.IsFileEdited = true;
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
@@ -357,8 +365,9 @@ namespace CSVEditor.View.Controls
                         {
                             Name = $"DataCellTextAreaRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
-                            AcceptsReturn = true
+                            AcceptsReturn = true,
                         };
+                        newElement.SetResourceReference(TextBox.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
                         newElement.KeyDown += (sender, e) => Context.IsFileEdited = true;
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
@@ -374,6 +383,7 @@ namespace CSVEditor.View.Controls
                         };
                         newElement.SetBinding(SelectElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
                         newElement.ContentTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.OnEdited += () => Context.IsFileEdited = true;
                         return newElement;
                     };
                 case FieldType.Image:
@@ -402,6 +412,7 @@ namespace CSVEditor.View.Controls
 
                         newElement.SetBinding(DateElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
                         newElement.DateTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.OnEdited += () => Context.IsFileEdited = true;
                         return newElement;
                     }
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");

@@ -20,6 +20,8 @@
                      Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Margin="2"
                      HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center"
+                     FontSize="{DynamicResource BaseFontSize}"
                      Grid.Column="0"/>
             <Viewbox Grid.Column="2">
                 <DatePicker SelectedDateChanged="DatePicker_SelectedDateChanged"
@@ -37,19 +39,6 @@
                                Text=" Generate Date from TODAY  "/>
                 </StackPanel>
             </Button>
-            <!--<Button Name="GenerateDateFromPickerButton"
-                    MinWidth="200"
-                    Margin="2"
-                    Grid.Column="2"
-                    Command="{Binding GenerateDateFromPickerCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconBoxIcons Kind="RegularCalendar" />
-                    <TextBlock VerticalAlignment="Center"
-                               FontWeight="Bold"
-                               Text=" Pick and Generate Date.  "/>
-                </StackPanel>
-            </Button>-->
-
         </Grid>
     </Border>
 </UserControl>

@@ -64,7 +64,8 @@
                      Grid.Row="2"
                      FontSize="16"
                      Margin="3"
-                     TextChanged="CellContentTextBox_TextChanged">
+                     TextChanged="CellContentTextBox_TextChanged"
+                     KeyDown="CellContentTextBox_KeyDown">
             </TextBox>
             <Label Grid.Column="1" Grid.Row="4"
                Content="Base Path:"/>

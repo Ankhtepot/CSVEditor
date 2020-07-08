@@ -27,6 +27,8 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty ComboBoxSourceProperty =
             DependencyProperty.Register("ComboBoxSource", typeof(List<string>), typeof(SelectElementControl), new PropertyMetadata(new List<string>()));
 
+        public Action OnEdited;
+
         public SelectElementControl()
         {
             InitializeComponent();
@@ -49,7 +51,12 @@ namespace CSVEditor.View.Controls
 
         private void SourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Text = e.AddedItems[0] as string;
+            Text = e.AddedItems[0] as string;            
+        }
+
+        private void SourceComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            OnEdited?.Invoke();
         }
     }
 }
