@@ -13,8 +13,18 @@
     <Window.DataContext>
         <vm:SaveVM x:Name="VM"/>
     </Window.DataContext>
-    
-    <Grid>
-        
-    </Grid>
+
+    <Border Style="{StaticResource BaseBorderStyle}">
+        <DockPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="{x:Static p:Resources.SaveAsText}"
+                        Style="{StaticResource BaseButtonStyle}"/>
+            </Grid>
+        </DockPanel>
+    </Border>
 </Window>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +19,13 @@ namespace CSVEditor.View
     /// </summary>
     public partial class SaveWindow : Window
     {
-        public SaveWindow()
+        public SaveOptions SetOptions { get; set; }
+        public SaveWindow(SaveOptions saveOptions)
         {
             InitializeComponent();
+
+            (DataContext as SaveVM).SaveOptions = saveOptions;
+            SetOptions = saveOptions;
         }
     }
 }

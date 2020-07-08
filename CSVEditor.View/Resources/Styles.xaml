@@ -60,6 +60,18 @@
         <Setter Property="Margin" Value="5,0"/>
     </Style>
     <!-- Button -->
+    <Style TargetType="Button" x:Key="BaseButtonStyle">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="{DynamicResource BaseButtonColorResource}"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="8" BorderThickness="1" BorderBrush="Black"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="Button" x:Key="CancelButtonStyle">
         <Setter Property="Foreground" Value="Red"/>
         <Setter Property="Background" Value="{DynamicResource WarningColorResource}"/>
@@ -106,9 +118,13 @@
     <Color x:Key="LightColor">Beige</Color>
     <Color x:Key="DarkColor">AntiqueWhite</Color>
     <Color x:Key="WarningColor">MistyRose</Color>
+    <Color x:Key="AcceptColor">LightGreen</Color>
+    <Color x:Key="BaseButtonColor">Gray</Color>
     <SolidColorBrush x:Key="LightColorResource" Color="{StaticResource LightColor}"/>
     <SolidColorBrush x:Key="DarkColorResource" Color="{StaticResource DarkColor}"/>
     <SolidColorBrush x:Key="WarningColorResource" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="AcceptColorResource" Color="{StaticResource AcceptColor}"/>
+    <SolidColorBrush x:Key="BaseButtonColorResource" Color="{StaticResource BaseButtonColor}"/>
     <!-- Global Style Variables -->
     <sys:Double x:Key="BaseFontSize">16</sys:Double>
 

@@ -253,7 +253,7 @@ namespace CSVEditor.ViewModel
             }
 
             var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
-            FileSystemServices.SaveTextFile("D:\\Csharp\\WPF\\Backups\\test.csv", csvText);
+            //FileSystemServices.SaveTextFile("D:\\Csharp\\WPF\\Backups\\test.csv", csvText);
         }
 
         public static void SaveConfiguration()
