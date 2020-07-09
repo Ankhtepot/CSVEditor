@@ -97,6 +97,24 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelText {
+            get {
+                return ResourceManager.GetString("CancelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commit on Save.
+        /// </summary>
+        public static string CommitText {
+            get {
+                return ResourceManager.GetString("CommitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete This Line.
         /// </summary>
         public static string DeleteLineText {
@@ -187,6 +205,33 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite.
+        /// </summary>
+        public static string OverwriteText {
+            get {
+                return ResourceManager.GetString("OverwriteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Push on Save.
+        /// </summary>
+        public static string PushText {
+            get {
+                return ResourceManager.GetString("PushText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember Selection.
+        /// </summary>
+        public static string RememberSelectionText {
+            get {
+                return ResourceManager.GetString("RememberSelectionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save as....
         /// </summary>
         public static string SaveAsText {
@@ -201,6 +246,15 @@ namespace CSVEditor.View.Properties {
         public static string SaveText {
             get {
                 return ResourceManager.GetString("SaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save To: .
+        /// </summary>
+        public static string SaveToText {
+            get {
+                return ResourceManager.GetString("SaveToText", resourceCulture);
             }
         }
         

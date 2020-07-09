@@ -1,5 +1,6 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.HelperClasses;
+using CSVEditor.Model.Interfaces;
 using CSVEditor.Model.Services;
 using CSVEditor.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
@@ -28,6 +29,8 @@ namespace CSVEditor.ViewModel
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
 
         private string rootRepositoryPath;
+
+        public IWindowService WindowService { get; set; }
 
         public static AppOptions AppOptions;
 
@@ -254,6 +257,7 @@ namespace CSVEditor.ViewModel
 
             var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
             //FileSystemServices.SaveTextFile("D:\\Csharp\\WPF\\Backups\\test.csv", csvText);
+            var newSaveOptions = WindowService.OpenSaveWindow(saveOptions, RootRepositoryPath);
         }
 
         public static void SaveConfiguration()

@@ -23,7 +23,7 @@ namespace CSVEditor.Model.HelperClasses
             RememberSetting = false;
             CommitOnSave = false;
             PushOnSave = false;
-            AlternativePath = null;
+            AlternativePath = AppDomain.CurrentDomain.BaseDirectory;
             SaveModeSetting = SaveMode.Overwrite;
         }
     }

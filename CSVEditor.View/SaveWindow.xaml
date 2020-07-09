@@ -8,23 +8,116 @@
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         mc:Ignorable="d"
         Title="{x:Static p:Resources.SaveWindowTitle}"
+        SizeToContent="WidthAndHeight"
         Height="450" Width="800">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:SaveVM x:Name="VM"/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Border Style="{StaticResource BaseBorderStyle}">
-        <DockPanel>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+        <DockPanel >
+            <Border Style="{StaticResource BaseBorderStyle}" 
+                    DockPanel.Dock="Top"
+                    BorderThickness="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <Button Content="{x:Static p:Resources.SaveAsText}"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                    <Button Content="{x:Static p:Resources.SaveAsText}"
+                            Style="{StaticResource BaseButtonStyle}"
+                            Grid.Column="0">
+                        <Button.Resources>
+                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                        </Button.Resources>
+                    </Button>
+                    <Button Style="{StaticResource BaseButtonStyle}"
+                            Grid.Column="1"
+                            MinWidth="50">
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Source="{x:Static p:Resources.SaveToText}"/>
+                                    <Binding Path="SaveOptions.AlternativePath"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Button.Resources>
+                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
+                <Border Style="{StaticResource BaseBorderStyle}"
+                        BorderThickness="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Content="{x:Static p:Resources.OverwriteText}"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Grid.Column="0"
+                                Grid.Row="0">
+                            <Button.Resources>
+                                <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                            </Button.Resources>
+                        </Button>
+                        <TextBlock Text="{Binding RootRepositoryPath}"
+                                   Style="{StaticResource BigTextBlockStyle}"
+                                   Grid.Column="1"
+                                   Grid.Row="0"/>
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding SaveOptions.CommitOnSave, Mode=TwoWay}"/>
+                                <TextBlock Text="{x:Static p:Resources.CommitText}"
+                                           Style="{StaticResource BigTextBlockStyle}"/>
+                                <CheckBox IsChecked="{Binding SaveOptions.PushOnSave, Mode=TwoWay}"
+                                          IsEnabled="{Binding SaveOptions.CommitOnSave}"
+                                          Margin="30,5,0,5"/>
+                                <TextBlock Text="{x:Static p:Resources.PushText}"
+                                           Style="{StaticResource BigTextBlockStyle}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
             </Grid>
+
+            <Button Style="{StaticResource CancelButtonStyle}" 
+                    DockPanel.Dock="Top" 
+                    Margin="5,20"
+                    BorderThickness="2">
+                <Button.Resources>
+                    <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                </Button.Resources>
+                <TextBlock Text="{x:Static p:Resources.CancelText}"
+                           Style="{StaticResource BigTextBlockStyle}"/>
+            </Button>
+
+            <Border Style="{StaticResource BaseBorderStyle}"
+                    DockPanel.Dock="Top"
+                    BorderThickness="2">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}"/>
+                    <TextBlock Text="{x:Static p:Resources.RememberSelectionText}"
+                               Style="{StaticResource BigTextBlockStyle}"/>
+                </StackPanel>
+            </Border>
         </DockPanel>
     </Border>
 </Window>

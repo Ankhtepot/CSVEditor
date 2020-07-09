@@ -129,6 +129,12 @@
   <data name="AddLineUpText" xml:space="preserve">
     <value>Add New Line Above This Line</value>
   </data>
+  <data name="CancelText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CommitText" xml:space="preserve">
+    <value>Commit on Save</value>
+  </data>
   <data name="DeleteLineText" xml:space="preserve">
     <value>Delete This Line</value>
   </data>
@@ -159,11 +165,23 @@
   <data name="NotEditedText" xml:space="preserve">
     <value>Not Edited</value>
   </data>
+  <data name="OverwriteText" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="PushText" xml:space="preserve">
+    <value>Push on Save</value>
+  </data>
+  <data name="RememberSelectionText" xml:space="preserve">
+    <value>Remember Selection</value>
+  </data>
   <data name="SaveAsText" xml:space="preserve">
     <value>Save as...</value>
   </data>
   <data name="SaveText" xml:space="preserve">
     <value>Save...</value>
+  </data>
+  <data name="SaveToText" xml:space="preserve">
+    <value>Save To: </value>
   </data>
   <data name="SaveWindowTitle" xml:space="preserve">
     <value>Save Options</value>
