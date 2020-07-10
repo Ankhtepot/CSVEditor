@@ -242,22 +242,9 @@ namespace CSVEditor.ViewModel
         public async void SaveCurrentCsvFile()
         {
             var saveOptions = AppOptions.SaveOptions;
-            if (IsFileEdited)
-            {
-                if (saveOptions.RememberSetting)
-                {
-                    
-
-                    if (saveOptions.SaveModeSetting == SaveMode.AlternativePath )
-                    {
-                        
-                    }
-                }
-            }
-
             var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
-            //FileSystemServices.SaveTextFile("D:\\Csharp\\WPF\\Backups\\test.csv", csvText);
-            var newSaveOptions = WindowService.OpenSaveWindow(saveOptions, RootRepositoryPath);
+
+            var newSaveOptions = WindowService.OpenSaveWindow(saveOptions, csvText, SelectedCsvFile.AbsPath);
         }
 
         public static void SaveConfiguration()
@@ -276,7 +263,7 @@ namespace CSVEditor.ViewModel
 
         public void SaveOnExit()
         {
-            SaveCurrentCsvFile();            
+            SaveCurrentCsvFile();
             ExitApp();
         }
 
@@ -295,11 +282,11 @@ namespace CSVEditor.ViewModel
         {
             if (IsFileEdited)
             {
-                //TODO check if hes sure
+                //TODO check if hes sure to not save
             }
 
             SaveConfiguration();
-            SaveAppOptions();            
+            SaveAppOptions();
             Application.Current.Shutdown();
         }
 

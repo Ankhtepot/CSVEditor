@@ -7,13 +7,15 @@
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         mc:Ignorable="d"
+        x:Name="SaveWindowMain"
         Title="{x:Static p:Resources.SaveWindowTitle}"
         SizeToContent="WidthAndHeight"
-        Height="450" Width="800">
+        Height="327" Width="800"
+        ResizeMode="NoResize">
 
-    <!--<Window.DataContext>
+    <Window.DataContext>
         <vm:SaveVM x:Name="VM"/>
-    </Window.DataContext>-->
+    </Window.DataContext>
 
     <Border Style="{StaticResource BaseBorderStyle}">
         <DockPanel >
@@ -65,6 +67,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <Button Content="{x:Static p:Resources.OverwriteText}"
@@ -75,7 +78,7 @@
                                 <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
                             </Button.Resources>
                         </Button>
-                        <TextBlock Text="{Binding RootRepositoryPath}"
+                        <TextBlock Text="{Binding CsvFilePath}"
                                    Style="{StaticResource BigTextBlockStyle}"
                                    Grid.Column="1"
                                    Grid.Row="0"/>
@@ -84,13 +87,33 @@
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding SaveOptions.CommitOnSave, Mode=TwoWay}"/>
+                                <CheckBox x:Name="CommitCheckBox" 
+                                          Unchecked="UncheckPushOnSave"
+                                          IsChecked="{Binding SaveOptions.CommitOnSave, Mode=TwoWay}"/>
                                 <TextBlock Text="{x:Static p:Resources.CommitText}"
                                            Style="{StaticResource BigTextBlockStyle}"/>
-                                <CheckBox IsChecked="{Binding SaveOptions.PushOnSave, Mode=TwoWay}"
-                                          IsEnabled="{Binding SaveOptions.CommitOnSave}"
-                                          Margin="30,5,0,5"/>
+                                <CheckBox x:Name="PushCheckBox"
+                                          Unchecked="UncheckPushOnSave"
+                                          IsEnabled="{Binding SaveOptions.CommitOnSave}"                                          
+                                          Margin="30,5,0,5">
+                                    <CheckBox.IsChecked>
+                                        <MultiBinding Converter="{StaticResource DependandOnOtherBoolConverter}">
+                                            <Binding Path="SaveOptions.PushOnSave" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding ElementName="CommitCheckBox" Path="IsChecked"/>
+                                        </MultiBinding>
+                                    </CheckBox.IsChecked>
+                                </CheckBox>
                                 <TextBlock Text="{x:Static p:Resources.PushText}"
+                                           Style="{StaticResource BigTextBlockStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                DockPanel.Dock="Top"
+                                Grid.Row="2">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}"/>
+                                <TextBlock Text="{x:Static p:Resources.RememberSelectionText}"
                                            Style="{StaticResource BigTextBlockStyle}"/>
                             </StackPanel>
                         </Border>
@@ -99,6 +122,8 @@
             </Grid>
 
             <Button Style="{StaticResource CancelButtonStyle}" 
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding ElementName=SaveWindowMain}"
                     DockPanel.Dock="Top" 
                     Margin="5,20"
                     BorderThickness="2">
@@ -109,15 +134,7 @@
                            Style="{StaticResource BigTextBlockStyle}"/>
             </Button>
 
-            <Border Style="{StaticResource BaseBorderStyle}"
-                    DockPanel.Dock="Top"
-                    BorderThickness="2">
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}"/>
-                    <TextBlock Text="{x:Static p:Resources.RememberSelectionText}"
-                               Style="{StaticResource BigTextBlockStyle}"/>
-                </StackPanel>
-            </Border>
+           
         </DockPanel>
     </Border>
 </Window>

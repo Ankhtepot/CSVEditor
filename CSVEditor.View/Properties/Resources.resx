@@ -172,7 +172,7 @@
     <value>Push on Save</value>
   </data>
   <data name="RememberSelectionText" xml:space="preserve">
-    <value>Remember Selection</value>
+    <value>Remember This Selection</value>
   </data>
   <data name="SaveAsText" xml:space="preserve">
     <value>Save as...</value>

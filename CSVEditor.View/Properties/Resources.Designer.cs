@@ -223,7 +223,7 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remember Selection.
+        ///   Looks up a localized string similar to Remember This Selection.
         /// </summary>
         public static string RememberSelectionText {
             get {

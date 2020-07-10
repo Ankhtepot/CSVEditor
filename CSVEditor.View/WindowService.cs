@@ -9,13 +9,12 @@ namespace CSVEditor.View
 {
     public class WindowService : IWindowService
     {
-        public SaveOptions OpenSaveWindow(SaveOptions saveOptions, string rootRepositoryPath)
+        public SaveOptions OpenSaveWindow(SaveOptions saveOptions, string csvFileText, string csvFilePath)
         {
-            var window = new SaveWindow(saveOptions, rootRepositoryPath);
+            var window = new SaveWindow(saveOptions, csvFileText, csvFilePath);
 
             window.ShowDialog();
-
-            return window.SaveOptions;
+            return (window.DataContext as SaveVM).SaveOptions;
         }
     }
 }

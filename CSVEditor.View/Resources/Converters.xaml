@@ -17,4 +17,5 @@
     <converters:DateFormatToFormatedDateConverter x:Key="DateFormatToFormatedDateConverter"/>
     <converters:DateAndDateFormatToResultTextConverter x:Key="DateAndDateFormatToResultTextConverter"/>
     <converters:FileMenuEnabledConverter x:Key="FileMenuEnabledConverter"/>
+    <converters:DependandOnOtherBoolConverter x:Key="DependandOnOtherBoolConverter"/>
 </ResourceDictionary>

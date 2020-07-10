@@ -19,36 +19,22 @@ namespace CSVEditor.View
     /// <summary>
     /// Interaction logic for SaveWindow.xaml
     /// </summary>
-    public partial class SaveWindow : Window, INotifyPropertyChanged
+    public partial class SaveWindow : Window
     {
-        private SaveOptions saveOptions;
-        public SaveOptions SaveOptions
-        {
-            get { return saveOptions; }
-            set 
-            {
-                saveOptions = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string RootRepositoryPath { get; set; }
-
-        public SaveWindow(SaveOptions saveOptions, string rootRepositoryPath)
+        public SaveWindow(SaveOptions saveOptions, string csvFileText, string csvFilePath)
         {
             InitializeComponent();
-            SaveOptions = saveOptions;
-            RootRepositoryPath = rootRepositoryPath;
-            DataContext = this;
-            //(DataContext as SaveVM).SaveOptions = saveOptions;
-            
+
+            var context = DataContext as SaveVM;
+            context.SaveOptions = saveOptions;
+            context.CsvFilePath = csvFilePath;
+            context.CsvFileText = csvFileText;
+            context.SaveWindow = SaveWindowMain;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void UncheckPushOnSave(object sender, RoutedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            (DataContext as SaveVM).SaveOptions.PushOnSave = false;
         }
     }
 }
