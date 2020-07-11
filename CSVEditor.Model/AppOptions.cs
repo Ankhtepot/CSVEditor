@@ -7,6 +7,7 @@ namespace CSVEditor.Model
     {
         public string LastRootPath { get; set; }
         public string LastSelectedFilePath { get; set; }
+        public bool WasEdited { get; set; }
         public CsvFile LastSelectedCsvFile { get; set; }
         public VisualConfig VisualConfig { get; set; }
         public SaveOptions SaveOptions { get; set; }
@@ -17,6 +18,7 @@ namespace CSVEditor.Model
         public AppOptions() : this(
             "",
             "",
+            false,
             null,
             new VisualConfig(),
             new SaveOptions(),
@@ -29,6 +31,7 @@ namespace CSVEditor.Model
         public AppOptions(
             string lastRootPath,
             string lastSelectedFilePath,
+            bool wasEdited,
             CsvFile lastSelectedCsvFile,
             VisualConfig visulaConfig,
             SaveOptions saveOptions,
@@ -38,6 +41,7 @@ namespace CSVEditor.Model
         {
             LastRootPath = lastRootPath;
             LastSelectedFilePath = lastSelectedFilePath;
+            WasEdited = wasEdited;
             LastSelectedCsvFile = lastSelectedCsvFile;
             VisualConfig = visulaConfig;
             SaveOptions = saveOptions;

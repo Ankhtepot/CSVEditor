@@ -1,9 +1,6 @@
 ﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Interfaces;
 using CSVEditor.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CSVEditor.View
 {
@@ -14,7 +11,10 @@ namespace CSVEditor.View
             var window = new SaveWindow(saveOptions, csvFileText, csvFilePath);
 
             window.ShowDialog();
-            return (window.DataContext as SaveVM).SaveOptions;
+            var windowContext = window.DataContext as SaveVM;
+            return windowContext.SaveSuccessful ?
+                (window.DataContext as SaveVM).SaveOptions
+                : null;
         }
     }
 }

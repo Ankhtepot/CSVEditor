@@ -69,6 +69,7 @@ namespace CSVEditor.ViewModel
             set
             {
                 isFileEdited = value;
+                if(AppOptions != null) AppOptions.WasEdited = value;
                 OnPropertyChanged();
             }
         }
@@ -205,16 +206,7 @@ namespace CSVEditor.ViewModel
 
         //*******************************
         //*********** Methods ***********
-        //*******************************
-
-        public void addNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
-        {
-            FileConfigurations.Add(new CsvFileConfiguration()
-            {
-                AbsoluteFilePath = fileAbsPath,
-                ColumnConfigurations = currentFileConfigurations
-            });
-        }
+        //*******************************        
 
         public void UpdateFileConfigurations(Grid mainGridContainer = null)
         {
@@ -239,38 +231,33 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public async void SaveCurrentCsvFile()
+        public void OnWindowClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            ExitApp();
+        }
+
+        private void AddNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
+        {
+            FileConfigurations.Add(new CsvFileConfiguration()
+            {
+                AbsoluteFilePath = fileAbsPath,
+                ColumnConfigurations = currentFileConfigurations
+            });
+        }
+
+        private async void SaveCurrentCsvFile()
         {
             var saveOptions = AppOptions.SaveOptions;
             var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
 
-            var newSaveOptions = WindowService.OpenSaveWindow(saveOptions, csvText, SelectedCsvFile.AbsPath);
-        }
-
-        public static void SaveConfiguration()
-        {
-            JsonServices.SerializeJson(FileConfigurations,
-                Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME),
-                "Csv file configurations");
-        }
-
-        public static void SaveAppOptions()
-        {
-            JsonServices.SerializeJson(AppOptions,
-                Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
-                "App Options");
-        }
-
-        public void SaveOnExit()
-        {
-            SaveCurrentCsvFile();
-            ExitApp();
-        }
-
-        public void OnWindowClosing(object sender, CancelEventArgs e)
-        {
-            ExitApp();
-        }
+            var saveWindowResult = WindowService.OpenSaveWindow(saveOptions, csvText, SelectedCsvFile.AbsPath);
+            if (saveWindowResult != null)
+            {
+                AppOptions.SaveOptions = saveWindowResult;
+                IsFileEdited = false;
+            }
+        }        
 
         private void SaveAndExit()
         {
@@ -278,16 +265,36 @@ namespace CSVEditor.ViewModel
             ExitApp();
         }
 
+        private async void SaveOverwriteCurrentFileDirectly()
+        {
+            var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
+            FileSystemServices.SaveTextFile(SelectedCsvFile.AbsPath, csvText);
+        }
+
         private void ExitApp()
         {
-            if (IsFileEdited)
+            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.FILE_EDITED, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
             {
-                //TODO check if hes sure to not save
+                SaveCurrentCsvFile();
             }
 
             SaveConfiguration();
             SaveAppOptions();
             Application.Current.Shutdown();
+        }
+
+        private static void SaveConfiguration()
+        {
+            JsonServices.SerializeJson(FileConfigurations,
+                Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME),
+                "Csv file configurations");
+        }
+
+        private static void SaveAppOptions()
+        {
+            JsonServices.SerializeJson(AppOptions,
+                Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
+                "App Options");
         }
 
         private static List<CsvFileConfiguration> initializeFileConfigurations()
@@ -346,7 +353,7 @@ namespace CSVEditor.ViewModel
 
             if (foundConfiguration == null)
             {
-                addNewFileConfiguration(currentFileConfigurations, currentFileAbsPath);
+                AddNewFileConfiguration(currentFileConfigurations, currentFileAbsPath);
 
                 return currentFileConfigurations;
             }
@@ -381,6 +388,7 @@ namespace CSVEditor.ViewModel
                 SetSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
+                IsFileEdited = loadedOptions.WasEdited | false;
                 CsvFilesStructure.Clear();
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
                 AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event

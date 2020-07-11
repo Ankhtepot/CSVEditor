@@ -10,6 +10,7 @@
         public const string EDIT_COLUMN_CONFIGURATIONS = "Edit Column Configurations";
         public const string EDIT_LINES = "Edit Lines";
         public const string ERROR_WORK_STATUS = "Last task stopped with and error.";
+        public const string FILE_EDITED = "File Edited";
         public const string IDLE_WORK_STATUS = "No task in progress.";
         public const string IMAGE_URI_LABEL_TEXT = "Set Relative Path to Save Image Files to:";
         public const string LINE_EDITOR_TITLE = "Line Editor";
@@ -20,6 +21,10 @@
         public const string PROCESSING_FILE = "Processing File";
         public const string REPLACE_IMAGE_FILE = "Replace image file";
         public const string ROOT_DIRECTORY = "Root directory";
+        public const string SAVE_FILE_AS = "Save File As";
+        public const string SAVE_FILE_BEFORE_EXIT_QUERY = "Would you like to save edited file before closing CsvEditor?";
+        public const string SAVE_FILE_TITLE = "Save File";
+        public const string SAVING_FAILED_TEXT = "Saving file failed. Error: ";
         public const string SELECT_PREDEFINED_SAVE_PATH = "Select Predefined Save Path.";
         public const string SELECT_PROJECT_ROOT_DIRECTORY = "Select project root directory";
         public const string SELECTED_TEXT_DEFAULT = "Selected file:";

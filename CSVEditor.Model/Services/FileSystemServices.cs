@@ -81,8 +81,13 @@ namespace CSVEditor.ViewModel
             {
                 Filter = filter,
                 CheckPathExists = true,
-                InitialDirectory = Directory.Exists(path) ? path : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)
+                InitialDirectory = Directory.Exists(path) ? path : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures),
             };
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                fileDialog.Title = title;
+            }
 
             if (fileDialog.ShowDialog() == true)
             {
@@ -90,6 +95,32 @@ namespace CSVEditor.ViewModel
             }
 
             return null;
+        }
+
+        public static string QueryUserToSaveFile(string path, string title = "", string filter = "All files (*.*)|*.*")
+        {
+            var fileDialog = new SaveFileDialog()
+            {
+                Filter = filter,
+                CheckPathExists = true,
+                InitialDirectory = Directory.Exists(path) ? path : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures),
+            };
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                fileDialog.Title = title;
+            }
+
+            try
+            {
+                fileDialog.ShowDialog();
+                return fileDialog.FileName;
+            }
+            catch (Exception e)
+            {
+                MessageBoxHelper.ShowProcessErrorBox(title, Constants.SAVING_FAILED_TEXT + e.Message);
+                return null;
+            }
         }
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
@@ -301,7 +332,7 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public static void SaveTextFile(string fileName, string fileContent)
+        public static bool SaveTextFile(string fileName, string fileContent)
         {
             try
             {
@@ -311,10 +342,12 @@ namespace CSVEditor.ViewModel
                 }
 
                 File.WriteAllText(fileName, fileContent);
+                return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error writing to path \"{fileName}\". Error: {e.Message}.");
+                MessageBoxHelper.ShowProcessErrorBox(Constants.SAVE_FILE_TITLE, Constants.SAVING_FAILED_TEXT + e.Message);
+                return false;
             }
         }
     }

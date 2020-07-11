@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVEditor.View", "CSVEditor.View\CSVEditor.View.csproj", "{F781A423-E6FF-4008-9356-56D425BF180B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVEditor.ViewModel", "CSVEditor.ViewModel\CSVEditor.ViewModel.csproj", "{C26EA37F-B6F9-48D6-BFF1-519D27F5DE2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVEditor.ViewModel", "CSVEditor.ViewModel\CSVEditor.ViewModel.csproj", "{C26EA37F-B6F9-48D6-BFF1-519D27F5DE2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVEditor.Model", "CSVEditor.Model\CSVEditor.Model.csproj", "{0084BD36-2DB6-46B6-BA8A-40954A6F3D44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVEditor.Model", "CSVEditor.Model\CSVEditor.Model.csproj", "{0084BD36-2DB6-46B6-BA8A-40954A6F3D44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

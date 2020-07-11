@@ -13,22 +13,24 @@ namespace CSVEditor.ViewModel
 
         public Window SaveWindow;
 
+        public bool SaveSuccessful;
+
         private string csvFilePath;
         public string CsvFilePath
         {
             get { return csvFilePath; }
-            set 
+            set
             {
                 csvFilePath = value;
                 OnPropertyChanged();
             }
         }
 
-        private SaveOptions saveOptions;    
+        private SaveOptions saveOptions;
         public SaveOptions SaveOptions
         {
             get { return saveOptions; }
-            set 
+            set
             {
                 saveOptions = value;
                 OnPropertyChanged();
@@ -48,24 +50,49 @@ namespace CSVEditor.ViewModel
             CancelCommand = new DelegateCommand(Cancel);
         }
 
-        private void Cancel()
-        {
-            SaveWindow?.Close();
-        }
-
         private void SaveAlternativePath()
         {
-            throw new NotImplementedException();
+            var path = GetAlternativePathIsExists();
+
+            SaveOptions.AlternativePath = path;
+
+            SaveFile(path);
         }
 
         private void SaveAs()
         {
-            throw new NotImplementedException();
+            var path = GetAlternativePathIsExists();
+
+            path = FileSystemServices.QueryUserToSaveFile(path, Constants.SAVE_FILE_TITLE);
+
+            SaveOptions.AlternativePath = path;
+
+            SaveFile(path);
+        }
+
+        private string GetAlternativePathIsExists()
+        {
+            return string.IsNullOrEmpty(SaveOptions.AlternativePath)
+                ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                : SaveOptions.AlternativePath;
         }
 
         private void Overwrite()
         {
-            throw new NotImplementedException();
+            SaveFile(CsvFilePath);
+            Cancel();
+        }
+
+        private void SaveFile(string path)
+        {
+            SaveSuccessful = FileSystemServices.SaveTextFile(path, CsvFileText);
+
+            Cancel();
+        }
+
+        private void Cancel()
+        {
+            SaveWindow?.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
