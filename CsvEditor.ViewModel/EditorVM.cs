@@ -234,11 +234,21 @@ namespace CSVEditor.ViewModel
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
-            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
+            if (IsFileEdited)
             {
-                e.Cancel = true;
-                ShouldExitAfterSave = true;
-                SaveCurrentCsvFile();
+                var result = MessageBoxHelper.ShowQueryYesNoCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    e.Cancel = true;
+                    ShouldExitAfterSave = true;
+                    SaveCurrentCsvFile(); 
+                }
+                if(result == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
 
             SaveConfiguration();
@@ -286,10 +296,19 @@ namespace CSVEditor.ViewModel
 
         private void ExitApp()
         {
-            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
+            if (IsFileEdited)
             {
-                ShouldExitAfterSave = true;
-                SaveCurrentCsvFile();
+                var result = MessageBoxHelper.ShowQueryYesNoCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    ShouldExitAfterSave = true;
+                    SaveCurrentCsvFile();
+                }
+                if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
             }
             else
             {

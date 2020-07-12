@@ -12,9 +12,9 @@ namespace CSVEditor.Model.HelperClasses
             return MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public static MessageBoxResult ShowQueryOKCancelBox(string title, string content)
+        public static MessageBoxResult ShowQueryYesNoCancelBox(string title, string content)
         {
-            return MessageBox.Show(content, title, MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            return MessageBox.Show(content, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
         }
     }
 }
