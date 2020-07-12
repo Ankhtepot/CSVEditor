@@ -12,6 +12,7 @@ namespace CSVEditor.View
 
             window.ShowDialog();
             var windowContext = window.DataContext as SaveVM;
+
             return windowContext.SaveSuccessful ?
                 (window.DataContext as SaveVM).SaveOptions
                 : null;

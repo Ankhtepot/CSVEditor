@@ -27,16 +27,16 @@ namespace CSVEditor.ViewModel
         public const string CONFIGURATION_FOLDER_NAME = "config";
 
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY = new DirectoryWithCsv("Directory", new List<string> { "Files..." });
+        public static string BaseAppPath;
+        public static string ConfigurationFolderPath;
 
-        private string rootRepositoryPath;
+        private bool ShouldExitAfterSave;
 
         public IWindowService WindowService { get; set; }
 
         public static AppOptions AppOptions;
 
-        public static string BaseAppPath;
-        public static string ConfigurationFolderPath;
-
+        private string rootRepositoryPath;
         public string RootRepositoryPath
         {
             get => rootRepositoryPath;
@@ -180,6 +180,7 @@ namespace CSVEditor.ViewModel
             IsLineEditMode = false;
             IsFileEdited = false;
             IsGitRepo = false;
+            ShouldExitAfterSave = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             AsyncVM.WorkingStatus = WorkStatus.Idle;
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
@@ -233,8 +234,15 @@ namespace CSVEditor.ViewModel
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
-            e.Cancel = true;
-            ExitApp();
+            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
+            {
+                e.Cancel = true;
+                ShouldExitAfterSave = true;
+                SaveCurrentCsvFile();
+            }
+
+            SaveConfiguration();
+            SaveAppOptions();
         }
 
         private void AddNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
@@ -257,12 +265,17 @@ namespace CSVEditor.ViewModel
                 AppOptions.SaveOptions = saveWindowResult;
                 IsFileEdited = false;
             }
+
+            if (ShouldExitAfterSave)
+            {
+                Application.Current.Shutdown();
+            }
         }        
 
         private void SaveAndExit()
         {
+            ShouldExitAfterSave = true;
             SaveCurrentCsvFile();
-            ExitApp();
         }
 
         private async void SaveOverwriteCurrentFileDirectly()
@@ -273,14 +286,15 @@ namespace CSVEditor.ViewModel
 
         private void ExitApp()
         {
-            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.FILE_EDITED, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
+            if (IsFileEdited && MessageBoxHelper.ShowQueryOKCancelBox(Constants.SAVE_FILE_TITLE, Constants.SAVE_FILE_BEFORE_EXIT_QUERY) == MessageBoxResult.OK)
             {
+                ShouldExitAfterSave = true;
                 SaveCurrentCsvFile();
             }
-
-            SaveConfiguration();
-            SaveAppOptions();
-            Application.Current.Shutdown();
+            else
+            {
+                Application.Current.MainWindow.Close();
+            }
         }
 
         private static void SaveConfiguration()

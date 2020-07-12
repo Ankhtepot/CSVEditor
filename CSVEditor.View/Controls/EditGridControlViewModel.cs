@@ -12,10 +12,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using static CSVEditor.Model.HelperClasses.Enums;
-using CSVEditor.Model;
 using CSVEditor.Model.Services;
 using CSVEditor.Model.HelperClasses;
-using Microsoft.VisualBasic;
 
 namespace CSVEditor.View.Controls
 {
@@ -66,7 +64,7 @@ namespace CSVEditor.View.Controls
             dateGuideWindow.ShowDialog();
             CellInfo returnValue = dateGuideWindow.WindowResult;
 
-            if (returnValue.Content != parameters[0])
+            if (returnValue != null && returnValue.Content != parameters[0])
             {
                 UpdateFileConfigurations(returnValue.Content, returnValue.ColumnNr, MainGridContainer); 
             }
@@ -234,7 +232,7 @@ namespace CSVEditor.View.Controls
                             Height = 20,
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
-                            ImageSource = ResourceHelper.GetBitmapImageFromResources("images/question-mark-160071_small.png", 20, 20),
+                            ImageSource = ResourceHelper.GetBitmapImageFromResources("Images/question-mark-160071_small.png", 20, 20),
                             Command = OpenDateFilterGuideWindowCommand,
                             CommandParameter = $"{Context.SelectedCsvFile.ColumnConfigurations[count].URI}|{count}",
                             ToolTip = Constants.OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP,

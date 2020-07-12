@@ -8,83 +8,76 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="400"
              Background="AntiqueWhite">
-    
-    <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
 
-            <Button x:Name="ToBeginningButton"
-                    Click="ToBeginningButton_Click"
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Button x:Name="ToBeginningButton"
+                Click="ToBeginningButton_Click"
+                Width="50"
+                Grid.Column="0">
+            <iconPacks:PackIconBoxIcons Kind="SolidArrowToLeft"
+                                        Width="30"
+                                        Height="25"/>
+        </Button>
+        <Button x:Name="OneBackButton"
+                Click="OneBackButton_Click"
+                Width="50"
+                Grid.Column="1">
+            <iconPacks:PackIconBoxIcons Kind="RegularLeftArrowAlt"
+                                        Width="30"
+                                        Height="25"/>
+        </Button>
+        <TextBox x:Name="NumberTextBox" 
+                    Grid.Column="2"
                     Width="50"
-                    Grid.Column="0">
-                <iconPacks:PackIconBoxIcons Kind="SolidArrowToLeft"
-                                            Width="30"
-                                            Height="25"/>
-            </Button>
-            <Button x:Name="OneBackButton"
-                    Click="OneBackButton_Click"
-                    Width="50"
-                    Grid.Column="1">
-                <iconPacks:PackIconBoxIcons Kind="RegularLeftArrowAlt"
-                                            Width="30"
-                                            Height="25"/>
-            </Button>
-            <TextBox x:Name="NumberTextBox" 
-                     Grid.Column="2"
-                     Width="50"
-                     Height="25"
-                     FontSize="18"
-                     Margin="5,2"
-                     PreviewTextInput="NumberTextBox_PreviewTextInput"
-                     TextChanged="NumberTextBox_TextChanged"
-                     TextBlock.LineHeight="21"
-                     TextBlock.LineStackingStrategy="BlockLineHeight"
-                     >
-                
-            </TextBox>
-            <TextBlock Width="50"
-                       Text="  Of "
-                       FontSize="20"
-                       Grid.Column="3">
-                
-            </TextBlock>
-            <Border Grid.Column="4" 
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    CornerRadius="2"
-                    Margin="0,0,5,0">
-                <TextBlock x:Name="LinesCountTextBlock"
-                           MinWidth="50"
-                           Margin="15,0,0,0"
-                           FontSize="20"/>
-            </Border>
-            <Button x:Name="OneForwardButton"
-                    Click="OneForwardButton_Click"
-                    Width="50"
-                    Grid.Column="5">
-                <iconPacks:PackIconBoxIcons Kind="RegularRightArrowAlt"
-                                            Width="30"
-                                            Height="25"/>
-            </Button>
-            <Button x:Name="LastLineButton"
-                    Click="LastLineButton_Click"
-                    Width="50"
-                    Grid.Column="6">
-                <iconPacks:PackIconBoxIcons Kind="SolidArrowToRight"
-                                            Width="30"
-                                            Height="25"/>
-            </Button>
-        </Grid>
+                    Height="25"
+                    FontSize="18"
+                    Margin="5,2"
+                    PreviewTextInput="NumberTextBox_PreviewTextInput"
+                    TextChanged="NumberTextBox_TextChanged"
+                    TextBlock.LineHeight="21"
+                    TextBlock.LineStackingStrategy="BlockLineHeight"/>
+        <TextBlock Width="50"
+                    Text="  Of "
+                    FontSize="20"
+                    Grid.Column="3"/>
+        <Border Grid.Column="4" 
+                BorderBrush="Black"
+                BorderThickness="1"
+                CornerRadius="2"
+                Margin="0,0,5,0">
+            <TextBlock x:Name="LinesCountTextBlock"
+                        MinWidth="50"
+                        Margin="15,0,0,0"
+                        FontSize="20"/>
+        </Border>
+        <Button x:Name="OneForwardButton"
+                Click="OneForwardButton_Click"
+                Width="50"
+                Grid.Column="5">
+            <iconPacks:PackIconBoxIcons Kind="RegularRightArrowAlt"
+                                        Width="30"
+                                        Height="25"/>
+        </Button>
+        <Button x:Name="LastLineButton"
+                Click="LastLineButton_Click"
+                Width="50"
+                Grid.Column="6">
+            <iconPacks:PackIconBoxIcons Kind="SolidArrowToRight"
+                                        Width="30"
+                                        Height="25"/>
+        </Button>
     </Grid>
 </UserControl>

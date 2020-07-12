@@ -76,7 +76,7 @@
                     <MenuItem.Icon>
                         <iconPacks:PackIconBoxIcons Kind="RegularEdit" />
                     </MenuItem.Icon>
-                    
+
                     <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                               Command="{Binding EditLineCommand}">
                         <MenuItem.Icon>
@@ -357,7 +357,7 @@
                                         <Border Style="{StaticResource BaseBorderStyle}" 
                                                 Grid.Column="0" 
                                                 Margin="1"
-                                                Background="AntiqueWhite"
+                                                Background="{DynamicResource DarkColorResource}"
                                                 MaxHeight="38"
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
@@ -368,11 +368,15 @@
                                                                              Margin="5,5"/>
                                             </Viewbox>
                                         </Border>
-                                        <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="1" Margin="1"
+                                        <Border Style="{StaticResource BaseBorderStyle}" 
+                                                Grid.Column="1" 
+                                                Margin="1"
+                                                Background="{DynamicResource DarkColorResource}"
+                                                MaxHeight="38"
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                                 >
-                                            <Label Grid.Column="1" Content="File Ops Placeholder" HorizontalAlignment="Center"/>
+                                            <uc:FileOperationsControl/>
                                         </Border>
                                     </Grid>
                                     <Button Content="{Binding IsLineEditMode, Converter={StaticResource EditModeToTextConverter}}"

@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace CSVEditor.View.Controls.EditGridCellElements
+namespace CSVEditor.View.Controls
 {
     /// <summary>
     /// Interaction logic for ImageButtonControl.xaml
@@ -50,7 +50,6 @@ namespace CSVEditor.View.Controls.EditGridCellElements
         }
         public static readonly DependencyProperty ImageSourceProperty =
             DependencyProperty.Register("ImageSource", typeof(BitmapImage), typeof(ImageButtonControl));
-
 
         public Stretch ImageStretch
         {
