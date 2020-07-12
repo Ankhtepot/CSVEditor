@@ -143,6 +143,11 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
+        public Dictionary<AddLinePlacement, string> AddLinePlacementSource = new Dictionary<AddLinePlacement, string>()
+        {
+            
+        };
+
         public static Action<Grid> OnConfiguraitonUpdated;
         public Action OnConfigurationUpdated;
         public Action OnCsvFileSet;

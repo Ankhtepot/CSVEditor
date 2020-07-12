@@ -59,6 +59,16 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty ImageStretchProperty =
             DependencyProperty.Register("ImageStretch", typeof(Stretch), typeof(ImageButtonControl), new PropertyMetadata(Stretch.Fill));
 
+
+
+        public CornerRadius CornerRadius
+        {
+            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+        public static readonly DependencyProperty CornerRadiusProperty =
+            DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(ImageButtonControl), new PropertyMetadata(new CornerRadius(0)));
+
         public ImageButtonControl()
         {
             InitializeComponent();

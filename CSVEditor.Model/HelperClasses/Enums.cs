@@ -21,5 +21,13 @@ namespace CSVEditor.Model.HelperClasses
             Error,
             Done
         }
+
+        public enum NewLinePosition
+        {
+            Above,
+            Below,
+            ToTheTop,
+            ToTheBottom
+        }
     }
 }

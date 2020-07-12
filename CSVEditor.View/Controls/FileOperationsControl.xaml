@@ -6,8 +6,23 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="400">
-    <Grid>
-        <local:ImageButtonControl ImageStretch="Fill"/>
-
+    <Grid HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <local:ImageButtonControl Command="{Binding SaveCommand}" 
+                                  CornerRadius="5"
+                                  ImageStretch="Fill" 
+                                  Width="30" 
+                                  Height="30">
+            <local:ImageButtonControl.ImageSource>
+                <BitmapImage UriSource="..\Images\icons8-save-close-50.png"/>
+            </local:ImageButtonControl.ImageSource>
+        </local:ImageButtonControl>
     </Grid>
 </UserControl>

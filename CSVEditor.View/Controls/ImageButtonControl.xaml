@@ -13,6 +13,13 @@
                 CommandParameter="{Binding CommandParameter}">
             <Image Source="{Binding ImageSource}"
                    Stretch="{Binding ImageStretch}"/>
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="CornerRadius" Value="{Binding CornerRadius}"/>
+                </Style>
+            </Button.Resources>
         </Button>
     </Grid>
 </UserControl>

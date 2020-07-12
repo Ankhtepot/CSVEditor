@@ -233,6 +233,7 @@ namespace CSVEditor.View.Controls
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
                             ImageSource = ResourceHelper.GetBitmapImageFromResources("Images/question-mark-160071_small.png", 20, 20),
+                            CornerRadius = new CornerRadius(10),
                             Command = OpenDateFilterGuideWindowCommand,
                             CommandParameter = $"{Context.SelectedCsvFile.ColumnConfigurations[count].URI}|{count}",
                             ToolTip = Constants.OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP,
