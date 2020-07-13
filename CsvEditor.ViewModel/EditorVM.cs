@@ -30,7 +30,7 @@ namespace CSVEditor.ViewModel
         public static string BaseAppPath;
         public static string ConfigurationFolderPath;
 
-        private bool ShouldExitAfterSave;
+        public bool ShouldExitAfterSave;
 
         public IWindowService WindowService { get; set; }
 
@@ -69,7 +69,7 @@ namespace CSVEditor.ViewModel
             set
             {
                 isFileEdited = value;
-                if(AppOptions != null) AppOptions.WasEdited = value;
+                if (AppOptions != null) AppOptions.WasEdited = value;
                 OnPropertyChanged();
             }
         }
@@ -130,12 +130,8 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private AsyncVM asyncVM;
-        public AsyncVM AsyncVM
-        {
-            get { return asyncVM; }
-            set { asyncVM = value; OnPropertyChanged(); }
-        }
+        public AsyncVM AsyncVM { get; set; }
+        public GitVM GitVM { get; set; }
 
         public static List<CsvFileConfiguration> FileConfigurations { get; set; }
 
@@ -143,10 +139,7 @@ namespace CSVEditor.ViewModel
 
         public ObservableCollection<DirectoryWithCsv> CsvFilesStructure { get; set; }
 
-        public Dictionary<AddLinePlacement, string> AddLinePlacementSource = new Dictionary<AddLinePlacement, string>()
-        {
-            
-        };
+        public Dictionary<AddLinePlacement, string> AddLinePlacementSource { get; set; }
 
         public static Action<Grid> OnConfiguraitonUpdated;
         public Action OnConfigurationUpdated;
@@ -161,6 +154,7 @@ namespace CSVEditor.ViewModel
         public DelegateCommand LoadRepositoryCommand { get; set; }
         public DelegateCommand CancelActiveWorkerAsyncCommand { get; set; }
         public DelegateCommand SwitchEditModeCommand { get; set; }
+        public DelegateCommand<string> AddLineCommand { get; set; }
         public DelegateCommand AddLineUpCommand { get; set; }
         public DelegateCommand AddLineDownCommand { get; set; }
         public DelegateCommand AddLineToTopCommand { get; set; }
@@ -190,10 +184,12 @@ namespace CSVEditor.ViewModel
             AsyncVM.WorkingStatus = WorkStatus.Idle;
             CsvFilesStructure = new ObservableCollection<DirectoryWithCsv>();
             CsvFilesStructure.Add(DEFAULT_DIRECTORY);
+            AddLinePlacementSource = GetAddLineComboBoxSource();
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
             CancelActiveWorkerAsyncCommand = new DelegateCommand(AsyncVM.CancelActiveWorkerAsync);
             SwitchEditModeCommand = new DelegateCommand(SwitchLineEditMode);
+            AddLineCommand = new DelegateCommand<string>(AddLine);
             AddLineUpCommand = new DelegateCommand(AddLineUp);
             AddLineDownCommand = new DelegateCommand(AddLineDown);
             AddLineToTopCommand = new DelegateCommand(AddLineToTop);
@@ -247,17 +243,28 @@ namespace CSVEditor.ViewModel
                 {
                     e.Cancel = true;
                     ShouldExitAfterSave = true;
-                    SaveCurrentCsvFile(); 
+                    SaveCurrentCsvFile();
                 }
-                if(result == MessageBoxResult.Cancel)
+                if (result == MessageBoxResult.Cancel)
                 {
                     e.Cancel = true;
                     return;
                 }
             }
 
-            SaveConfiguration();
-            SaveAppOptions();
+            SaveVM.SaveConfiguration();
+            SaveVM.SaveAppOptions();
+        }        
+
+        private Dictionary<AddLinePlacement, string> GetAddLineComboBoxSource()
+        {
+            return new Dictionary<AddLinePlacement, string>()
+            {
+                {AddLinePlacement.ToTheTop, Constants.ADD_LINE_TO_TOP },
+                {AddLinePlacement.Above, Constants.ADD_LINE_ABOVE },
+                {AddLinePlacement.Below, Constants.ADD_LINE_BELLOW },
+                {AddLinePlacement.ToTheBottom, Constants.ADD_LINE_TO_BOTTOM }
+            };
         }
 
         private void AddNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
@@ -269,34 +276,15 @@ namespace CSVEditor.ViewModel
             });
         }
 
-        private async void SaveCurrentCsvFile()
+        private void SaveCurrentCsvFile()
         {
-            var saveOptions = AppOptions.SaveOptions;
-            var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
-
-            var saveWindowResult = WindowService.OpenSaveWindow(saveOptions, csvText, SelectedCsvFile.AbsPath);
-            if (saveWindowResult != null)
-            {
-                AppOptions.SaveOptions = saveWindowResult;
-                IsFileEdited = false;
-            }
-
-            if (ShouldExitAfterSave)
-            {
-                Application.Current.Shutdown();
-            }
-        }        
+            SaveVM.SaveCurrentCsvFile(this, WindowService);
+        }
 
         private void SaveAndExit()
         {
             ShouldExitAfterSave = true;
             SaveCurrentCsvFile();
-        }
-
-        private async void SaveOverwriteCurrentFileDirectly()
-        {
-            var csvText = await AsyncVM.CsvFileToTextTask(SelectedCsvFile);
-            FileSystemServices.SaveTextFile(SelectedCsvFile.AbsPath, csvText);
         }
 
         private void ExitApp()
@@ -319,20 +307,6 @@ namespace CSVEditor.ViewModel
             {
                 Application.Current.MainWindow.Close();
             }
-        }
-
-        private static void SaveConfiguration()
-        {
-            JsonServices.SerializeJson(FileConfigurations,
-                Path.Combine(ConfigurationFolderPath, CSV_CONFIGURATIONS_FILE_NAME),
-                "Csv file configurations");
-        }
-
-        private static void SaveAppOptions()
-        {
-            JsonServices.SerializeJson(AppOptions,
-                Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
-                "App Options");
         }
 
         private static List<CsvFileConfiguration> initializeFileConfigurations()
@@ -488,6 +462,19 @@ namespace CSVEditor.ViewModel
             AddLine(0);
         }
 
+        private void AddLine(string addLinePlacement)
+        {
+            switch(addLinePlacement)
+            {
+                case Constants.ADD_LINE_TO_TOP: AddLineToTop(); break;
+                case Constants.ADD_LINE_ABOVE: AddLineUp(); break;
+                case Constants.ADD_LINE_BELLOW:AddLineDown(); break;
+                case Constants.ADD_LINE_TO_BOTTOM: AddLineToBottom(); break;
+                default: throw new InvalidEnumArgumentException();
+            };
+
+        }
+
         private void AddLine(int index)
         {
             List<string> newLine = new List<string>();
@@ -501,6 +488,7 @@ namespace CSVEditor.ViewModel
             updatedCsvFile.Lines.Insert(index, newLine);
             SelectedCsvFile = updatedCsvFile;
             SelectedItemIndex = index;
+            IsFileEdited = true;
 
             RequestChangeTab?.Invoke(1);
         }

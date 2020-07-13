@@ -7,17 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid x:Name="TopContainer">
-        <Button Margin="{Binding ButtonMargin}"
+        <Button x:Name="ImageButtonButton"
+                Margin="{Binding ButtonMargin}"
                 Padding="{Binding ButtonPadding}"
                 Command="{Binding Command}"
-                CommandParameter="{Binding CommandParameter}">
+                CommandParameter="{Binding CommandParameter}"
+                IsEnabled="{Binding Enabled}">
             <Image Source="{Binding ImageSource}"
-                   Stretch="{Binding ImageStretch}"/>
+                   Stretch="{Binding ImageStretch}"
+                   IsEnabled="{Binding Enabled}"/>
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush" Value="Black"/>
                     <Setter Property="CornerRadius" Value="{Binding CornerRadius}"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                            <Setter Property="Background" Value="{Binding EnabledBackgroundColor}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Button.Resources>
         </Button>

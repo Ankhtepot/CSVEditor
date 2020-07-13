@@ -2,6 +2,10 @@
 {
     public class Constants
     {
+        public const string ADD_LINE_TO_TOP = "Add To Top";
+        public const string ADD_LINE_ABOVE = "Add Above";
+        public const string ADD_LINE_BELLOW = "Add Bellow";
+        public const string ADD_LINE_TO_BOTTOM = "Add To Bottom";
         public const string BASE_FONT_SIZE_KEY = "BaseFontSize";
         public const string CANCELED_WORK_STATUS = "Last task was cancelled.";
         public const string COMPLETED_WORK_STATUS = "Task completed successfuly.";

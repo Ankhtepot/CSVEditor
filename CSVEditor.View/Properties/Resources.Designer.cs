@@ -79,6 +79,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Line... Choose placement in the Combo Box.
+        /// </summary>
+        public static string AddLineTooltipText {
+            get {
+                return ResourceManager.GetString("AddLineTooltipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Line to the Beggining of File.
         /// </summary>
         public static string AddLineToTopText {
@@ -102,6 +111,15 @@ namespace CSVEditor.View.Properties {
         public static string CancelText {
             get {
                 return ResourceManager.GetString("CancelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commit Repository.
+        /// </summary>
+        public static string CommitRepositoryText {
+            get {
+                return ResourceManager.GetString("CommitRepositoryText", resourceCulture);
             }
         }
         
@@ -210,6 +228,24 @@ namespace CSVEditor.View.Properties {
         public static string OverwriteText {
             get {
                 return ResourceManager.GetString("OverwriteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pull From Remote Repository.
+        /// </summary>
+        public static string PullRepositoryText {
+            get {
+                return ResourceManager.GetString("PullRepositoryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Push To Remote Repository.
+        /// </summary>
+        public static string PushRepositoryText {
+            get {
+                return ResourceManager.GetString("PushRepositoryText", resourceCulture);
             }
         }
         

@@ -4,6 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Prism.Commands;
 using System;
+using CSVEditor.Model.Services;
+using System.IO;
+using CSVEditor.Model.Interfaces;
 
 namespace CSVEditor.ViewModel
 {
@@ -48,6 +51,38 @@ namespace CSVEditor.ViewModel
             SaveAsCommand = new DelegateCommand(SaveAs);
             SaveAltrnativePathCommand = new DelegateCommand(SaveAlternativePath);
             CancelCommand = new DelegateCommand(Cancel);
+        }
+
+        public static async void SaveCurrentCsvFile(EditorVM context, IWindowService windowService)
+        {
+            var saveOptions = EditorVM.AppOptions.SaveOptions;
+            var csvText = await context.AsyncVM.CsvFileToTextTask(context.SelectedCsvFile);
+
+            var saveWindowResult = windowService.OpenSaveWindow(saveOptions, csvText, context.SelectedCsvFile.AbsPath);
+            if (saveWindowResult != null)
+            {
+                EditorVM.AppOptions.SaveOptions = saveWindowResult;
+                context.IsFileEdited = false;
+            }
+
+            if (context.ShouldExitAfterSave)
+            {
+                Application.Current.Shutdown();
+            }
+        }
+
+        public static void SaveConfiguration()
+        {
+            JsonServices.SerializeJson(EditorVM.FileConfigurations,
+                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.CSV_CONFIGURATIONS_FILE_NAME),
+                "Csv file configurations");
+        }
+
+        public static void SaveAppOptions()
+        {
+            JsonServices.SerializeJson(EditorVM.AppOptions,
+                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.APP_OPTIONS_FILE_NAME),
+                "App Options");
         }
 
         private void SaveAlternativePath()

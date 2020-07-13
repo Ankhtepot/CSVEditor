@@ -171,12 +171,11 @@
                             <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}"/>
                         </Button.Resources>
                     </Button>
-                    <!--</Border>-->
                     <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center" Margin="0.5">
                         <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
                     </Border>
                 </Grid>
-                <!--#endregion-->
+                <!--#endregion column 1: Load repo section -->
 
                 <!--#region column 2: GitRepo control -->
                 <Border Style="{StaticResource BaseBorderStyle}"
@@ -199,7 +198,7 @@
                         </Border>
                     </StackPanel>
                 </Border>
-                <!--#endregion-->
+                <!--#endregion column 2: GitRepo control -->
 
                 <Button Grid.Row="1"
                         Content="Cancel process"

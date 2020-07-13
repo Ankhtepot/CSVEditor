@@ -22,7 +22,7 @@ namespace CSVEditor.Model.HelperClasses
             Done
         }
 
-        public enum NewLinePosition
+        public enum AddLinePlacement
         {
             Above,
             Below,

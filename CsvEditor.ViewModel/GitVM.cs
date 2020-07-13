@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,32 @@ namespace CSVEditor.ViewModel
                 currentRepository = value;
                 OnPropertyChanged();
             }
+        }
+
+        public DelegateCommand CommitRepositoryCommand { get; set; }
+        public DelegateCommand PushRepositoryCommand { get; set; }
+        public DelegateCommand PullRepositoryCommand { get; set; }
+
+        public GitVM()
+        {
+            CommitRepositoryCommand = new DelegateCommand(CommitRepository);
+            PushRepositoryCommand = new DelegateCommand(PushRepository);
+            PullRepositoryCommand = new DelegateCommand(PullRepository);
+        }
+
+        private void PullRepository()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PushRepository()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CommitRepository()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetRepository(string path)

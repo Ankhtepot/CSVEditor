@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CSVEditor.View.Properties;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -59,8 +60,6 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty ImageStretchProperty =
             DependencyProperty.Register("ImageStretch", typeof(Stretch), typeof(ImageButtonControl), new PropertyMetadata(Stretch.Fill));
 
-
-
         public CornerRadius CornerRadius
         {
             get { return (CornerRadius)GetValue(CornerRadiusProperty); }
@@ -68,6 +67,22 @@ namespace CSVEditor.View.Controls
         }
         public static readonly DependencyProperty CornerRadiusProperty =
             DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(ImageButtonControl), new PropertyMetadata(new CornerRadius(0)));
+
+        public bool Enabled
+        {
+            get { return (bool)GetValue(EnabledProperty); }
+            set { SetValue(EnabledProperty, value); }
+        }
+        public static readonly DependencyProperty EnabledProperty =
+            DependencyProperty.Register("Enabled", typeof(bool), typeof(ImageButtonControl), new PropertyMetadata(true));
+
+        public SolidColorBrush EnabledBackgroundColor
+        {
+            get { return (SolidColorBrush)GetValue(EnabledBackgroundColorProperty); }
+            set { SetValue(EnabledBackgroundColorProperty, value); }
+        }
+        public static readonly DependencyProperty EnabledBackgroundColorProperty =
+            DependencyProperty.Register("EnabledBackgroundColor", typeof(SolidColorBrush), typeof(ImageButtonControl), new PropertyMetadata(new SolidColorBrush(Colors.MediumAquamarine)));
 
         public ImageButtonControl()
         {
