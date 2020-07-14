@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="CSVEditor.View.Controls.GitControlsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             xmlns:p="clr-namespace:CSVEditor.View.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <Style TargetType="local:ImageButtonControl" x:Key="ImageButtonStyle">
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="ImageStretch" Value="Fill"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,0"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <StackPanel Orientation="Horizontal">
+        <local:ImageButtonControl Command="{Binding GitVM.CommitCommand}" 
+                                  Style="{StaticResource ImageButtonStyle}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
+                                  ToolTip="{x:Static p:Resources.CommitRepositoryText}">
+            <local:ImageButtonControl.ImageSource>
+                <BitmapImage UriSource="..\Images\icons8_chevron_right_50px.png"/>
+            </local:ImageButtonControl.ImageSource>
+        </local:ImageButtonControl>
+        <local:ImageButtonControl Command="{Binding GitVM.PullCommand}" 
+                                  Style="{StaticResource ImageButtonStyle}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
+                                  ToolTip="{x:Static p:Resources.PullRepositoryText}">
+            <local:ImageButtonControl.ImageSource>
+                <BitmapImage UriSource="..\Images\icons8-thick-arrow-pointing-down-50.png"/>
+            </local:ImageButtonControl.ImageSource>
+        </local:ImageButtonControl>
+        <local:ImageButtonControl Command="{Binding GitVM.PushCommand}" 
+                                  Style="{StaticResource ImageButtonStyle}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
+                                  ToolTip="{x:Static p:Resources.PushRepositoryText}">
+            <local:ImageButtonControl.ImageSource>
+                <BitmapImage UriSource="..\Images\icons8-up-right-50.png"/>
+            </local:ImageButtonControl.ImageSource>
+        </local:ImageButtonControl>        
+    </StackPanel>
+</UserControl>

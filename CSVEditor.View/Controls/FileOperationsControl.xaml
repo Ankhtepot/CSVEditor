@@ -69,9 +69,10 @@
                 <BitmapImage UriSource="..\Images\icons8-delete-file-50.png"/>
             </local:ImageButtonControl.ImageSource>
         </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding GitVM.CommitCommand}" 
+        <local:GitControlsControl Grid.Column="4"/>
+        <!--<local:ImageButtonControl Command="{Binding GitVM.CommitCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding IsGitRepo}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
                                   Grid.Column="4"
                                   ToolTip="{x:Static p:Resources.CommitRepositoryText}">
             <local:ImageButtonControl.ImageSource>
@@ -80,7 +81,7 @@
         </local:ImageButtonControl>
         <local:ImageButtonControl Command="{Binding GitVM.PullCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding IsGitRepo}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
                                   Grid.Column="5"
                                   ToolTip="{x:Static p:Resources.PullRepositoryText}">
             <local:ImageButtonControl.ImageSource>
@@ -89,12 +90,12 @@
         </local:ImageButtonControl>
         <local:ImageButtonControl Command="{Binding GitVM.PushCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding IsGitRepo}"
+                                  Enabled="{Binding GitVM.IsGitRepo}"
                                   Grid.Column="6"
                                   ToolTip="{x:Static p:Resources.PushRepositoryText}">
             <local:ImageButtonControl.ImageSource>
                 <BitmapImage UriSource="..\Images\icons8-up-right-50.png"/>
             </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
+        </local:ImageButtonControl>-->
     </Grid>
 </UserControl>

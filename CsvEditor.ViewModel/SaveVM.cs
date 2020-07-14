@@ -45,6 +45,8 @@ namespace CSVEditor.ViewModel
         public DelegateCommand SaveAltrnativePathCommand { get; set; }
         public DelegateCommand CancelCommand { get; set; }
 
+        public static Action<bool, bool> OnSaved;
+
         public SaveVM()
         {
             OverwriteCommand = new DelegateCommand(Overwrite);
@@ -55,13 +57,17 @@ namespace CSVEditor.ViewModel
 
         public static async void SaveCurrentCsvFile(EditorVM context, IWindowService windowService)
         {
-            var saveOptions = EditorVM.AppOptions.SaveOptions;
+            var saveOptions = EditorVM.AppOptions.SaveOptions.RememberSetting
+                ? EditorVM.AppOptions.SaveOptions
+                : new SaveOptions();
+
             var csvText = await context.AsyncVM.CsvFileToTextTask(context.SelectedCsvFile);
 
             var saveWindowResult = windowService.OpenSaveWindow(saveOptions, csvText, context.SelectedCsvFile.AbsPath);
             if (saveWindowResult != null)
             {
                 EditorVM.AppOptions.SaveOptions = saveWindowResult;
+                OnSaved?.Invoke(saveWindowResult.CommitOnSave, saveWindowResult.PushOnSave);
                 context.IsFileEdited = false;
             }
 

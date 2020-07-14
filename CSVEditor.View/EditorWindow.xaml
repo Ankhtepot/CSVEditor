@@ -184,18 +184,24 @@
                         HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal">
                         <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource }"
-                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}}">
+                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}">
                             <TextBlock Style="{StaticResource LowTextBlockStyle}"
                                    Text="{x:Static p:Resources.NotEditedText}"/>
                         </Border>
                         <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource WarningColorResource }"
-                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}">
+                                Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Style="{StaticResource LowTextBlockStyle}"
                                    Text="{x:Static p:Resources.EditedText}"/>
                         </Border>
-                        <Border  Style="{StaticResource BaseBorderStyle}">
-                            <TextBlock Text="{Binding IsGitRepo, Converter={StaticResource BoolToGitRepoFoundConverter}}"/>
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                Visibility="{Binding GitVM.IsGitRepo, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"
+                                Background="{DynamicResource DarkColorResource}">
+                            <TextBlock Text="{x:Static p:Resources.NotGitRepository}"
+                                       Style="{StaticResource LowTextBlockStyle}"/>
                         </Border>
+                        <Viewbox Height="18">
+                            <uc:GitControlsControl Visibility="{Binding GitVM.IsGitRepo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </Viewbox>
                     </StackPanel>
                 </Border>
                 <!--#endregion column 2: GitRepo control -->
@@ -291,19 +297,14 @@
                         <!--#region Overview -->
                         <TabItem Header="Overview" x:Name="OverviewTab">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition Width="61*"/>
-                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="1*"/>
                                 </Grid.RowDefinitions>
 
                                 <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}" Grid.ColumnSpan="2" Margin="0,0,0,284" Grid.RowSpan="2"
-                                                    />
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"/>
                                 <uc:CsvFileGridViewerControl Grid.Row="1" 
                                                              x:Name="CsvFileGridViewer"
                                                              InputCsvFile="{Binding SelectedCsvFile}" 
@@ -314,11 +315,8 @@
 
                         <!--#region Line Editor-->
                         <TabItem Header="Line Editor"
-                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}">
+                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-
-                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition/>

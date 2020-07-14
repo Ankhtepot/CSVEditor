@@ -48,18 +48,18 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private bool isGitRepo;
-        public bool IsGitRepo
-        {
-            get { return isGitRepo; }
-            set { isGitRepo = value; OnPropertyChanged(); }
-        }
-
         private bool isLineEditMode;
         public bool IsLineEditMode
         {
             get { return isLineEditMode; }
-            set { isLineEditMode = value; OnPropertyChanged(); }
+            set 
+            {
+                if (isLineEditMode != value)
+                {
+                    isLineEditMode = value;
+                    OnPropertyChanged(); 
+                } 
+            }
         }
 
         private bool isFileEdited;
@@ -174,11 +174,12 @@ namespace CSVEditor.ViewModel
             BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             ConfigurationFolderPath = Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME);
             AsyncVM = new AsyncVM(this);
+            GitVM = new GitVM();
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
-            IsLineEditMode = false;
+            IsLineEditMode = true;
             IsFileEdited = false;
-            IsGitRepo = false;
+            GitVM.IsGitRepo = false;
             ShouldExitAfterSave = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             AsyncVM.WorkingStatus = WorkStatus.Idle;
@@ -348,7 +349,7 @@ namespace CSVEditor.ViewModel
                 value.ColumnConfigurations = ResolveCsvFileConfiguration(value.ColumnConfigurations, value.AbsPath);
             }
             selectedCsvFile = value;
-            IsLineEditMode = false;
+            IsLineEditMode = true;
             IsFileEdited = false;
 
             OnCsvFileSet?.Invoke();
@@ -399,7 +400,7 @@ namespace CSVEditor.ViewModel
 
                 SetSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
-                IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(RootRepositoryPath);
+                GitVM.SetGitInfo(RootRepositoryPath);
                 IsFileEdited = loadedOptions.WasEdited | false;
                 CsvFilesStructure.Clear();
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
@@ -408,7 +409,7 @@ namespace CSVEditor.ViewModel
                 AppOptions.VisualConfig = loadedOptions.VisualConfig ?? new VisualConfig();
                 AppOptions.SaveOptions = loadedOptions.SaveOptions ?? new SaveOptions();
             }
-        }
+        }       
 
         private void SetVisuals(VisualConfig visualConfig)
         {

@@ -14,10 +14,10 @@ namespace CSVEditor.ViewModel.Converters
             {
                 if (parameter is string newParameter && Regex.IsMatch(newParameter, "[Ff]alse"))
                 {
-                    return newValue ? Visibility.Visible : Visibility.Collapsed;
+                    return newValue ? Visibility.Collapsed : Visibility.Visible;
                 }
 
-                return newValue ? Visibility.Collapsed : Visibility.Visible;
+                return newValue ? Visibility.Visible : Visibility.Collapsed;
             }
 
             return Visibility.Visible;

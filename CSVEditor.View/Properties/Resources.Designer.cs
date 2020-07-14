@@ -223,6 +223,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory doesn&apos;t contain Git repository..
+        /// </summary>
+        public static string NotGitRepository {
+            get {
+                return ResourceManager.GetString("NotGitRepository", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite.
         /// </summary>
         public static string OverwriteText {

@@ -1,18 +1,59 @@
 ﻿using LibGit2Sharp;
 using Prism.Commands;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace CSVEditor.ViewModel
 {
     public class GitVM : INotifyPropertyChanged
     {
-        private IRepository currentRepository;
+        private bool isGitRepo;
+        public bool IsGitRepo
+        {
+            get { return isGitRepo; }
+            set 
+            {
+                isGitRepo = value;
+                OnPropertyChanged();
+            }
+        }
 
+        private bool isRepositoryUpToDate;
+        public bool IsRepositoryUpToDate
+        {
+            get { return isRepositoryUpToDate; }
+            set 
+            {
+                isRepositoryUpToDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isRepositoryCommited;
+        public bool IsRepositoryCommited
+        {
+            get { return isRepositoryCommited; }
+            set 
+            {
+                isRepositoryCommited = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isRepositoryPushed;
+        public bool IsRepositoryPushed
+        {
+            get { return isRepositoryPushed; }
+            set 
+            {
+                isRepositoryPushed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private IRepository currentRepository;
         public IRepository CurrentRepository
         {
             get { return currentRepository; }
@@ -32,6 +73,17 @@ namespace CSVEditor.ViewModel
             CommitRepositoryCommand = new DelegateCommand(CommitRepository);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
+
+            SaveVM.OnSaved += ProcessRepositoryOnSave;
+        }
+
+        public void SetGitInfo(string rootRepositoryPath)
+        {
+            IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(rootRepositoryPath);
+            if (IsGitRepo)
+            {
+                SetRepository(rootRepositoryPath);
+            }
         }
 
         private void PullRepository()
@@ -54,10 +106,19 @@ namespace CSVEditor.ViewModel
             try
             {
                 CurrentRepository = new Repository(path);
+                var status = IsUnstaged();
             }
             catch (RepositoryNotFoundException e)
             {
                 Console.WriteLine($"Path \"{path}\" doesn't contain valid repository. Error: {e.Message}");
+            }
+        }
+
+        private void ProcessRepositoryOnSave(bool commitOnSave, bool pushOnSave)
+        {
+            if (commitOnSave)
+            {
+                //CurrentRepository.Commit()
             }
         }
 

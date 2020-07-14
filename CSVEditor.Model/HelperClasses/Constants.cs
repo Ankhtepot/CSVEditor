@@ -20,6 +20,7 @@
         public const string LINE_EDITOR_TITLE = "Line Editor";
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";
         public const string LOAD_REPOSITORY_PLACEHOLDER = "Load Repository...";
+        public const string NOT_GIT_REPOSITORY = "Directory doesn't contain Git repository.";
         public const string NO_FILE_SELECTED = "No file selected.";
         public const string OPEN_DATE_FILTER_GUIDE_WINDOW_TOOLTIP = "Open help window to guide you how to set date format right.";
         public const string PROCESSING_FILE = "Processing File";

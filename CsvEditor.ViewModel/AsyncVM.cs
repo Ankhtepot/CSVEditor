@@ -125,7 +125,7 @@ namespace CSVEditor.ViewModel
 
             EditorVM.RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath(Constants.SELECT_PROJECT_ROOT_DIRECTORY);
 
-            EditorVM.IsGitRepo = FileSystemServices.IsDirectoryWithGitRepository(EditorVM.RootRepositoryPath);
+            EditorVM.GitVM.SetGitInfo(EditorVM.RootRepositoryPath);
 
             EditorVM.CsvFilesStructure.Clear();
 
