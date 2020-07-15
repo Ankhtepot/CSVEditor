@@ -106,11 +106,38 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author.
+        /// </summary>
+        public static string AuthorText {
+            get {
+                return ResourceManager.GetString("AuthorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string CancelText {
             get {
                 return ResourceManager.GetString("CancelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commiter.
+        /// </summary>
+        public static string CommiterText {
+            get {
+                return ResourceManager.GetString("CommiterText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commit Message.
+        /// </summary>
+        public static string CommitMessageText {
+            get {
+                return ResourceManager.GetString("CommitMessageText", resourceCulture);
             }
         }
         
@@ -196,6 +223,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Git Setup.
+        /// </summary>
+        public static string GitSetupWindowTitle {
+            get {
+                return ResourceManager.GetString("GitSetupWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Directory.
         /// </summary>
         public static string LoadDirectoryText {
@@ -228,6 +264,15 @@ namespace CSVEditor.View.Properties {
         public static string NotGitRepository {
             get {
                 return ResourceManager.GetString("NotGitRepository", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OKText {
+            get {
+                return ResourceManager.GetString("OKText", resourceCulture);
             }
         }
         
@@ -318,6 +363,15 @@ namespace CSVEditor.View.Properties {
         public static string SelectPromptComboBoxText {
             get {
                 return ResourceManager.GetString("SelectPromptComboBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use This Setup.
+        /// </summary>
+        public static string UseThisSetupText {
+            get {
+                return ResourceManager.GetString("UseThisSetupText", resourceCulture);
             }
         }
     }

@@ -35,6 +35,22 @@ namespace CSVEditor.View.Controls.EditGridCellElements
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(LabeledTextBoxControl), new PropertyMetadata(""));
 
+        public double TextBoxWidth
+        {
+            get { return (double)GetValue(TextBoxWidthProperty); }
+            set { SetValue(TextBoxWidthProperty, value); }
+        }
+        public static readonly DependencyProperty TextBoxWidthProperty =
+            DependencyProperty.Register("TextBoxWidth", typeof(double), typeof(LabeledTextBoxControl), new PropertyMetadata(100d));
+
+        public bool AcceptsReturn
+        {
+            get { return (bool)GetValue(AcceptsReturnProperty); }
+            set { SetValue(AcceptsReturnProperty, value); }
+        }
+        public static readonly DependencyProperty AcceptsReturnProperty =
+            DependencyProperty.Register("AcceptsReturn", typeof(bool), typeof(LabeledTextBoxControl), new PropertyMetadata(false));
+
         public LabeledTextBoxControl()
         {
             InitializeComponent();

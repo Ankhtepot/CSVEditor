@@ -169,12 +169,13 @@ namespace CSVEditor.ViewModel
         //********* Constructor *********
         //*******************************
 
-        public EditorVM()
+        public EditorVM(IWindowService windowService)
         {
+            WindowService = windowService;
             BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             ConfigurationFolderPath = Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME);
             AsyncVM = new AsyncVM(this);
-            GitVM = new GitVM();
+            GitVM = new GitVM(windowService);
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsLineEditMode = true;
@@ -401,13 +402,13 @@ namespace CSVEditor.ViewModel
                 SetSelectedFile(loadedOptions.LastSelectedFilePath, false);
                 SelectedCsvFile = loadedOptions.LastSelectedCsvFile;
                 GitVM.SetGitInfo(RootRepositoryPath);
-                IsFileEdited = loadedOptions.WasEdited | false;
+                IsFileEdited = loadedOptions.WasEdited;
                 CsvFilesStructure.Clear();
                 loadedOptions.LastCsvFilesStructure.ForEach(record => CsvFilesStructure.Add(record));
                 AppOptions.LastCsvFilesStructure = CsvFilesStructure.ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
-                SelectedItemIndex = 0;
-                AppOptions.VisualConfig = loadedOptions.VisualConfig ?? new VisualConfig();
-                AppOptions.SaveOptions = loadedOptions.SaveOptions ?? new SaveOptions();
+                AppOptions.VisualConfig = loadedOptions.VisualConfig;
+                AppOptions.SaveOptions = loadedOptions.SaveOptions;
+                AppOptions.GitOptions = loadedOptions.GitOptions;
             }
         }       
 
@@ -473,7 +474,6 @@ namespace CSVEditor.ViewModel
                 case Constants.ADD_LINE_TO_BOTTOM: AddLineToBottom(); break;
                 default: throw new InvalidEnumArgumentException();
             };
-
         }
 
         private void AddLine(int index)

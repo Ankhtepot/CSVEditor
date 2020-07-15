@@ -17,5 +17,13 @@ namespace CSVEditor.View
                 (window.DataContext as SaveVM).SaveOptions
                 : null;
         }
+
+        public GitOptions OpenGitSetupWindow(GitOptions gitOptions)
+        {
+            var window = new GitSetupWindow(gitOptions);
+            window.ShowDialog();
+
+            return window.GitOptions;
+        }
     }
 }

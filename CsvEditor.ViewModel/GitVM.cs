@@ -1,4 +1,6 @@
-﻿using LibGit2Sharp;
+﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.Model.Interfaces;
+using LibGit2Sharp;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
@@ -9,6 +11,8 @@ namespace CSVEditor.ViewModel
 {
     public class GitVM : INotifyPropertyChanged
     {
+        public IWindowService WindowService { get; set; }
+
         private bool isGitRepo;
         public bool IsGitRepo
         {
@@ -68,7 +72,7 @@ namespace CSVEditor.ViewModel
         public DelegateCommand PushRepositoryCommand { get; set; }
         public DelegateCommand PullRepositoryCommand { get; set; }
 
-        public GitVM()
+        public GitVM(IWindowService windowService)
         {
             CommitRepositoryCommand = new DelegateCommand(CommitRepository);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
@@ -118,7 +122,10 @@ namespace CSVEditor.ViewModel
         {
             if (commitOnSave)
             {
-                //CurrentRepository.Commit()
+                var options = EditorVM.AppOptions.GitOptions;
+                options = WindowService.OpenGitSetupWindow(options);
+
+                //CurrentRepository.Commit(options.CommitMessage, new Signature()
             }
         }
 

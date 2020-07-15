@@ -132,8 +132,17 @@
   <data name="AddLineUpText" xml:space="preserve">
     <value>Add New Line Above This Line</value>
   </data>
+  <data name="AuthorText" xml:space="preserve">
+    <value>Author</value>
+  </data>
   <data name="CancelText" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="CommiterText" xml:space="preserve">
+    <value>Commiter</value>
+  </data>
+  <data name="CommitMessageText" xml:space="preserve">
+    <value>Commit Message</value>
   </data>
   <data name="CommitRepositoryText" xml:space="preserve">
     <value>Commit Repository</value>
@@ -162,6 +171,9 @@
   <data name="FileText" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="GitSetupWindowTitle" xml:space="preserve">
+    <value>Git Setup</value>
+  </data>
   <data name="LoadDirectoryText" xml:space="preserve">
     <value>Load Directory</value>
   </data>
@@ -173,6 +185,9 @@
   </data>
   <data name="NotGitRepository" xml:space="preserve">
     <value>Directory doesn't contain Git repository.</value>
+  </data>
+  <data name="OKText" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="OverwriteText" xml:space="preserve">
     <value>Overwrite</value>
@@ -203,5 +218,8 @@
   </data>
   <data name="SelectPromptComboBoxText" xml:space="preserve">
     <value>-- Select value --</value>
+  </data>
+  <data name="UseThisSetupText" xml:space="preserve">
+    <value>Use This Setup</value>
   </data>
 </root>

@@ -21,9 +21,8 @@ namespace CSVEditor.View
         public EditorWindow()
         {
             InitializeComponent();
-            EditorVM = new EditorVM();
+            EditorVM = new EditorVM(new WindowService());
             EditorVM.RequestChangeTab += SetMainTabSelectedTabIndex;
-            EditorVM.WindowService = new WindowService();
             TopContainer.DataContext = EditorVM;
 
             Closing += EditorVM.OnWindowClosing;

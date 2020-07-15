@@ -11,6 +11,7 @@ namespace CSVEditor.Model
         public CsvFile LastSelectedCsvFile { get; set; }
         public VisualConfig VisualConfig { get; set; }
         public SaveOptions SaveOptions { get; set; }
+        public GitOptions GitOptions { get; set; }
         public List<char> Delimiters { get; set; }
         public List<char> BlockIdentifiers { get; set; }
         public List<DirectoryWithCsv> LastCsvFilesStructure { get; set; }
@@ -22,6 +23,7 @@ namespace CSVEditor.Model
             null,
             new VisualConfig(),
             new SaveOptions(),
+            new GitOptions(),
             CsvFile.Delimiters,
             CsvFile.BlockIdentifiers,
             new List<DirectoryWithCsv>() { new DirectoryWithCsv() })
@@ -35,6 +37,7 @@ namespace CSVEditor.Model
             CsvFile lastSelectedCsvFile,
             VisualConfig visulaConfig,
             SaveOptions saveOptions,
+            GitOptions gitOptions,
             List<char> delimiters,
             List<char> blockIdentifiers,
             List<DirectoryWithCsv> lastCsvFilesStructure)
@@ -45,6 +48,7 @@ namespace CSVEditor.Model
             LastSelectedCsvFile = lastSelectedCsvFile;
             VisualConfig = visulaConfig;
             SaveOptions = saveOptions;
+            GitOptions = gitOptions;
             Delimiters = delimiters;
             BlockIdentifiers = blockIdentifiers;
             LastCsvFilesStructure = lastCsvFilesStructure;
