@@ -74,6 +74,7 @@ namespace CSVEditor.ViewModel
 
         public GitVM(IWindowService windowService)
         {
+            WindowService = windowService;
             CommitRepositoryCommand = new DelegateCommand(CommitRepository);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
@@ -123,7 +124,7 @@ namespace CSVEditor.ViewModel
             if (commitOnSave)
             {
                 var options = EditorVM.AppOptions.GitOptions;
-                options = WindowService.OpenGitSetupWindow(options);
+                options = WindowService?.OpenGitSetupWindow(options);
 
                 //CurrentRepository.Commit(options.CommitMessage, new Signature()
             }

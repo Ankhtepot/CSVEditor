@@ -12,23 +12,86 @@
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize">
 
-    <Window.Resources>
-        <sys:Double x:Key="TextBoxWidth">200</sys:Double>
-        <Style TargetType="uc:LabeledTextBoxControl">
-            <Setter Property="TextBoxWidth" Value="{StaticResource TextBoxWidth}"/>
-            <Setter Property="FontSize" Value="{StaticResource BaseFontSize}"/>
-        </Style>
-    </Window.Resources>
+    <Border Style="{StaticResource BaseBorderStyle}" 
+            Background="{DynamicResource LightColorResource}"
+            Margin="20,0,20,15">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-    <StackPanel Margin="20">
-        <uc:LabeledTextBoxControl LabelContent="{x:Static p:Resources.CommitMessageText}"
-                                  Text="{Binding GitOptions.CommitMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  AcceptsReturn="True"
-                                  TextBoxWidth="{StaticResource TextBoxWidth}"/>
-        <uc:LabeledTextBoxControl LabelContent="{x:Static p:Resources.AuthorText}"
-                                  Text="{Binding GitOptions.Author}"
-                                  Margin="0,5"/>
-        <uc:LabeledTextBoxControl LabelContent="{x:Static p:Resources.CommiterText}"
-                                  Text="{Binding GitOptions.Commiter}"/>
-    </StackPanel>
+            <Label Content="{x:Static p:Resources.CommitMessageText}"
+                   ContentStringFormat="{}{0}:"
+                   FontSize="{StaticResource MiddleFontSize}"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Grid.Column="0"
+                   Grid.Row="0"/>
+            <TextBox Text="{Binding GitOptions.CommitMessage, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     FontSize="{StaticResource MiddleFontSize}"
+                     AcceptsReturn="True"
+                     Width="250"
+                     Height="22" VerticalContentAlignment="Center"/>
+            <Label Content="{x:Static p:Resources.AuthorText}"
+                   ContentStringFormat="{}{0}:"
+                   FontSize="{StaticResource MiddleFontSize}"
+                   HorizontalContentAlignment="Right"
+                   Grid.Column="0"
+                   Grid.Row="1"/>
+            <TextBox Text="{Binding GitOptions.Author, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     FontSize="{StaticResource MiddleFontSize}"
+                     Height="22" VerticalContentAlignment="Center"/>
+            <Label Content="{x:Static p:Resources.CommiterText}"
+                   ContentStringFormat="{}{0}:"
+                   FontSize="{StaticResource MiddleFontSize}"
+                   HorizontalContentAlignment="Right"
+                   Grid.Column="0"
+                   Grid.Row="2"/>
+            <TextBox Text="{Binding GitOptions.Commiter, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="2"
+                     FontSize="{StaticResource MiddleFontSize}"
+                     Height="22" VerticalContentAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" 
+                        Grid.Row="3" 
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        Margin="10">
+                <Button Style="{StaticResource AcceptButtonStyle}"
+                        Content="{x:Static p:Resources.UseThisSetupText}"
+                        HorizontalAlignment="Left"
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        Margin="0,10,30,0"
+                        Width="100">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+                <Button Style="{StaticResource CancelButtonStyle}"
+                        Content="{x:Static p:Resources.UseThisSetupText}"
+                        HorizontalAlignment="right"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        Margin="30,10,0,0"
+                        Width="100">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

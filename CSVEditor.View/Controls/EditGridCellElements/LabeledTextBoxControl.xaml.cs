@@ -51,6 +51,14 @@ namespace CSVEditor.View.Controls.EditGridCellElements
         public static readonly DependencyProperty AcceptsReturnProperty =
             DependencyProperty.Register("AcceptsReturn", typeof(bool), typeof(LabeledTextBoxControl), new PropertyMetadata(false));
 
+        public double TextBoxHeight
+        {
+            get { return (double)GetValue(TextBoxHeightProperty); }
+            set { SetValue(TextBoxHeightProperty, value); }
+        }
+        public static readonly DependencyProperty TextBoxHeightProperty =
+            DependencyProperty.Register("TextBoxHeight", typeof(double), typeof(LabeledTextBoxControl), new PropertyMetadata(20d));
+
         public LabeledTextBoxControl()
         {
             InitializeComponent();

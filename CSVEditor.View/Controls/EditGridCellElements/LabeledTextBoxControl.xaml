@@ -23,7 +23,8 @@
                      Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      MinWidth="{Binding TextBoxWidth}"
                      AcceptsReturn="{Binding AcceptsReturn}"
-                     Height="20"
+                     VerticalContentAlignment="Center"
+                     Height="{Binding TextBoxHeight}"
                      Grid.Column="1"
                      Margin="2,0,2,0"/>
         </Grid>
