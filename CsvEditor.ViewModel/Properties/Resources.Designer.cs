@@ -61,6 +61,15 @@ namespace CSVEditor.ViewModel.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Git Commit not performed - no changes to commit..
+        /// </summary>
+        public static string NotCommitedError {
+            get {
+                return ResourceManager.GetString("NotCommitedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Directory doesn&apos;t contain Git repository..
         /// </summary>
         public static string NotGitRepositoryText {

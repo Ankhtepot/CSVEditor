@@ -19,7 +19,7 @@
     </UserControl.Resources>
     
     <StackPanel Orientation="Horizontal">
-        <local:ImageButtonControl Command="{Binding GitVM.CommitCommand}" 
+        <local:ImageButtonControl Command="{Binding GitVM.CommitRepositoryCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
                                   Enabled="{Binding GitVM.IsGitRepo}"
                                   ToolTip="{x:Static p:Resources.CommitRepositoryText}">
@@ -27,7 +27,7 @@
                 <BitmapImage UriSource="..\Images\icons8_chevron_right_50px.png"/>
             </local:ImageButtonControl.ImageSource>
         </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding GitVM.PullCommand}" 
+        <local:ImageButtonControl Command="{Binding GitVM.PullRepositoryCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
                                   Enabled="{Binding GitVM.IsGitRepo}"
                                   ToolTip="{x:Static p:Resources.PullRepositoryText}">
@@ -35,7 +35,7 @@
                 <BitmapImage UriSource="..\Images\icons8-thick-arrow-pointing-down-50.png"/>
             </local:ImageButtonControl.ImageSource>
         </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding GitVM.PushCommand}" 
+        <local:ImageButtonControl Command="{Binding GitVM.PushRepositoryCommand}" 
                                   Style="{StaticResource ImageButtonStyle}"
                                   Enabled="{Binding GitVM.IsGitRepo}"
                                   ToolTip="{x:Static p:Resources.PushRepositoryText}">

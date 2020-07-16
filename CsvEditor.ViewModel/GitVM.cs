@@ -1,10 +1,8 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Interfaces;
+﻿using CSVEditor.Model.Interfaces;
 using LibGit2Sharp;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace CSVEditor.ViewModel
@@ -57,8 +55,8 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private IRepository currentRepository;
-        public IRepository CurrentRepository
+        private Repository currentRepository;
+        public Repository CurrentRepository
         {
             get { return currentRepository; }
             set 
@@ -68,6 +66,7 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        public DelegateCommand OpenGitSetupCommand { get; set; }
         public DelegateCommand CommitRepositoryCommand { get; set; }
         public DelegateCommand PushRepositoryCommand { get; set; }
         public DelegateCommand PullRepositoryCommand { get; set; }
@@ -75,7 +74,8 @@ namespace CSVEditor.ViewModel
         public GitVM(IWindowService windowService)
         {
             WindowService = windowService;
-            CommitRepositoryCommand = new DelegateCommand(CommitRepository);
+            OpenGitSetupCommand = new DelegateCommand(OpenGitSetup);
+            CommitRepositoryCommand = new DelegateCommand(CommitRepositorySolo);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
 
@@ -91,6 +91,23 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        private void OpenGitSetup()
+        {
+            OpenGitSetupWindow();
+        }
+
+        private bool OpenGitSetupWindow()
+        {
+            var newOptions = WindowService?.OpenGitSetupWindow();
+            if (newOptions != null)
+            {
+                EditorVM.AppOptions.GitOptions = newOptions;
+                return true;
+            }
+
+            return false;
+        }
+
         private void PullRepository()
         {
             throw new NotImplementedException();
@@ -101,17 +118,52 @@ namespace CSVEditor.ViewModel
             throw new NotImplementedException();
         }
 
+        private void CommitRepositorySolo()
+        {
+            if (!OpenGitSetupWindow())
+            {
+                return;
+            }
+
+            CommitRepository();
+        }
+
         private void CommitRepository()
         {
-            throw new NotImplementedException();
+            var options = EditorVM.AppOptions.GitOptions;
+
+            var authorSifnature = new Signature(options.Author, options.Email, DateTimeOffset.Now);
+
+            try
+            {
+                if (IsRepositoryUnstaged())
+                {
+
+                }
+
+                CurrentRepository.Commit(options.CommitMessage, authorSifnature, authorSifnature);
+            }
+            catch (EmptyCommitException)
+            {
+                Console.WriteLine(Properties.Resources.NotCommitedError);
+            }
+        }
+
+        private void StageRepository()
+        {
+            using (var repo = new Repository(CurrentRepository.Info.WorkingDirectory))
+            {
+                
+            }
         }
 
         public void SetRepository(string path)
         {
             try
             {
+                Console.WriteLine("[GitVM] Setting up repository.");
                 CurrentRepository = new Repository(path);
-                var status = IsUnstaged();
+                var status = IsRepositoryUnstaged();
             }
             catch (RepositoryNotFoundException e)
             {
@@ -123,16 +175,18 @@ namespace CSVEditor.ViewModel
         {
             if (commitOnSave)
             {
-                var options = EditorVM.AppOptions.GitOptions;
-                options = WindowService?.OpenGitSetupWindow(options);
+                if (!OpenGitSetupWindow())
+                {
+                    return;
+                }
 
-                //CurrentRepository.Commit(options.CommitMessage, new Signature()
+                CommitRepository();
             }
         }
 
-        public bool IsUnstaged()
+        public bool IsRepositoryUnstaged()
         {
-            return CurrentRepository?.RetrieveStatus(new StatusOptions()).Count() > 0;
+            return CurrentRepository?.RetrieveStatus().IsDirty == true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

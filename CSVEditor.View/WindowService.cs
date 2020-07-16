@@ -18,12 +18,14 @@ namespace CSVEditor.View
                 : null;
         }
 
-        public GitOptions OpenGitSetupWindow(GitOptions gitOptions)
+        public GitOptions OpenGitSetupWindow()
         {
-            var window = new GitSetupWindow(gitOptions);
+            var window = new GitSetupWindow(EditorVM.AppOptions.GitOptions);
             window.ShowDialog();
 
-            return window.GitOptions;
+            return window.Canceled
+                ? null
+                : window.GitOptions;
         }
     }
 }

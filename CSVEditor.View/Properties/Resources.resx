@@ -162,6 +162,9 @@
   <data name="EditThisLineText" xml:space="preserve">
     <value>Edit this line</value>
   </data>
+  <data name="EmailText" xml:space="preserve">
+    <value>Email</value>
+  </data>
   <data name="ExitAndSaveText" xml:space="preserve">
     <value>Save and Close Csv Editor</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="LoadText" xml:space="preserve">
     <value>Load</value>
+  </data>
+  <data name="NotCommitedError" xml:space="preserve">
+    <value>Git Commit not performed - no changes to commit.</value>
   </data>
   <data name="NotEditedText" xml:space="preserve">
     <value>Not Edited</value>

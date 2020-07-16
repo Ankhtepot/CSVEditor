@@ -196,6 +196,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string EmailText {
+            get {
+                return ResourceManager.GetString("EmailText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save and Close Csv Editor.
         /// </summary>
         public static string ExitAndSaveText {
@@ -246,6 +255,15 @@ namespace CSVEditor.View.Properties {
         public static string LoadText {
             get {
                 return ResourceManager.GetString("LoadText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Git Commit not performed - no changes to commit..
+        /// </summary>
+        public static string NotCommitedError {
+            get {
+                return ResourceManager.GetString("NotCommitedError", resourceCulture);
             }
         }
         

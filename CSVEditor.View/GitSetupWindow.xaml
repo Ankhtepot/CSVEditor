@@ -52,13 +52,13 @@
                      Grid.Row="1"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
-            <Label Content="{x:Static p:Resources.CommiterText}"
+            <Label Content="{x:Static p:Resources.EmailText}"
                    ContentStringFormat="{}{0}:"
                    FontSize="{StaticResource MiddleFontSize}"
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="2"/>
-            <TextBox Text="{Binding GitOptions.Commiter, Mode=TwoWay}"
+            <TextBox Text="{Binding GitOptions.Email, Mode=TwoWay}"
                      Grid.Column="1"
                      Grid.Row="2"
                      FontSize="{StaticResource MiddleFontSize}"
@@ -69,8 +69,10 @@
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"
                         Margin="10">
-                <Button Style="{StaticResource AcceptButtonStyle}"
+                <Button x:Name="OKButton" 
+                        Style="{StaticResource AcceptButtonStyle}"
                         Content="{x:Static p:Resources.UseThisSetupText}"
+                        Click="OKButton_Click"
                         HorizontalAlignment="Left"
                         Grid.Column="0"
                         Grid.Row="3"
@@ -80,8 +82,9 @@
                         <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
                     </Button.Resources>
                 </Button>
-                <Button Style="{StaticResource CancelButtonStyle}"
-                        Content="{x:Static p:Resources.UseThisSetupText}"
+                <Button x:Name="CancelButton" Style="{StaticResource CancelButtonStyle}"
+                        Content="{x:Static p:Resources.CancelText}"
+                        Click="CancelButton_Click"
                         HorizontalAlignment="right"
                         Grid.Column="1"
                         Grid.Row="3"

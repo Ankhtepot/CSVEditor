@@ -10,13 +10,13 @@ namespace CSVEditor.Model.HelperClasses
 
         public string CommitMessage { get; set; }
         public string Author { get; set; }
-        public string Commiter { get; set; }
+        public string Email { get; set; }
 
         public GitOptions()
         {
             CommitMessage = DefaultCommitMessage;
             Author = "<Author>";
-            Commiter = "<Commiter>";
+            Email = "<Email>";
         }
     }
 }
