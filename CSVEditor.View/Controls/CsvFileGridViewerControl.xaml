@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:p="clr-namespace:CSVEditor.View.Properties"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -49,7 +50,7 @@
             <MenuItem Header="Delete This Line"
                       Command="{Binding DeleteLineCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_Trash" Foreground="Red"/>
+                    <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>    

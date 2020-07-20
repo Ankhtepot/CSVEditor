@@ -177,6 +177,9 @@
   <data name="GitSetupWindowTitle" xml:space="preserve">
     <value>Git Setup</value>
   </data>
+  <data name="GitText" xml:space="preserve">
+    <value>Git</value>
+  </data>
   <data name="LoadDirectoryText" xml:space="preserve">
     <value>Load Directory</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="OKText" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="OpenGitSetupText" xml:space="preserve">
+    <value>Open Git Setup Window</value>
+  </data>
   <data name="OverwriteText" xml:space="preserve">
     <value>Overwrite</value>
   </data>
@@ -210,6 +216,12 @@
   <data name="RememberSelectionText" xml:space="preserve">
     <value>Remember This Selection</value>
   </data>
+  <data name="RemoteBranchNameText" xml:space="preserve">
+    <value>RemoteBranch</value>
+  </data>
+  <data name="RemoteLinkText" xml:space="preserve">
+    <value>Remote repository link</value>
+  </data>
   <data name="SaveAsText" xml:space="preserve">
     <value>Save as...</value>
   </data>
@@ -224,6 +236,9 @@
   </data>
   <data name="SelectPromptComboBoxText" xml:space="preserve">
     <value>-- Select value --</value>
+  </data>
+  <data name="UserNameText" xml:space="preserve">
+    <value>User Name</value>
   </data>
   <data name="UseThisSetupText" xml:space="preserve">
     <value>Use This Setup</value>

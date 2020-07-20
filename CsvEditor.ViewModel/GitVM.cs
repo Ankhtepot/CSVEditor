@@ -1,5 +1,6 @@
 ﻿using CSVEditor.Model.Interfaces;
 using LibGit2Sharp;
+using LibGit2Sharp.Handlers;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
@@ -7,6 +8,12 @@ using System.Runtime.CompilerServices;
 
 namespace CSVEditor.ViewModel
 {
+    //*************************************************************************
+    //************************    testing repo info     ***********************
+    //git remote add origin https://github.com/Ankhtepot/CsvEditorTesting.git
+    //git push -u origin master
+    //*************************************************************************
+
     public class GitVM : INotifyPropertyChanged
     {
         public IWindowService WindowService { get; set; }
@@ -15,7 +22,7 @@ namespace CSVEditor.ViewModel
         public bool IsGitRepo
         {
             get { return isGitRepo; }
-            set 
+            set
             {
                 isGitRepo = value;
                 OnPropertyChanged();
@@ -26,7 +33,7 @@ namespace CSVEditor.ViewModel
         public bool IsRepositoryUpToDate
         {
             get { return isRepositoryUpToDate; }
-            set 
+            set
             {
                 isRepositoryUpToDate = value;
                 OnPropertyChanged();
@@ -37,7 +44,7 @@ namespace CSVEditor.ViewModel
         public bool IsRepositoryCommited
         {
             get { return isRepositoryCommited; }
-            set 
+            set
             {
                 isRepositoryCommited = value;
                 OnPropertyChanged();
@@ -48,7 +55,7 @@ namespace CSVEditor.ViewModel
         public bool IsRepositoryPushed
         {
             get { return isRepositoryPushed; }
-            set 
+            set
             {
                 isRepositoryPushed = value;
                 OnPropertyChanged();
@@ -59,7 +66,7 @@ namespace CSVEditor.ViewModel
         public Repository CurrentRepository
         {
             get { return currentRepository; }
-            set 
+            set
             {
                 currentRepository = value;
                 OnPropertyChanged();
@@ -110,12 +117,33 @@ namespace CSVEditor.ViewModel
 
         private void PullRepository()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var gitOptions = EditorVM.AppOptions.GitOptions;
+                var options = new PullOptions();
+                options.FetchOptions = new FetchOptions();
+                options.FetchOptions.CredentialsProvider = new CredentialsHandler(
+                    (url, usernameFromUrl, types) =>
+                        new UsernamePasswordCredentials()
+                        {
+                            Username = gitOptions.UserName,
+                            Password = gitOptions.Email
+                        });
+
+                var signature = new Signature(
+                    new Identity(gitOptions.UserName, gitOptions.Email), DateTimeOffset.Now);
+
+                Commands.Pull(CurrentRepository, signature, options);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error pulling repository. Error: {e.Message}");
+            }
         }
 
         private void PushRepository()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void CommitRepositorySolo()
@@ -128,32 +156,49 @@ namespace CSVEditor.ViewModel
             CommitRepository();
         }
 
-        private void CommitRepository()
+        private bool CommitRepository()
         {
             var options = EditorVM.AppOptions.GitOptions;
 
-            var authorSifnature = new Signature(options.Author, options.Email, DateTimeOffset.Now);
+            var authorSifnature = new Signature(options.UserName, options.Email, DateTimeOffset.Now);
 
             try
             {
                 if (IsRepositoryUnstaged())
                 {
-
+                    StageRepository();
+                    Console.WriteLine($"Repository staged.");
                 }
 
                 CurrentRepository.Commit(options.CommitMessage, authorSifnature, authorSifnature);
+
+                Console.WriteLine($"Repository commited");
+
+                return true;
             }
             catch (EmptyCommitException)
             {
                 Console.WriteLine(Properties.Resources.NotCommitedError);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Unexpected error during commit. Error: {e.Message}");
+                return false;
             }
         }
 
-        private void StageRepository()
+        private bool StageRepository()
         {
-            using (var repo = new Repository(CurrentRepository.Info.WorkingDirectory))
+            try
             {
-                
+                Commands.Stage(CurrentRepository, "*");
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while staging repository at \"{CurrentRepository.Info.WorkingDirectory}\". Error: {e.Message}");
+                return false;
             }
         }
 
@@ -180,7 +225,12 @@ namespace CSVEditor.ViewModel
                     return;
                 }
 
-                CommitRepository();
+                var commited = CommitRepository();
+
+                if (pushOnSave && commited)
+                {
+                    PushRepository();
+                }
             }
         }
 

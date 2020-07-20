@@ -5,19 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              xmlns:p="clr-namespace:CSVEditor.View.Properties"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="400">
 
     <UserControl.Resources>
-        <Style TargetType="local:ImageButtonControl" x:Key="ImageButtonStyle">
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="ImageStretch" Value="Fill"/>
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
+        <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Margin" Value="5,0"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -28,25 +25,31 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        
-        <local:ImageButtonControl Command="{Binding SaveCommand}" 
-                                  Style="{StaticResource ImageButtonStyle}"
+
+        <Button Command="{Binding SaveCommand}" 
+                                  Style="{StaticResource ButtonStyle}"
                                   Grid.Column="0"
                                   ToolTip="{x:Static p:Resources.SaveText}">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8-save-close-50.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding AddLineCommand}" 
-                                  CommandParameter="{Binding SelectedItem.Value, ElementName=AddlineComboBox}"
-                                  Style="{StaticResource ImageButtonStyle}"
-                                  ToolTip="{x:Static p:Resources.AddLineTooltipText}"
-                                  Grid.Column="1"
-                                  Margin="10,0,2,0">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8-add-file-50.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+            <iconPacks:PackIconBoxIcons Kind="RegularSave" />
+        </Button>
+        <Button Command="{Binding AddLineCommand}" 
+                CommandParameter="{Binding SelectedItem.Value, ElementName=AddlineComboBox}"
+                Style="{StaticResource ButtonStyle}"
+                ToolTip="{x:Static p:Resources.AddLineTooltipText}"
+                Grid.Column="1"
+                Margin="10,0,2,0">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+            <iconPacks:PackIconEntypo Kind="AddToList" />
+        </Button>
         <ComboBox ItemsSource="{Binding AddLinePlacementSource, Mode=OneTime}"
                   x:Name="AddlineComboBox"
                   SelectedIndex="0"
@@ -60,42 +63,20 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <local:ImageButtonControl Command="{Binding DeleteLineCommand}" 
+        <Button Command="{Binding DeleteLineCommand}" 
                                   CommandParameter="{Binding}"
-                                  Style="{StaticResource ImageButtonStyle}"
+                                  Style="{StaticResource ButtonStyle}"
                                   Grid.Column="3"
                                   ToolTip="{x:Static p:Resources.DeleteLineText}">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8-delete-file-50.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
-        <local:GitControlsControl Grid.Column="4"/>
-        <!--<local:ImageButtonControl Command="{Binding GitVM.CommitCommand}" 
-                                  Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding GitVM.IsGitRepo}"
-                                  Grid.Column="4"
-                                  ToolTip="{x:Static p:Resources.CommitRepositoryText}">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8_chevron_right_50px.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding GitVM.PullCommand}" 
-                                  Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding GitVM.IsGitRepo}"
-                                  Grid.Column="5"
-                                  ToolTip="{x:Static p:Resources.PullRepositoryText}">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8-thick-arrow-pointing-down-50.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>
-        <local:ImageButtonControl Command="{Binding GitVM.PushCommand}" 
-                                  Style="{StaticResource ImageButtonStyle}"
-                                  Enabled="{Binding GitVM.IsGitRepo}"
-                                  Grid.Column="6"
-                                  ToolTip="{x:Static p:Resources.PushRepositoryText}">
-            <local:ImageButtonControl.ImageSource>
-                <BitmapImage UriSource="..\Images\icons8-up-right-50.png"/>
-            </local:ImageButtonControl.ImageSource>
-        </local:ImageButtonControl>-->
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+            <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
+        </Button>
+        <Viewbox Grid.Column="4" Margin="5,3,0,3">
+            <local:GitControlsControl Grid.Column="4"/>
+        </Viewbox>
     </Grid>
 </UserControl>

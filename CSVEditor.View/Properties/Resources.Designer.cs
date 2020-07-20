@@ -241,6 +241,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Git.
+        /// </summary>
+        public static string GitText {
+            get {
+                return ResourceManager.GetString("GitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Directory.
         /// </summary>
         public static string LoadDirectoryText {
@@ -295,6 +304,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Git Setup Window.
+        /// </summary>
+        public static string OpenGitSetupText {
+            get {
+                return ResourceManager.GetString("OpenGitSetupText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite.
         /// </summary>
         public static string OverwriteText {
@@ -340,6 +358,24 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RemoteBranch.
+        /// </summary>
+        public static string RemoteBranchNameText {
+            get {
+                return ResourceManager.GetString("RemoteBranchNameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote repository link.
+        /// </summary>
+        public static string RemoteLinkText {
+            get {
+                return ResourceManager.GetString("RemoteLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save as....
         /// </summary>
         public static string SaveAsText {
@@ -381,6 +417,15 @@ namespace CSVEditor.View.Properties {
         public static string SelectPromptComboBoxText {
             get {
                 return ResourceManager.GetString("SelectPromptComboBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Name.
+        /// </summary>
+        public static string UserNameText {
+            get {
+                return ResourceManager.GetString("UserNameText", resourceCulture);
             }
         }
         

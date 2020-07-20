@@ -5,8 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
-        xmlns:uc="clr-namespace:CSVEditor.View.Controls.EditGridCellElements"
-        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="{x:Static p:Resources.GitSetupWindowTitle}" 
         SizeToContent="WidthAndHeight"
@@ -21,6 +19,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -41,17 +41,19 @@
                      AcceptsReturn="True"
                      Width="250"
                      Height="22" VerticalContentAlignment="Center"/>
-            <Label Content="{x:Static p:Resources.AuthorText}"
+            
+            <Label Content="{x:Static p:Resources.UserNameText}"
                    ContentStringFormat="{}{0}:"
                    FontSize="{StaticResource MiddleFontSize}"
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="1"/>
-            <TextBox Text="{Binding GitOptions.Author, Mode=TwoWay}"
+            <TextBox Text="{Binding GitOptions.UserName, Mode=TwoWay}"
                      Grid.Column="1"
                      Grid.Row="1"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
+            
             <Label Content="{x:Static p:Resources.EmailText}"
                    ContentStringFormat="{}{0}:"
                    FontSize="{StaticResource MiddleFontSize}"
@@ -63,8 +65,33 @@
                      Grid.Row="2"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
+
+            <Label Content="{x:Static p:Resources.RemoteLinkText}"
+                   ContentStringFormat="{}{0}:"
+                   FontSize="{StaticResource MiddleFontSize}"
+                   HorizontalContentAlignment="Right"
+                   Grid.Column="0"
+                   Grid.Row="3"/>
+            <TextBox Text="{Binding GitOptions.RemoteRepositoryLink, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="3"
+                     FontSize="{StaticResource MiddleFontSize}"
+                     Height="22" VerticalContentAlignment="Center"/>
+
+            <Label Content="{x:Static p:Resources.RemoteBranchNameText}"
+                   ContentStringFormat="{}{0}:"
+                   FontSize="{StaticResource MiddleFontSize}"
+                   HorizontalContentAlignment="Right"
+                   Grid.Column="0"
+                   Grid.Row="4"/>
+            <TextBox Text="{Binding GitOptions.RemoteBranch, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="4"
+                     FontSize="{StaticResource MiddleFontSize}"
+                     Height="22" VerticalContentAlignment="Center"/>
+
             <StackPanel Orientation="Horizontal" 
-                        Grid.Row="3" 
+                        Grid.Row="5" 
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"

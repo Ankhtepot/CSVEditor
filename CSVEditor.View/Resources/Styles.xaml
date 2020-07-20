@@ -132,12 +132,14 @@
     <Color x:Key="AcceptColor">LightGreen</Color>
     <Color x:Key="LightAcceptColor">MediumAquamarine</Color>
     <Color x:Key="BaseButtonColor">Beige</Color>
+    <Color x:Key="MenuHeaderBorderColor">Black</Color>
     <SolidColorBrush x:Key="LightColorResource" Color="{StaticResource LightColor}"/>
     <SolidColorBrush x:Key="DarkColorResource" Color="{StaticResource DarkColor}"/>
     <SolidColorBrush x:Key="WarningColorResource" Color="{StaticResource WarningColor}"/>
     <SolidColorBrush x:Key="AcceptColorResource" Color="{StaticResource AcceptColor}"/>
     <SolidColorBrush x:Key="LightAcceptColorResource" Color="{StaticResource LightAcceptColor}"/>
     <SolidColorBrush x:Key="BaseButtonColorResource" Color="{StaticResource BaseButtonColor}"/>
+    <SolidColorBrush x:Key="MenuHeaderBorderColorResource" Color="{StaticResource MenuHeaderBorderColor}"/>
     <!-- Global Style Variables -->
     <sys:Double x:Key="BaseFontSize">16</sys:Double>
     <sys:Double x:Key="MiddleFontSize">13</sys:Double>

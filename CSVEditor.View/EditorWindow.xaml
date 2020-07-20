@@ -31,7 +31,7 @@
             <Menu Margin="5,0,0,0">
                 <MenuItem Header="{x:Static p:Resources.FileText}" 
                       IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
-                      BorderBrush="Black">
+                      BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
                     <MenuItem.Icon >
                         <iconPacks:PackIconBoxIcons Kind="RegularSave" />
                     </MenuItem.Icon>
@@ -65,8 +65,7 @@
                 </MenuItem>
 
                 <MenuItem Header="{x:Static p:Resources.EditText}"
-                      
-                      BorderBrush="Black">
+                          BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{StaticResource FileMenuEnabledConverter}">
                             <Binding Path="AsyncVM.WorkingStatus"/>
@@ -112,7 +111,41 @@
                     <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
                               Command="{Binding DeleteLineCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_Trash"/>
+                            <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="{x:Static p:Resources.GitText}"
+                          BorderBrush="{DynamicResource MenuHeaderBorderColorResource}"
+                          IsEnabled="{Binding GitVM.IsGitRepo}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconFontAwesome Kind="GithubSquareBrands" />
+                    </MenuItem.Icon>
+
+                    <MenuItem Header="{x:Static p:Resources.OpenGitSetupText}"
+                              Command="{Binding GitVM.OpenGitSetupCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularWindow" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <MenuItem Header="{x:Static p:Resources.CommitRepositoryText}"
+                              Command="{Binding GitVM.CommitRepositoryCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconOcticons Kind="GitCommit" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.PullRepositoryText}"
+                              Command="{Binding GitVM.PullRepositoryCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconOcticons Kind="GitPullRequest" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.PushRepositoryText}"
+                              Command="{Binding GitVM.PushRepositoryCommand}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconOcticons Kind="RepoPush" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
