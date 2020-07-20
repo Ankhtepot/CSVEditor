@@ -406,7 +406,9 @@
                                                 Visibility="{Binding IsLineEditMode,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                                 >
-                                            <uc:FileOperationsControl/>
+                                            <Viewbox HorizontalAlignment="Center">
+                                                <uc:FileOperationsControl/>
+                                            </Viewbox>
                                         </Border>
                                     </Grid>
                                     <Button Content="{Binding IsLineEditMode, Converter={StaticResource EditModeToTextConverter}}"

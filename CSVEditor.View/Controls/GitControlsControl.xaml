@@ -8,16 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="300">
 
-    <UserControl.Resources>
-        <Style TargetType="local:ImageButtonControl" x:Key="ImageButtonStyle">
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="ImageStretch" Value="Fill"/>
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5,0"/>
-        </Style>
-    </UserControl.Resources>
-
     <StackPanel Orientation="Horizontal">
         <Button Command="{Binding GitVM.CommitRepositoryCommand}" 
                 Style="{StaticResource BaseButtonStyle}"

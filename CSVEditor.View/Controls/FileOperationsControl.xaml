@@ -11,7 +11,8 @@
 
     <UserControl.Resources>
         <Style TargetType="Button" x:Key="ButtonStyle">
-            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Margin" Value="5,5"/>
+            <!--<Setter Property="Height" Value="25"/>-->
         </Style>
     </UserControl.Resources>
 
@@ -27,9 +28,10 @@
         </Grid.ColumnDefinitions>
 
         <Button Command="{Binding SaveCommand}" 
-                                  Style="{StaticResource ButtonStyle}"
-                                  Grid.Column="0"
-                                  ToolTip="{x:Static p:Resources.SaveText}">
+                Style="{StaticResource BaseButtonStyle}"
+                Grid.Column="0"
+                Margin="5,3"
+                ToolTip="{x:Static p:Resources.SaveText}">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -39,10 +41,10 @@
         </Button>
         <Button Command="{Binding AddLineCommand}" 
                 CommandParameter="{Binding SelectedItem.Value, ElementName=AddlineComboBox}"
-                Style="{StaticResource ButtonStyle}"
+                Style="{StaticResource BaseButtonStyle}"
                 ToolTip="{x:Static p:Resources.AddLineTooltipText}"
                 Grid.Column="1"
-                Margin="10,0,2,0">
+                Margin="10,3,2,3">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -64,10 +66,11 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <Button Command="{Binding DeleteLineCommand}" 
-                                  CommandParameter="{Binding}"
-                                  Style="{StaticResource ButtonStyle}"
-                                  Grid.Column="3"
-                                  ToolTip="{x:Static p:Resources.DeleteLineText}">
+                CommandParameter="{Binding}"
+                Style="{StaticResource BaseButtonStyle}"
+                Grid.Column="3"
+                ToolTip="{x:Static p:Resources.DeleteLineText}"
+                Margin="5,3,10,3">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10"/>
