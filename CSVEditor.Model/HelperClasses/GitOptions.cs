@@ -12,6 +12,7 @@ namespace CSVEditor.Model.HelperClasses
         public string CommitMessage { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public string RemoteRepositoryLink { get; set; }
         public string RemoteBranch { get; set; }
 
@@ -20,6 +21,7 @@ namespace CSVEditor.Model.HelperClasses
             CommitMessage = DefaultCommitMessage;
             UserName = "<UserName>";
             Email = "<Email>";
+            Password = "";
             RemoteRepositoryLink = "<Remote Repository Link>";
             RemoteBranch = DefaultRemoteBranch;
         }

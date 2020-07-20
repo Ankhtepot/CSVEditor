@@ -322,6 +322,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string PasswordText {
+            get {
+                return ResourceManager.GetString("PasswordText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pull From Remote Repository.
         /// </summary>
         public static string PullRepositoryText {

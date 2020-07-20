@@ -5,6 +5,7 @@ using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace CSVEditor.ViewModel
 {
@@ -78,9 +79,9 @@ namespace CSVEditor.ViewModel
         public DelegateCommand PushRepositoryCommand { get; set; }
         public DelegateCommand PullRepositoryCommand { get; set; }
 
-        public GitVM(IWindowService windowService)
+        public GitVM(EditorVM EditorVM)
         {
-            WindowService = windowService;
+            WindowService = EditorVM.WindowService;
             OpenGitSetupCommand = new DelegateCommand(OpenGitSetup);
             CommitRepositoryCommand = new DelegateCommand(CommitRepositorySolo);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
@@ -117,6 +118,16 @@ namespace CSVEditor.ViewModel
 
         private void PullRepository()
         {
+            if (!OpenGitSetupWindow())
+            {
+                return;
+            }
+
+            PullRepositorySolo();
+        }
+
+        private async void PullRepositorySolo()
+        {
             try
             {
                 var gitOptions = EditorVM.AppOptions.GitOptions;
@@ -124,20 +135,34 @@ namespace CSVEditor.ViewModel
                 options.FetchOptions = new FetchOptions();
                 options.FetchOptions.CredentialsProvider = new CredentialsHandler(
                     (url, usernameFromUrl, types) =>
-                        new UsernamePasswordCredentials()
-                        {
-                            Username = gitOptions.UserName,
-                            Password = gitOptions.Email
-                        });
+                        new DefaultCredentials()
+                        //{
+                        //    Username = gitOptions.UserName,
+                        //    Password = gitOptions.Password
+                        //});
+                        );
 
                 var signature = new Signature(
                     new Identity(gitOptions.UserName, gitOptions.Email), DateTimeOffset.Now);
 
-                Commands.Pull(CurrentRepository, signature, options);
+                var result = await Task.Run(() => PullAsync(CurrentRepository, signature, options));
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error pulling repository. Error: {e.Message}");
+            }
+        }
+
+        private async Task<MergeResult> PullAsync(Repository repository, Signature signature, PullOptions options)
+        {
+            try
+            {
+                return await Task.Run(() => Commands.Pull(CurrentRepository, signature, options));
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
         }
 

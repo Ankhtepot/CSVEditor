@@ -204,6 +204,9 @@
   <data name="OverwriteText" xml:space="preserve">
     <value>Overwrite</value>
   </data>
+  <data name="PasswordText" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="PullRepositoryText" xml:space="preserve">
     <value>Pull From Remote Repository</value>
   </data>

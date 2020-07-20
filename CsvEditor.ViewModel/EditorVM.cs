@@ -175,7 +175,7 @@ namespace CSVEditor.ViewModel
             BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             ConfigurationFolderPath = Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME);
             AsyncVM = new AsyncVM(this);
-            GitVM = new GitVM(windowService);
+            GitVM = new GitVM(this);
 
             RootRepositoryPath = Constants.LOAD_REPOSITORY_PLACEHOLDER;
             IsLineEditMode = true;
