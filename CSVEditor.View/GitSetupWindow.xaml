@@ -40,8 +40,8 @@
                      Grid.Row="0"
                      FontSize="{StaticResource MiddleFontSize}"
                      AcceptsReturn="True"
-                     Width="250"
-                     Height="22" VerticalContentAlignment="Center"/>
+                     Height="22" 
+                     VerticalContentAlignment="Center"/>
             
             <Label Content="{x:Static p:Resources.UserNameText}"
                    ContentStringFormat="{}{0}:"

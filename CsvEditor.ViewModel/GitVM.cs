@@ -4,6 +4,7 @@ using LibGit2Sharp.Handlers;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -131,21 +132,33 @@ namespace CSVEditor.ViewModel
             try
             {
                 var gitOptions = EditorVM.AppOptions.GitOptions;
-                var options = new PullOptions();
-                options.FetchOptions = new FetchOptions();
-                options.FetchOptions.CredentialsProvider = new CredentialsHandler(
-                    (url, usernameFromUrl, types) =>
-                        new DefaultCredentials()
-                        //{
-                        //    Username = gitOptions.UserName,
-                        //    Password = gitOptions.Password
-                        //});
-                        );
+                //var options = new PullOptions();
+                //options.FetchOptions = new FetchOptions();
+                //options.FetchOptions.CredentialsProvider = new CredentialsHandler(
+                //    (url, usernameFromUrl, types) =>
+                //        new UsernamePasswordCredentials()
+                //        {
+                //            Username = gitOptions.UserName,
+                //            Password = gitOptions.Password
+                //        });
+                //        //);
 
-                var signature = new Signature(
-                    new Identity(gitOptions.UserName, gitOptions.Email), DateTimeOffset.Now);
+                //var signature = new Signature(
+                //    new Identity(gitOptions.UserName, gitOptions.Email), DateTimeOffset.Now);
 
-                var result = await Task.Run(() => PullAsync(CurrentRepository, signature, options));
+                ////var result = await Task.Run(() => PullAsync(CurrentRepository, signature, options));
+                //var result = await Task.Run(() => Commands.Pull(CurrentRepository, signature, options));
+
+                var creds = new UsernamePasswordCredentials()
+                {
+                    Username = gitOptions.UserName,
+                    Password = gitOptions.Password
+                };
+                CredentialsHandler credHandler = (_url, _user, _cred) => creds;
+                var fetchOpts = new FetchOptions { CredentialsProvider = credHandler };
+                var remote = CurrentRepository.Network.Remotes["origin"];
+                var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                Commands.Fetch(CurrentRepository, remote.Name, refSpecs, fetchOpts, "logMessage");
             }
             catch (Exception e)
             {
