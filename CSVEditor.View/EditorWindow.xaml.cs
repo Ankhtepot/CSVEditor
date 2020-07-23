@@ -1,10 +1,8 @@
 ﻿using CSVEditor.Model.Services;
 using CSVEditor.View.Controls;
 using CSVEditor.ViewModel;
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace CSVEditor.View
 {

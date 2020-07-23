@@ -1,4 +1,5 @@
-﻿using Constants = CSVEditor.Model.HelperClasses.Constants;
+﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.Model.Services;
 using CSVEditor.View.Controls.DataCellElements;
 using CSVEditor.View.Controls.EditGridCellElements;
 using CSVEditor.ViewModel;
@@ -12,8 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using static CSVEditor.Model.HelperClasses.Enums;
-using CSVEditor.Model.Services;
-using CSVEditor.Model.HelperClasses;
+using Constants = CSVEditor.Model.HelperClasses.Constants;
 
 namespace CSVEditor.View.Controls
 {

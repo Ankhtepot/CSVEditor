@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 
 namespace CSVEditor.Model.Services
@@ -44,11 +43,6 @@ namespace CSVEditor.Model.Services
             }
 
             return deserializedJson;
-        }
-
-        public static List<CsvFileConfiguration> LoadCsvFilesConfigurations(string fullPath)
-        {
-            return null;
         }
     }
 }

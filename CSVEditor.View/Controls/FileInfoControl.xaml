@@ -15,16 +15,15 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label x:Name="SelectedTextLabel"
-                Grid.Row="0" 
-                Grid.Column="0" 
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"/>
+               Grid.Row="0" 
+               Grid.Column="0" 
+               Margin="10,0,0,0"
+               VerticalAlignment="Center"/>
         <TextBlock Grid.Column="1" 
                    x:Name="FileInfoTextBox"
-                    Grid.Row="0"  
-                    VerticalAlignment="Center"
-                    TextWrapping="Wrap"
-                    Margin="0,0,10,0"
-                                   />
+                   Grid.Row="0"  
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Margin="0,0,10,0"/>
     </Grid>
 </UserControl>

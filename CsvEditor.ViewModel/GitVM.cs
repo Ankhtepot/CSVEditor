@@ -4,15 +4,14 @@ using LibGit2Sharp.Handlers;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace CSVEditor.ViewModel
 {
     //*************************************************************************
     //************************    testing repo info     ***********************
     //git remote add origin https://github.com/Ankhtepot/CsvEditorTesting.git
+    //git to kocourweb: https://github.com/miljed/kocourweb.git
     //git push -u origin master
     //*************************************************************************
 
@@ -131,51 +130,31 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                var gitOptions = EditorVM.AppOptions.GitOptions;
-                //var options = new PullOptions();
-                //options.FetchOptions = new FetchOptions();
-                //options.FetchOptions.CredentialsProvider = new CredentialsHandler(
-                //    (url, usernameFromUrl, types) =>
-                //        new UsernamePasswordCredentials()
-                //        {
-                //            Username = gitOptions.UserName,
-                //            Password = gitOptions.Password
-                //        });
-                //        //);
-
-                //var signature = new Signature(
-                //    new Identity(gitOptions.UserName, gitOptions.Email), DateTimeOffset.Now);
-
-                ////var result = await Task.Run(() => PullAsync(CurrentRepository, signature, options));
-                //var result = await Task.Run(() => Commands.Pull(CurrentRepository, signature, options));
-
-                var creds = new UsernamePasswordCredentials()
+                using (var repo = new Repository(CurrentRepository.Info.Path))
                 {
-                    Username = gitOptions.UserName,
-                    Password = gitOptions.Password
-                };
-                CredentialsHandler credHandler = (_url, _user, _cred) => creds;
-                var fetchOpts = new FetchOptions { CredentialsProvider = credHandler };
-                var remote = CurrentRepository.Network.Remotes["origin"];
-                var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                Commands.Fetch(CurrentRepository, remote.Name, refSpecs, fetchOpts, "logMessage");
+                    var gitOpts = EditorVM.AppOptions.GitOptions;
+                    // Credential information to fetch
+                    PullOptions options = new PullOptions();
+                    options.FetchOptions = new FetchOptions();
+                    options.FetchOptions.CredentialsProvider = new CredentialsHandler(
+                        (url, usernameFromUrl, types) =>
+                            new UsernamePasswordCredentials()
+                            {
+                                Username = gitOpts.UserName,
+                                Password = gitOpts.Password
+                            });
+
+                    // User information to create a merge commit
+                    var signature = new Signature(
+                        new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
+
+                    // Pull
+                    Commands.Pull(repo, signature, options);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error pulling repository. Error: {e.Message}");
-            }
-        }
-
-        private async Task<MergeResult> PullAsync(Repository repository, Signature signature, PullOptions options)
-        {
-            try
-            {
-                return await Task.Run(() => Commands.Pull(CurrentRepository, signature, options));
-            }
-            catch (Exception e)
-            {
-
-                throw e;
             }
         }
 
@@ -202,17 +181,20 @@ namespace CSVEditor.ViewModel
 
             try
             {
-                if (IsRepositoryUnstaged())
+                using (var repo = new Repository(CurrentRepository.Info.Path))
                 {
-                    StageRepository();
-                    Console.WriteLine($"Repository staged.");
+                    if (IsRepositoryUnstaged())
+                    {
+                        StageRepository();
+                        Console.WriteLine($"Repository staged.");
+                    }
+
+                    repo.Commit(options.CommitMessage, authorSifnature, authorSifnature);
+
+                    Console.WriteLine($"Repository commited");
+
+                    return true;
                 }
-
-                CurrentRepository.Commit(options.CommitMessage, authorSifnature, authorSifnature);
-
-                Console.WriteLine($"Repository commited");
-
-                return true;
             }
             catch (EmptyCommitException)
             {

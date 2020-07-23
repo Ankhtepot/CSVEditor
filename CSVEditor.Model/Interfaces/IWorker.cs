@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CSVEditor.Model.Interfaces
+﻿namespace CSVEditor.Model.Interfaces
 {
     public interface IWorker
     {

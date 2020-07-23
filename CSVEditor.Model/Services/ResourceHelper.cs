@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace CSVEditor.Model.Services

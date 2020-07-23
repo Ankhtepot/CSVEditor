@@ -1,5 +1,4 @@
-﻿using System;
-namespace CSVEditor.Model.HelperClasses
+﻿namespace CSVEditor.Model.HelperClasses
 {
     public class Enums
     {

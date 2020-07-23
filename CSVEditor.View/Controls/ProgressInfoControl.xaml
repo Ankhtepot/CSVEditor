@@ -5,15 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
-             xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="70"
              >
 
-    <UserControl.Resources>
-        <converters:WorkStatusToTextConverter x:Key="WorkStatusToTextConverter"/>
-    </UserControl.Resources>
-    
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -41,7 +36,6 @@
                          Orientation="Horizontal"
                          Margin="5"
                          Height="15"
-                         IsIndeterminate="False"
-                         />
+                         IsIndeterminate="False"/>
         </Grid>
 </UserControl>

@@ -26,9 +26,7 @@ namespace CSVEditor.Model.HelperClasses
             }
         }
 
-        public CsvColumnConfiguration() : this (FieldType.TextBox, "")
-        {
-        }
+        public CsvColumnConfiguration() : this (FieldType.TextBox, "") {}
 
         public CsvColumnConfiguration(FieldType type, string uRI = "")
         {

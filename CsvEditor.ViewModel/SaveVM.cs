@@ -1,12 +1,12 @@
 ﻿using CSVEditor.Model.HelperClasses;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+using CSVEditor.Model.Interfaces;
+using CSVEditor.Model.Services;
 using Prism.Commands;
 using System;
-using CSVEditor.Model.Services;
+using System.ComponentModel;
 using System.IO;
-using CSVEditor.Model.Interfaces;
+using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace CSVEditor.ViewModel
 {

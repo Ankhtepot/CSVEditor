@@ -2,7 +2,6 @@
 using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Interfaces;
 using CSVEditor.Model.Services;
-using CSVEditor.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using Prism.Commands;
 using System;
@@ -12,11 +11,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static CSVEditor.Model.HelperClasses.Enums;
-using static CSVEditor.Model.HelperClasses.SaveOptions;
 
 namespace CSVEditor.ViewModel
 {
@@ -80,7 +77,8 @@ namespace CSVEditor.ViewModel
             get { return selectedText; }
             set
             {
-                selectedText = value; OnPropertyChanged();
+                selectedText = value;
+                OnPropertyChanged();
             }
         }
 
@@ -503,7 +501,6 @@ namespace CSVEditor.ViewModel
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

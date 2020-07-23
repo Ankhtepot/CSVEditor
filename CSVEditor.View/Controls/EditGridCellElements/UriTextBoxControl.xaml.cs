@@ -1,5 +1,4 @@
 ﻿using CSVEditor.Model.Services;
-using CSVEditor.ViewModel;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;

@@ -1,4 +1,9 @@
-﻿using System;
+﻿using CSVEditor.Model;
+using CSVEditor.Model.HelperClasses;
+using CSVEditor.Model.Services;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -6,11 +11,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using CSVEditor.Model;
-using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CSVEditor.ViewModel
 {
@@ -161,7 +161,6 @@ namespace CSVEditor.ViewModel
 
             foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
-                //Console.WriteLine("Scanning directory: " + directory);
                 var recursiveYield = GetDirectoriesFromRootPath(directory, worker);
                 directories = recursiveYield != null
                     ? directories.Concat(recursiveYield).ToList()

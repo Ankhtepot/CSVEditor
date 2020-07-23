@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using CSVEditor.Services;
-using CSVEditor.Model.HelperClasses;
 
 namespace CSVEditor.Model
 {

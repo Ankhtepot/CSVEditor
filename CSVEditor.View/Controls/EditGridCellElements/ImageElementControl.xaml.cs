@@ -1,6 +1,5 @@
 ﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.ViewModel;
-using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;

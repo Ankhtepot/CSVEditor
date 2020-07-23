@@ -12,7 +12,6 @@
     <UserControl.Resources>
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Margin" Value="5,5"/>
-            <!--<Setter Property="Height" Value="25"/>-->
         </Style>
     </UserControl.Resources>
 

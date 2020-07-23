@@ -1,5 +1,4 @@
 ﻿using CSVEditor.Model.HelperClasses;
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -61,7 +60,6 @@ namespace CSVEditor.View.Controls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

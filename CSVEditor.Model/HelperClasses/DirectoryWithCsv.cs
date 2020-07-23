@@ -19,9 +19,7 @@ namespace CSVEditor.Model.HelperClasses
             set { csvFilesNames = value; }
         }
 
-        public DirectoryWithCsv() : this ("", new List<string>())
-        {
-        }
+        public DirectoryWithCsv() : this ("", new List<string>()) {}
 
         public DirectoryWithCsv(string directoryPath, List<string> fileNames)
         {

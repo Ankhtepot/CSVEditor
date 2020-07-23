@@ -1,7 +1,4 @@
-﻿using CSVEditor.Model.Services;
-using CSVEditor.ViewModel;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 
 namespace CSVEditor.View
 {

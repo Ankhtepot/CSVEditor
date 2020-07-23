@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using CSVEditor.Model.HelperClasses;
+﻿using CSVEditor.Model.HelperClasses;
+using System.Collections.Generic;
 
 namespace CSVEditor.Model
 {

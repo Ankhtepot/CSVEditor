@@ -1,16 +1,16 @@
-﻿using CSVEditor.Model.HelperClasses;
+﻿using CSVEditor.Model;
+using CSVEditor.Model.HelperClasses;
 using CSVEditor.Services;
 using CSVEditor.ViewModel.Abstracts;
+using CSVEditor.ViewModel.BackgroundWorkers;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static CSVEditor.Model.HelperClasses.Enums;
-using CSVEditor.ViewModel.BackgroundWorkers;
-using CSVEditor.Model;
-using System.Text;
 
 namespace CSVEditor.ViewModel
 {
@@ -111,7 +111,6 @@ namespace CSVEditor.ViewModel
                 {
                     await Task.Delay(UPDATE_PROGRESS_DELAY);
                     var dotsCount = SelectedFileRaw.Count<char>(ch => ch == '.');
-                    //TODO: check and fix updating after main task finishes if its broken
                     SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", ""); 
                     Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }
