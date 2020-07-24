@@ -39,7 +39,6 @@ namespace CSVEditor.ViewModel
             set
             {
                 workingStatus = value;
-                Console.WriteLine($"EditorVM:Working status = {value}");
                 OnPropertyChanged();
             }
         }
@@ -112,7 +111,6 @@ namespace CSVEditor.ViewModel
                     await Task.Delay(UPDATE_PROGRESS_DELAY);
                     var dotsCount = SelectedFileRaw.Count<char>(ch => ch == '.');
                     SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", ""); 
-                    Console.WriteLine("Updated Progress Text: " + SelectedFileRaw);
                 }
             });
         }
@@ -138,7 +136,6 @@ namespace CSVEditor.ViewModel
 
         public void CancelActiveWorkerAsync()
         {
-            Console.WriteLine("Canceling Active Worker: " + ActiveWorker.GetType().Name);
             ActiveWorker?.CancelAsync();
         }
 
@@ -149,7 +146,6 @@ namespace CSVEditor.ViewModel
             if (csvFile.Lines.Count < 1)
             {
                 WorkingStatus = WorkStatus.Done;
-                Console.WriteLine("Converting Csv File to text: ERROR: File has no lines to convert.");
             }
 
             var progressStep = 100d / csvFile.Lines.Count;

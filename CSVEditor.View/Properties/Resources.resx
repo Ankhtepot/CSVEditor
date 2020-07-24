@@ -135,6 +135,9 @@
   <data name="AuthorText" xml:space="preserve">
     <value>Author</value>
   </data>
+  <data name="CancelProcessText" xml:space="preserve">
+    <value>Cancel Process</value>
+  </data>
   <data name="CancelText" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -180,8 +183,17 @@
   <data name="GitText" xml:space="preserve">
     <value>Git</value>
   </data>
+  <data name="LineEditorText" xml:space="preserve">
+    <value>LineEditor</value>
+  </data>
+  <data name="LineNrText" xml:space="preserve">
+    <value>Line:</value>
+  </data>
   <data name="LoadDirectoryText" xml:space="preserve">
     <value>Load Directory</value>
+  </data>
+  <data name="LoadedCSVFilesText" xml:space="preserve">
+    <value>Loaded CSV files</value>
   </data>
   <data name="LoadText" xml:space="preserve">
     <value>Load</value>
@@ -215,6 +227,9 @@
   </data>
   <data name="PushText" xml:space="preserve">
     <value>Push on Save</value>
+  </data>
+  <data name="RawFileText" xml:space="preserve">
+    <value>Raw File</value>
   </data>
   <data name="RememberSelectionText" xml:space="preserve">
     <value>Remember This Selection</value>

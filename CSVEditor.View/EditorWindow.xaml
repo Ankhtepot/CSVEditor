@@ -7,7 +7,6 @@
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
-        xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
         Title="CSV Editor" 
         Height="450" 
@@ -79,32 +78,32 @@
                     <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                               Command="{Binding EditLineCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_Edit"/>
+                            <iconPacks:PackIconFontAwesome Kind="EditSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Style="{StaticResource MenuSeparatorStyle}"/>
                     <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
                               Command="{Binding AddLineToTopCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_AngleDoubleUp"/>
+                            <iconPacks:PackIconFontAwesome Kind="AngleDoubleUpSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static p:Resources.AddLineUpText}"
                               Command="{Binding AddLineUpCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_AngleUp"/>
+                            <iconPacks:PackIconFontAwesome Kind="AngleUpSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static p:Resources.AddLineDownText}"
                               Command="{Binding AddLineDownCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_AngleDown"/>
+                            <iconPacks:PackIconFontAwesome Kind="AngleDownSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
                               Command="{Binding AddLineToBottomCommand}">
                         <MenuItem.Icon>
-                            <fa:SvgAwesome Icon="Solid_AngleDoubleDown"/>
+                            <iconPacks:PackIconFontAwesome Kind="AngleDoubleDownSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Style="{StaticResource MenuSeparatorStyle}"/>
@@ -239,7 +238,7 @@
                 <!--#endregion column 2: GitRepo control -->
 
                 <Button Grid.Row="1"
-                        Content="Cancel process"
+                        Content="{x:Static p:Resources.CancelProcessText}"
                         HorizontalAlignment="Left"                        
                         Visibility="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToVisibilityConverter}}"
                         Style="{StaticResource CancelButtonStyle}"
@@ -270,23 +269,29 @@
                 </Grid.RowDefinitions>
 
                 <!--#region Loaded files section -->
-                <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="5,5,0,5">
+                <Border Style="{StaticResource BaseBorderStyle}" 
+                        Grid.Column="0" 
+                        Margin="5,5,0,5"
+                        Background="{DynamicResource DarkColorResource}">
                     <Grid VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Loaded CSV files" 
+                        <TextBlock Text="{x:Static p:Resources.LoadedCSVFilesText}" 
                                    Margin="10,0"
-                                   Grid.Row="0"/>
+                                   Grid.Row="0"
+                                   FontSize="{StaticResource MiddleFontSize}"
+                                   FontWeight="SemiBold"
+                                   Background="{DynamicResource DarkColorResource}"/>
                         <ListBox Grid.Row="1"
                                  ItemsSource="{Binding CsvFilesStructure}"
                                  x:Name="DirectoryListBoxOutter"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  VerticalAlignment="Stretch"
-                                 IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
-                                 >
+                                 Background="{DynamicResource LightColorResource}"
+                                 IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Focusable" Value="False"/>
@@ -294,13 +299,11 @@
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <uc:DirectoryWithCsvControl 
-                                        x:Name="DirectoryListBoxInner" 
-                                        DirectoryData="{Binding}"
-                                        SelectedFile="{Binding DataContext.SelectedFile, 
-                                            Mode=TwoWay, 
-                                            RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                        />
+                                    <uc:DirectoryWithCsvControl x:Name="DirectoryListBoxInner" 
+                                                                DirectoryData="{Binding}"
+                                                                SelectedFile="{Binding DataContext.SelectedFile, 
+                                                                Mode=TwoWay, 
+                                                                RelativeSource={RelativeSource AncestorType=ListBox}}"/>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -346,7 +349,7 @@
                         <!--#endregion Overview-->
 
                         <!--#region Line Editor-->
-                        <TabItem Header="Line Editor"
+                        <TabItem Header="{x:Static p:Resources.LineEditorText}"
                                  Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -448,7 +451,7 @@
                         <!--#endregion Line Editor-->
 
                         <!--#region RawText -->
-                        <TabItem Header="Raw File">
+                        <TabItem Header="{x:Static p:Resources.RawFileText}">
                             <Grid x:Name="RawFileStackPanel">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>

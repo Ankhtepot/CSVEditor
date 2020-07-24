@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
-             xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:p="clr-namespace:CSVEditor.View.Properties"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
@@ -15,39 +14,39 @@
 
         <ContextMenu x:Key="ItemContextMenu"
                      DataContext="{Binding Data, Source={StaticResource proxy}}">
-            <MenuItem Header="Edit This Line"
+            <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                       Command="{Binding EditLineCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_Edit" Foreground="Blue"/>
+                    <iconPacks:PackIconFontAwesome Kind="EditSolid" Foreground="Blue"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-            <MenuItem Header="Add New Line to the Beggining of File"
+            <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
                       Command="{Binding AddLineToTopCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_AngleDoubleUp" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AngleDoubleUpSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Add New Line Above This Line"
+            <MenuItem Header="{x:Static p:Resources.AddLineUpText}"
                       Command="{Binding AddLineUpCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_AngleUp" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AngleUpSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Add New Line Bellow This Line"
+            <MenuItem Header="{x:Static p:Resources.AddLineDownText}"
                       Command="{Binding AddLineDownCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_AngleDown" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AngleUpSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Add New Line to the End of File"
+            <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
                       Command="{Binding AddLineToBottomCommand}">
                 <MenuItem.Icon>
-                    <fa:SvgAwesome Icon="Solid_AngleDoubleDown" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AngleDoubleDownSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator Style="{StaticResource MenuSeparatorStyle}"/>
-            <MenuItem Header="Delete This Line"
+            <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
                       Command="{Binding DeleteLineCommand}">
                 <MenuItem.Icon>
                     <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
@@ -81,7 +80,7 @@
                         <GridViewColumn.Header>
                             <TextBlock TextAlignment="Center"
                                        MinWidth="30">
-                                <Run Text="Line:"/>
+                                <Run Text="{x:Static p:Resources.LineNrText}"/>
                             </TextBlock>
                         </GridViewColumn.Header>
                     </GridViewColumn>

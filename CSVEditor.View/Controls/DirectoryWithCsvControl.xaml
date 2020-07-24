@@ -16,25 +16,31 @@
     </UserControl.Resources>
 
     <Border>
-        <StackPanel>
+        <Border Style="{StaticResource BaseBorderStyle}" Margin="0" Background="{DynamicResource LightColorResource}">
             <StackPanel>
-                <TextBlock x:Name="RootPathTextBlock" 
-                           Text="{Binding DirectoryAbsolutePath}"
-                           TextWrapping="Wrap"
-                           Width="200"/>
-                <ListBox ItemsSource="{Binding CsvFilesNames}"
-                         SelectedItem="{Binding Path=.}"
-                         SelectionChanged="list_SelectionChanged"
-                         x:Name="CsvFilesListBox"
-                         LostFocus="CsvFilesListBox_LostFocus">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Name="filePathTextBlock"
-                                       Text="{Binding Path=., Converter={StaticResource AbsPathToFileNameConverter}}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <Border Style="{StaticResource BaseBorderStyle}" Background="LightGreen">
+                    <TextBlock x:Name="RootPathTextBlock" 
+                               Text="{Binding DirectoryAbsolutePath}"
+                               TextWrapping="Wrap"
+                               Width="200"
+                               Margin="5,2"/>
+                </Border>
+                <Border Style="{StaticResource BaseBorderStyle}" Margin="1">
+                    <ListBox ItemsSource="{Binding CsvFilesNames}"
+                             SelectedItem="{Binding Path=.}"
+                             SelectionChanged="list_SelectionChanged"
+                             x:Name="CsvFilesListBox"
+                             LostFocus="CsvFilesListBox_LostFocus"
+                             Background="MediumAquamarine">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=., Converter={StaticResource AbsPathToFileNameConverter}}"
+                                           FontWeight="Bold"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
             </StackPanel>
-        </StackPanel>
+        </Border>
     </Border>
 </UserControl>

@@ -115,6 +115,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel Process.
+        /// </summary>
+        public static string CancelProcessText {
+            get {
+                return ResourceManager.GetString("CancelProcessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string CancelText {
@@ -250,11 +259,38 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LineEditor.
+        /// </summary>
+        public static string LineEditorText {
+            get {
+                return ResourceManager.GetString("LineEditorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line:.
+        /// </summary>
+        public static string LineNrText {
+            get {
+                return ResourceManager.GetString("LineNrText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Directory.
         /// </summary>
         public static string LoadDirectoryText {
             get {
                 return ResourceManager.GetString("LoadDirectoryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded CSV files.
+        /// </summary>
+        public static string LoadedCSVFilesText {
+            get {
+                return ResourceManager.GetString("LoadedCSVFilesText", resourceCulture);
             }
         }
         
@@ -354,6 +390,15 @@ namespace CSVEditor.View.Properties {
         public static string PushText {
             get {
                 return ResourceManager.GetString("PushText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raw File.
+        /// </summary>
+        public static string RawFileText {
+            get {
+                return ResourceManager.GetString("RawFileText", resourceCulture);
             }
         }
         
