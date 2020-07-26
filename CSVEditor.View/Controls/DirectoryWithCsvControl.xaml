@@ -34,8 +34,14 @@
                              Background="MediumAquamarine">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=., Converter={StaticResource AbsPathToFileNameConverter}}"
-                                           FontWeight="Bold"/>
+                                <TextBlock x:Name="textblock" Text="{Binding Path=., Converter={StaticResource AbsPathToFileNameConverter}}"
+                                           FontWeight="SemiBold"/>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsSelected}" Value="True">         
+                                        <Setter Property="FontSize" TargetName="textblock" Value="13" />
+                                        <Setter Property="FontWeight" TargetName="textblock" Value="Bold"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

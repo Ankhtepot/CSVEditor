@@ -15,7 +15,7 @@ namespace CSVEditor.View.Controls
     {
         public static readonly string ROOT_DIRECTORY = "Root Directory";
 
-        private static string lastAcceptedImageSavePath;
+        private static string LastAcceptedImageSavePath;
 
         public string ImageCellContent
         {
@@ -100,15 +100,16 @@ namespace CSVEditor.View.Controls
         {
             if (FileSystemServices.IsImageFile(newImageFile))
             {
-                lastAcceptedImageSavePath ??= lastAcceptedImageSavePath = (DataContext as EditorVM).RootRepositoryPath;
-
                 var Context = DataContext as EditorVM;
+
+                LastAcceptedImageSavePath ??= LastAcceptedImageSavePath = Context.RootRepositoryPath;
+                
                 var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
                 var newImageFileName = Path.GetFileName(newImageFile);
 
                 var selectedSavePath = string.IsNullOrEmpty(uriText)
-                    ? FileSystemServices.QueryUserForPath(lastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
+                    ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
                     : uriText;
 
                 if (selectedSavePath == null)
@@ -116,7 +117,7 @@ namespace CSVEditor.View.Controls
                     return false;
                 }
 
-                if (FileSystemServices.SaveDraggedFile(newImageFile, selectedSavePath))
+                if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))
                 {
                     ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
                 };
@@ -153,7 +154,7 @@ namespace CSVEditor.View.Controls
         {
             var path = Path.Combine((DataContext as EditorVM).RootRepositoryPath, FileSystemServices.ConvertContentPathToSystemPath(CellContentTextBox.Text));
             path = Path.GetDirectoryName(path);
-            var filter = "All Valid Image Files (*.jpg, *.jpeg, *.png)|*.png;*.jpg;*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|JPEG Files (*.jpeg)|*.jpeg|All Files (*.*)|*.*";
+            var filter = Properties.Resources.ImageFilesFilter;
             var selectedImage = FileSystemServices.QueryUserToSelectFile(path, Constants.REPLACE_IMAGE_FILE, filter);
 
             if (!string.IsNullOrEmpty(selectedImage))

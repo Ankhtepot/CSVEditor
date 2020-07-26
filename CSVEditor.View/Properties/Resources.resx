@@ -153,6 +153,12 @@
   <data name="CommitText" xml:space="preserve">
     <value>Commit on Save</value>
   </data>
+  <data name="CurrentImageText" xml:space="preserve">
+    <value>CurrentImage</value>
+  </data>
+  <data name="DeleteCurrentImageText" xml:space="preserve">
+    <value>Delete Current Image</value>
+  </data>
   <data name="DeleteLineText" xml:space="preserve">
     <value>Delete This Line</value>
   </data>
@@ -183,6 +189,9 @@
   <data name="GitText" xml:space="preserve">
     <value>Git</value>
   </data>
+  <data name="ImageFilesFilter" xml:space="preserve">
+    <value>All Valid Image Files (*.jpg, *.jpeg, *.png)|*.png;*.jpg;*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|JPEG Files (*.jpeg)|*.jpeg|All Files (*.*)|*.*</value>
+  </data>
   <data name="LineEditorText" xml:space="preserve">
     <value>LineEditor</value>
   </data>
@@ -197,6 +206,9 @@
   </data>
   <data name="LoadText" xml:space="preserve">
     <value>Load</value>
+  </data>
+  <data name="NewImageText" xml:space="preserve">
+    <value>New Image</value>
   </data>
   <data name="NotCommitedError" xml:space="preserve">
     <value>Git Commit not performed - no changes to commit.</value>

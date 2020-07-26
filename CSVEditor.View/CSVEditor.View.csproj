@@ -8,12 +8,6 @@
 
   <ItemGroup>
     <None Remove="Controls\LineEditControl.xaml.cs~RFe30db0c.TMP" />
-    <None Remove="Images\icons8-add-file-50.png" />
-    <None Remove="Images\icons8-delete-file-50.png" />
-    <None Remove="Images\icons8-save-close-50.png" />
-    <None Remove="Images\icons8-thick-arrow-pointing-down-50.png" />
-    <None Remove="Images\icons8-up-right-50.png" />
-    <None Remove="Images\icons8_chevron_right_50px.png" />
     <None Remove="Images\no_image_available.png" />
     <None Remove="Images\question-mark-160071_small.png" />
   </ItemGroup>
@@ -35,24 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\icons8-add-file-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icons8-delete-file-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icons8-save-close-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icons8-thick-arrow-pointing-down-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icons8-up-right-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icons8_chevron_right_50px.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\no_image_available.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

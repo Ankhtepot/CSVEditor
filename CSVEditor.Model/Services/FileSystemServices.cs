@@ -272,7 +272,7 @@ namespace CSVEditor.ViewModel
             return false;
         }
 
-        public static bool SaveDraggedFile(string newImageFile, string selectedSavePath)
+        public static bool SaveImageFile(string newImageFile, string selectedSavePath)
         {
             var newFileName = Path.GetFileName(newImageFile);
 

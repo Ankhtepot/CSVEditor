@@ -46,6 +46,9 @@ namespace CSVEditor.View
             }
         }
 
-
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new ReplaceImageWindow().ShowDialog();
+        }
     }
 }

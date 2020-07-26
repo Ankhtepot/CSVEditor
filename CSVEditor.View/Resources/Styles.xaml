@@ -41,6 +41,10 @@
     <Style TargetType="Border" x:Key="RoundBordersForButtonStyle" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}">
         <Setter Property="CornerRadius" Value="5"/>
     </Style>
+    <Style TargetType="Border" x:Key="HeaderBorderStyle" BasedOn="{StaticResource BaseBorderStyle}">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Background" Value="{DynamicResource DarkColorResource}"/>
+    </Style>
     <!-- TextBlock -->
     <Style TargetType="TextBlock" x:Key="BaseTextBlockStyle">
         <Setter Property="Margin" Value="5"/>
@@ -58,6 +62,12 @@
     </Style>
     <Style x:Key="LowTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="Margin" Value="5,0"/>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="BorderedHeaderTextBlockStyle">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="{DynamicResource BigFontSize}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
     </Style>
     <!-- Button -->
     <Style TargetType="Button" x:Key="BaseButtonStyle">
@@ -143,5 +153,7 @@
     <!-- Global Style Variables -->
     <sys:Double x:Key="BaseFontSize">16</sys:Double>
     <sys:Double x:Key="MiddleFontSize">13</sys:Double>
+    <sys:Double x:Key="BigFontSize">20</sys:Double>
+    <sys:Double x:Key="SmallFontSize">10</sys:Double>
 
 </ResourceDictionary>

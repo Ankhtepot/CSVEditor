@@ -169,6 +169,24 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CurrentImage.
+        /// </summary>
+        public static string CurrentImageText {
+            get {
+                return ResourceManager.GetString("CurrentImageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Current Image.
+        /// </summary>
+        public static string DeleteCurrentImageText {
+            get {
+                return ResourceManager.GetString("DeleteCurrentImageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete This Line.
         /// </summary>
         public static string DeleteLineText {
@@ -259,6 +277,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Valid Image Files (*.jpg, *.jpeg, *.png)|*.png;*.jpg;*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|JPEG Files (*.jpeg)|*.jpeg|All Files (*.*)|*.*.
+        /// </summary>
+        public static string ImageFilesFilter {
+            get {
+                return ResourceManager.GetString("ImageFilesFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LineEditor.
         /// </summary>
         public static string LineEditorText {
@@ -300,6 +327,15 @@ namespace CSVEditor.View.Properties {
         public static string LoadText {
             get {
                 return ResourceManager.GetString("LoadText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Image.
+        /// </summary>
+        public static string NewImageText {
+            get {
+                return ResourceManager.GetString("NewImageText", resourceCulture);
             }
         }
         
