@@ -12,7 +12,8 @@
         <Border Style="{StaticResource HeaderBorderStyle}"
                 CornerRadius="{Binding CornerRadius, Mode=OneWay}">
             <TextBlock Text="{Binding Text, Mode=OneWay}"
-                       Style="{StaticResource BorderedHeaderTextBlockStyle}"/>
+                       Style="{StaticResource BorderedHeaderTextBlockStyle}"
+                       Margin="0,5"/>
         </Border>
     </Grid>
 </UserControl>

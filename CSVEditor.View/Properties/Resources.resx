@@ -255,6 +255,9 @@
   <data name="SaveAsText" xml:space="preserve">
     <value>Save as...</value>
   </data>
+  <data name="SaveImageText" xml:space="preserve">
+    <value>Save Image</value>
+  </data>
   <data name="SaveText" xml:space="preserve">
     <value>Save...</value>
   </data>

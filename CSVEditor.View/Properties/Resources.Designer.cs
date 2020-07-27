@@ -475,6 +475,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Image.
+        /// </summary>
+        public static string SaveImageText {
+            get {
+                return ResourceManager.GetString("SaveImageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save....
         /// </summary>
         public static string SaveText {

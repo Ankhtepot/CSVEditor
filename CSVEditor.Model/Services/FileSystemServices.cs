@@ -248,7 +248,7 @@ namespace CSVEditor.ViewModel
             }
             else
             {
-                newImage.UriSource = ResourceHelper.LoadBitmapUriSourceFromResource("images/no_image_available.png");
+                newImage.UriSource = ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
             }
 
             newImage.EndInit();

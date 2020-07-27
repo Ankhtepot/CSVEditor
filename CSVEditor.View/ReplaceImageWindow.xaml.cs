@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSVEditor.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -20,6 +21,11 @@ namespace CSVEditor.View
         public ReplaceImageWindow()
         {
             InitializeComponent();
+        }
+
+        public void SetImagePaths(string newImagePath, string currentImagePath)
+        {
+            (DataContext as ReplaceImageVM).SetImagePaths(newImagePath, currentImagePath);
         }
     }
 }

@@ -117,6 +117,12 @@ namespace CSVEditor.View.Controls
                     return false;
                 }
 
+                if (!string.IsNullOrEmpty(CellContentTextBox.Text))
+                {
+                    var replaceWindow = new ReplaceImageWindow();
+                    replaceWindow.SetImagePaths(newImageFile, selectedSavePath);
+                }
+
                 if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))
                 {
                     ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);

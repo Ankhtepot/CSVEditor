@@ -7,17 +7,19 @@
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
+        xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
+        xmlns:c="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
         mc:Ignorable="d"
         Title="Replace Image" Height="450" Width="800">
 
-    <!--<Window.DataContext>
-        <local:ReplaceImageWindow/>
-    </Window.DataContext>-->
+    <Window.DataContext>
+        <vm:ReplaceImageVM/>
+    </Window.DataContext>
 
     <Window.Resources>
         <Style x:Key="VerticalBorderLineStyle" TargetType="Border">
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="MaxWidth" Value="2"/>
             <Setter Property="BorderBrush" Value="Gray"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -27,40 +29,114 @@
 
     <Border Style="{StaticResource BaseBorderStyle}"
             Background="{DynamicResource LightColorResource}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <StackPanel Grid.Column="0" Grid.Row="0">
-                <uc:HeaderWithBorderControl Text="{x:Static p:Resources.NewImageText}"/>
-            </StackPanel>
-
-            <Grid Grid.Column="1" Grid.Row="0">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Border Style="{StaticResource VerticalBorderLineStyle}"
-                        Grid.Row="0"/>
-                <TextBlock Grid.Row="1">
-                    <iconPacks:PackIconEntypo Kind="ArrowBoldRight" 
-                                              Margin="5,20"/>
-                </TextBlock>
-                <Border Style="{StaticResource VerticalBorderLineStyle}"
+
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <uc:HeaderWithBorderControl Text="{x:Static p:Resources.NewImageText}" Width="170" Margin="0,30"/>
+                    <Border Style="{StaticResource BaseSquareBorderStyle}"
+                        Width="150"
+                        MaxHeight="150">
+                        <Image Stretch="Fill"
+                           Source="{Binding NewImageSource}">
+                            <Image.ToolTip>
+                                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                    <Border BorderBrush="Black" BorderThickness="1">
+                                        <Image Source="{Binding Source}" Stretch="UniformToFill" MaxHeight="500"/>
+                                    </Border>
+                                </ToolTip>
+                            </Image.ToolTip>
+                        </Image>
+                    </Border>
+                </StackPanel>
+
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Border Style="{StaticResource VerticalBorderLineStyle}"
+                        Grid.Row="0"
+                        Margin="5,30,5,5"/>
+                    <TextBlock Grid.Row="1" FontSize="30">
+                        <iconPacks:PackIconEntypo Kind="ArrowBoldRight" 
+                                                  Margin="5,20"
+                                                  Width="50"
+                                                  Height="50"/>
+                    </TextBlock>
+                    <Border Style="{StaticResource VerticalBorderLineStyle}"
                         Grid.Row="2"/>
+                </Grid>
+
+                <StackPanel Grid.Column="2" Grid.Row="0">
+                    <uc:HeaderWithBorderControl Text="{x:Static p:Resources.CurrentImageText}" Width="170" Margin="0,30"/>
+                    <Border Style="{StaticResource BaseSquareBorderStyle}"
+                        Width="150"
+                        MaxHeight="150">
+                        <Image Stretch="Fill"
+                           Source="{Binding CurrentImageSource}">
+                            <Image.ToolTip>
+                                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                    <Border BorderBrush="Black" BorderThickness="1">
+                                        <Image Source="{Binding Source}" Stretch="UniformToFill" MaxHeight="500"/>
+                                    </Border>
+                                </ToolTip>
+                            </Image.ToolTip>
+                        </Image>
+                    </Border>
+                </StackPanel>
             </Grid>
 
-            <!--<StackPanel Grid.Column="2" Grid.Row="0">
-                <uc:HeaderWithBorderControl Text="{x:Static p:Resources.CurrentImageText}"/>
-            </StackPanel>-->
-        </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource AcceptButtonStyle}"
+                        Content="{x:Static p:Resources.SaveImageText}"
+                        Grid.Column="0"
+                        Margin="10,10"
+                        HorizontalAlignment="Center"
+                        Width="100">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+
+                <CheckBox x:Name="OverwriteCheckbox"
+                          Content="{x:Static p:Resources.OverwriteText}"
+                          Visibility="{Binding Overwrite, Converter={StaticResource BoolToVisibilityConverter}}"
+                          Grid.Column="1"
+                          HorizontalAlignment="Center"/>
+                <CheckBox x:Name="DeleteCheckbox"
+                          Content="{x:Static p:Resources.DeleteCurrentImageText}"
+                          Visibility="{Binding Overwrite, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"
+                          Grid.Column="1"
+                          HorizontalAlignment="Center"/>
+
+                <Button Style="{StaticResource CancelButtonStyle}"
+                        Content="{x:Static p:Resources.CancelText}"
+                        Grid.Column="2"
+                        Margin="10,10"
+                        HorizontalAlignment="Center"
+                        Width="100">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </StackPanel>
     </Border>
 </Window>
