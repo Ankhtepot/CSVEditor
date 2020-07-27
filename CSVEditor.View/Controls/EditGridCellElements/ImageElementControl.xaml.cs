@@ -120,7 +120,8 @@ namespace CSVEditor.View.Controls
                 if (!string.IsNullOrEmpty(CellContentTextBox.Text))
                 {
                     var replaceWindow = new ReplaceImageWindow();
-                    replaceWindow.SetImagePaths(newImageFile, selectedSavePath);
+                    replaceWindow.SetImagePaths(newImageFile, selectedSavePath, CellContentTextBox.Text);
+                    replaceWindow.ShowDialog();
                 }
 
                 if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))

@@ -23,9 +23,9 @@ namespace CSVEditor.View
             InitializeComponent();
         }
 
-        public void SetImagePaths(string newImagePath, string currentImagePath)
+        public void SetImagePaths(string newImagePath, string savePath, string currentImagePath)
         {
-            (DataContext as ReplaceImageVM).SetImagePaths(newImagePath, currentImagePath);
+            (DataContext as ReplaceImageVM).SetImagePaths(newImagePath, savePath, currentImagePath);
         }
     }
 }
