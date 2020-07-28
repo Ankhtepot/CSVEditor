@@ -72,7 +72,7 @@ namespace CSVEditor.View.Controls
             string uriPath = configUri;
             path = Path.Combine(string.IsNullOrEmpty(configUri) ? rootRepositoryPath : uriPath, path);
 
-            return FileSystemServices.SetBitmapImageFromPath(path);
+            return FileSystemServices.GetBitmapImageFromPath(path);
         }
 
         private void CellContentTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -120,6 +120,7 @@ namespace CSVEditor.View.Controls
                 if (!string.IsNullOrEmpty(CellContentTextBox.Text))
                 {
                     var replaceWindow = new ReplaceImageWindow();
+                    //TODO: Fix savePath so its full path where file should be saved
                     replaceWindow.SetImagePaths(newImageFile, selectedSavePath, CellContentTextBox.Text);
                     replaceWindow.ShowDialog();
                 }

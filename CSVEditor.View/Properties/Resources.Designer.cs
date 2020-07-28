@@ -178,6 +178,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Current File and Save.
+        /// </summary>
+        public static string DeleteCurrentFileAndSaveText {
+            get {
+                return ResourceManager.GetString("DeleteCurrentFileAndSaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Current Image.
         /// </summary>
         public static string DeleteCurrentImageText {
@@ -340,6 +349,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Save Path:.
+        /// </summary>
+        public static string NewSavePathText {
+            get {
+                return ResourceManager.GetString("NewSavePathText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Git Commit not performed - no changes to commit..
         /// </summary>
         public static string NotCommitedError {
@@ -381,6 +399,15 @@ namespace CSVEditor.View.Properties {
         public static string OpenGitSetupText {
             get {
                 return ResourceManager.GetString("OpenGitSetupText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite Current File.
+        /// </summary>
+        public static string OverwriteCurrentFileText {
+            get {
+                return ResourceManager.GetString("OverwriteCurrentFileText", resourceCulture);
             }
         }
         

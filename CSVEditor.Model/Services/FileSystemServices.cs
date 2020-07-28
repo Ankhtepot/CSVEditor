@@ -236,7 +236,7 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public static BitmapImage SetBitmapImageFromPath(string path)
+        public static BitmapImage GetBitmapImageFromPath(string path)
         {
             BitmapImage newImage = new BitmapImage();
             newImage.BeginInit();

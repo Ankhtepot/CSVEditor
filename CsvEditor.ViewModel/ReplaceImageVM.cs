@@ -1,6 +1,7 @@
 ﻿using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using CSVEditor.Services;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,19 +9,20 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace CSVEditor.ViewModel
 {
     public class ReplaceImageVM : INotifyPropertyChanged
     {
-        private Uri newImageSource;
-        public Uri NewImageSource
+        private ImageSource newImageSource;
+        public ImageSource NewImageSource
         {
             get 
             {
                 if (newImageSource == null)
                 {
-                    return ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
+                    return FileSystemServices.GetBitmapImageFromPath("");
                 }
                 return newImageSource; 
             }
@@ -31,14 +33,14 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        private Uri currentImageSource;
-        public Uri CurrentImageSource
+        private ImageSource currentImageSource;
+        public ImageSource CurrentImageSource
         {
             get 
             {
                 if (currentImageSource == null)
                 {
-                    return ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
+                    return FileSystemServices.GetBitmapImageFromPath("");
                 }
                 return currentImageSource;
             }
@@ -71,6 +73,17 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        private string savePath;
+        public string SavePath
+        {
+            get { return savePath; }
+            set 
+            {
+                savePath = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool overwrite;
         public bool Overwrite
         {
@@ -82,14 +95,85 @@ namespace CSVEditor.ViewModel
             }
         }
 
+        private bool actionChecked;
+        public bool ActionChecked
+        {
+            get { return actionChecked; }
+            set 
+            {
+                actionChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string newSavePath;
+        public string NewSavePath
+        {
+            get { return newSavePath; }
+            set 
+            {
+                newSavePath = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DelegateCommand CancelCommand { get; set; }
+        public DelegateCommand DeleteCurentImageAndSaveCommand { get; set; }
+        public DelegateCommand OverwriteCurrentImageCommand { get; set; }
+        public DelegateCommand SaveCommand { get; set; }
+
+        public Action<ReplaceImageResult> OnWindowResultChange;
+
         public ReplaceImageVM()
         {
             Overwrite = true;
+            ActionChecked = false;
+            NewSavePath = "no path to display";
+
+            CancelCommand = new DelegateCommand(Cancel);
+            DeleteCurentImageAndSaveCommand = new DelegateCommand(DeleteCurentImageAndSave);
+            OverwriteCurrentImageCommand = new DelegateCommand(OverwriteCurrentImage);
+            SaveCommand = new DelegateCommand(Save);
         }
 
-        public void SetImagePaths(string newImagePath, string savePath, string currentImagePath)
+        public enum ReplaceImageResult
         {
-            Overwrite = Path.GetFileName(newImagePath) == Path.GetFileName(currentImagePath);
+            Canceled,
+            Overwrite,
+            DeleteAndSave,
+            Save
+        }
+
+        private void OverwriteCurrentImage()
+        {
+            OnWindowResultChange?.Invoke(ReplaceImageResult.Overwrite);
+        }
+
+        private void DeleteCurentImageAndSave()
+        {
+            OnWindowResultChange?.Invoke(ReplaceImageResult.DeleteAndSave);
+        }
+
+        private void Cancel()
+        {
+            OnWindowResultChange?.Invoke(ReplaceImageResult.Canceled);
+        }
+
+        private void Save()
+        {
+            OnWindowResultChange?.Invoke(ReplaceImageResult.Save);
+        }
+
+        public void SetImagePaths(string newImagePath, string savePath, string currentImageRelativePath)
+        {
+            Overwrite = Path.GetFileName(newImagePath) == Path.GetFileName(currentImageRelativePath);
+            NewImagePath = newImagePath;
+            CurrentImagePath = currentImageRelativePath;
+            SavePath = savePath;
+            NewSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
+
+            NewImageSource = FileSystemServices.GetBitmapImageFromPath(newImagePath);
+            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath(Path.Combine(savePath, currentImageRelativePath));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -37,7 +37,7 @@ namespace CSVEditor.View.Controls
         public HeaderWithBorderControl()
         {
             InitializeComponent();
-            DataContext = this;
+            TopContainer.DataContext = this;
         }
     }
 }

@@ -94,6 +94,25 @@
         <Setter Property="Background" Value="LightGreen"/>
         <Setter Property="BorderBrush" Value="Green"/>
     </Style>
+    <Thickness x:Key="ButtonMargin" Left="10" Top="10" Right="10" Bottom="10"/>
+    <HorizontalAlignment x:Key="ButtonHorizontalAlignment">center</HorizontalAlignment>
+    <FontWeight x:Key="ButtonFontWeight">Bold</FontWeight>
+    <sys:Double x:Key="ButtonFontSize">20</sys:Double>
+    <sys:Double x:Key="ButtonWidth">150</sys:Double>
+    <Style x:Key="BigAcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource AcceptButtonStyle}">
+        <Setter Property="Margin" Value="{StaticResource ButtonMargin}"/>
+        <Setter Property="HorizontalAlignment" Value="{StaticResource ButtonHorizontalAlignment}"/>
+        <Setter Property="Width" Value="{StaticResource ButtonWidth}"/>
+        <Setter Property="FontSize" Value="{StaticResource ButtonFontSize}"/>
+        <Setter Property="FontWeight" Value="{StaticResource ButtonFontWeight}"/>
+    </Style>
+    <Style x:Key="BigCancelButtonStyle" TargetType="Button" BasedOn="{StaticResource CancelButtonStyle}">
+        <Setter Property="Margin" Value="{StaticResource ButtonMargin}"/>
+        <Setter Property="HorizontalAlignment" Value="{StaticResource ButtonHorizontalAlignment}"/>
+        <Setter Property="Width" Value="{StaticResource ButtonWidth}"/>
+        <Setter Property="FontSize" Value="{StaticResource ButtonFontSize}"/>
+        <Setter Property="FontWeight" Value="{StaticResource ButtonFontWeight}"/>
+    </Style>
     <!-- DatePicker -->
     <Style TargetType="DatePicker" x:Key="BaseDatePickerStyle">
         <Setter Property="SelectedDateFormat" Value="Short"/>
