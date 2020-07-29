@@ -20,19 +20,27 @@ namespace CSVEditor.View.Controls
     {
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(""));
 
         public CornerRadius CornerRadius
         {
-            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
-            set { SetValue(CornerRadiusProperty, value); }
+            get => (CornerRadius)GetValue(CornerRadiusProperty);
+            set => SetValue(CornerRadiusProperty, value);
         }
         public static readonly DependencyProperty CornerRadiusProperty =
             DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(HeaderWithBorderControl), new PropertyMetadata(new CornerRadius(5)));
+
+        public Thickness TextPadding
+        {
+            get => (Thickness)GetValue(TextPaddingProperty);
+            set => SetValue(TextPaddingProperty, value);
+        }
+        public static readonly DependencyProperty TextPaddingProperty =
+            DependencyProperty.Register("TextPadding", typeof(Thickness), typeof(HeaderWithBorderControl), new PropertyMetadata(new Thickness(5)));
 
         public HeaderWithBorderControl()
         {

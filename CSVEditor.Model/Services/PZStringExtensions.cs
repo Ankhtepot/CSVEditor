@@ -29,5 +29,25 @@ namespace CSVEditor.Model.Services
 
             return false;
         }
+
+        public static string ToSystemPath(this string jsonPath)
+        {
+            var path = "";
+
+            if (string.IsNullOrEmpty(jsonPath))
+            {
+                return path;
+            }
+
+            path = Regex.Replace(jsonPath, "\r", "");
+            path = Regex.Replace(path, "/", @"\");
+
+            if (!char.IsLetterOrDigit(path[0]))
+            {
+                path = path.Substring(1);
+            }
+
+            return path;
+        }
     }
 }

@@ -157,7 +157,7 @@ namespace CSVEditor.ViewModel
                 return null;
             }
 
-            IEnumerable<string> directories = getDirectoriesFromPath(rootPath, worker) ?? new List<string>();
+            IEnumerable<string> directories = GetDirectoriesFromPath(rootPath, worker) ?? new List<string>();
 
             foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
@@ -170,7 +170,7 @@ namespace CSVEditor.ViewModel
             return directories != null ? directories.ToList() : null;
         }
 
-        private static List<string> getDirectoriesFromPath(string path, BackgroundWorker worker = null)
+        private static List<string> GetDirectoriesFromPath(string path, BackgroundWorker worker = null)
         {
             if (worker != null && worker.CancellationPending)
             {
@@ -285,7 +285,6 @@ namespace CSVEditor.ViewModel
 
             if (File.Exists(fullNewFilePath))
             {
-                //TODO: if file already exists, pop up windows with preview and ask if user wants to replace that file.
                 if (MessageBox.Show(messageOverwrite, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
                 {
                     File.Copy(newImageFile, fullNewFilePath, true);

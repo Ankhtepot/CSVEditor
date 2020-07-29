@@ -39,7 +39,7 @@
                             <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
                         </Button.Resources>
                     </Button>
-                    <Button Command="{Binding SaveAltrnativePathCommand}" Style="{StaticResource BaseButtonStyle}"
+                    <Button Command="{Binding SaveAlternativePathCommand}" Style="{StaticResource BaseButtonStyle}"
                             Grid.Column="1"
                             MinWidth="50">
                         <TextBlock>

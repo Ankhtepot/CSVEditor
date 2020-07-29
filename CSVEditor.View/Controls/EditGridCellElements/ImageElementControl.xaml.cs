@@ -1,34 +1,37 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.ViewModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using CSVEditor.Model.HelperClasses;
+using CSVEditor.Model.Services;
+using CSVEditor.ViewModel;
 
-namespace CSVEditor.View.Controls
+namespace CSVEditor.View.Controls.EditGridCellElements
 {
     /// <summary>
     /// Interaction logic for ImageElementControl.xaml
     /// </summary>
     public partial class ImageElementControl : UserControl
     {
+        private static EditorVM Context;
+
         public static readonly string ROOT_DIRECTORY = "Root Directory";
 
         private static string LastAcceptedImageSavePath;
 
         public string ImageCellContent
         {
-            get { return (string)GetValue(ImageCellContentProperty); }
-            set { SetValue(ImageCellContentProperty, value); }
+            get => (string)GetValue(ImageCellContentProperty);
+            set => SetValue(ImageCellContentProperty, value);
         }
         public static readonly DependencyProperty ImageCellContentProperty =
             DependencyProperty.Register("ImageCellContent", typeof(string), typeof(ImageElementControl), new PropertyMetadata(null, ImageSourceChanged));
 
         public int ColumnNr
         {
-            get { return (int)GetValue(ColumnNrProperty); }
-            set { SetValue(ColumnNrProperty, value); }
+            get => (int)GetValue(ColumnNrProperty);
+            set => SetValue(ColumnNrProperty, value);
         }
         public static readonly DependencyProperty ColumnNrProperty =
             DependencyProperty.Register("ColumnNr", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
@@ -36,6 +39,7 @@ namespace CSVEditor.View.Controls
         public ImageElementControl()
         {
             InitializeComponent();
+            Context = DataContext as EditorVM;
         }
 
         private static void ImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -48,7 +52,8 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            var Context = control.DataContext as EditorVM;
+            Context ??= control.DataContext as EditorVM;
+
             var configUri = Context.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
             var newImage = GetImageSource(imageCellContent, Context.RootRepositoryPath, configUri);
 
@@ -68,7 +73,7 @@ namespace CSVEditor.View.Controls
 
         public static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath, string configUri)
         {
-            string path = FileSystemServices.ConvertContentPathToSystemPath(cellContent);
+            string path = cellContent.ToSystemPath();
             string uriPath = configUri;
             path = Path.Combine(string.IsNullOrEmpty(configUri) ? rootRepositoryPath : uriPath, path);
 
@@ -98,33 +103,39 @@ namespace CSVEditor.View.Controls
 
         private bool SaveNewImageSourceFile(string newImageFile)
         {
-            if (FileSystemServices.IsImageFile(newImageFile))
+            if (!FileSystemServices.IsImageFile(newImageFile))
             {
-                var Context = DataContext as EditorVM;
+                return true;
+            }
 
-                LastAcceptedImageSavePath ??= LastAcceptedImageSavePath = Context.RootRepositoryPath;
+            Context ??= DataContext as EditorVM;
+
+            LastAcceptedImageSavePath ??= LastAcceptedImageSavePath = Context?.RootRepositoryPath;
                 
-                var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
+            var uriText = Context?.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
-                var newImageFileName = Path.GetFileName(newImageFile);
+            var newImageFileName = Path.GetFileName(newImageFile);
 
-                var selectedSavePath = string.IsNullOrEmpty(uriText)
-                    ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
-                    : uriText;
+            var selectedSavePath = string.IsNullOrEmpty(uriText) || uriText == Context.SelectedCsvFile.AbsPath
+                ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
+                : uriText;
 
-                if (selectedSavePath == null)
-                {
-                    return false;
-                }
+            if (selectedSavePath == null)
+            {
+                return false;
+            }
 
-                if (!string.IsNullOrEmpty(CellContentTextBox.Text))
-                {
-                    var replaceWindow = new ReplaceImageWindow();
-                    //TODO: Fix savePath so its full path where file should be saved
-                    replaceWindow.SetImagePaths(newImageFile, selectedSavePath, CellContentTextBox.Text);
-                    replaceWindow.ShowDialog();
-                }
-
+            if (!string.IsNullOrEmpty(CellContentTextBox.Text))
+            {
+                var replaceWindow = new ReplaceImageWindow();
+                replaceWindow.SetImagePaths(newImageFile, selectedSavePath, CellContentTextBox.Text);
+                replaceWindow.ShowDialog();
+                selectedSavePath = replaceWindow.NewSavePath;
+                File.Copy(newImageFile, selectedSavePath, true);
+                ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
+            }
+            else
+            {
                 if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))
                 {
                     ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
@@ -137,7 +148,6 @@ namespace CSVEditor.View.Controls
         private void ResolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)
         {
             var cellContentPath = Path.Combine(fileSavePath, fileName);
-            var Context = DataContext as EditorVM;
             var uriText = Context.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
             cellContentPath = string.IsNullOrEmpty(uriText)
@@ -160,26 +170,33 @@ namespace CSVEditor.View.Controls
 
         private void SelectImageFileFromDialog()
         {
-            var path = Path.Combine((DataContext as EditorVM).RootRepositoryPath, FileSystemServices.ConvertContentPathToSystemPath(CellContentTextBox.Text));
+            var path = Path.Combine(Context.RootRepositoryPath, CellContentTextBox.Text.ToSystemPath());
             path = Path.GetDirectoryName(path);
             var filter = Properties.Resources.ImageFilesFilter;
             var selectedImage = FileSystemServices.QueryUserToSelectFile(path, Constants.REPLACE_IMAGE_FILE, filter);
 
-            if (!string.IsNullOrEmpty(selectedImage))
+            if (string.IsNullOrEmpty(selectedImage))
             {
-                if (path == Path.GetDirectoryName(selectedImage))
-                {
-                    ResolveCellContentTextBoxFromSavePath(path, Path.GetFileName(selectedImage));
-                    return;
-                }
-
-                SaveNewImageSourceFile(selectedImage);
+                return;
             }
+
+            if (path == Path.GetDirectoryName(selectedImage))
+            {
+                ResolveCellContentTextBoxFromSavePath(path, Path.GetFileName(selectedImage));
+                return;
+            }
+
+            SaveNewImageSourceFile(selectedImage);
         }
 
         private void CellContentTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            (DataContext as EditorVM).IsFileEdited = true;
+            Context.IsFileEdited = true;
+        }
+
+        private void ImageElementControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

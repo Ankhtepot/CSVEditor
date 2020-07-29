@@ -42,7 +42,7 @@ namespace CSVEditor.ViewModel
 
         public DelegateCommand OverwriteCommand { get; set; }
         public DelegateCommand SaveAsCommand { get; set; }
-        public DelegateCommand SaveAltrnativePathCommand { get; set; }
+        public DelegateCommand SaveAlternativePathCommand { get; set; }
         public DelegateCommand CancelCommand { get; set; }
 
         public static Action<bool, bool> OnSaved;
@@ -51,7 +51,7 @@ namespace CSVEditor.ViewModel
         {
             OverwriteCommand = new DelegateCommand(Overwrite);
             SaveAsCommand = new DelegateCommand(SaveAs);
-            SaveAltrnativePathCommand = new DelegateCommand(SaveAlternativePath);
+            SaveAlternativePathCommand = new DelegateCommand(SaveAlternativePath);
             CancelCommand = new DelegateCommand(Cancel);
         }
 

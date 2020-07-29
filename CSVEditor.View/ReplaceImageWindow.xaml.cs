@@ -19,8 +19,10 @@ namespace CSVEditor.View
     /// </summary>
     public partial class ReplaceImageWindow : Window
     {
-        public ReplaceImageResult WindowResult = ReplaceImageResult.Canceled;
         private ReplaceImageVM Context;
+
+        public ReplaceImageResult WindowResult = ReplaceImageResult.Canceled;
+        public string NewSavePath => Context?.NewSavePath;
 
         public ReplaceImageWindow()
         {
@@ -36,6 +38,7 @@ namespace CSVEditor.View
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Context.OnWindowResultChange += (result) => WindowResult = result;
+            Context.OnWindowCloseRequested += Close;
         }
     }
 }

@@ -6,14 +6,15 @@
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
              xmlns:p="clr-namespace:CSVEditor.View.Properties"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="200">
+             d:DesignHeight="50" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance Type=local:HeaderWithBorderControl}">
     
     <Grid x:Name="TopContainer">
         <Border Style="{StaticResource HeaderBorderStyle}"
                 CornerRadius="{Binding CornerRadius, Mode=OneWay}">
             <TextBlock Text="{Binding Text, Mode=OneWay}"
                        Style="{StaticResource BorderedHeaderTextBlockStyle}"
-                       Margin="0,5"/>
+                       Margin="{Binding TextPadding}"/>
         </Border>
     </Grid>
 </UserControl>

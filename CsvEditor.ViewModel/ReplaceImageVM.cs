@@ -1,15 +1,10 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
-using CSVEditor.Services;
+﻿using CSVEditor.Model.Services;
 using Prism.Commands;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace CSVEditor.ViewModel
 {
@@ -54,7 +49,7 @@ namespace CSVEditor.ViewModel
         private string newImagePath;
         public string NewImagePath
         {
-            get { return newImagePath; }
+            get => newImagePath;
             private set 
             {
                 newImagePath = value;
@@ -65,7 +60,7 @@ namespace CSVEditor.ViewModel
         private string currentImagePath;
         public string CurrentImagePath
         {
-            get { return currentImagePath; }
+            get => currentImagePath;
             private set 
             {
                 currentImagePath = value;
@@ -76,7 +71,7 @@ namespace CSVEditor.ViewModel
         private string savePath;
         public string SavePath
         {
-            get { return savePath; }
+            get => savePath;
             set 
             {
                 savePath = value;
@@ -87,7 +82,7 @@ namespace CSVEditor.ViewModel
         private bool overwrite;
         public bool Overwrite
         {
-            get { return overwrite; }
+            get => overwrite;
             set 
             {
                 overwrite = value;
@@ -98,7 +93,7 @@ namespace CSVEditor.ViewModel
         private bool actionChecked;
         public bool ActionChecked
         {
-            get { return actionChecked; }
+            get => actionChecked;
             set 
             {
                 actionChecked = value;
@@ -109,7 +104,7 @@ namespace CSVEditor.ViewModel
         private string newSavePath;
         public string NewSavePath
         {
-            get { return newSavePath; }
+            get => newSavePath;
             set 
             {
                 newSavePath = value;
@@ -118,11 +113,12 @@ namespace CSVEditor.ViewModel
         }
 
         public DelegateCommand CancelCommand { get; set; }
-        public DelegateCommand DeleteCurentImageAndSaveCommand { get; set; }
+        public DelegateCommand DeleteCurrentImageAndSaveCommand { get; set; }
         public DelegateCommand OverwriteCurrentImageCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
         public Action<ReplaceImageResult> OnWindowResultChange;
+        public Action OnWindowCloseRequested;
 
         public ReplaceImageVM()
         {
@@ -131,7 +127,7 @@ namespace CSVEditor.ViewModel
             NewSavePath = "no path to display";
 
             CancelCommand = new DelegateCommand(Cancel);
-            DeleteCurentImageAndSaveCommand = new DelegateCommand(DeleteCurentImageAndSave);
+            DeleteCurrentImageAndSaveCommand = new DelegateCommand(DeleteCurrentImageAndSave);
             OverwriteCurrentImageCommand = new DelegateCommand(OverwriteCurrentImage);
             SaveCommand = new DelegateCommand(Save);
         }
@@ -147,33 +143,57 @@ namespace CSVEditor.ViewModel
         private void OverwriteCurrentImage()
         {
             OnWindowResultChange?.Invoke(ReplaceImageResult.Overwrite);
+            CloseWindow();
         }
 
-        private void DeleteCurentImageAndSave()
+        private void DeleteCurrentImageAndSave()
         {
+            if (File.Exists(CurrentImagePath))
+            {
+                File.Delete(CurrentImagePath);
+            }
+
             OnWindowResultChange?.Invoke(ReplaceImageResult.DeleteAndSave);
+            CloseWindow();
         }
 
         private void Cancel()
         {
             OnWindowResultChange?.Invoke(ReplaceImageResult.Canceled);
+            CloseWindow();
         }
 
         private void Save()
         {
             OnWindowResultChange?.Invoke(ReplaceImageResult.Save);
+            CloseWindow();
         }
 
-        public void SetImagePaths(string newImagePath, string savePath, string currentImageRelativePath)
+        private void CloseWindow()
         {
-            Overwrite = Path.GetFileName(newImagePath) == Path.GetFileName(currentImageRelativePath);
+            NewImageSource = FileSystemServices.GetBitmapImageFromPath("");
+            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath("");
+            OnWindowCloseRequested?.Invoke();
+        }
+
+        public void SetImagePaths(string newImagePath, string savePath, string cellContentPath)
+        {
             NewImagePath = newImagePath;
-            CurrentImagePath = currentImageRelativePath;
+            CurrentImagePath = Path.Combine(savePath, cellContentPath.ToSystemPath());
             SavePath = savePath;
-            NewSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
+
+            Overwrite = Path.GetFileName(newImagePath) == Path.GetFileName(cellContentPath);
+
+            var lastSlash = cellContentPath.LastIndexOf("/");
+
+            var cleanedRelativePath = cellContentPath
+                .Substring(0,  lastSlash != -1 ? lastSlash : 0)
+                .ToSystemPath();
+
+            NewSavePath = Path.Combine(SavePath, cleanedRelativePath, Path.GetFileName(NewImagePath));
 
             NewImageSource = FileSystemServices.GetBitmapImageFromPath(newImagePath);
-            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath(Path.Combine(savePath, currentImageRelativePath));
+            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath(CurrentImagePath);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
