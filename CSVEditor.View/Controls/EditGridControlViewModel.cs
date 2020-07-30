@@ -76,7 +76,7 @@ namespace CSVEditor.View.Controls
             lastTextBoxWithContextMenuClosed.Text = text;
         }
 
-        private void setupNewGrid()
+        private void SetupNewGrid()
         {
             MainGrid = new Grid()
             {
@@ -86,7 +86,7 @@ namespace CSVEditor.View.Controls
 
         public Grid GetEditLinesGridForNewCsvFile()
         {
-            setupNewGrid();
+            SetupNewGrid();
 
             if (LineIndex == -1)
             {
@@ -107,7 +107,7 @@ namespace CSVEditor.View.Controls
 
         public Grid GetEditConfigurationsGridForNewCsvFile()
         {
-            setupNewGrid();
+            SetupNewGrid();
 
             AddRowsDefinitionsToGrid();
             AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");

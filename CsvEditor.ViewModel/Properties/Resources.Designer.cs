@@ -77,5 +77,14 @@ namespace CSVEditor.ViewModel.Properties {
                 return ResourceManager.GetString("NotGitRepositoryText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Save Path.
+        /// </summary>
+        public static string SelectSavePathText {
+            get {
+                return ResourceManager.GetString("SelectSavePathText", resourceCulture);
+            }
+        }
     }
 }

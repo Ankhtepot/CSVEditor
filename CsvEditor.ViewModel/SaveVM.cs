@@ -21,7 +21,7 @@ namespace CSVEditor.ViewModel
         private string csvFilePath;
         public string CsvFilePath
         {
-            get { return csvFilePath; }
+            get => csvFilePath;
             set
             {
                 csvFilePath = value;
@@ -32,7 +32,7 @@ namespace CSVEditor.ViewModel
         private SaveOptions saveOptions;
         public SaveOptions SaveOptions
         {
-            get { return saveOptions; }
+            get => saveOptions;
             set
             {
                 saveOptions = value;

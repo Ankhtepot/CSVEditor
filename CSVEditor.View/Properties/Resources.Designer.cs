@@ -232,6 +232,15 @@ namespace CSVEditor.View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ....
+        /// </summary>
+        public static string Ellipsis {
+            get {
+                return ResourceManager.GetString("Ellipsis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string EmailText {
@@ -543,6 +552,15 @@ namespace CSVEditor.View.Properties {
         public static string SelectPromptComboBoxText {
             get {
                 return ResourceManager.GetString("SelectPromptComboBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Different Save Path.
+        /// </summary>
+        public static string SelectSavePathText {
+            get {
+                return ResourceManager.GetString("SelectSavePathText", resourceCulture);
             }
         }
         

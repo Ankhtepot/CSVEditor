@@ -32,11 +32,13 @@ namespace CSVEditor.View
         public void SetImagePaths(string newImagePath, string savePath, string currentImageRelativePath)
         {
             Context = DataContext as ReplaceImageVM;
-            Context.SetImagePaths(newImagePath, savePath, currentImageRelativePath);
+            Context?.SetImagePaths(newImagePath, savePath, currentImageRelativePath);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Context == null) return;
+
             Context.OnWindowResultChange += (result) => WindowResult = result;
             Context.OnWindowCloseRequested += Close;
         }

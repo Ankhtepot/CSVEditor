@@ -14,6 +14,7 @@
                 CornerRadius="{Binding CornerRadius, Mode=OneWay}">
             <TextBlock Text="{Binding Text, Mode=OneWay}"
                        Style="{StaticResource BorderedHeaderTextBlockStyle}"
+                       MouseDown="TextBox_OnMouseDown"
                        Margin="{Binding TextPadding}"/>
         </Border>
     </Grid>

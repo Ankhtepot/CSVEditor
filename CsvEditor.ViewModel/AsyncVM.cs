@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CSVEditor.Model.Services;
 using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel

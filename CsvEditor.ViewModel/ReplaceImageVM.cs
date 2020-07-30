@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CSVEditor.ViewModel
 {
@@ -116,6 +117,7 @@ namespace CSVEditor.ViewModel
         public DelegateCommand DeleteCurrentImageAndSaveCommand { get; set; }
         public DelegateCommand OverwriteCurrentImageCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
+        public DelegateCommand<string> SelectSavePathCommand { get; set; }
 
         public Action<ReplaceImageResult> OnWindowResultChange;
         public Action OnWindowCloseRequested;
@@ -130,6 +132,7 @@ namespace CSVEditor.ViewModel
             DeleteCurrentImageAndSaveCommand = new DelegateCommand(DeleteCurrentImageAndSave);
             OverwriteCurrentImageCommand = new DelegateCommand(OverwriteCurrentImage);
             SaveCommand = new DelegateCommand(Save);
+            SelectSavePathCommand = new DelegateCommand<string>(SelectSavePath);
         }
 
         public enum ReplaceImageResult
@@ -169,6 +172,19 @@ namespace CSVEditor.ViewModel
             CloseWindow();
         }
 
+        private void SelectSavePath(string currentPath)
+        {
+            var currentFileExtension = Path.GetExtension(currentPath);
+            var dialogFilter = new CommonFileDialogFilter($"{currentFileExtension} Files (*{currentFileExtension})",
+                $"*{currentFileExtension}");
+            var newPath = FileSystemServices.QueryUserForPath(currentPath, Properties.Resources.SelectSavePathText, dialogFilter);
+
+            if (!string.IsNullOrEmpty(newPath))
+            {
+                SetImagePaths(NewImagePath, Path.GetDirectoryName(newPath), CurrentImagePath);
+            }
+        }
+
         private void CloseWindow()
         {
             NewImageSource = FileSystemServices.GetBitmapImageFromPath("");
@@ -182,8 +198,6 @@ namespace CSVEditor.ViewModel
             CurrentImagePath = Path.Combine(savePath, cellContentPath.ToSystemPath());
             SavePath = savePath;
 
-            Overwrite = Path.GetFileName(newImagePath) == Path.GetFileName(cellContentPath);
-
             var lastSlash = cellContentPath.LastIndexOf("/");
 
             var cleanedRelativePath = cellContentPath
@@ -191,6 +205,8 @@ namespace CSVEditor.ViewModel
                 .ToSystemPath();
 
             NewSavePath = Path.Combine(SavePath, cleanedRelativePath, Path.GetFileName(NewImagePath));
+
+            Overwrite = File.Exists(NewSavePath);
 
             NewImageSource = FileSystemServices.GetBitmapImageFromPath(newImagePath);
             CurrentImageSource = FileSystemServices.GetBitmapImageFromPath(CurrentImagePath);

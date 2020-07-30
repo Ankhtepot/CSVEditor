@@ -5,6 +5,7 @@ using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using CSVEditor.Model.Services;
 
 namespace CSVEditor.ViewModel
 {

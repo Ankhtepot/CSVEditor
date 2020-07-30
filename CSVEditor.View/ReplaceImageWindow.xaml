@@ -104,7 +104,33 @@
             <TextBlock Text="{x:Static p:Resources.NewSavePathText}"
                        Margin="10,10,10,0"/>
 
-            <uc:HeaderWithBorderControl Text="{Binding NewSavePath}" TextPadding="10,5" />
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <uc:HeaderWithBorderControl Text="{Binding NewSavePath}" 
+                                            Command="{Binding SelectSavePathCommand}"
+                                            CommandParameter="{Binding NewSavePath}"
+                                            Grid.Column="0"
+                                            TextPadding="10,5" 
+                                            HorizontalAlignment="Stretch"
+                                            ToolTip="{x:Static p:Resources.SelectSavePathText}"/>
+                <Button Content="{x:Static p:Resources.Ellipsis}" 
+                        Command="{Binding SelectSavePathCommand}"
+                        CommandParameter="{Binding NewSavePath}"
+                        Style="{StaticResource BaseButtonStyle}"
+                        Background="{DynamicResource DarkColorResource}"
+                        Grid.Column="1"
+                        Width="40"
+                        Margin="5,5,10,5"
+                        ToolTip="{x:Static p:Resources.SelectSavePathText}">
+                    <Button.Resources>
+                        <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    </Button.Resources>
+                </Button>
+            </Grid>
 
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>

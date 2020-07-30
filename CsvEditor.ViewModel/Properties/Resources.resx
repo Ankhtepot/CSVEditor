@@ -123,4 +123,7 @@
   <data name="NotGitRepositoryText" xml:space="preserve">
     <value>Directory doesn't contain Git repository.</value>
   </data>
+  <data name="SelectSavePathText" xml:space="preserve">
+    <value>Select Save Path</value>
+  </data>
 </root>

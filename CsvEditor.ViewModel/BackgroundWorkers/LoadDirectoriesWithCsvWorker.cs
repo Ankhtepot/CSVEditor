@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using CSVEditor.Model.Services;
 using static CSVEditor.Model.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel.BackgroundWorkers

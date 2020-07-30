@@ -42,10 +42,31 @@ namespace CSVEditor.View.Controls
         public static readonly DependencyProperty TextPaddingProperty =
             DependencyProperty.Register("TextPadding", typeof(Thickness), typeof(HeaderWithBorderControl), new PropertyMetadata(new Thickness(5)));
 
+        public ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.Register("Command", typeof(ICommand), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
+
+        public string CommandParameter
+        {
+            get => (string)GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register("CommandParameter", typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
+
         public HeaderWithBorderControl()
         {
             InitializeComponent();
             TopContainer.DataContext = this;
+        }
+
+        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Command?.Execute(CommandParameter);
         }
     }
 }

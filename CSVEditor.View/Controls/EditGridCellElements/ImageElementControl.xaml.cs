@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using CSVEditor.Model.HelperClasses;
 using CSVEditor.Model.Services;
 using CSVEditor.ViewModel;
+using static CSVEditor.ViewModel.ReplaceImageVM.ReplaceImageResult;
 
 namespace CSVEditor.View.Controls.EditGridCellElements
 {
@@ -116,7 +117,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
 
             var newImageFileName = Path.GetFileName(newImageFile);
 
-            var selectedSavePath = string.IsNullOrEmpty(uriText) || uriText == Context.SelectedCsvFile.AbsPath
+            var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) || uriText == Context.SelectedCsvFile.AbsPath
                 ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
                 : uriText;
 
@@ -125,24 +126,44 @@ namespace CSVEditor.View.Controls.EditGridCellElements
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(CellContentTextBox.Text))
+            if (string.IsNullOrEmpty(CellContentTextBox.Text))
+            {
+                if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))
+                {
+                    ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
+                }
+            }
+            else
             {
                 var replaceWindow = new ReplaceImageWindow();
                 replaceWindow.SetImagePaths(newImageFile, selectedSavePath, CellContentTextBox.Text);
                 replaceWindow.ShowDialog();
                 selectedSavePath = replaceWindow.NewSavePath;
-                File.Copy(newImageFile, selectedSavePath, true);
-                ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
-            }
-            else
-            {
-                if (FileSystemServices.SaveImageFile(newImageFile, selectedSavePath))
+                if (replaceWindow.WindowResult != Canceled)
                 {
-                    ResolveCellContentTextBoxFromSavePath(selectedSavePath, newImageFileName);
-                };
+                    ResolveReplaceDialogResult(newImageFile, selectedSavePath, replaceWindow.WindowResult); 
+                }
             }
 
             return true;
+        }
+
+        private void ResolveReplaceDialogResult(string newImageFile, string selectedSavePath, ReplaceImageVM.ReplaceImageResult replaceWindowWindowResult)
+        {
+            switch (replaceWindowWindowResult)
+            {
+                case Overwrite:
+                {
+                    if (File.Exists(selectedSavePath))
+                    {
+                        File.Delete(selectedSavePath);
+                    }
+
+                    File.Copy(newImageFile, selectedSavePath);
+                }; break;
+            }
+
+            ResolveCellContentTextBoxFromSavePath(selectedSavePath, Path.GetFileName(newImageFile));
         }
 
         private void ResolveCellContentTextBoxFromSavePath(string fileSavePath, string fileName)

@@ -1,9 +1,4 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -11,17 +6,25 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using CSVEditor.Model.HelperClasses;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
-namespace CSVEditor.ViewModel
+namespace CSVEditor.Model.Services
 {
     public class FileSystemServices
     {
-        private static readonly string[] BASE_IMAGE_FILE_EXTENSIONS = { ".png", ".jpg", ".jpeg" };
+        private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg" };
+        private static readonly string AllFilesFilter = "All files (*.*)|*.*";
+        private static readonly CommonFileDialogFilter CommonDialogAllFilesFilter = new CommonFileDialogFilter("All files (*.*)", "*.*");
 
         public static string QueryUserForRootRepositoryPath(string title = "")
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
             var result = dialog.ShowDialog();
 
             if (!string.IsNullOrEmpty(title))
@@ -39,10 +42,18 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public static string QueryUserForPath(string initialDirectory = "", string title = "")
+        public static string QueryUserForPath(string initialDirectory = "", string title = "", CommonFileDialogFilter filter = null)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
+            var dialog = new CommonOpenFileDialog()
+            {
+                Filters = {CommonDialogAllFilesFilter },
+                IsFolderPicker = true,
+            };
+
+            if (filter != null)
+            {
+                dialog.Filters.Add(filter);
+            }
 
             if(!string.IsNullOrEmpty(title))
             {
@@ -54,7 +65,7 @@ namespace CSVEditor.ViewModel
                 dialog.InitialDirectory = initialDirectory;
             }
 
-            CommonFileDialogResult result = CommonFileDialogResult.None;
+            CommonFileDialogResult result;
             try
             {
                 result = dialog.ShowDialog();
@@ -65,23 +76,26 @@ namespace CSVEditor.ViewModel
                 return null;
             }
 
-            if (result == CommonFileDialogResult.Ok)
-            {
-                return dialog.FileName;
-            }
-            else
-            {
-                return null;
-            }
+            return result == CommonFileDialogResult.Ok 
+                ? dialog.FileName 
+                : null;
         }
 
-        public static string QueryUserToSelectFile(string path, string title = "", string filter = "All files (*.*)|*.*")
+        public static string QueryUserToSelectFile(string path, string title = "", string filter = null)
         {
+            filter ??= AllFilesFilter;
+
+            var fileName = Path.GetFileName(path);
+            var cleanedPath = Path.GetDirectoryName(path);
+
             var fileDialog = new OpenFileDialog()
             {
                 Filter = filter,
                 CheckPathExists = true,
-                InitialDirectory = Directory.Exists(path) ? path : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures),
+                InitialDirectory = Directory.Exists(cleanedPath) 
+                    ? cleanedPath 
+                    : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures),
+                FileName = string.IsNullOrEmpty(fileName) ? $"new file.txt" : fileName,
             };
 
             if (!string.IsNullOrEmpty(title))
@@ -258,7 +272,7 @@ namespace CSVEditor.ViewModel
 
         public static bool IsImageFile(string fileAbsPath, string[] fileExtensions = null)
         {
-            fileExtensions ??= BASE_IMAGE_FILE_EXTENSIONS;
+            fileExtensions ??= BaseImageFileExtensions;
 
             try
             {
