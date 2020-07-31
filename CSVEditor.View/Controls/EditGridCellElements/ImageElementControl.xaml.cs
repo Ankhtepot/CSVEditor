@@ -117,11 +117,11 @@ namespace CSVEditor.View.Controls.EditGridCellElements
 
             var newImageFileName = Path.GetFileName(newImageFile);
 
-            var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) || uriText == Context.SelectedCsvFile.AbsPath
+            var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) || uriText == Context.RootRepositoryPath
                 ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
                 : uriText;
 
-            if (selectedSavePath == null)
+            if (selectedSavePath == null || newImageFile == Path.Combine(selectedSavePath, Path.GetFileName(newImageFile)))
             {
                 return false;
             }
@@ -150,17 +150,20 @@ namespace CSVEditor.View.Controls.EditGridCellElements
 
         private void ResolveReplaceDialogResult(string newImageFile, string selectedSavePath, ReplaceImageVM.ReplaceImageResult replaceWindowWindowResult)
         {
-            switch (replaceWindowWindowResult)
+            if (newImageFile != selectedSavePath)
             {
-                case Overwrite:
+                switch (replaceWindowWindowResult)
                 {
-                    if (File.Exists(selectedSavePath))
-                    {
-                        File.Delete(selectedSavePath);
-                    }
+                    case Overwrite:
+                        {
+                            if (File.Exists(selectedSavePath))
+                            {
+                                File.Delete(selectedSavePath);
+                            }
 
-                    File.Copy(newImageFile, selectedSavePath);
-                }; break;
+                            File.Copy(newImageFile, selectedSavePath);
+                        }; break;
+                } 
             }
 
             ResolveCellContentTextBoxFromSavePath(selectedSavePath, Path.GetFileName(newImageFile));

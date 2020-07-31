@@ -204,7 +204,7 @@ namespace CSVEditor.ViewModel
                 .Substring(0,  lastSlash != -1 ? lastSlash : 0)
                 .ToSystemPath();
 
-            NewSavePath = Path.Combine(SavePath, cleanedRelativePath, Path.GetFileName(NewImagePath));
+            NewSavePath = Path.Combine(SavePath, Path.GetDirectoryName(cleanedRelativePath), Path.GetFileName(NewImagePath));
 
             Overwrite = File.Exists(NewSavePath);
 

@@ -445,9 +445,6 @@ namespace CSVEditor.View.Controls
                 ColumnNr = columnNr
             };
 
-            var itemIndexbinding = new Binding("SelectedItemIndex");
-            itemIndexbinding.Source = Context;
-
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
             newImageControl.CellContentTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
 

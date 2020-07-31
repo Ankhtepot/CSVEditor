@@ -16,7 +16,7 @@ namespace CSVEditor.Model.Services
     {
         private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg" };
         private static readonly string AllFilesFilter = "All files (*.*)|*.*";
-        private static readonly CommonFileDialogFilter CommonDialogAllFilesFilter = new CommonFileDialogFilter("All files (*.*)", "*.*");
+        private static readonly CommonFileDialogFilter CommonDialogAllFilesFilter = new CommonFileDialogFilter("All files (*.*)", ".*");
 
         public static string QueryUserForRootRepositoryPath(string title = "")
         {
@@ -46,7 +46,6 @@ namespace CSVEditor.Model.Services
         {
             var dialog = new CommonOpenFileDialog()
             {
-                Filters = {CommonDialogAllFilesFilter },
                 IsFolderPicker = true,
             };
 
