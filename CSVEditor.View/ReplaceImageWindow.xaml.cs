@@ -1,15 +1,5 @@
-﻿using CSVEditor.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using CSVEditor.ViewModel;
 using static CSVEditor.ViewModel.ReplaceImageVM;
 
 namespace CSVEditor.View
@@ -17,7 +7,7 @@ namespace CSVEditor.View
     /// <summary>
     /// Interaction logic for ReplaceImageWindow.xaml
     /// </summary>
-    public partial class ReplaceImageWindow : Window
+    public partial class ReplaceImageWindow
     {
         private ReplaceImageVM Context;
 
@@ -29,10 +19,10 @@ namespace CSVEditor.View
             InitializeComponent();
         }
 
-        public void SetImagePaths(string newImagePath, string savePath, string currentImageRelativePath)
+        public void SetImagePaths(string newImagePath, string savePath, string currentImagePath)
         {
             Context = DataContext as ReplaceImageVM;
-            Context?.SetImagePaths(newImagePath, savePath, currentImageRelativePath);
+            Context?.SetImagePaths(newImagePath, savePath, currentImagePath);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -16,7 +16,6 @@ namespace CSVEditor.Model.Services
     {
         private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg" };
         private static readonly string AllFilesFilter = "All files (*.*)|*.*";
-        private static readonly CommonFileDialogFilter CommonDialogAllFilesFilter = new CommonFileDialogFilter("All files (*.*)", ".*");
 
         public static string QueryUserForRootRepositoryPath(string title = "")
         {
@@ -49,10 +48,10 @@ namespace CSVEditor.Model.Services
                 IsFolderPicker = true,
             };
 
-            if (filter != null)
-            {
-                dialog.Filters.Add(filter);
-            }
+            //if (filter != null)
+            //{
+            //    dialog.Filters.Add(filter);
+            //}
 
             if(!string.IsNullOrEmpty(title))
             {
@@ -91,9 +90,10 @@ namespace CSVEditor.Model.Services
             {
                 Filter = filter,
                 CheckPathExists = true,
-                InitialDirectory = Directory.Exists(cleanedPath) 
+                InitialDirectory = (Directory.Exists(cleanedPath) 
                     ? cleanedPath 
-                    : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures),
+                    : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)) 
+                                   ?? Environment.SpecialFolder.CommonDocuments.ToString(),
                 FileName = string.IsNullOrEmpty(fileName) ? $"new file.txt" : fileName,
             };
 
@@ -138,7 +138,7 @@ namespace CSVEditor.Model.Services
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
-            List<string> rootPathDirectories = new List<string>();
+            var rootPathDirectories = new List<string>();
 
             try
             {
@@ -149,7 +149,7 @@ namespace CSVEditor.Model.Services
                 Console.WriteLine("Error while checking for GitRepo: " + e.Message);
             }
 
-            if (rootPathDirectories != null && rootPathDirectories.Count > 0)
+            if (rootPathDirectories.Count > 0)
             {
                 foreach (var directory in rootPathDirectories)
                 {
@@ -176,11 +176,11 @@ namespace CSVEditor.Model.Services
             {
                 var recursiveYield = GetDirectoriesFromRootPath(directory, worker);
                 directories = recursiveYield != null
-                    ? directories.Concat(recursiveYield).ToList()
+                    ? directories?.Concat(recursiveYield).ToList()
                     : null;
             }
 
-            return directories != null ? directories.ToList() : null;
+            return directories?.ToList();
         }
 
         private static List<string> GetDirectoriesFromPath(string path, BackgroundWorker worker = null)
@@ -190,7 +190,7 @@ namespace CSVEditor.Model.Services
                 return null;
             }
 
-            List<string> directories = new List<string>();
+            var directories = new List<string>();
 
             try
             {
@@ -198,11 +198,11 @@ namespace CSVEditor.Model.Services
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine($"Insufficient rights to scan direcotry at \"{path}\".");
+                Console.WriteLine($"Insufficient rights to scan directory at \"{path}\". Error: {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Unexpected error occured while reading directories at: \"{path}\"");
+                Console.WriteLine($"Unexpected error occured while reading directories at: \"{path}\". Error: {e.Message}");
             }
 
             return directories;
@@ -222,7 +222,7 @@ namespace CSVEditor.Model.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Unexpected error occured while scanning directories at: \"{path}\"");
+                Console.WriteLine($"Unexpected error occured while scanning directories at: \"{path}\". Error: {e.Message}");
             }
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
@@ -251,18 +251,13 @@ namespace CSVEditor.Model.Services
 
         public static BitmapImage GetBitmapImageFromPath(string path)
         {
-            BitmapImage newImage = new BitmapImage();
+            var newImage = new BitmapImage();
             newImage.BeginInit();
             newImage.CacheOption = BitmapCacheOption.OnLoad;
 
-            if (File.Exists(path))
-            {
-                newImage.UriSource = new Uri(path);
-            }
-            else
-            {
-                newImage.UriSource = ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
-            }
+            newImage.UriSource = File.Exists(path) 
+                ? new Uri(path) 
+                : ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
 
             newImage.EndInit();
 
@@ -279,7 +274,7 @@ namespace CSVEditor.Model.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}");
+                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}. Error: {e.Message}");
             }
 
             return false;

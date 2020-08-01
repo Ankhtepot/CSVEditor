@@ -175,13 +175,13 @@ namespace CSVEditor.ViewModel
         private void SelectSavePath(string currentPath)
         {
             var currentFileExtension = Path.GetExtension(currentPath);
-            var dialogFilter = new CommonFileDialogFilter($"{currentFileExtension} Files (*{currentFileExtension})",
-                $"*{currentFileExtension}");
+            var dialogFilter = new CommonFileDialogFilter($"{currentFileExtension} Files",
+                $".{currentFileExtension}");
             var newPath = FileSystemServices.QueryUserForPath(currentPath, Properties.Resources.SelectSavePathText, dialogFilter);
 
             if (!string.IsNullOrEmpty(newPath))
             {
-                SetImagePaths(NewImagePath, Path.GetDirectoryName(newPath), CurrentImagePath);
+                SetImagePaths(NewImagePath, newPath, CurrentImagePath);
             }
         }
 
@@ -192,19 +192,14 @@ namespace CSVEditor.ViewModel
             OnWindowCloseRequested?.Invoke();
         }
 
-        public void SetImagePaths(string newImagePath, string savePath, string cellContentPath)
+        public void SetImagePaths(string newImagePath, string savePath, string currentImagePath)
         {
             NewImagePath = newImagePath;
-            CurrentImagePath = Path.Combine(savePath, cellContentPath.ToSystemPath());
+            CurrentImagePath = currentImagePath;
+
             SavePath = savePath;
 
-            var lastSlash = cellContentPath.LastIndexOf("/");
-
-            var cleanedRelativePath = cellContentPath
-                .Substring(0,  lastSlash != -1 ? lastSlash : 0)
-                .ToSystemPath();
-
-            NewSavePath = Path.Combine(SavePath, Path.GetDirectoryName(cleanedRelativePath), Path.GetFileName(NewImagePath));
+            NewSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
 
             Overwrite = File.Exists(NewSavePath);
 
