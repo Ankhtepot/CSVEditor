@@ -11,7 +11,7 @@
         MinHeight="250"
         MaxHeight="250"
         SizeToContent="Width">
-    <Border Style="{StaticResource BaseBorderStyle}">
+    <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource}">
         <Grid x:Name="TopContainer"
           Margin="20">
             <Grid.RowDefinitions>

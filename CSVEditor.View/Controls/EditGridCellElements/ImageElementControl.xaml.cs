@@ -122,7 +122,9 @@ namespace CSVEditor.View.Controls.EditGridCellElements
 
             var newImageFileName = Path.GetFileName(newImageFile);
 
-            var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) || uriText == Context?.RootRepositoryPath
+            var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) 
+                                   || string.IsNullOrEmpty(uriText)
+                                   || uriText == Context?.RootRepositoryPath
                 ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
                 : uriText;
 

@@ -149,19 +149,11 @@
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="{x:Static p:Resources.GitText}"
-                          BorderBrush="{DynamicResource MenuHeaderBorderColorResource}"
-                          IsEnabled="{Binding GitVM.IsGitRepo}">
+                <MenuItem Header="{x:Static p:Resources.AboutText}"
+                          BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconJamIcons Kind="Info" />
                     </MenuItem.Icon>
-
-                    <MenuItem Header="{x:Static p:Resources.OpenGitSetupText}"
-                              Click="MenuItem_Click">
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconBoxIcons Kind="RegularWindow" />
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
             </Menu>
         </Border>

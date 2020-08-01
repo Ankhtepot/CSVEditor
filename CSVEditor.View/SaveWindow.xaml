@@ -17,7 +17,7 @@
         <vm:SaveVM x:Name="VM"/>
     </Window.DataContext>
 
-    <Border Style="{StaticResource BaseBorderStyle}">
+    <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource}">
         <DockPanel >
             <Border Style="{StaticResource BaseBorderStyle}" 
                     DockPanel.Dock="Top"
@@ -34,6 +34,7 @@
                     <Button Content="{x:Static p:Resources.SaveAsText}"
                             Command="{Binding SaveAsCommand}"
                             Style="{StaticResource BaseButtonStyle}"
+                            Background="{DynamicResource DarkColorResource}"
                             Grid.Column="0">
                         <Button.Resources>
                             <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
@@ -74,6 +75,7 @@
                         <Button Content="{x:Static p:Resources.OverwriteText}"
                                 Command="{Binding OverwriteCommand}"
                                 Style="{StaticResource BaseButtonStyle}"
+                                Background="{DynamicResource DarkColorResource}"
                                 Grid.Column="0"
                                 Grid.Row="0">
                             <Button.Resources>

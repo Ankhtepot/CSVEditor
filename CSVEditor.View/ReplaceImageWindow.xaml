@@ -30,7 +30,7 @@
         <Style x:Key="FilePathTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Padding" Value="5,0"></Setter>
             <Setter Property="TextWrapping" Value="Wrap"></Setter>
-            <Setter Property="MaxWidth" Value="400"></Setter>
+            <Setter Property="Width" Value="400"></Setter>
             <Setter Property="Height" Value="40"></Setter>
         </Style>
 
