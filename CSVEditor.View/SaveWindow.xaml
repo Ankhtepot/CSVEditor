@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         x:Name="SaveWindowMain"
         Title="{x:Static p:Resources.SaveWindowTitle}"
+        Icon="Resources/Icons/save_options.ico"
         SizeToContent="WidthAndHeight"
         Height="327" Width="800"
         ResizeMode="NoResize">

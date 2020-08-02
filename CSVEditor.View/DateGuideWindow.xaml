@@ -7,6 +7,7 @@
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         mc:Ignorable="d"
         Title="Date Format Guide" Height="250" Width="800"
+        Icon="Resources/Icons/calendar.ico"
         MinWidth="700"
         MinHeight="250"
         MaxHeight="250"

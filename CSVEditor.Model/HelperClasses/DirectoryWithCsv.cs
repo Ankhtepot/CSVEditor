@@ -8,15 +8,15 @@ namespace CSVEditor.Model.HelperClasses
     {
         private string directoryAbsolutePath;
         public string DirectoryAbsolutePath {
-            get { return directoryAbsolutePath; }
+            get => directoryAbsolutePath;
             set { directoryAbsolutePath = value; OnPropertyChanged(nameof(DirectoryAbsolutePath)); }
         }
 
         private List<string> csvFilesNames;
         public List<string> CsvFilesNames
         {
-            get { return csvFilesNames; }
-            set { csvFilesNames = value; }
+            get => csvFilesNames;
+            set => csvFilesNames = value;
         }
 
         public DirectoryWithCsv() : this ("", new List<string>()) {}

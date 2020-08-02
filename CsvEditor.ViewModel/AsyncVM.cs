@@ -1,6 +1,5 @@
 ﻿using CSVEditor.Model;
 using CSVEditor.Model.HelperClasses;
-using CSVEditor.Services;
 using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using System;

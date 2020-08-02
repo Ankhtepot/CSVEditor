@@ -9,6 +9,7 @@
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
         mc:Ignorable="d"
         Title="CSV Editor" 
+        Icon="Resources/Icons/csv_icon.ico"
         Height="450" 
         Width="1000"
         MinWidth="600"

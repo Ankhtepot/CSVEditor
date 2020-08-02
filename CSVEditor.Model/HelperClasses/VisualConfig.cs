@@ -7,21 +7,21 @@ namespace CSVEditor.Model.HelperClasses
     public class VisualConfig : INotifyPropertyChanged
     {
         private const double MIN_MAIN_WINDOW_WIDTH = 600;
-        private const double MIN_MAIN_WINDOW_HIGHT = 400;
+        private const double MIN_MAIN_WINDOW_HEIGHT = 400;
         private const double DEFAULT_MAIN_WINDOW_WIDTH = 1000;
         private const double DEFAULT_MAIN_WINDOW_HEIGHT = 450;
 
         private double mainWindowWidth;
         public double MainWindowWidth
         {
-            get { return mainWindowWidth; }
+            get => mainWindowWidth;
             set { mainWindowWidth = value; OnPropertyChanged(); }
         }
 
         private double mainWindowHeight;
         public double MainWindowHeight
         {
-            get { return mainWindowHeight; }
+            get => mainWindowHeight;
             set { mainWindowHeight = value; OnPropertyChanged(); }
         }
 
@@ -30,7 +30,7 @@ namespace CSVEditor.Model.HelperClasses
         public VisualConfig(double mainWindowWidth, double mainWindowHeight)
         {
             MainWindowWidth = Math.Max(mainWindowWidth, MIN_MAIN_WINDOW_WIDTH);
-            MainWindowHeight = Math.Max(mainWindowHeight, MIN_MAIN_WINDOW_HIGHT);
+            MainWindowHeight = Math.Max(mainWindowHeight, MIN_MAIN_WINDOW_HEIGHT);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

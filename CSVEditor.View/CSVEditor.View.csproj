@@ -8,8 +8,13 @@
 
   <ItemGroup>
     <None Remove="Controls\LineEditControl.xaml.cs~RFe30db0c.TMP" />
-    <None Remove="Images\no_image_available.png" />
-    <None Remove="Images\question-mark-160071_small.png" />
+    <None Remove="Resources\Images\no_image_available.png" />
+    <None Remove="Resources\Images\question-mark-160071_small.png" />
+    <None Remove="Resources\calendar.ico" />
+    <None Remove="Resources\csv_icon.ico" />
+    <None Remove="Resources\github.ico" />
+    <None Remove="Resources\replace_image.ico" />
+    <None Remove="Resources\save_options.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,10 +37,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\no_image_available.png">
+    <Resource Include="Resources\Images\no_image_available.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\question-mark-160071_small.png">
+    <Resource Include="Resources\Images\question-mark-160071_small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\calendar.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\csv_icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\github.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\replace_image.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\save_options.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

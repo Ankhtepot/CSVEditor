@@ -232,7 +232,7 @@ namespace CSVEditor.View.Controls
                             Height = 20,
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
-                            ImageSource = ResourceHelper.GetBitmapImageFromResources("Images/question-mark-160071_small.png"),
+                            ImageSource = ResourceHelper.GetBitmapImageFromResources("Resources/Images/question-mark-160071_small.png"),
                             CornerRadius = new CornerRadius(10),
                             Command = OpenDateFilterGuideWindowCommand,
                             CommandParameter = $"{Context.SelectedCsvFile.ColumnConfigurations[count].URI}|{count}",

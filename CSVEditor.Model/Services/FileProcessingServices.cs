@@ -1,29 +1,25 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSVEditor.Model.HelperClasses;
 
-namespace CSVEditor.Services
+namespace CSVEditor.Model.Services
 {
     public class FileProcessingServices
     {
         public static string GetRawFileText(string path)
         {
-            if (File.Exists(path))
+            if (!File.Exists(path))
             {
-                using (StreamReader stream = File.OpenText(path))
-                {
-                    return stream.ReadToEnd();
-                }
+                return "";
             }
 
-            return "";
+            using var stream = File.OpenText(path);
+            return stream.ReadToEnd();
         }
 
         public static async Task<string> RemoveFirstLineAsync(string text, string firstLine)
@@ -47,7 +43,7 @@ namespace CSVEditor.Services
             List<char> delimiters,
             BackgroundWorker worker = null)
         {
-            CsvFile result = new CsvFile();
+            var result = new CsvFile();
 
             if (File.Exists(path))
             {
@@ -55,8 +51,8 @@ namespace CSVEditor.Services
 
                 if (text == "") return result;
 
-                string[] lines = text.Split(Environment.NewLine);
-                string firstLine = text.Substring(0, text.IndexOf('\n'));
+                var lines = text.Split(Environment.NewLine);
+                var firstLine = text.Substring(0, text.IndexOf('\n'));
 
                 var fileIsValid = true;
 
@@ -75,7 +71,7 @@ namespace CSVEditor.Services
                     result.ColumnCount = result.HeadersStrings.Count;
                     result.AbsPath = path;
 
-                    for (int i = 0; i < result.ColumnCount; i++)
+                    for (var i = 0; i < result.ColumnCount; i++)
                     {
                         result.ColumnConfigurations.Add(new CsvColumnConfiguration());
                     }
@@ -83,7 +79,7 @@ namespace CSVEditor.Services
                     var csvLines = new List<List<string>>();
                     var columnContents = GetColumnContents(RemoveFirstLineAsync(text, firstLine).Result, result.Delimiter, blockIdentifiers, worker) ?? new List<string>();
 
-                    while (columnContents?.Count > 0)
+                    while (columnContents.Count > 0)
                     {
                         if (worker?.CancellationPending == true)
                         {
@@ -91,7 +87,7 @@ namespace CSVEditor.Services
                         }
 
                         var newLine = new List<string>();
-                        for (int i = 0; i < result.ColumnCount; i++)
+                        for (var i = 0; i < result.ColumnCount; i++)
                         {
                             if (columnContents.Count > 0)
                             {
@@ -158,11 +154,13 @@ namespace CSVEditor.Services
                     {
                         endOfBlockIndex = workingText.LastIndexOf(char.ToString(workingText[0]) + Environment.NewLine);
 
-                        if (endOfBlockIndex == -1) //this signifies the end of the file
+                        if (endOfBlockIndex != -1)
                         {
-                            result.Add(workingText.Substring(1, workingText.Length - 2)); //to not include blockIdentifier in text
-                            workingText = "";
+                            continue;
                         }
+
+                        result.Add(workingText.Substring(1, workingText.Length - 2)); //to not include blockIdentifier in text
+                        workingText = "";
                     }
                     else
                     {
@@ -198,16 +196,12 @@ namespace CSVEditor.Services
         {
             var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < line.Count; i++)
+            for (var i = 0; i < line.Count; i++)
             {
-                if (line[i].ContainsAny(new char[] { delimiter, blockIdentifier, '-', ':', '\\', '.', ',', ';', '&', '\'' }))
-                {
-                    stringBuilder.Append($"{blockIdentifier}{line[i]}{blockIdentifier}");
-                }
-                else
-                {
-                    stringBuilder.Append(line[i]);
-                }
+                stringBuilder.Append(
+                    line[i].ContainsAny(new char[] {delimiter, blockIdentifier, '-', ':', '\\', '.', ',', ';', '&', '\''})
+                        ? $"{blockIdentifier}{line[i]}{blockIdentifier}"
+                        : line[i]);
 
                 if (i < line.Count - 1)
                 {
@@ -222,7 +216,7 @@ namespace CSVEditor.Services
         {
             var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < csvFile.HeadersStrings.Count; i++)
+            for (var i = 0; i < csvFile.HeadersStrings.Count; i++)
             {
                 if (i < csvFile.HeadersStrings.Count - 1)
                 {
@@ -239,7 +233,7 @@ namespace CSVEditor.Services
 
         public static char IdentifyCsvDelimiter(string line, List<char> blockIdentifiers, List<char> delimiters)
         {
-            foreach (char letter in line)
+            foreach (var letter in line)
             {
                 if (!(char.IsLetterOrDigit(letter) || char.IsWhiteSpace(letter) || blockIdentifiers.Contains(letter)) && delimiters.Contains(letter))
                 {

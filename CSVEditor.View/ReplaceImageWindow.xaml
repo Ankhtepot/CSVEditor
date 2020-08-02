@@ -11,6 +11,7 @@
         Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="Replace Image" Height="450" Width="800"
+        Icon="Resources/Icons/replace_image.ico"
         SizeToContent="WidthAndHeight">
 
     <Window.DataContext>

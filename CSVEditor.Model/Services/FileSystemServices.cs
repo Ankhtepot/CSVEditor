@@ -110,8 +110,10 @@ namespace CSVEditor.Model.Services
             return null;
         }
 
-        public static string QueryUserToSaveFile(string path, string title = "", string filter = "All files (*.*)|*.*")
+        public static string QueryUserToSaveFile(string path, string title = "", string filter = null)
         {
+            filter ??= AllFilesFilter;
+
             var fileDialog = new SaveFileDialog()
             {
                 Filter = filter,
@@ -257,7 +259,7 @@ namespace CSVEditor.Model.Services
 
             newImage.UriSource = File.Exists(path) 
                 ? new Uri(path) 
-                : ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAIABLE_APP_PATH);
+                : ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAILABLE_APP_PATH);
 
             newImage.EndInit();
 

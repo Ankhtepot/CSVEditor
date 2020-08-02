@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
+using CSVEditor.Model.Services;
 
 namespace CSVEditor.ViewModel.Converters
 {
@@ -14,7 +15,7 @@ namespace CSVEditor.ViewModel.Converters
 
             if (File.Exists(path))
             {
-                return Services.FileProcessingServices.GetRawFileText(path); 
+                return FileProcessingServices.GetRawFileText(path); 
             }
 
             return Constants.NO_FILE_SELECTED;

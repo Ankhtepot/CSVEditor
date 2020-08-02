@@ -16,7 +16,7 @@
         public const string ERROR_WORK_STATUS = "Last task stopped with and error.";
         public const string FILE_EDITED = "File Edited";
         public const string IDLE_WORK_STATUS = "No task in progress.";
-        public const string IMAGE_NOT_AVAIABLE_APP_PATH = "images/no_image_available.png";
+        public const string IMAGE_NOT_AVAILABLE_APP_PATH = "Resources/Images/no_image_available.png";
         public const string IMAGE_URI_LABEL_TEXT = "Set Relative Path to Save Image Files to:";
         public const string LINE_EDITOR_TITLE = "Line Editor";
         public const string LOAD_REPOSITORY_FAILED = "Loading the repository failed.";

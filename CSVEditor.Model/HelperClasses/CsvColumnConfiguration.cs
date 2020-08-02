@@ -8,7 +8,7 @@ namespace CSVEditor.Model.HelperClasses
     {
         private FieldType type;
         public FieldType Type {
-            get { return type; }
+            get => type;
             set
             {
                 type = value;
@@ -18,7 +18,7 @@ namespace CSVEditor.Model.HelperClasses
 
         private string uRI;
         public string URI {
-            get { return uRI; }
+            get => uRI;
             set
             {
                 uRI = value;
@@ -26,7 +26,7 @@ namespace CSVEditor.Model.HelperClasses
             }
         }
 
-        public CsvColumnConfiguration() : this (FieldType.TextBox, "") {}
+        public CsvColumnConfiguration() : this (FieldType.TextBox) {}
 
         public CsvColumnConfiguration(FieldType type, string uRI = "")
         {
