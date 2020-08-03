@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace CSVEditor.View.Controls
+namespace CSVEditor.View.Controls.EditGridCellElements
 {
     /// <summary>
     /// Interaction logic for SelectElementControl.xaml
     /// </summary>
-    public partial class SelectElementControl : UserControl
+    public partial class SelectElementControl
     {
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(SelectElementControl), new PropertyMetadata("", TextChanged));        
 
         public List<string> ComboBoxSource
         {
-            get { return (List<string>)GetValue(ComboBoxSourceProperty); }
-            set { SetValue(ComboBoxSourceProperty, value); }
+            get => (List<string>)GetValue(ComboBoxSourceProperty);
+            set => SetValue(ComboBoxSourceProperty, value);
         }
         public static readonly DependencyProperty ComboBoxSourceProperty =
             DependencyProperty.Register("ComboBoxSource", typeof(List<string>), typeof(SelectElementControl), new PropertyMetadata(new List<string>()));
@@ -45,7 +46,15 @@ namespace CSVEditor.View.Controls
             }
 
             var foundIndex = control.ComboBoxSource.FindIndex(record => record == newText);
-            control.SourceComboBox.SelectedIndex = foundIndex == -1 || control.ComboBoxSource.Count == 0 ? 0 : foundIndex;
+
+            if (foundIndex == -1)
+            {
+                return;
+            }
+
+            control.SourceComboBox.SelectionChanged -= control.SourceComboBox_SelectionChanged;
+            control.SourceComboBox.SelectedIndex = foundIndex;
+            control.SourceComboBox.SelectionChanged += control.SourceComboBox_SelectionChanged;
         }
 
         private void SourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -54,6 +63,11 @@ namespace CSVEditor.View.Controls
         }
 
         private void SourceComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            OnEdited?.Invoke();
+        }
+
+        private void ContentTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             OnEdited?.Invoke();
         }

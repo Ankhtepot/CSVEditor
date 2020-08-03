@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="CSVEditor.View.Controls.SelectElementControl"
+﻿<UserControl x:Class="CSVEditor.View.Controls.EditGridCellElements.SelectElementControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CSVEditor.View.Controls"
+             xmlns:local="clr-namespace:CSVEditor.View.Controls.EditGridCellElements"
              xmlns:p="clr-namespace:CSVEditor.View.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="400">
@@ -16,18 +16,21 @@
 
             <TextBox x:Name="ContentTextBox"
                      Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     KeyDown="ContentTextBox_OnKeyDown"
                      Grid.Column="0"
                      FontSize="{DynamicResource BaseFontSize}"
+                     VerticalAlignment="Center"
                      Margin="2"/>
             <ComboBox Name="SourceComboBox" 
                       ItemsSource="{Binding ComboBoxSource}"
                       SelectionChanged="SourceComboBox_SelectionChanged"
                       DropDownClosed="SourceComboBox_DropDownClosed"
+                      VerticalAlignment="Center"
                       IsEditable="True"
                       IsReadOnly="True"
                       Text="{x:Static p:Resources.SelectPromptComboBoxText}"
                       Grid.Column="1"
-                      Margin="2"/>
+                      Margin="2,0"/>
         </Grid>
     </Border>
 </UserControl>

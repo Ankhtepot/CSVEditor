@@ -272,7 +272,7 @@ namespace CSVEditor.Model.Services
 
             try
             {
-                return fileExtensions.Contains(Path.GetExtension(fileAbsPath));
+                return fileExtensions.Contains(Path.GetExtension(fileAbsPath).ToLower());
             }
             catch (Exception e)
             {
