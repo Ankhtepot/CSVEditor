@@ -16,11 +16,11 @@ namespace CSVEditor.Model.Services
             try
             {
                 File.WriteAllText(fullPath, jsonedSource);
-                Console.WriteLine($"{referencedName} saved to: {fullPath}");
+                Console.WriteLine($@"{referencedName} saved to: {fullPath}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error saving {referencedName}: {e.Message}");
+                Console.WriteLine($@"Error saving {referencedName}: {e.Message}");
                 return false;
             }
 
@@ -35,11 +35,11 @@ namespace CSVEditor.Model.Services
             {
                 var loadedJson = File.ReadAllText(fullPath);
                 deserializedJson = JsonSerializer.Deserialize<T>(loadedJson);
-                Console.WriteLine($"{referencedName} loaded from: {fullPath}");
+                Console.WriteLine($@"{referencedName} loaded from: {fullPath}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error loading {referencedName}: {e.Message}");
+                Console.WriteLine($@"Error loading {referencedName}: {e.Message}");
             }
 
             return deserializedJson;

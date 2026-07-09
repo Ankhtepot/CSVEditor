@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using CSVEditor.Model.Services;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 
 namespace CSVEditor.ViewModel
@@ -175,9 +174,11 @@ namespace CSVEditor.ViewModel
         private void SelectSavePath(string currentPath)
         {
             var currentFileExtension = Path.GetExtension(currentPath);
-            var dialogFilter = new CommonFileDialogFilter($"{currentFileExtension} Files",
-                $".{currentFileExtension}");
-            var newPath = FileSystemServices.QueryUserForPath(currentPath, Properties.Resources.SelectSavePathText, dialogFilter);
+            var filter = string.IsNullOrEmpty(currentFileExtension) 
+                ? null 
+                : $"{currentFileExtension} Files (*{currentFileExtension})|*{currentFileExtension}|All files (*.*)|*.*";
+
+            var newPath = FileSystemServices.QueryUserForPath(currentPath, Properties.Resources.SelectSavePathText, filter);
 
             if (!string.IsNullOrEmpty(newPath))
             {

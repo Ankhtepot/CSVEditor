@@ -17,14 +17,14 @@
             <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                       Command="{Binding EditLineCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconFontAwesome Kind="EditSolid" Foreground="Blue"/>
+                    <iconPacks:PackIconFontAwesome Kind="PenToSquareSolid" Foreground="Blue"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator Style="{StaticResource MenuSeparatorStyle}"/>
             <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
                       Command="{Binding AddLineToTopCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconFontAwesome Kind="AngleDoubleUpSolid" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AnglesUpSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.AddLineUpText}"
@@ -36,20 +36,20 @@
             <MenuItem Header="{x:Static p:Resources.AddLineDownText}"
                       Command="{Binding AddLineDownCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconFontAwesome Kind="AngleUpSolid" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AngleDownSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
                       Command="{Binding AddLineToBottomCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconFontAwesome Kind="AngleDoubleDownSolid" Foreground="Green"/>
+                    <iconPacks:PackIconFontAwesome Kind="AnglesDownSolid" Foreground="Green"/>
                 </MenuItem.Icon>
             </MenuItem>
             <Separator Style="{StaticResource MenuSeparatorStyle}"/>
             <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
                       Command="{Binding DeleteLineCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
+                    <iconPacks:PackIconFontAwesome Kind="TrashCanSolid" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>    

@@ -52,7 +52,7 @@
                     <MenuItem Header="{x:Static p:Resources.ExitAndSaveText}"
                               Command="{Binding SaveAndExitCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconUnicons Kind="SignOutAlt" />
+                            <iconPacks:PackIconUnicons Kind="SignOutAltLine" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Style="{StaticResource MenuSeparatorStyle}"/>
@@ -79,14 +79,14 @@
                     <MenuItem Header="{x:Static p:Resources.EditThisLineText}"
                               Command="{Binding EditLineCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconFontAwesome Kind="EditSolid" />
+                            <iconPacks:PackIconFontAwesome Kind="PenToSquareSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Style="{StaticResource MenuSeparatorStyle}"/>
                     <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
                               Command="{Binding AddLineToTopCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconFontAwesome Kind="AngleDoubleUpSolid" />
+                            <iconPacks:PackIconFontAwesome Kind="AnglesUpSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static p:Resources.AddLineUpText}"
@@ -104,14 +104,14 @@
                     <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
                               Command="{Binding AddLineToBottomCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconFontAwesome Kind="AngleDoubleDownSolid" />
+                            <iconPacks:PackIconFontAwesome Kind="AnglesDownSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Style="{StaticResource MenuSeparatorStyle}"/>
                     <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
                               Command="{Binding DeleteLineCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
+                            <iconPacks:PackIconFontAwesome Kind="TrashCanSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -120,7 +120,7 @@
                           BorderBrush="{DynamicResource MenuHeaderBorderColorResource}"
                           IsEnabled="{Binding GitVM.IsGitRepo}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconFontAwesome Kind="GithubSquareBrands" />
+                        <iconPacks:PackIconFontAwesome Kind="SquareGithubBrands" />
                     </MenuItem.Icon>
 
                     <MenuItem Header="{x:Static p:Resources.OpenGitSetupText}"

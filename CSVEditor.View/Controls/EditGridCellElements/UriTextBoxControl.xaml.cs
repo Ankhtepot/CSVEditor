@@ -77,7 +77,7 @@ namespace CSVEditor.View.Controls
                 }
                 catch (Exception error)
                 {
-                    Console.WriteLine($"Error opening link: \"{linkText}\" | Error message: {error.Message}");
+                    Console.WriteLine($@"Error opening link: ""{linkText}"" | Error message: {error.Message}");
                 }
             }
         }

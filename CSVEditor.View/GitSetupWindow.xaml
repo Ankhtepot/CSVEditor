@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:p="clr-namespace:CSVEditor.View.Properties"
-        mc:Ignorable="d"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d" 
         Title="{x:Static p:Resources.GitSetupWindowTitle}" 
         Icon="Resources/Icons/github.ico"
         SizeToContent="WidthAndHeight"
@@ -27,6 +28,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Content="{x:Static p:Resources.CommitMessageText}"
@@ -36,7 +39,7 @@
                    VerticalContentAlignment="Center"
                    Grid.Column="0"
                    Grid.Row="0"/>
-            <TextBox Text="{Binding GitOptions.CommitMessage, Mode=TwoWay}"
+            <TextBox Text="{Binding GitOptions.CommitMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="0"
                      FontSize="{StaticResource MiddleFontSize}"
@@ -50,11 +53,12 @@
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="1"/>
-            <TextBox Text="{Binding GitOptions.UserName, Mode=TwoWay}"
+            <TextBox Text="{Binding GitOptions.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="1"
                      FontSize="{StaticResource MiddleFontSize}"
-                     Height="22" VerticalContentAlignment="Center"/>
+                     Height="22" VerticalContentAlignment="Center"
+                     LostFocus="UserNameTextBox_LostFocus"/>
             
             <Label Content="{x:Static p:Resources.EmailText}"
                    ContentStringFormat="{}{0}:"
@@ -62,11 +66,12 @@
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="2"/>
-            <TextBox Text="{Binding GitOptions.Email, Mode=TwoWay}"
+            <TextBox Text="{Binding GitOptions.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="2"
                      FontSize="{StaticResource MiddleFontSize}"
-                     Height="22" VerticalContentAlignment="Center"/>
+                     Height="22" VerticalContentAlignment="Center"
+                     ToolTip="This email will be used as your signature in Git commits."/>
 
             <Label Content="{x:Static p:Resources.PasswordText}"
                    ContentStringFormat="{}{0}:"
@@ -74,21 +79,53 @@
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="3"/>
-            <TextBox Text="{Binding GitOptions.Password, Mode=TwoWay}"
-                     Grid.Column="1"
-                     Grid.Row="3"
-                     FontSize="{StaticResource MiddleFontSize}"
-                     Height="22" VerticalContentAlignment="Center"/>
+            <Grid Grid.Column="1" Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <PasswordBox x:Name="PasswordBox"
+                             FontSize="{StaticResource MiddleFontSize}"
+                             Height="22" VerticalContentAlignment="Center"
+                             ToolTip="For GitHub/GitLab, use a Personal Access Token (PAT) instead of your password."/>
+                <Button x:Name="GitHubLoginButton" 
+                        Grid.Column="1"
+                        Content="GitHub Login"
+                        Margin="5,0,0,0"
+                        Padding="5,0"
+                        Click="GitHubLoginButton_Click"
+                        ToolTip="Validate token and fetch profile info from GitHub"/>
+                <Grid Grid.Column="2" Background="Transparent" VerticalAlignment="Center"
+                      ToolTip="How it works?&#x0a;1. Generate a PAT using the link below.&#x0a;2. Paste the token into the Password field.&#x0a;3. Click 'GitHub Login' to validate and fill in Username/Email.&#x0a;4. This enables secure Git operations and sets your commit signature.">
+                    <iconPacks:PackIconOcticons Kind="Question" 
+                                                Margin="5,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="Black"/>
+                </Grid>
+            </Grid>
+            
+            <TextBlock Grid.Column="1" Grid.Row="4" Margin="0,2,0,5" FontSize="11">
+                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/settings/tokens/new?scopes=repo,user&amp;description=CSVEditor">
+                    Get a GitHub Personal Access Token (requires 'repo' and 'user' scopes)
+                </Hyperlink>
+            </TextBlock>
+            
+            <CheckBox Content="Use Secure Token Storage (Windows Credential Manager)"
+                      IsChecked="{Binding GitOptions.UseToken, Mode=TwoWay}"
+                      Grid.Row="5" Grid.Column="1"
+                      Margin="0,5"
+                      FontSize="11"/>
             
             <Label Content="{x:Static p:Resources.RemoteLinkText}"
                    ContentStringFormat="{}{0}:"
                    FontSize="{StaticResource MiddleFontSize}"
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
-                   Grid.Row="4"/>
-            <TextBox Text="{Binding GitOptions.RemoteRepositoryLink, Mode=TwoWay}"
+                   Grid.Row="6"/>
+            <TextBox Text="{Binding GitOptions.RemoteRepositoryLink, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
-                     Grid.Row="4"
+                     Grid.Row="6"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
 
@@ -97,15 +134,15 @@
                    FontSize="{StaticResource MiddleFontSize}"
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
-                   Grid.Row="5"/>
-            <TextBox Text="{Binding GitOptions.RemoteBranch, Mode=TwoWay}"
+                   Grid.Row="7"/>
+            <TextBox Text="{Binding GitOptions.RemoteBranch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
-                     Grid.Row="5"
+                     Grid.Row="7"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
 
             <StackPanel Orientation="Horizontal" 
-                        Grid.Row="6" 
+                        Grid.Row="8" 
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"

@@ -8,41 +8,76 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="300">
 
-    <StackPanel Orientation="Horizontal">
-        <Button Command="{Binding GitVM.CommitRepositoryCommand}" 
-                Style="{StaticResource BaseButtonStyle}"
-                IsEnabled="{Binding GitVM.IsGitRepo}"
-                ToolTip="{x:Static p:Resources.CommitRepositoryText}">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="10"/>
+    <Grid VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="0" Background="Transparent" VerticalAlignment="Center" ToolTip="{Binding GitVM.LoginTooltip}">
+            <iconPacks:PackIconMaterial Margin="5,0"
+                                      VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial.Style>
+                    <Style TargetType="iconPacks:PackIconMaterial">
+                        <Setter Property="Kind" Value="LightbulbOutline"/>
+                        <Setter Property="Foreground" Value="Red"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding GitVM.IsLoggedIn}" Value="True">
+                                <Setter Property="Kind" Value="Lightbulb"/>
+                                <Setter Property="Foreground" Value="Green"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </iconPacks:PackIconMaterial.Style>
+            </iconPacks:PackIconMaterial>
+        </Grid>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Background="Transparent">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding GitVM.IsLoggedIn}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
-            </Button.Resources>
-            <iconPacks:PackIconOcticons Kind="GitCommit" />
-        </Button>
-        <Button Command="{Binding GitVM.PullRepositoryCommand}" 
-                Style="{StaticResource BaseButtonStyle}"
-                IsEnabled="{Binding GitVM.IsGitRepo}"
-                ToolTip="{x:Static p:Resources.PullRepositoryText}"
-                Margin="5,0">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="10"/>
-                </Style>
-            </Button.Resources>
-            <iconPacks:PackIconOcticons Kind="GitPullRequest" />
-        </Button>
-        <Button Command="{Binding GitVM.PushRepositoryCommand}" 
-                Style="{StaticResource BaseButtonStyle}"
-                IsEnabled="{Binding GitVM.IsGitRepo}"
-                ToolTip="{x:Static p:Resources.PushRepositoryText}"
-                Margin="0,0,5,0">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="10"/>
-                </Style>
-            </Button.Resources>
-            <iconPacks:PackIconOcticons Kind="RepoPush" />
-        </Button>        
-    </StackPanel>
+            </StackPanel.Style>
+            <Button Command="{Binding GitVM.CommitRepositoryCommand}" 
+                    Style="{StaticResource BaseButtonStyle}"
+                    IsEnabled="{Binding GitVM.IsGitRepo}"
+                    ToolTip="{x:Static p:Resources.CommitRepositoryText}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+                <iconPacks:PackIconOcticons Kind="GitCommit" />
+            </Button>
+            <Button Command="{Binding GitVM.PullRepositoryCommand}" 
+                    Style="{StaticResource BaseButtonStyle}"
+                    IsEnabled="{Binding GitVM.IsGitRepo}"
+                    ToolTip="{x:Static p:Resources.PullRepositoryText}"
+                    Margin="5,0">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+                <iconPacks:PackIconOcticons Kind="GitPullRequest" />
+            </Button>
+            <Button Command="{Binding GitVM.PushRepositoryCommand}" 
+                    Style="{StaticResource BaseButtonStyle}"
+                    IsEnabled="{Binding GitVM.IsGitRepo}"
+                    ToolTip="{x:Static p:Resources.PushRepositoryText}"
+                    Margin="0,0,5,0">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+                <iconPacks:PackIconOcticons Kind="RepoPush" />
+            </Button>
+        </StackPanel>
+    </Grid>
 </UserControl>

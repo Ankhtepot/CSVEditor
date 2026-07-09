@@ -75,7 +75,7 @@
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </Button.Resources>
-            <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" />
+            <iconPacks:PackIconFontAwesome Kind="TrashCanSolid" />
         </Button>
         <Viewbox Grid.Column="4" Margin="5,3,0,3">
             <local:GitControlsControl Grid.Column="4"/>

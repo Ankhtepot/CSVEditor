@@ -57,7 +57,7 @@ namespace CSVEditor.ViewModel.Abstracts
                 VM.AsyncVM.WorkingStatus = WorkStatus.Done;
             }
 
-            Console.WriteLine($"BW:{GetType().Name} - Completed status: {resultInfo}");
+            Console.WriteLine($@"BW:{GetType().Name} - Completed status: {resultInfo}");
             VM.AsyncVM.ActiveWorker = null;
         }
 

@@ -22,11 +22,8 @@ namespace CSVEditor.ViewModel
         private DateTime chosenTime;
         public DateTime ChosenTime
         {
-            get
-            {
-                return chosenTime == null ? DateTime.Now : chosenTime; 
-            }
-            set { chosenTime = value; }
+            get => chosenTime;
+            set => chosenTime = value;
         }
 
         public List<string> DateFormatExamples

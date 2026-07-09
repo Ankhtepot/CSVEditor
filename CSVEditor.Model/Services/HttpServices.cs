@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Net;
+using System.Net.Http;
 
 namespace CSVEditor.Model.Services
 {
     public class HttpServices
     {
+        private static readonly HttpClient _httpClient = new HttpClient();
+
         public static bool checkWebsite(string URL)
         {
             try
             {
-                WebClient wc = new WebClient();
-                string HTMLSource = wc.DownloadString(URL);
-                return true;
+                using var response = _httpClient.GetAsync(URL).GetAwaiter().GetResult();
+                return response.IsSuccessStatusCode;
             }
             catch (Exception)
             {

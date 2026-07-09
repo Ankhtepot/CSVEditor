@@ -19,7 +19,7 @@ namespace CSVEditor.View.Controls
 {
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
-        private int rowsCount { get => Context.SelectedCsvFile.HeadersStrings.Count + 1; }
+        private int rowsCount { get => Context.SelectedCsvFile?.HeadersStrings?.Count + 1 ?? 1; }
 
         private TextBox lastTextBoxWithContextMenuClosed;
 
@@ -32,7 +32,7 @@ namespace CSVEditor.View.Controls
         public double MinColumnWidth { get; set; } = 30d;
         public double ImageWidth { get; set; } = 200d;
         public double ImageHeight { get; set; } = 150d;
-        public Thickness ElementMargin { get; set; } = new Thickness(2d);
+        public Thickness ElementMargin { get; set; } = new(2d);
         public EditorVM Context { get; set; }
         public Grid MainGrid { get; set; }
         public Grid MainGridContainer { get; set; }
@@ -53,8 +53,8 @@ namespace CSVEditor.View.Controls
 
         private void OpenDateFilterGuideWindow(string parameterInfo)
         {
-            var parameters = parameterInfo.Split('|');
-            var dateGuideWindow = new DateGuideWindow(
+            string[] parameters = parameterInfo.Split('|');
+            DateGuideWindow dateGuideWindow = new(
                 new CellInfo() 
                 {
                     Content = parameters[0],
@@ -72,7 +72,12 @@ namespace CSVEditor.View.Controls
 
         private void QueryForRelativePathToRootPath()
         {
-            var text = FileSystemServices.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
+            if (Context.SelectedCsvFile == null || lastTextBoxWithContextMenuClosed == null)
+            {
+                return;
+            }
+
+            string text = FileSystemServices.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
             lastTextBoxWithContextMenuClosed.Text = text;
         }
 
@@ -88,7 +93,7 @@ namespace CSVEditor.View.Controls
         {
             SetupNewGrid();
 
-            if (LineIndex == -1)
+            if (Context.SelectedCsvFile == null || LineIndex == -1)
             {
                 return MainGrid;
             }
@@ -108,6 +113,11 @@ namespace CSVEditor.View.Controls
         public Grid GetEditConfigurationsGridForNewCsvFile()
         {
             SetupNewGrid();
+
+            if (Context.SelectedCsvFile == null)
+            {
+                return MainGrid;
+            }
 
             AddRowsDefinitionsToGrid();
             AddColumnWithContent(0, RowNumberColumnCreationMethod, "Column\nNumber");
@@ -129,7 +139,7 @@ namespace CSVEditor.View.Controls
 
         private void AddColumnDefinitionToGrid(bool isLastColumn = false)
         {
-            var newDefinition = new ColumnDefinition()
+            ColumnDefinition newDefinition = new()
             {
                 Width = isLastColumn
                   ? new GridLength(1, GridUnitType.Star)
@@ -147,7 +157,7 @@ namespace CSVEditor.View.Controls
 
         private UIElement RowNumberColumnCreationMethod(int count)
         {
-            var newElement = new TextBlock()
+            TextBlock newElement = new()
             {
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Right,
@@ -160,7 +170,9 @@ namespace CSVEditor.View.Controls
 
         private UIElement HeadersColumnCreationMethod(int count)
         {
-            var newElement = new TextBlock()
+            if (Context.SelectedCsvFile == null) return new TextBlock();
+
+            TextBlock newElement = new()
             {
                 Padding = new Thickness(5),
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -184,7 +196,9 @@ namespace CSVEditor.View.Controls
 
         private UIElement ItemTypeSelectionColumnCreationMethod(int count)
         {
-            var newComboBox = new ComboBox()
+            if (Context.SelectedCsvFile == null) return new UIElement();
+
+            ComboBox newComboBox = new()
             {
                 Tag = count,
                 ItemsSource = Enum.GetValues(typeof(FieldType)),
@@ -200,33 +214,35 @@ namespace CSVEditor.View.Controls
 
         private UIElement UriColumnCreationMethod(int count)
         {
+            if (Context.SelectedCsvFile == null) return null;
+
             switch (Context.SelectedCsvFile.ColumnConfigurations[count].Type)
             {
                 case (FieldType.Image):
                     {
-                        var newUri = BuildConfigUriCell(Constants.IMAGE_URI_LABEL_TEXT, count);
+                        LabeledTextBoxControl newUri = BuildConfigUriCell(Constants.IMAGE_URI_LABEL_TEXT, count);
                         newUri.TextBox.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
-                        newUri.TextBox.ContextMenuClosing += (sender, e) => lastTextBoxWithContextMenuClosed = sender as TextBox;
+                        newUri.TextBox.ContextMenuClosing += (sender, _) => lastTextBoxWithContextMenuClosed = sender as TextBox;
 
                         return newUri;
-                    };
+                    }
                 case (FieldType.Date):
                     {
-                        var wrapperGrid = BuildBasicGrid(1, 2);
+                        Grid wrapperGrid = BuildBasicGrid(1, 2);
 
-                        var uriCell = BuildConfigUriCell(Constants.DATE_URI_LABEL_TEXT, count);
+                        LabeledTextBoxControl uriCell = BuildConfigUriCell(Constants.DATE_URI_LABEL_TEXT, count);
                         uriCell.Margin = ElementMargin;
                         Grid.SetColumn(uriCell, 0);
                         Grid.SetRow(uriCell, 0);
                         wrapperGrid.Children.Add(uriCell);
 
-                        var uriCellTextBinding = new Binding("Text")
+                        Binding uriCellTextBinding = new("Text")
                         {
                             Source = uriCell.DataContext,
                             Mode = BindingMode.TwoWay
                         };
 
-                        var filterInfoButton = new ImageButtonControl()
+                        ImageButtonControl filterInfoButton = new()
                         {
                             Width = 20,
                             Height = 20,
@@ -244,20 +260,25 @@ namespace CSVEditor.View.Controls
                         wrapperGrid.Children.Add(filterInfoButton);
 
                         return wrapperGrid;
-                    };
+                    }
                 default: return null;
             }
         }
 
         private LabeledTextBoxControl BuildConfigUriCell(string labelContent, int columnNr)
         {
-            var newUri = new LabeledTextBoxControl()
+            if (Context.SelectedCsvFile == null) return new LabeledTextBoxControl();
+
+            LabeledTextBoxControl newUri = new()
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
+                TextBox =
+                {
+                    Tag = columnNr
+                },
+                Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI
             };
 
-            newUri.TextBox.Tag = columnNr;
-            newUri.Text = Context.SelectedCsvFile.ColumnConfigurations[columnNr].URI;
             newUri.TextBox.TextChanged += NewUri_TextChanged;
             newUri.LabelContent = labelContent;
 
@@ -266,24 +287,32 @@ namespace CSVEditor.View.Controls
 
         private void NewUri_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var textBox = (TextBox)sender;
-            var columnNumber = (int)textBox.Tag;
-            var newValue = textBox.Text;
+            if (sender is TextBox { Tag: int columnNumber } textBox)
+            {
+                string newValue = textBox.Text;
 
-            UpdateFileConfigurations(newValue, columnNumber);
+                UpdateFileConfigurations(newValue, columnNumber);
+            }
         }
 
-        private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FieldTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs args)
         {
-            var columnNumber = (int)((ComboBox)sender).Tag;
-            var newValue = (FieldType)e.AddedItems[0];
-            
-            UpdateFileConfigurations(newValue, columnNumber, MainGridContainer);
+            if (sender is ComboBox { Tag: int columnNumber } 
+                && args.AddedItems.Count > 0 
+                && args.AddedItems[0] is FieldType newValue)
+            {
+                UpdateFileConfigurations(newValue, columnNumber, MainGridContainer);
+            }
         }
 
         private void UpdateFileConfigurations(object updatedValue, int columnNr, Grid mainGridContainer = null)
         {
-            var shouldUpdate = false;
+            if (Context.SelectedCsvFile == null)
+            {
+                return;
+            }
+
+            bool shouldUpdate = false;
 
             if (updatedValue is FieldType newType && newType != Context.SelectedCsvFile.ColumnConfigurations[columnNr].Type) 
             {
@@ -303,9 +332,9 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            if (updatedValue !is string && updatedValue !is FieldType)
+            if (updatedValue is not string && updatedValue is not FieldType)
             {
-                Console.WriteLine("Configuration wasnt updated, newValue not recognized"); 
+                Console.WriteLine(@"Configuration wasn't updated, newValue not recognized"); 
             }
         }
 
@@ -323,7 +352,7 @@ namespace CSVEditor.View.Controls
 
             for (int i = 1; i < rowsCount; i++)
             {
-                var newCellElement = creationMethod(i - 1); //  -1 because index 0 is header
+                UIElement newCellElement = creationMethod(i - 1); //  -1 because index 0 is header
 
                 if (newCellElement != null)
                 {
@@ -337,72 +366,72 @@ namespace CSVEditor.View.Controls
 
         private UIElement CreateDataCellElement(FieldType type, int columnNr)
         {
-            if (Context.SelectedCsvFile.Lines.Count <= 0)
+            if (Context.SelectedCsvFile == null || Context.SelectedCsvFile.Lines.Count <= 0)
             {
                 return new UIElement();
             }
 
-            var columnContent = Context.SelectedCsvFile.Lines[LineIndex][columnNr];
+            string columnContent = Context.SelectedCsvFile.Lines[LineIndex][columnNr];
 
             switch (type)
             {
                 case FieldType.TextBox:
                     {
-                        var newElement = new TextBox()
+                        TextBox newElement = new()
                         {
                             Name = $"DataCellTextBoxRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                         };
                         newElement.SetResourceReference(TextBox.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
-                        newElement.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.KeyDown += (_, _) => Context.IsFileEdited = true;
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
-                    };
+                    }
                 case FieldType.TextArea:
                     {
-                        var newElement = new TextBox()
+                        TextBox newElement = new()
                         {
                             Name = $"DataCellTextAreaRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                             AcceptsReturn = true,
                         };
                         newElement.SetResourceReference(TextBox.FontSizeProperty, Constants.BASE_FONT_SIZE_KEY);
-                        newElement.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.KeyDown += (_, _) => Context.IsFileEdited = true;
                         newElement.SetBinding(TextBox.TextProperty, getBaseTwoWayBinding(columnNr));
                         return newElement;
-                    };
+                    }
                 case FieldType.Select:
                     {
-                        var columnDistinctValues = GetColumnDistinctValues(columnNr);
+                        List<string> columnDistinctValues = GetColumnDistinctValues(columnNr);
 
-                        var newElement = new SelectElementControl()
+                        SelectElementControl newElement = new()
                         {
                             ComboBoxSource = columnDistinctValues,
                             Margin = ElementMargin
                         };
                         newElement.SetBinding(SelectElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
-                        newElement.ContentTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.ContentTextBox.KeyDown += (_, _) => Context.IsFileEdited = true;
                         newElement.OnEdited += () => Context.IsFileEdited = true;
                         return newElement;
-                    };
+                    }
                 case FieldType.Image:
                     {
                         return BuildImageElementControl(columnNr, columnContent);
                     }
                 case FieldType.URI:
                     {
-                        var newElement = new UriTextBoxControl()
+                        UriTextBoxControl newElement = new()
                         {
                             Name = $"DataCellUriRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
                         };
                         newElement.SetBinding(UriTextBoxControl.TextProperty, getBaseTwoWayBinding(columnNr));
-                        newElement.UriTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.UriTextBox.KeyDown += (_, _) => Context.IsFileEdited = true;
                         return newElement;
-                    };
+                    }
                 case FieldType.Date:
                     {
-                        var newElement = new DateElementControl()
+                        DateElementControl newElement = new()
                         {
                             Name = $"DataCellDateRow{LineIndex}Column{columnNr}",
                             Margin = ElementMargin,
@@ -410,17 +439,17 @@ namespace CSVEditor.View.Controls
                         };
 
                         newElement.SetBinding(DateElementControl.TextProperty, getBaseTwoWayBinding(columnNr));
-                        newElement.DateTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+                        newElement.DateTextBox.KeyDown += (_, _) => Context.IsFileEdited = true;
                         newElement.OnEdited += () => Context.IsFileEdited = true;
                         return newElement;
                     }
                 default: throw new NotSupportedException($"Element type \"{type}\" not supported.");
-            };
+            }
         }
 
         private Binding getBaseTwoWayBinding(int columnNr)
         {
-            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
+            Binding binding = new($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
             binding.Source = Context;
             binding.Mode = BindingMode.TwoWay;
             binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
@@ -430,15 +459,17 @@ namespace CSVEditor.View.Controls
 
         private Binding getBaseBinding(int columnNr)
         {
-            var binding = new Binding($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
-            binding.Source = Context;
+            Binding binding = new($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]")
+            {
+                Source = Context
+            };
 
             return binding;
         }
 
         private UIElement BuildImageElementControl(int columnNr, string imageCellContent)
         {
-            var newImageControl = new ImageElementControl()
+            ImageElementControl newImageControl = new()
             {
                 DataContext = Context,
                 MaxHeight = ImageHeight,
@@ -446,13 +477,18 @@ namespace CSVEditor.View.Controls
             };
 
             newImageControl.SetBinding(ImageElementControl.ImageCellContentProperty, getBaseTwoWayBinding(columnNr));
-            newImageControl.CellContentTextBox.KeyDown += (sender, e) => Context.IsFileEdited = true;
+            newImageControl.CellContentTextBox.KeyDown += (_, _) => Context.IsFileEdited = true;
 
             return newImageControl;
         }
 
         private List<string> GetColumnDistinctValues(int columnNr)
         {
+            if (Context.SelectedCsvFile == null)
+            {
+                return new List<string>();
+            }
+
             return Context.SelectedCsvFile.Lines
                 .Select(Line => Line[columnNr])
                 .Where(record => !string.IsNullOrEmpty(record))
@@ -462,10 +498,10 @@ namespace CSVEditor.View.Controls
 
         public UIElement BuildHeader(int columnNumber, string text, string headerStyle = HEADER_TEXT_BOX_STYLE)
         {
-            var wrapperGrid = new Grid();
+            Grid wrapperGrid = new();
             wrapperGrid.Style = (Style)Resources[HEADER_GRID_STYLE];
 
-            var newHeader = new TextBlock();
+            TextBlock newHeader = new();
             newHeader.Style = (Style)Resources[headerStyle];
             newHeader.Text = text;
 
@@ -480,7 +516,7 @@ namespace CSVEditor.View.Controls
 
         public Grid BuildBasicGrid(int rowCount, int columnCount)
         {
-            var newGrid = new Grid();
+            Grid newGrid = new();
 
             newGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 

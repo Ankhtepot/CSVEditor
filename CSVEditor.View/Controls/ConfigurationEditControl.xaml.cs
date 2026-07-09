@@ -48,7 +48,7 @@ namespace CSVEditor.View.Controls
                 control.DataContext as EditorVM,
                 control.TopContainer);
 
-            Console.WriteLine($"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM).SelectedCsvFile.AbsPath)}");
+            Console.WriteLine($@"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM).SelectedCsvFile.AbsPath)}");
 
             control.TopContainer.Children.Clear();
             control.TopContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());
@@ -63,7 +63,7 @@ namespace CSVEditor.View.Controls
         {
             topContainer.Children.Clear();
             topContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());
-            Console.WriteLine($"COnfigurationEditControl: RebuildGrid Executed.");
+            Console.WriteLine($@"COnfigurationEditControl: RebuildGrid Executed.");
         }        
     }
 }

@@ -15,12 +15,12 @@ namespace CSVEditor.View.Controls.EditGridCellElements
     /// </summary>
     public partial class ImageElementControl
     {
-        private static EditorVM Context;
+        private EditorVM Context;
 
         public static readonly string RootDirectory = "Root Directory";
 
         private static string LastAcceptedImageSavePath;
-        private static string CurrentImagePath;
+        private string CurrentImagePath;
 
         public static readonly DependencyProperty ImageCellContentProperty =
             DependencyProperty.Register("ImageCellContent", typeof(string), typeof(ImageElementControl), new PropertyMetadata(null, ImageSourceChanged));
@@ -49,21 +49,21 @@ namespace CSVEditor.View.Controls.EditGridCellElements
                 return;
             }
 
-            Context ??= control.DataContext as EditorVM;
+            control.Context ??= control.DataContext as EditorVM;
 
-            var configUri = Context?.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
-            var newImage = GetImageSource(imageCellContent, Context?.RootRepositoryPath, configUri);
+            var configUri = control.Context?.SelectedCsvFile.ColumnConfigurations[control.ColumnNr].URI;
+            var newImage = control.GetImageSource(imageCellContent, control.Context?.RootRepositoryPath, configUri);
 
             var cellContentBinding =
-                new Binding($"SelectedCsvFile.Lines[{Context?.SelectedItemIndex}][{control.ColumnNr}]")
+                new Binding($"SelectedCsvFile.Lines[{control.Context?.SelectedItemIndex}][{control.ColumnNr}]")
                 {
-                    Source = Context,
+                    Source = control.Context,
                     Mode = BindingMode.TwoWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 };
 
             control.UriContentTextBlock.Text = string.IsNullOrEmpty(configUri)
-                ? $"{RootDirectory}: {Context?.RootRepositoryPath}"
+                ? $"{RootDirectory}: {control.Context?.RootRepositoryPath}"
                 : configUri;
 
             control.CellContentTextBox.SetBinding(TextBox.TextProperty, cellContentBinding);
@@ -71,7 +71,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
             control.ImageFromSource.Source = newImage;
         }
 
-        public static BitmapImage GetImageSource(string cellContent, string rootRepositoryPath, string configUri)
+        public BitmapImage GetImageSource(string cellContent, string rootRepositoryPath, string configUri)
         {
             var path = cellContent.ToSystemPath();
             var uriPath = configUri;
@@ -116,7 +116,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
 
             Context ??= DataContext as EditorVM;
 
-            LastAcceptedImageSavePath ??= LastAcceptedImageSavePath = Context?.RootRepositoryPath;
+            LastAcceptedImageSavePath ??= Context?.RootRepositoryPath;
 
             var uriText = Context?.SelectedCsvFile.ColumnConfigurations[ColumnNr].URI;
 
@@ -173,11 +173,6 @@ namespace CSVEditor.View.Controls.EditGridCellElements
                         File.Copy(newImageFile, selectedSavePath);break;
                     case Save: File.Copy(newImageFile, selectedSavePath); break;
                     case DeleteAndSave:
-                        if (File.Exists(CurrentImagePath))
-                        {
-                            File.Delete(CurrentImagePath);
-                        }
-
                         File.Copy(newImageFile, selectedSavePath); break;
                 }
             }

@@ -57,7 +57,7 @@ namespace CSVEditor.View.Controls
                resources,
                Context);
 
-            Console.WriteLine($"LineEditControl, building new Grid for Index =  {Context.SelectedItemIndex}.");
+            Console.WriteLine($@"LineEditControl, building new Grid for Index =  {Context.SelectedItemIndex}.");
             
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }

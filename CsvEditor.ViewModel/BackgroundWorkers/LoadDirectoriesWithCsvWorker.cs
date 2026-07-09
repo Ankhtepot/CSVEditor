@@ -33,7 +33,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
 
             directories = directories.Concat(foundDirectories).ToList();
 
-            Console.WriteLine($"BW finished loading directories. Directories found: {directories.Count}");
+            Console.WriteLine($@"BW finished loading directories. Directories found: {directories.Count}");
 
             worker.ReportProgress(25);
 

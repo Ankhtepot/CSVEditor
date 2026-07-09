@@ -8,8 +8,6 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using CSVEditor.Model.HelperClasses;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-
 namespace CSVEditor.Model.Services
 {
     public class FileSystemServices
@@ -19,21 +17,16 @@ namespace CSVEditor.Model.Services
 
         public static string QueryUserForRootRepositoryPath(string title = "")
         {
-            var dialog = new CommonOpenFileDialog
-            {
-                IsFolderPicker = true
-            };
-
-            var result = dialog.ShowDialog();
-
+            var dialog = new OpenFolderDialog();
+            
             if (!string.IsNullOrEmpty(title))
             {
                 dialog.Title = title;
             }
 
-            if (result == CommonFileDialogResult.Ok)
+            if (dialog.ShowDialog() == true)
             {
-                return dialog.FileName;
+                return dialog.FolderName;
             }
             else
             {
@@ -41,19 +34,32 @@ namespace CSVEditor.Model.Services
             }
         }
 
-        public static string QueryUserForPath(string initialDirectory = "", string title = "", CommonFileDialogFilter filter = null)
+        public static string QueryUserForPath(string initialDirectory = "", string title = "", string filter = null)
         {
-            var dialog = new CommonOpenFileDialog()
+            if (!string.IsNullOrEmpty(filter))
             {
-                IsFolderPicker = true,
-            };
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = filter,
+                    CheckFileExists = false,
+                    FileName = "Folder Selection",
+                    Title = title,
+                    InitialDirectory = Directory.Exists(initialDirectory)
+                        ? initialDirectory
+                        : (string.IsNullOrEmpty(initialDirectory) ? "" : Path.GetDirectoryName(initialDirectory))
+                };
 
-            //if (filter != null)
-            //{
-            //    dialog.Filters.Add(filter);
-            //}
+                if (fileDialog.ShowDialog() == true)
+                {
+                    return Path.GetDirectoryName(fileDialog.FileName);
+                }
 
-            if(!string.IsNullOrEmpty(title))
+                return null;
+            }
+
+            var dialog = new OpenFolderDialog();
+
+            if (!string.IsNullOrEmpty(title))
             {
                 dialog.Title = title;
             }
@@ -63,20 +69,19 @@ namespace CSVEditor.Model.Services
                 dialog.InitialDirectory = initialDirectory;
             }
 
-            CommonFileDialogResult result;
             try
             {
-                result = dialog.ShowDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    return dialog.FolderName;
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error while reading directory path: {e.Message}");
-                return null;
+                Console.WriteLine($@"Error while reading directory path: {e.Message}");
             }
 
-            return result == CommonFileDialogResult.Ok 
-                ? dialog.FileName 
-                : null;
+            return null;
         }
 
         public static string QueryUserToSelectFile(string path, string title = "", string filter = null)
@@ -200,11 +205,11 @@ namespace CSVEditor.Model.Services
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine($"Insufficient rights to scan directory at \"{path}\". Error: {e.Message}");
+                Console.WriteLine($@"Insufficient rights to scan directory at ""{path}"". Error: {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Unexpected error occured while reading directories at: \"{path}\". Error: {e.Message}");
+                Console.WriteLine($@"Unexpected error occured while reading directories at: ""{path}"". Error: {e.Message}");
             }
 
             return directories;
@@ -220,11 +225,11 @@ namespace CSVEditor.Model.Services
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine($"Insufficient rights to read all files in \"{path}\".");
+                Console.WriteLine($@"Insufficient rights to read all files in ""{path}"".");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Unexpected error occured while scanning directories at: \"{path}\". Error: {e.Message}");
+                Console.WriteLine($@"Unexpected error occured while scanning directories at: ""{path}"". Error: {e.Message}");
             }
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
@@ -243,7 +248,7 @@ namespace CSVEditor.Model.Services
             }
             catch (Exception)
             {
-                Console.WriteLine($"Creating new {Path.GetFileName(configurationsFilePath)} in {configurationsFilePath}");
+                Console.WriteLine($@"Creating new {Path.GetFileName(configurationsFilePath)} in {configurationsFilePath}");
 
                 File.Create(configurationsFilePath);
 
@@ -276,7 +281,7 @@ namespace CSVEditor.Model.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error reading file extension for file: {fileAbsPath}. Error: {e.Message}");
+                Console.WriteLine($@"Error reading file extension for file: {fileAbsPath}. Error: {e.Message}");
             }
 
             return false;
@@ -335,7 +340,7 @@ namespace CSVEditor.Model.Services
         {
             if (!Directory.Exists(Path.Combine(baseAppPath, configurationFolderName)))
             {
-                Console.WriteLine($"Creating new {configurationFolderName} directory in {baseAppPath}");
+                Console.WriteLine($@"Creating new {configurationFolderName} directory in {baseAppPath}");
                 Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
             }
         }
