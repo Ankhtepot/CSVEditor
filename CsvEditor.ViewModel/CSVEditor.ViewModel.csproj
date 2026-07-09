@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSVEditor.Model\CSVEditor.Model.csproj" />
+    <ProjectReference Include="..\CSVEditor.Core\CSVEditor.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

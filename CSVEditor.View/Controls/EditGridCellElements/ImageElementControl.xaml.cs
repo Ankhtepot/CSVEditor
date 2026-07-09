@@ -1,10 +1,10 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
+using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Services;
 using CSVEditor.ViewModel;
 using static CSVEditor.ViewModel.ReplaceImageVM.ReplaceImageResult;
 

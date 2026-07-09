@@ -1,7 +1,7 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Interfaces;
-using CSVEditor.Model.Services;
+using CSVEditor.Core;
+using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Interfaces;
+using CSVEditor.Core.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using Prism.Commands;
 using System;
@@ -13,7 +13,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using static CSVEditor.Model.HelperClasses.Enums;
+using static CSVEditor.Core.HelperClasses.Enums;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace CSVEditor.ViewModel
 {
@@ -122,15 +123,14 @@ namespace CSVEditor.ViewModel
 
         public int SelectedItemIndex
         {
-            get { return selectedItemIndex; }
+            get => selectedItemIndex;
             set
             {
-                if (selectedItemIndex != value)
-                {
-                    selectedItemIndex = value;
-                    Console.WriteLine($@"EditorVM, selectedIndexUpdated to {value}");
-                    OnPropertyChanged();
-                }
+                if (selectedItemIndex == value) return;
+                
+                selectedItemIndex = value;
+                Console.WriteLine($@"EditorVM, selectedIndexUpdated to {value}");
+                OnPropertyChanged();
             }
         }
 
@@ -145,7 +145,7 @@ namespace CSVEditor.ViewModel
 
         public Dictionary<AddLinePlacement, string> AddLinePlacementSource { get; set; }
 
-        public static Action<Grid> OnConfiguraitonUpdated;
+        public static Action<Grid> OnGridConfigurationUpdated;
         public Action OnConfigurationUpdated;
         public Action OnCsvFileSet;
         public Action OnCsvFileUpdated;
@@ -177,8 +177,8 @@ namespace CSVEditor.ViewModel
         {
             AppOptions = new AppOptions();
             WindowService = windowService;
-            BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-            ConfigurationFolderPath = Path.Combine(BaseAppPath, CONFIGURATION_FOLDER_NAME);
+            BaseAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName);
+            ConfigurationFolderPath = Path.Combine(BaseAppPath ?? string.Empty, CONFIGURATION_FOLDER_NAME);
             AsyncVM = new AsyncVM(this);
             GitVM = new GitVM(this);
 
@@ -236,7 +236,7 @@ namespace CSVEditor.ViewModel
 
             if (mainGridContainer != null)
             {
-                OnConfiguraitonUpdated?.Invoke(mainGridContainer);
+                OnGridConfigurationUpdated?.Invoke(mainGridContainer);
             }
             else
             {
@@ -389,16 +389,14 @@ namespace CSVEditor.ViewModel
                 return currentFileConfigurations;
             }
 
-            return foundConfiguration != null
-                ? foundConfiguration
-                : currentFileConfigurations;
+            return foundConfiguration;
         }
 
         private List<CsvColumnConfiguration> FindFileConfiguration(string fileAbsPath)
         {
             return FileConfigurations?
                 .Where(conf => conf.AbsoluteFilePath == fileAbsPath)
-                .DefaultIfEmpty()?
+                .DefaultIfEmpty()
                 .FirstOrDefault()?.ColumnConfigurations;
         }
 

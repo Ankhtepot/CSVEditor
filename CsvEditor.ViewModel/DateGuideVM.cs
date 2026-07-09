@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -58,9 +58,9 @@ namespace CSVEditor.ViewModel
                 "MM/dd/yyyy h:mm tt",
                 "MM/dd/yyyy HH:mm:ss",
                 "MMMM dd",
-                "yyyyâ€™-â€˜MMâ€™-â€˜ddâ€™Tâ€™HHâ€™:â€™mmâ€™:â€™ss.fffffffK",
-                "ddd, dd MMM yyy HHâ€™:â€™mmâ€™:â€™ss â€˜GMTâ€™",
-                "yyyyâ€™-â€˜MMâ€™-â€˜ddâ€™Tâ€™HHâ€™:â€™mmâ€™:â€™ss",
+                "yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss.fffffffK",
+                "ddd, dd MMM yyy HH’:’mm’:’ss ‘GMT’",
+                "yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss",
                 "HH:mm",
                 "hh:mm tt",
                 "H:mm",

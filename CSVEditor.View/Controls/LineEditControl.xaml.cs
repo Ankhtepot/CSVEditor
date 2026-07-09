@@ -1,4 +1,4 @@
-﻿using CSVEditor.ViewModel;
+using CSVEditor.ViewModel;
 using System;
 using System.Windows;
 using System.Windows.Controls;

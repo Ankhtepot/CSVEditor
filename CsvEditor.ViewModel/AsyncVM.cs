@@ -1,5 +1,5 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.HelperClasses;
+using CSVEditor.Core;
+using CSVEditor.Core.HelperClasses;
 using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
 using System;
@@ -9,8 +9,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CSVEditor.Model.Services;
-using static CSVEditor.Model.HelperClasses.Enums;
+using CSVEditor.Core.Services;
+using static CSVEditor.Core.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel
 {

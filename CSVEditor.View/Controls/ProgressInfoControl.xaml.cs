@@ -1,8 +1,8 @@
-﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.Core.HelperClasses;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static CSVEditor.Model.HelperClasses.Enums;
+using static CSVEditor.Core.HelperClasses.Enums;
 
 namespace CSVEditor.View.Controls
 {

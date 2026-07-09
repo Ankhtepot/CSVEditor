@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="CSVEditor.View.Controls.DirectoryWithCsvControl"
+<UserControl x:Class="CSVEditor.View.Controls.DirectoryWithCsvControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
-             xmlns:converters="clr-namespace:CSVEditor.ViewModel.Converters;assembly=CSVEditor.ViewModel"
+             xmlns:converters="clr-namespace:CSVEditor.Core.Converters;assembly=CSVEditor.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400">
     <UserControl.Resources>

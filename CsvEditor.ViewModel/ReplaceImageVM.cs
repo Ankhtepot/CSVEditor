@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
-using CSVEditor.Model.Services;
+using CSVEditor.Core.Services;
 using Prism.Commands;
 
 namespace CSVEditor.ViewModel

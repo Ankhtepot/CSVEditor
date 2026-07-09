@@ -1,5 +1,5 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Interfaces;
+using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Interfaces;
 using CSVEditor.ViewModel;
 
 namespace CSVEditor.View

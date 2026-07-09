@@ -1,5 +1,5 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Services;
+using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Services;
 using Octokit;
 using System;
 using System.ComponentModel;

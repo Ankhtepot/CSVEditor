@@ -1,5 +1,5 @@
-﻿using CSVEditor.Model;
-using CSVEditor.Model.Services;
+using CSVEditor.Core;
+using CSVEditor.Core.Services;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

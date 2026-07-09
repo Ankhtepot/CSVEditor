@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model.Interfaces;
+using CSVEditor.Core.Interfaces;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Repository = LibGit2Sharp.Repository;
@@ -8,8 +8,8 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using CSVEditor.Model.Services;
-using CSVEditor.Model.HelperClasses;
+using CSVEditor.Core.Services;
+using CSVEditor.Core.HelperClasses;
 using Octokit;
 
 namespace CSVEditor.ViewModel

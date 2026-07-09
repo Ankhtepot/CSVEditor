@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSVEditor.Model\CSVEditor.Model.csproj" />
+    <ProjectReference Include="..\CSVEditor.Core\CSVEditor.Core.csproj" />
     <ProjectReference Include="..\CSVEditor.ViewModel\CSVEditor.ViewModel.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model.HelperClasses;
+using CSVEditor.Core.HelperClasses;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

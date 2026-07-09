@@ -1,6 +1,6 @@
-﻿using CSVEditor.Model.HelperClasses;
-using CSVEditor.Model.Interfaces;
-using CSVEditor.Model.Services;
+using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Interfaces;
+using CSVEditor.Core.Services;
 using Prism.Commands;
 using System;
 using System.ComponentModel;

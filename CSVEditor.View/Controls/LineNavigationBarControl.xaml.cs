@@ -1,4 +1,4 @@
-﻿using CSVEditor.Model.Services;
+using CSVEditor.Core.Services;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
