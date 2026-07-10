@@ -1,8 +1,8 @@
-using CSVEditor.Core.Properties;
+﻿using CSVEditor.Core.Properties;
 
 namespace CSVEditor.Core.HelperClasses
 {
-    public class Constants
+    public static class Constants
     {
         public static string ADD_LINE_TO_TOP => Resources.AddLineToTop;
         public static string ADD_LINE_ABOVE => Resources.AddLineAbove;

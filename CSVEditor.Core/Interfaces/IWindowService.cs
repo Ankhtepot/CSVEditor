@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 
 namespace CSVEditor.Core.Interfaces
 {
@@ -6,5 +6,6 @@ namespace CSVEditor.Core.Interfaces
     {
         SaveOptions OpenSaveWindow(SaveOptions saveOptions, string csvFileText, string csvFilePath);
         GitOptions OpenGitSetupWindow();
+        bool OpenGitPushWindow();
     }
 }

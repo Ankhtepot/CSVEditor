@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -7,7 +7,7 @@ namespace CSVEditor.Core.HelperClasses
     public class GitOptions : INotifyPropertyChanged
     {
         private const string DefaultCommitMessage = "<change in CSV file>";
-        private const string DefaultRemoteBranch = "origin";
+        private const string DefaultRemoteName = "origin";
 
         private string commitMessage;
         public string CommitMessage
@@ -54,11 +54,11 @@ namespace CSVEditor.Core.HelperClasses
             set { remoteRepositoryLink = value; OnPropertyChanged(); }
         }
 
-        private string remoteBranch;
-        public string RemoteBranch
+        private string remoteName;
+        public string RemoteName
         {
-            get => remoteBranch;
-            set { remoteBranch = value; OnPropertyChanged(); }
+            get => remoteName;
+            set { remoteName = value; OnPropertyChanged(); }
         }
 
         public GitOptions()
@@ -69,7 +69,7 @@ namespace CSVEditor.Core.HelperClasses
             Password = "";
             UseToken = true;
             RemoteRepositoryLink = "<Remote Repository Link>";
-            RemoteBranch = DefaultRemoteBranch;
+            RemoteName = DefaultRemoteName;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

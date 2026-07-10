@@ -6,11 +6,14 @@ using Signature = LibGit2Sharp.Signature;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using CSVEditor.Core.Services;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Properties;
+using CSVEditor.Core.Extensions;
 using Octokit;
 
 namespace CSVEditor.ViewModel
@@ -26,70 +29,72 @@ namespace CSVEditor.ViewModel
     {
         public IWindowService WindowService { get; set; }
 
-        private bool isGitRepo;
         public bool IsGitRepo
         {
-            get { return isGitRepo; }
+            get => field;
             set
             {
-                isGitRepo = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool isRepositoryUpToDate;
         public bool IsRepositoryUpToDate
         {
-            get { return isRepositoryUpToDate; }
+            get => field;
             set
             {
-                isRepositoryUpToDate = value;
+                field = value;
+                IsRepositoryUpToDateStatic = value;
                 OnPropertyChanged();
             }
         }
+        
+        public static bool IsRepositoryUpToDateStatic { get; set; }
 
-        private bool isRepositoryCommited;
         public bool IsRepositoryCommited
         {
-            get { return isRepositoryCommited; }
+            get => field;
             set
             {
-                isRepositoryCommited = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool isRepositoryPushed;
         public bool IsRepositoryPushed
         {
-            get { return isRepositoryPushed; }
+            get => field;
             set
             {
-                isRepositoryPushed = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private Repository currentRepository;
         public Repository CurrentRepository
         {
-            get { return currentRepository; }
+            get => field;
             set
             {
-                currentRepository = value;
+                field = value;
+                CurrentRepositoryStatic = value;
                 OnPropertyChanged();
             }
         }
+        
+        public static Repository CurrentRepositoryStatic { get; set; }
 
         public bool IsLoggedIn => EditorVM.AppOptions?.GitOptions?.IsAuthenticated ?? false;
 
         public string LoginTooltip => IsLoggedIn
-            ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions.GitOptions.UserName, EditorVM.AppOptions.GitOptions.Email)
+            ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions.GitOptions.UserName,
+                EditorVM.AppOptions.GitOptions.Email)
             : Resources.LogInHelpText;
 
         public DelegateCommand OpenGitSetupCommand { get; set; }
         public DelegateCommand CommitRepositoryCommand { get; set; }
-        public DelegateCommand PushRepositoryCommand { get; set; }
+        public static DelegateCommand PushRepositoryCommand { get; set; }
         public DelegateCommand PullRepositoryCommand { get; set; }
 
         public GitVM(EditorVM EditorVM)
@@ -115,10 +120,12 @@ namespace CSVEditor.ViewModel
 
         private async Task VerifyGitHubLoginAsync()
         {
-            var gitOpts = EditorVM.AppOptions?.GitOptions;
+            GitOptions gitOpts = EditorVM.AppOptions?.GitOptions;
             if (gitOpts == null || !gitOpts.IsAuthenticated) return;
 
-            string token = gitOpts.UseToken ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password : gitOpts.Password;
+            string token = gitOpts.UseToken
+                ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password
+                : gitOpts.Password;
             if (string.IsNullOrEmpty(token))
             {
                 gitOpts.IsAuthenticated = false;
@@ -127,7 +134,7 @@ namespace CSVEditor.ViewModel
 
             try
             {
-                GitHubClient client = new GitHubClient(new ProductHeaderValue("CSVEditor"))
+                GitHubClient client = new(new ProductHeaderValue("CSVEditor"))
                 {
                     Credentials = new Octokit.Credentials(token)
                 };
@@ -150,16 +157,17 @@ namespace CSVEditor.ViewModel
         {
             if (EditorVM.AppOptions?.GitOptions != null)
             {
-                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+                EditorVM.AppOptions.GitOptions.PropertyChanged -=
+                    GitOptions_PropertyChanged; // Unsubscribe first to avoid multiple subscriptions
                 EditorVM.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
             }
         }
 
         private void GitOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(GitOptions.IsAuthenticated) ||
-                e.PropertyName == nameof(GitOptions.UserName) ||
-                e.PropertyName == nameof(GitOptions.Email))
+            if (e.PropertyName is nameof(GitOptions.IsAuthenticated)
+                or nameof(GitOptions.UserName)
+                or nameof(GitOptions.Email))
             {
                 OnPropertyChanged(nameof(IsLoggedIn));
                 OnPropertyChanged(nameof(LoginTooltip));
@@ -183,25 +191,26 @@ namespace CSVEditor.ViewModel
 
         private bool OpenGitSetupWindow()
         {
-            var oldOptions = EditorVM.AppOptions.GitOptions;
-            var newOptions = WindowService?.OpenGitSetupWindow();
-            if (newOptions != null)
-            {
-                if (oldOptions != null)
-                {
-                    oldOptions.PropertyChanged -= GitOptions_PropertyChanged;
-                }
-                EditorVM.AppOptions.GitOptions = newOptions;
-                SubscribeToGitOptions();
-                
-                OnPropertyChanged(nameof(IsLoggedIn));
-                OnPropertyChanged(nameof(LoginTooltip));
+            GitOptions oldOptions = EditorVM.AppOptions.GitOptions;
+            GitOptions newOptions = WindowService?.OpenGitSetupWindow();
 
-                SaveVM.SaveAppOptions();
-                return true;
-            }
+            if (newOptions == null) return false;
 
-            return false;
+            oldOptions.PropertyChanged -= GitOptions_PropertyChanged;
+
+            EditorVM.AppOptions.GitOptions = newOptions;
+            SubscribeToGitOptions();
+
+            OnPropertyChanged(nameof(IsLoggedIn));
+            OnPropertyChanged(nameof(LoginTooltip));
+
+            SaveVM.SaveAppOptions();
+            return true;
+        }
+
+        public bool? OpenGitPushWindow()
+        {
+            return WindowService?.OpenGitPushWindow();
         }
 
         private void PullRepository()
@@ -218,38 +227,38 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                using (var repo = new Repository(CurrentRepository.Info.Path))
-                {
-                    var gitOpts = EditorVM.AppOptions.GitOptions;
-                    var password = gitOpts.UseToken ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password : gitOpts.Password;
-                    // Credential information to fetch
-                    PullOptions options = new PullOptions();
-                    options.FetchOptions = new FetchOptions();
-                    options.FetchOptions.CredentialsProvider = new CredentialsHandler(
-                        (_, _, _) =>
-                            new UsernamePasswordCredentials()
-                            {
-                                Username = gitOpts.UserName,
-                                Password = password
-                            });
+                using Repository repo = new(CurrentRepository.Info.Path);
+                GitOptions gitOpts = EditorVM.AppOptions.GitOptions;
+                string password = gitOpts.UseToken
+                    ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password
+                    : gitOpts.Password;
+                // Credential information to fetch
+                PullOptions options = new();
+                options.FetchOptions = new FetchOptions();
+                options.FetchOptions.CredentialsProvider = new CredentialsHandler((_, _, _) =>
+                    new UsernamePasswordCredentials()
+                    {
+                        Username = gitOpts.UserName,
+                        Password = password
+                    });
 
-                    // User information to create a merge commit
-                    var signature = new Signature(
-                        new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
+                // User information to create a merge commit
+                Signature signature = new(gitOpts.UserName, gitOpts.Email, DateTimeOffset.Now);
 
-                    // Pull
-                    Commands.Pull(repo, signature, options);
-                }
+                // Pull
+                Commands.Pull(repo, signature, options);
+
+                SetRepository(repo.Info.WorkingDirectory);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorPullingRepositoryFormat, e.Message));
+                Console.WriteLine(Resources.ErrorPullingRepositoryFormat, e.Message);
             }
         }
 
         private void PushRepository()
         {
-            if (!OpenGitSetupWindow())
+            if (OpenGitPushWindow() != true)
             {
                 return;
             }
@@ -261,46 +270,64 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                using (var repo = new Repository(CurrentRepository.Info.Path))
+                using Repository repo = new(CurrentRepository.Info.Path);
+                
+                GitOptions gitOpts = EditorVM.AppOptions.GitOptions;
+                string password = gitOpts.UseToken
+                    ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password
+                    : gitOpts.Password;
+
+                Remote remote = repo.Network.Remotes[gitOpts.RemoteName];
+                if (remote == null)
                 {
-                    var gitOpts = EditorVM.AppOptions.GitOptions;
-                    var password = gitOpts.UseToken ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password : gitOpts.Password;
-
-                    var remote = repo.Network.Remotes["origin"];
-                    if (remote == null)
+                    if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) &&
+                        !gitOpts.RemoteRepositoryLink.Contains("<"))
                     {
-                        if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) && !gitOpts.RemoteRepositoryLink.Contains("<"))
-                        {
-                            Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteRepositoryLink));
-                            remote = repo.Network.Remotes.Add("origin", gitOpts.RemoteRepositoryLink);
-                        }
-                        else
-                        {
-                            Console.WriteLine(Resources.RemoteOriginNotFoundNoLinkText);
-                            return;
-                        }
+                        Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteName, gitOpts.RemoteRepositoryLink));
+                        remote = repo.Network.Remotes.Add(gitOpts.RemoteName, gitOpts.RemoteRepositoryLink);
                     }
-
-                    var options = new PushOptions
+                    else
                     {
-                        CredentialsProvider = (_, _, _) =>
-                            new UsernamePasswordCredentials()
-                            {
-                                Username = gitOpts.UserName,
-                                Password = password
-                            }
-                    };
-
-                    // Push the current branch to origin
-                    repo.Network.Push(remote, repo.Head.CanonicalName, options);
-                    
-                    Console.WriteLine(string.Format(Resources.RepositoryPushedFormat, remote.Name));
-                    IsRepositoryPushed = true;
+                        Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundNoLinkText, gitOpts.RemoteName));
+                        return;
+                    }
                 }
+
+                PushOptions options = new()
+                {
+                    CredentialsProvider = (_, _, _) =>
+                        new UsernamePasswordCredentials()
+                        {
+                            Username = gitOpts.UserName,
+                            Password = password
+                        }
+                };
+
+                if (repo.Info.IsHeadDetached)
+                {
+                    throw new InvalidOperationException("Cannot push a detached HEAD. Please checkout a branch first.");
+                }
+
+                // Push the current branch to remote
+                string pushRefSpec = $"{repo.Head.CanonicalName}:{repo.Head.CanonicalName}";
+                repo.Network.Push(remote, pushRefSpec, options);
+
+                // Set upstream tracking if not set
+                var localBranch = repo.Head;
+                if (localBranch.TrackedBranch == null)
+                {
+                    repo.Branches.Update(localBranch, b => b.Remote = remote.Name, 
+                        b => b.UpstreamBranch = localBranch.CanonicalName);
+                }
+
+                Console.WriteLine(Resources.RepositoryPushedFormat, remote.Name);
+                IsRepositoryPushed = true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorPushingRepositoryFormat, e.Message));
+                IsRepositoryPushed = false;
+                Console.WriteLine(Resources.ErrorPushingRepositoryFormat, e.Message);
+                MessageBox.Show(string.Format(Resources.ErrorPushingRepositoryFormat, e.Message));
             }
         }
 
@@ -316,26 +343,26 @@ namespace CSVEditor.ViewModel
 
         private bool CommitRepository()
         {
-            var options = EditorVM.AppOptions.GitOptions;
+            GitOptions options = EditorVM.AppOptions.GitOptions;
 
-            var authorSifnature = new Signature(options.UserName, options.Email, DateTimeOffset.Now);
+            Signature authorSifnature = new(options.UserName, options.Email, DateTimeOffset.Now);
 
             try
             {
-                using (var repo = new Repository(CurrentRepository.Info.Path))
+                using Repository repo = new(CurrentRepository.Info.Path);
+                if (IsRepositoryUnstaged(repo))
                 {
-                    if (IsRepositoryUnstaged())
-                    {
-                        StageRepository();
-                        Console.WriteLine(Resources.RepositoryStagedText);
-                    }
-
-                    repo.Commit(options.CommitMessage, authorSifnature, authorSifnature);
-
-                    Console.WriteLine(Resources.RepositoryCommittedText);
-
-                    return true;
+                    StageRepository(repo);
+                    Console.WriteLine(Resources.RepositoryStagedText);
                 }
+
+                repo.Commit(options.CommitMessage, authorSifnature, authorSifnature);
+
+                Console.WriteLine(Resources.RepositoryCommittedText);
+
+                SetRepository(repo.Info.WorkingDirectory);
+
+                return true;
             }
             catch (EmptyCommitException)
             {
@@ -344,21 +371,21 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.UnexpectedErrorDuringCommitFormat, e.Message));
+                Console.WriteLine(Resources.UnexpectedErrorDuringCommitFormat, e.Message);
                 return false;
             }
         }
 
-        private bool StageRepository()
+        private bool StageRepository(Repository repo)
         {
             try
             {
-                Commands.Stage(CurrentRepository, "*");
+                Commands.Stage(repo, "*");
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorStagingRepositoryFormat, CurrentRepository.Info.WorkingDirectory, e.Message));
+                Console.WriteLine(Resources.ErrorStagingRepositoryFormat, repo.Info.WorkingDirectory, e.Message);
                 return false;
             }
         }
@@ -369,11 +396,11 @@ namespace CSVEditor.ViewModel
             {
                 Console.WriteLine(Resources.SettingUpRepositoryText);
                 CurrentRepository = new Repository(path);
-                var status = IsRepositoryUnstaged();
+                bool status = IsRepositoryUnstaged();
             }
             catch (RepositoryNotFoundException e)
             {
-                Console.WriteLine(string.Format(Resources.PathNotValidRepositoryFormat, path, e.Message));
+                Console.WriteLine(Resources.PathNotValidRepositoryFormat, path, e.Message);
             }
         }
 
@@ -386,7 +413,7 @@ namespace CSVEditor.ViewModel
                     return;
                 }
 
-                var commited = CommitRepository();
+                bool commited = CommitRepository();
 
                 if (pushOnSave && commited)
                 {
@@ -395,9 +422,27 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public bool IsRepositoryUnstaged()
+        public bool IsRepositoryUnstaged(Repository repo = null)
         {
-            return CurrentRepository?.RetrieveStatus().IsDirty == true;
+            repo ??= CurrentRepository;
+            return repo?.RetrieveStatus().IsDirty == true;
+        }
+        
+        /// <summary>
+        /// Gets the current git status of the repository as a string, concretely only changed files.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetGitStatus()
+        {
+            RepositoryStatus status = CurrentRepositoryStatic?.RetrieveStatus();
+            
+            return status == null 
+                ? string.Format(Resources.GitStatusFailed) 
+                : status.Modified.ToList().Count > 0 
+                    ? CurrentRepositoryStatic.RetrieveStatus().Modified
+                        .Select(e => e.FilePath)
+                        .ToHumanReadableString()
+                    : Resources.GitStatusNoChanges;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

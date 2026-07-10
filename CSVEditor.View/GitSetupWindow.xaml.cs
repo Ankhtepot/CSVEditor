@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using T = CSVEditor.Core.Properties.Resources;
 
 namespace CSVEditor.View
 {
@@ -18,7 +19,7 @@ namespace CSVEditor.View
 
         public GitOptions GitOptions
         {
-            get { return gitOptions; }
+            get => gitOptions;
             set 
             {
                 gitOptions = value;
@@ -52,17 +53,17 @@ namespace CSVEditor.View
             string token = PasswordBox.Password;
             if (string.IsNullOrEmpty(token))
             {
-                MessageBox.Show("Please enter a Personal Access Token first.");
+                MessageBox.Show(T.EnterPATPrompt);
                 return;
             }
 
             try
             {
-                var client = new GitHubClient(new ProductHeaderValue("CSVEditor"));
-                var tokenAuth = new Credentials(token);
+                GitHubClient client = new(new ProductHeaderValue("CSVEditor"));
+                Credentials tokenAuth = new(token);
                 client.Credentials = tokenAuth;
 
-                var user = await client.User.Current();
+                User user = await client.User.Current();
 
                 GitOptions.UserName = user.Login;
                 if (!string.IsNullOrEmpty(user.Email))
@@ -70,11 +71,11 @@ namespace CSVEditor.View
                     GitOptions.Email = user.Email;
                 }
                 GitOptions.IsAuthenticated = true;
-                
-                string msg = $"Successfully authenticated as {user.Login}!";
+
+                string msg = string.Format(T.GitAuthSuccessText, user.Login);
                 if (string.IsNullOrEmpty(user.Email))
                 {
-                    msg += "\n\nNote: Your GitHub email is private and couldn't be fetched. You can manually enter the email you want to use for commit signatures.";
+                    msg += $"\n\n{T.GitCouldntFetchEmailText}";
                 }
                 MessageBox.Show(msg);
             }
@@ -84,9 +85,10 @@ namespace CSVEditor.View
                 string message = ex.Message;
                 if (ex is AuthorizationException)
                 {
-                    message += "\n\nTip: For GitHub, you must use a Personal Access Token (PAT). Regular passwords are no longer supported for API access.";
+                    message += $"\n\n{T.GitPATTipText}";
                 }
-                MessageBox.Show($"Authentication failed: {message}");
+
+                MessageBox.Show(string.Format(T.GitAuthFailed, message));
             }
         }
 
@@ -112,7 +114,7 @@ namespace CSVEditor.View
             if (GitOptions.UseToken && GitOptions.UserName != _lastCheckedUsername)
             {
                 _lastCheckedUsername = GitOptions.UserName;
-                var token = CredentialService.GetToken(GitOptions.UserName);
+                string token = CredentialService.GetToken(GitOptions.UserName);
                 if (!string.IsNullOrEmpty(token))
                 {
                     PasswordBox.Password = token;

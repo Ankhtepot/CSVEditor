@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
 using CSVEditor.ViewModel;
 
@@ -8,24 +8,35 @@ namespace CSVEditor.View
     {
         public SaveOptions OpenSaveWindow(SaveOptions saveOptions, string csvFileText, string csvFilePath)
         {
-            var window = new SaveWindow(saveOptions, csvFileText, csvFilePath);
+            SaveWindow window = new(saveOptions, csvFileText, csvFilePath);
 
             window.ShowDialog();
-            var windowContext = window.DataContext as SaveVM;
+            SaveVM windowContext = window.DataContext as SaveVM;
+            
+            if (windowContext == null)
+                return null;
 
             return windowContext.SaveSuccessful ?
-                (window.DataContext as SaveVM).SaveOptions
+                windowContext.SaveOptions
                 : null;
         }
 
         public GitOptions OpenGitSetupWindow()
         {
-            var window = new GitSetupWindow(EditorVM.AppOptions.GitOptions);
+            GitSetupWindow window = new(EditorVM.AppOptions.GitOptions);
             window.ShowDialog();
 
             return window.Canceled
                 ? null
                 : window.GitOptions;
+        }
+
+        public bool OpenGitPushWindow()
+        {
+            GitPushWindow window = new(EditorVM.AppOptions.GitOptions);
+            window.ShowDialog();
+
+            return !window.Canceled;
         }
     }
 }

@@ -355,8 +355,8 @@ Do you want to overwrite this file?</value>
   <data name="RememberSelectionText" xml:space="preserve">
     <value>Remember This Selection</value>
   </data>
-  <data name="RemoteBranchNameText" xml:space="preserve">
-    <value>RemoteBranch</value>
+  <data name="RemoteNameText" xml:space="preserve">
+    <value>Remote Name</value>
   </data>
   <data name="RemoteLinkText" xml:space="preserve">
     <value>Remote repository link</value>
@@ -425,10 +425,10 @@ Do you want to overwrite this file?</value>
     <value>Error pulling repository. Error: {0}</value>
   </data>
   <data name="RemoteOriginNotFoundAddingFormat" xml:space="preserve">
-    <value>Remote 'origin' not found. Adding remote 'origin' with link: {0}</value>
+    <value>Remote '{0}' not found. Adding remote '{0}' with link: {1}</value>
   </data>
   <data name="RemoteOriginNotFoundNoLinkText" xml:space="preserve">
-    <value>Remote 'origin' not found and no valid remote link provided in Git Setup.</value>
+    <value>Remote '{0}' not found and no valid remote link provided in Git Setup.</value>
   </data>
   <data name="RepositoryPushedFormat" xml:space="preserve">
     <value>Repository pushed to {0}.</value>
@@ -477,5 +477,38 @@ Do you want to overwrite this file?</value>
   </data>
   <data name="DateFormatResultFormat" xml:space="preserve">
     <value>Date: {0} with date format of "{1}" results to: {2}.</value>
+  </data>
+  <data name="GitPushWindowTitle" xml:space="preserve">
+    <value>Git Push</value>
+  </data>
+  <data name="ChangedFiles" xml:space="preserve">
+    <value>Changed Files</value>
+  </data>
+  <data name="EnterPATPrompt" xml:space="preserve">
+    <value>Please enter a Personal Access Token first.</value>
+  </data>
+  <data name="GitAuthSuccessText" xml:space="preserve">
+    <value>Successfully authenticated as {0}!</value>
+  </data>
+  <data name="GitCouldntFetchEmailText" xml:space="preserve">
+    <value>Note: Your GitHub email is private and couldn't be fetched. You can manually enter the email you want to use for commit signatures.</value>
+  </data>
+  <data name="GitPATTipText" xml:space="preserve">
+    <value>Tip: For GitHub, you must use a Personal Access Token (PAT). Regular passwords are no longer supported for API access.</value>
+  </data>
+  <data name="GitAuthFailed" xml:space="preserve">
+    <value>Authentication failed: {0}"</value>
+  </data>
+  <data name="GitStatusText" xml:space="preserve">
+    <value>Git Status</value>
+  </data>
+  <data name="GitStatusFailed" xml:space="preserve">
+    <value>Failed to get Git Status.</value>
+  </data>
+  <data name="GitStatusNoChanges" xml:space="preserve">
+    <value>Nothing to commit &amp; push.</value>
+  </data>
+  <data name="GitPushButtonText" xml:space="preserve">
+    <value>Push</value>
   </data>
 </root>

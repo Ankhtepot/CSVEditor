@@ -129,13 +129,13 @@
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"/>
 
-            <Label Content="{x:Static p:Resources.RemoteBranchNameText}"
+            <Label Content="{x:Static p:Resources.RemoteNameText}"
                    ContentStringFormat="{}{0}:"
                    FontSize="{StaticResource MiddleFontSize}"
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="7"/>
-            <TextBox Text="{Binding GitOptions.RemoteBranch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding GitOptions.RemoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="7"
                      FontSize="{StaticResource MiddleFontSize}"
@@ -152,8 +152,6 @@
                         Content="{x:Static p:Resources.UseThisSetupText}"
                         Click="OKButton_Click"
                         HorizontalAlignment="Left"
-                        Grid.Column="0"
-                        Grid.Row="3"
                         Margin="0,10,30,0"
                         Width="100">
                     <Button.Resources>
@@ -164,8 +162,6 @@
                         Content="{x:Static p:Resources.CancelText}"
                         Click="CancelButton_Click"
                         HorizontalAlignment="right"
-                        Grid.Column="1"
-                        Grid.Row="3"
                         Margin="30,10,0,0"
                         Width="100">
                     <Button.Resources>
