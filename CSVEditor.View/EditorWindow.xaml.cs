@@ -3,6 +3,7 @@ using CSVEditor.View.Controls;
 using CSVEditor.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
+using CSVEditor.Core.Extensions;
 
 namespace CSVEditor.View
 {

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,20 +6,19 @@ namespace CSVEditor.Core.HelperClasses
 {
     public class DirectoryWithCsv : INotifyPropertyChanged
     {
-        private string directoryAbsolutePath;
-        public string DirectoryAbsolutePath {
-            get => directoryAbsolutePath;
-            set { directoryAbsolutePath = value; OnPropertyChanged(nameof(DirectoryAbsolutePath)); }
-        }
-
-        private List<string> csvFilesNames;
-        public List<string> CsvFilesNames
+        public string DirectoryAbsolutePath
         {
-            get => csvFilesNames;
-            set => csvFilesNames = value;
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        public DirectoryWithCsv() : this ("", new List<string>()) {}
+        public List<string> CsvFilesNames { get; set; }
+
+        public DirectoryWithCsv() : this ("", []) {}
 
         public DirectoryWithCsv(string directoryPath, List<string> fileNames)
         {

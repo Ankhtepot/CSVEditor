@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
 using CSVEditor.Core.Services;
 using CSVEditor.Core.Properties;
@@ -14,29 +14,27 @@ namespace CSVEditor.ViewModel
     public class SaveVM : INotifyPropertyChanged
     {
         public string CsvFileText;
-
         public Window SaveWindow;
-
         public bool SaveSuccessful;
+        public Visibility IsLoggedInToGit { get; set; } = Visibility.Collapsed;
+        public Visibility IsNotLoggedInToGit => IsLoggedInToGit == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
 
-        private string csvFilePath;
         public string CsvFilePath
         {
-            get => csvFilePath;
+            get;
             set
             {
-                csvFilePath = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private SaveOptions saveOptions;
         public SaveOptions SaveOptions
         {
-            get => saveOptions;
+            get;
             set
             {
-                saveOptions = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
@@ -54,17 +52,19 @@ namespace CSVEditor.ViewModel
             SaveAsCommand = new DelegateCommand(SaveAs);
             SaveAlternativePathCommand = new DelegateCommand(SaveAlternativePath);
             CancelCommand = new DelegateCommand(Cancel);
+            
+            IsLoggedInToGit = AppOptionsService.IsLoggedInToGit == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public static async void SaveCurrentCsvFile(EditorVM context, IWindowService windowService)
         {
-            var saveOptions = EditorVM.AppOptions.SaveOptions.RememberSetting
+            SaveOptions saveOptions = EditorVM.AppOptions.SaveOptions.RememberSetting
                 ? EditorVM.AppOptions.SaveOptions
                 : new SaveOptions();
 
-            var csvText = await context.AsyncVM.CsvFileToTextTask(context.SelectedCsvFile);
+            string csvText = await context.AsyncVM.CsvFileToTextTask(context.SelectedCsvFile);
 
-            var saveWindowResult = windowService.OpenSaveWindow(saveOptions, csvText, context.SelectedCsvFile.AbsPath);
+            SaveOptions saveWindowResult = windowService.OpenSaveWindow(saveOptions, csvText, context.SelectedCsvFile.AbsPath);
             if (saveWindowResult != null)
             {
                 EditorVM.AppOptions.SaveOptions = saveWindowResult;
@@ -81,20 +81,13 @@ namespace CSVEditor.ViewModel
         public static void SaveConfiguration()
         {
             JsonServices.SerializeJson(EditorVM.FileConfigurations,
-                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.CSV_CONFIGURATIONS_FILE_NAME),
+                Path.Combine(EditorVM.ConfigurationFolderPath, Constants.CSV_CONFIGURATIONS_FILE_NAME),
                 Resources.CsvFileConfigurationsText);
-        }
-
-        public static void SaveAppOptions()
-        {
-            JsonServices.SerializeJson(EditorVM.AppOptions,
-                Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.APP_OPTIONS_FILE_NAME),
-                Resources.AppOptionsName);
         }
 
         private void SaveAlternativePath()
         {
-            var path = GetAlternativePathIsExists();
+            string path = GetAlternativePathIsExists();
 
             SaveOptions.AlternativePath = path;
 
@@ -103,9 +96,9 @@ namespace CSVEditor.ViewModel
 
         private void SaveAs()
         {
-            var path = GetAlternativePathIsExists();
+            string path = GetAlternativePathIsExists();
 
-            path = FileSystemServices.QueryUserToSaveFile(path, Constants.SAVE_FILE_TITLE);
+            path = FileSystemService.QueryUserToSaveFile(path, Constants.SAVE_FILE_TITLE);
 
             SaveOptions.AlternativePath = path;
 
@@ -127,7 +120,7 @@ namespace CSVEditor.ViewModel
 
         private void SaveFile(string path)
         {
-            SaveSuccessful = FileSystemServices.SaveTextFile(path, CsvFileText);
+            SaveSuccessful = FileSystemService.SaveTextFile(path, CsvFileText);
 
             Cancel();
         }

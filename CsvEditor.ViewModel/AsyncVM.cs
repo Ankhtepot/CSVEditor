@@ -1,4 +1,4 @@
-using CSVEditor.Core;
+﻿using CSVEditor.Core;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.ViewModel.Abstracts;
 using CSVEditor.ViewModel.BackgroundWorkers;
@@ -18,57 +18,65 @@ namespace CSVEditor.ViewModel
     {
         private const int UPDATE_PROGRESS_DELAY = 100;
 
-        private string selectedFileRaw;
         public string SelectedFileRaw
         {
-            get { return selectedFileRaw; }
-            set { selectedFileRaw = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private bool isConverterProcessing;
         public bool IsConverterProcessing
         {
-            get { return isConverterProcessing; }
-            set { isConverterProcessing = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private WorkStatus workingStatus;
         public WorkStatus WorkingStatus
         {
-            get { return workingStatus; }
+            get;
             set
             {
-                workingStatus = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private int workProgress;
         public int WorkProgress
         {
-            get { return workProgress; }
+            get;
             set
             {
-                workProgress = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
-
-        private AbstractEditorVMWorker activeWorker;
 
         public AbstractEditorVMWorker ActiveWorker //this field is being handled by AbstractEditorVMWorker
         {
-            get { return activeWorker; }
-            set { activeWorker = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
 
-        private EditorVM editorVM;
-
         public EditorVM EditorVM
         {
-            get { return editorVM; }
-            set { editorVM = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
 
@@ -81,20 +89,20 @@ namespace CSVEditor.ViewModel
 
         public async void SetRawTextFromAbsPath(string path)
         {
-            var cts = new CancellationTokenSource();
+            CancellationTokenSource cts = new();
 
             UpdateProcessingFileTextTask(cts.Token);
-            string rawText = await Task.Run(() => GetRawTextTask(cts, path));
+            string rawText = await Task.Run(() => GetRawTextTask(cts, path), cts.Token);
             await Task.Delay(UPDATE_PROGRESS_DELAY * 3);
             SelectedFileRaw = rawText;
         }
 
         private string GetRawTextTask(CancellationTokenSource cts, string path)
         {
-            var result = Task.Run( async () =>
+            Task<string> result = Task.Run( async () =>
             {
-                var rawText = await Task.Run(() => FileProcessingServices.GetRawFileText(path));
-                cts.Cancel();
+                string rawText = await Task.Run(() => FileProcessingServices.GetRawFileText(path));
+                await cts.CancelAsync();
                 return rawText;
             });
 
@@ -108,11 +116,11 @@ namespace CSVEditor.ViewModel
                 SelectedFileRaw = Constants.PROCESSING_FILE;
                 while (!token.IsCancellationRequested)
                 {
-                    await Task.Delay(UPDATE_PROGRESS_DELAY);
-                    var dotsCount = SelectedFileRaw.Count<char>(ch => ch == '.');
+                    await Task.Delay(UPDATE_PROGRESS_DELAY, token);
+                    int dotsCount = SelectedFileRaw.Count(ch => ch == '.');
                     SelectedFileRaw = dotsCount < 10 ? SelectedFileRaw + "." : SelectedFileRaw.Replace(".", ""); 
                 }
-            });
+            }, token);
         }
 
         public void LoadRepository()
@@ -120,7 +128,7 @@ namespace CSVEditor.ViewModel
             EditorVM.SelectedFile = null;
             EditorVM.SelectedCsvFile = null;
 
-            EditorVM.RootRepositoryPath = FileSystemServices.QueryUserForRootRepositoryPath(Constants.SELECT_PROJECT_ROOT_DIRECTORY);
+            EditorVM.RootRepositoryPath = FileSystemService.QueryUserForRootRepositoryPath(Constants.SELECT_PROJECT_ROOT_DIRECTORY);
 
             EditorVM.GitVM.SetGitInfo(EditorVM.RootRepositoryPath);
 
@@ -141,6 +149,11 @@ namespace CSVEditor.ViewModel
 
         public async Task<string> CsvFileToTextTask(CsvFile csvFile)
         {
+            if (csvFile == null)
+            {
+                return null;
+            }
+
             WorkingStatus = WorkStatus.Working;
 
             if (csvFile.Lines.Count < 1)
@@ -148,15 +161,15 @@ namespace CSVEditor.ViewModel
                 WorkingStatus = WorkStatus.Done;
             }
 
-            var progressStep = 100d / csvFile.Lines.Count;
+            double progressStep = 100d / csvFile.Lines.Count;
             WorkProgress = 0;
 
-            var progress = new Progress<int>(lineNr =>
+            Progress<int> progress = new(lineNr =>
             {
                 WorkProgress = (int)((lineNr + 1) * progressStep); // +1 for headers line
             });
 
-            var csvText = await Task.Run(() => ConvertCsvFileToTextTask(csvFile, progress));
+            string csvText = await Task.Run(() => ConvertCsvFileToTextTask(csvFile, progress));
 
             WorkingStatus = WorkStatus.Done;
 
@@ -167,11 +180,11 @@ namespace CSVEditor.ViewModel
         {
             return Task.Run(async () =>
             {
-                var stringBuilder = new StringBuilder(FileProcessingServices.HeadersLineToStringLine(csvFile));
+                StringBuilder stringBuilder = new(FileProcessingServices.HeadersLineToStringLine(csvFile));
 
                 for (int i = 0; i < csvFile.Lines.Count; i++)
                 {
-                    var processedLine = await Task.Run(() => FileProcessingServices.CsvLineToString(csvFile.Lines[i], csvFile.Delimiter, csvFile.BlockIdentifier));
+                    string processedLine = await Task.Run(() => FileProcessingServices.CsvLineToString(csvFile.Lines[i], csvFile.Delimiter, csvFile.BlockIdentifier));
 
                     progress.Report(i + 1);
 

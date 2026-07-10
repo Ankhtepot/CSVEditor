@@ -78,16 +78,16 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Bellow.
+        ///   Looks up a localized string similar to Add Below.
         /// </summary>
-        public static string AddLineBellow {
+        public static string AddLineBelow {
             get {
-                return ResourceManager.GetString("AddLineBellow", resourceCulture);
+                return ResourceManager.GetString("AddLineBelow", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Line Bellow This Line.
+        ///   Looks up a localized string similar to Add New Line Below This Line.
         /// </summary>
         public static string AddLineDownText {
             get {
@@ -150,11 +150,38 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load app options from {0}.\nError: {1}.
+        /// </summary>
+        public static string AppOptionsLoadError {
+            get {
+                return ResourceManager.GetString("AppOptionsLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App Options.
         /// </summary>
         public static string AppOptionsName {
             get {
                 return ResourceManager.GetString("AppOptionsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occured while processing app options.\nError: {0}.
+        /// </summary>
+        public static string AppOptionsProcessingError {
+            get {
+                return ResourceManager.GetString("AppOptionsProcessingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occured while saving app options.\nError: {0}.
+        /// </summary>
+        public static string AppOptionsSaveError {
+            get {
+                return ResourceManager.GetString("AppOptionsSaveError", resourceCulture);
             }
         }
         

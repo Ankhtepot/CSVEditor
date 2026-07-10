@@ -90,7 +90,9 @@
                         <Border Style="{StaticResource BaseBorderStyle}"
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2">
+                                Grid.ColumnSpan="2"
+                                Visibility="{ Binding IsLoggedInToGit}"
+                                >
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox x:Name="CommitCheckBox" 
                                           Unchecked="UncheckPushOnSave"
@@ -115,7 +117,10 @@
 
                         <Border Style="{StaticResource BaseBorderStyle}"
                                 DockPanel.Dock="Top"
-                                Grid.Row="2">
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Visibility="{ Binding IsLoggedInToGit}"
+                                >
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}"/>
                                 <TextBlock Text="{x:Static p:Resources.RememberSelectionText}"

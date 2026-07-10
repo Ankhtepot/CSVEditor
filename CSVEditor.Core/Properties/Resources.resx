@@ -61,8 +61,8 @@
   <data name="AddLineAbove" xml:space="preserve">
     <value>Add Above</value>
   </data>
-  <data name="AddLineBellow" xml:space="preserve">
-    <value>Add Bellow</value>
+  <data name="AddLineBelow" xml:space="preserve">
+    <value>Add Below</value>
   </data>
   <data name="AddLineToBottom" xml:space="preserve">
     <value>Add To Bottom</value>
@@ -218,7 +218,7 @@ Do you want to overwrite this file?</value>
     <value>About</value>
   </data>
   <data name="AddLineDownText" xml:space="preserve">
-    <value>Add New Line Bellow This Line</value>
+    <value>Add New Line Below This Line</value>
   </data>
   <data name="AddLineTooltipText" xml:space="preserve">
     <value>Add Line... Choose placement in the Combo Box</value>
@@ -537,5 +537,14 @@ Do you want to overwrite this file?</value>
   </data>
   <data name="GitPushStatusErrorMessage" xml:space="preserve">
     <value>Push status error: {0} - {1}</value>
+  </data>
+  <data name="AppOptionsProcessingError" xml:space="preserve">
+    <value>Error occured while processing app options.\nError: {0}</value>
+  </data>
+  <data name="AppOptionsLoadError" xml:space="preserve">
+    <value>Failed to load app options from {0}.\nError: {1}</value>
+  </data>
+  <data name="AppOptionsSaveError" xml:space="preserve">
+    <value>Error occured while saving app options.\nError: {0}</value>
   </data>
 </root>

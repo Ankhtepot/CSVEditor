@@ -14,15 +14,14 @@ namespace CSVEditor.View
     /// </summary>
     public partial class GitSetupWindow : Window, INotifyPropertyChanged
     {
-        private GitOptions gitOptions;
         private string _lastCheckedUsername;
 
         public GitOptions GitOptions
         {
-            get => gitOptions;
-            set 
+            get;
+            set
             {
-                gitOptions = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
@@ -106,6 +105,7 @@ namespace CSVEditor.View
             }
 
             Canceled = false;
+            // SaveGitOptions();
             Close();
         }
 
@@ -120,6 +120,12 @@ namespace CSVEditor.View
                     PasswordBox.Password = token;
                 }
             }
+        }
+
+        private void SaveGitOptions()
+        {
+            AppOptionsService.AppOptions.GitOptions = GitOptions;
+            AppOptionsService.SaveAppOptions();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using CSVEditor.ViewModel.Abstracts;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             var path = e.Argument as string;
 
             var directories = new List<string> { path };
-            var foundDirectories = FileSystemServices.GetDirectoriesFromRootPath(path, worker);
+            var foundDirectories = FileSystemService.GetDirectoriesFromRootPath(path, worker);
 
             if (worker.CancellationPending == true || foundDirectories == null)
             {
@@ -49,7 +49,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
                 else
                 {
                     currentProgress += progressStep;
-                    var foundDirectoryWithCsv = FileSystemServices.ScanDirectory(path, directory);
+                    var foundDirectoryWithCsv = FileSystemService.ScanDirectory(path, directory);
                     if (foundDirectoryWithCsv != null)
                     {
                         worker.ReportProgress((int)currentProgress, foundDirectoryWithCsv);

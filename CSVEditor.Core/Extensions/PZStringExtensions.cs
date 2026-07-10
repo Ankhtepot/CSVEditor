@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace CSVEditor.Core.Services
+namespace CSVEditor.Core.Extensions
 {
     public static class PZStringExtensions
     {
@@ -15,6 +15,11 @@ namespace CSVEditor.Core.Services
             var Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
             var Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             return Rgx.IsMatch(URL);
+        }
+
+        public static string ToHumanReadableString(this IEnumerable<string> strings)
+        {
+            return string.Join(", ", strings);
         }
 
         public static bool ContainsAny(this string text, char[] chars)

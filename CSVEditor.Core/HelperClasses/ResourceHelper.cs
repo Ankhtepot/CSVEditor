@@ -1,17 +1,15 @@
-using System;
-using System.Reflection;
+﻿using System;
 using System.Windows.Media.Imaging;
 
 namespace CSVEditor.Core.Services
 {
-    public class ResourceHelper
+    public static class ResourceHelper
     {
         /// <summary>
         /// Author: Eric Quellet
-        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 'Embedded resource'.
+        /// Load a resource WPF-BitmapImage (png, bmp, ...) from the embedded resource defined as 'Resource' not as 'Embedded resource'.
         /// </summary>
         /// <param name="pathInApplication">Path without starting slash</param>
-        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
         /// <returns></returns>
         public static Uri LoadBitmapUriSourceFromResource(string pathInApplication)
         {
@@ -25,7 +23,7 @@ namespace CSVEditor.Core.Services
 
         public static BitmapImage GetBitmapImageFromResources(string resourcePath)
         {
-            BitmapImage bitmapImage = new BitmapImage();
+            BitmapImage bitmapImage = new();
             bitmapImage.BeginInit();
             bitmapImage.UriSource = LoadBitmapUriSourceFromResource(resourcePath);
             bitmapImage.EndInit();

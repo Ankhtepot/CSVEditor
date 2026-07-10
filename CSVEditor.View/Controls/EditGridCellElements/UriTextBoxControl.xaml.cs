@@ -1,4 +1,4 @@
-using CSVEditor.Core.Services;
+﻿using CSVEditor.Core.Services;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CSVEditor.Core.Extensions;
 
 namespace CSVEditor.View.Controls
 {

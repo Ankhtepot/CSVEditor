@@ -11,35 +11,38 @@ using CSVEditor.Core.Properties;
 using Microsoft.Win32;
 namespace CSVEditor.Core.Services
 {
-    public class FileSystemServices
+    public class FileSystemService
     {
+        private static string _baseAppPath;
+        public static string BaseAppPath => _baseAppPath 
+            ??= Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName);
+
+        private static string _configurationFolderPath;
+        public static string ConfigurationFolderPath => _configurationFolderPath
+            ??= Path.Combine(BaseAppPath ?? string.Empty, Constants.CONFIGURATION_FOLDER_NAME);
+
         private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg", ".webp" };
         private static readonly string AllFilesFilter = "All files (*.*)|*.*";
 
         public static string QueryUserForRootRepositoryPath(string title = "")
         {
-            var dialog = new OpenFolderDialog();
+            OpenFolderDialog dialog = new();
             
             if (!string.IsNullOrEmpty(title))
             {
                 dialog.Title = title;
             }
 
-            if (dialog.ShowDialog() == true)
-            {
-                return dialog.FolderName;
-            }
-            else
-            {
-                return Constants.LOAD_REPOSITORY_FAILED;
-            }
+            return dialog.ShowDialog() == true 
+                ? dialog.FolderName 
+                : Constants.LOAD_REPOSITORY_FAILED;
         }
 
         public static string QueryUserForPath(string initialDirectory = "", string title = "", string filter = null)
         {
             if (!string.IsNullOrEmpty(filter))
             {
-                var fileDialog = new OpenFileDialog
+                OpenFileDialog fileDialog = new()
                 {
                     Filter = filter,
                     CheckFileExists = false,
@@ -58,7 +61,7 @@ namespace CSVEditor.Core.Services
                 return null;
             }
 
-            var dialog = new OpenFolderDialog();
+            OpenFolderDialog dialog = new();
 
             if (!string.IsNullOrEmpty(title))
             {
@@ -79,7 +82,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorReadingDirectoryPathFormat, e.Message));
+                Console.WriteLine(Resources.ErrorReadingDirectoryPathFormat, e.Message);
             }
 
             return null;
@@ -89,17 +92,16 @@ namespace CSVEditor.Core.Services
         {
             filter ??= AllFilesFilter;
 
-            var fileName = Path.GetFileName(path);
-            var cleanedPath = Path.GetDirectoryName(path);
+            string fileName = Path.GetFileName(path);
+            string cleanedPath = Path.GetDirectoryName(path);
 
-            var fileDialog = new OpenFileDialog()
+            OpenFileDialog fileDialog = new()
             {
                 Filter = filter,
                 CheckPathExists = true,
                 InitialDirectory = (Directory.Exists(cleanedPath) 
                     ? cleanedPath 
-                    : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)) 
-                                   ?? Environment.SpecialFolder.CommonDocuments.ToString(),
+                    : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)),
                 FileName = string.IsNullOrEmpty(fileName) ? Resources.NewFileText : fileName,
             };
 
@@ -120,7 +122,7 @@ namespace CSVEditor.Core.Services
         {
             filter ??= AllFilesFilter;
 
-            var fileDialog = new SaveFileDialog()
+            SaveFileDialog fileDialog = new()
             {
                 Filter = filter,
                 CheckPathExists = true,
@@ -146,7 +148,7 @@ namespace CSVEditor.Core.Services
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
-            var rootPathDirectories = new List<string>();
+            List<string> rootPathDirectories = new();
 
             try
             {
@@ -154,12 +156,12 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorCheckingGitRepoFormat, e.Message));
+                Console.WriteLine(Resources.ErrorCheckingGitRepoFormat, e.Message);
             }
 
             if (rootPathDirectories.Count > 0)
             {
-                foreach (var directory in rootPathDirectories)
+                foreach (string directory in rootPathDirectories)
                 {
                     if (Regex.Match(directory, "\\.git").Success)
                     {
@@ -180,9 +182,9 @@ namespace CSVEditor.Core.Services
 
             IEnumerable<string> directories = GetDirectoriesFromPath(rootPath, worker) ?? new List<string>();
 
-            foreach (var directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
+            foreach (string directory in directories.Where(dir => !Regex.Match(dir, "\\.git").Success))
             {
-                var recursiveYield = GetDirectoriesFromRootPath(directory, worker);
+                List<string> recursiveYield = GetDirectoriesFromRootPath(directory, worker);
                 directories = recursiveYield != null
                     ? directories?.Concat(recursiveYield).ToList()
                     : null;
@@ -193,12 +195,12 @@ namespace CSVEditor.Core.Services
 
         private static List<string> GetDirectoriesFromPath(string path, BackgroundWorker worker = null)
         {
-            if (worker != null && worker.CancellationPending)
+            if (worker is {CancellationPending: true})
             {
                 return null;
             }
 
-            var directories = new List<string>();
+            List<string> directories = new();
 
             try
             {
@@ -206,11 +208,11 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine(string.Format(Resources.InsufficientRightsToScanDirectoryFormat, path, e.Message));
+                Console.WriteLine(Resources.InsufficientRightsToScanDirectoryFormat, path, e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.UnexpectedErrorReadingDirectoriesFormat, path, e.Message));
+                Console.WriteLine(Resources.UnexpectedErrorReadingDirectoriesFormat, path, e.Message);
             }
 
             return directories;
@@ -226,17 +228,17 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine(string.Format(Resources.InsufficientRightsToReadAllFilesFormat, path));
+                Console.WriteLine(Resources.InsufficientRightsToReadAllFilesFormat, path);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.UnexpectedErrorScanningDirectoriesFormat, path, e.Message));
+                Console.WriteLine(Resources.UnexpectedErrorScanningDirectoriesFormat, path, e.Message);
             }
 
-            var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
+            string directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
             directoryPath = directoryPath == "." ? Constants.ROOT_DIRECTORY : directoryPath;
 
-            return (csvFiles != null && csvFiles.Count > 0)
+            return csvFiles is {Count: > 0}
                 ? new DirectoryWithCsv(directoryPath, csvFiles)
                 : null;
         }
@@ -249,7 +251,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception)
             {
-                Console.WriteLine(string.Format(Resources.CreatingNewFileInDirectoryFormat, Path.GetFileName(configurationsFilePath), configurationsFilePath));
+                Console.WriteLine(Resources.CreatingNewFileInDirectoryFormat, Path.GetFileName(configurationsFilePath), configurationsFilePath);
 
                 File.Create(configurationsFilePath);
 
@@ -259,7 +261,7 @@ namespace CSVEditor.Core.Services
 
         public static BitmapImage GetBitmapImageFromPath(string path)
         {
-            var newImage = new BitmapImage();
+            BitmapImage newImage = new();
             newImage.BeginInit();
             newImage.CacheOption = BitmapCacheOption.OnLoad;
 
@@ -282,7 +284,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorReadingFileExtensionFormat, fileAbsPath, e.Message));
+                Console.WriteLine(Resources.ErrorReadingFileExtensionFormat, fileAbsPath, e.Message);
             }
 
             return false;
@@ -290,47 +292,50 @@ namespace CSVEditor.Core.Services
 
         public static bool SaveImageFile(string newImageFile, string selectedSavePath)
         {
-            var newFileName = Path.GetFileName(newImageFile);
+            string newFileName = Path.GetFileName(newImageFile);
 
-            var title = Resources.ConfirmSavingImageFileTitle;
-            var message = string.Format(Resources.ConfirmSavingImageFileMessage, newFileName, selectedSavePath);
-            var messageOverwrite = string.Format(Resources.FileAlreadyExistsOverwriteMessage, newFileName, selectedSavePath);
-            var icon = MessageBoxImage.Question;
-            var buttons = MessageBoxButton.OKCancel;
-            var fullNewFilePath = Path.Combine(selectedSavePath, newFileName);
+            string title = Resources.ConfirmSavingImageFileTitle;
+            string message = string.Format(Resources.ConfirmSavingImageFileMessage, newFileName, selectedSavePath);
+            string messageOverwrite = string.Format(Resources.FileAlreadyExistsOverwriteMessage, newFileName, selectedSavePath);
+            MessageBoxImage icon = MessageBoxImage.Question;
+            MessageBoxButton buttons = MessageBoxButton.OKCancel;
+            string fullNewFilePath = Path.Combine(selectedSavePath, newFileName);
 
             if (File.Exists(fullNewFilePath))
             {
                 if (MessageBox.Show(messageOverwrite, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
                 {
                     File.Copy(newImageFile, fullNewFilePath, true);
-                    return true;
                 }
 
                 return true;
             }
 
-            if (MessageBox.Show(message, title, buttons, icon) == MessageBoxResult.OK)
-            {
-                File.Copy(newImageFile, fullNewFilePath);
-                return true;
-            }
+            if (MessageBox.Show(message, title, buttons, icon) != MessageBoxResult.OK) 
+                return false;
+            
+            File.Copy(newImageFile, fullNewFilePath);
+            return true;
 
-            return false;
         }
 
         public static string ConvertContentPathToSystemPath(string imageCellContent)
         {
-            var path = "";
+            string path = "";
 
-            if (!string.IsNullOrEmpty(imageCellContent))
+            switch (string.IsNullOrEmpty(imageCellContent))
             {
-                path = Regex.Replace(imageCellContent, "\r", "");
-                path = Regex.Replace(path, "/", @"\");
-
-                if (!char.IsLetterOrDigit(path[0]))
+                case false:
                 {
-                    path = path.Substring(1);
+                    path = Regex.Replace(imageCellContent, "\r", "");
+                    path = Regex.Replace(path, "/", @"\");
+
+                    if (!char.IsLetterOrDigit(path[0]))
+                    {
+                        path = path[1..];
+                    }
+
+                    break;
                 }
             }
 
@@ -341,7 +346,7 @@ namespace CSVEditor.Core.Services
         {
             if (!Directory.Exists(Path.Combine(baseAppPath, configurationFolderName)))
             {
-                Console.WriteLine(string.Format(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName, baseAppPath));
+                Console.WriteLine(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName, baseAppPath);
                 Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
             }
         }

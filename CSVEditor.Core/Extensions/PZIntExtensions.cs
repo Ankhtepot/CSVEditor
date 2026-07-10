@@ -1,4 +1,4 @@
-namespace CSVEditor.Core.Services
+﻿namespace CSVEditor.Core.Extensions
 {
     public static class PZIntExtensions
     {

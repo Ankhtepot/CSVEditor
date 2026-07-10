@@ -77,7 +77,7 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            string text = FileSystemServices.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
+            string text = FileSystemService.QueryUserForPath(Context.SelectedCsvFile.AbsPath, Constants.SELECT_PREDEFINED_SAVE_PATH);
             lastTextBoxWithContextMenuClosed.Text = text;
         }
 

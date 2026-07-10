@@ -1,8 +1,9 @@
-using CSVEditor.Core.Services;
+﻿using CSVEditor.Core.Services;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CSVEditor.Core.Extensions;
 
 namespace CSVEditor.View.Controls
 {

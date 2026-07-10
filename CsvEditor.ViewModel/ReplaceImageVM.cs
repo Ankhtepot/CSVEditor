@@ -18,7 +18,7 @@ namespace CSVEditor.ViewModel
             {
                 if (newImageSource == null)
                 {
-                    return FileSystemServices.GetBitmapImageFromPath("");
+                    return FileSystemService.GetBitmapImageFromPath("");
                 }
                 return newImageSource; 
             }
@@ -36,7 +36,7 @@ namespace CSVEditor.ViewModel
             {
                 if (currentImageSource == null)
                 {
-                    return FileSystemServices.GetBitmapImageFromPath("");
+                    return FileSystemService.GetBitmapImageFromPath("");
                 }
                 return currentImageSource;
             }
@@ -179,7 +179,7 @@ namespace CSVEditor.ViewModel
                 ? null 
                 : string.Format(Resources.FileFilterFormat, currentFileExtension);
 
-            var newPath = FileSystemServices.QueryUserForPath(currentPath, Resources.SelectSavePathText, filter);
+            var newPath = FileSystemService.QueryUserForPath(currentPath, Resources.SelectSavePathText, filter);
 
             if (!string.IsNullOrEmpty(newPath))
             {
@@ -189,8 +189,8 @@ namespace CSVEditor.ViewModel
 
         private void CloseWindow()
         {
-            NewImageSource = FileSystemServices.GetBitmapImageFromPath("");
-            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath("");
+            NewImageSource = FileSystemService.GetBitmapImageFromPath("");
+            CurrentImageSource = FileSystemService.GetBitmapImageFromPath("");
             OnWindowCloseRequested?.Invoke();
         }
 
@@ -205,8 +205,8 @@ namespace CSVEditor.ViewModel
 
             Overwrite = File.Exists(NewSavePath);
 
-            NewImageSource = FileSystemServices.GetBitmapImageFromPath(newImagePath);
-            CurrentImageSource = FileSystemServices.GetBitmapImageFromPath(CurrentImagePath);
+            NewImageSource = FileSystemService.GetBitmapImageFromPath(newImagePath);
+            CurrentImageSource = FileSystemService.GetBitmapImageFromPath(CurrentImagePath);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
