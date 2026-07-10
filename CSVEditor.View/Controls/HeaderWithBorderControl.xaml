@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CSVEditor.View.Controls"
-             xmlns:p="clr-namespace:CSVEditor.View.Properties"
+             xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance Type=local:HeaderWithBorderControl}">

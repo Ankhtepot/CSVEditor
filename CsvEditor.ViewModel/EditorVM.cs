@@ -3,6 +3,7 @@ using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
 using CSVEditor.Core.Services;
 using CSVEditor.ViewModel.BackgroundWorkers;
+using CSVEditor.Core.Properties;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace CSVEditor.ViewModel
         public const string CONFIGURATION_FOLDER_NAME = "config";
 
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY =
-            new DirectoryWithCsv("Directory", new List<string> {"Files..."});
+            new DirectoryWithCsv(Resources.DefaultDirectoryName, new List<string> {Resources.DefaultFilesName});
 
         public static string BaseAppPath;
         public static string ConfigurationFolderPath;
@@ -129,7 +130,7 @@ namespace CSVEditor.ViewModel
                 if (selectedItemIndex == value) return;
                 
                 selectedItemIndex = value;
-                Console.WriteLine($@"EditorVM, selectedIndexUpdated to {value}");
+                Console.WriteLine(string.Format(Resources.SelectedIndexUpdatedFormat, value));
                 OnPropertyChanged();
             }
         }
@@ -223,11 +224,10 @@ namespace CSVEditor.ViewModel
         {
             if (FindFileConfiguration(SelectedCsvFile.AbsPath) == null)
             {
-                throw new InvalidDataException(
-                    "Error in file configuration process - configuration NOT FOUND, which should not happen on update.");
+                throw new InvalidDataException(Resources.FileConfigurationNotFoundException);
             }
 
-            Console.WriteLine($@"Updating configuration for {SelectedCsvFile.AbsPath} in {nameof(FileConfigurations)}");
+            Console.WriteLine(string.Format(Resources.UpdatingConfigurationFormat, SelectedCsvFile.AbsPath, nameof(FileConfigurations)));
 
             int configToUpdateIndex =
                 FileConfigurations.FindIndex(config => config.AbsoluteFilePath == SelectedCsvFile.AbsPath);
@@ -337,7 +337,7 @@ namespace CSVEditor.ViewModel
 
             if (File.Exists(value))
             {
-                Console.WriteLine(@"MainVM.SelectedCsvFile: " + selectedFile);
+                Console.WriteLine(string.Format(Resources.SelectedCsvFileLogFormat, selectedFile));
                 if (needsProcessing)
                 {
                     new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
@@ -406,7 +406,7 @@ namespace CSVEditor.ViewModel
 
             AppOptions loadedOptions = JsonServices.DeserializeJson<AppOptions>(
                 Path.Combine(ConfigurationFolderPath, APP_OPTIONS_FILE_NAME),
-                "App Options");
+                Resources.AppOptionsName);
 
             if (loadedOptions != null)
             {
@@ -480,14 +480,11 @@ namespace CSVEditor.ViewModel
 
         private void AddLine(string addLinePlacement)
         {
-            switch (addLinePlacement)
-            {
-                case Constants.ADD_LINE_TO_TOP: AddLineToTop(); break;
-                case Constants.ADD_LINE_ABOVE: AddLineUp(); break;
-                case Constants.ADD_LINE_BELLOW: AddLineDown(); break;
-                case Constants.ADD_LINE_TO_BOTTOM: AddLineToBottom(); break;
-                default: throw new InvalidEnumArgumentException();
-            }
+            if (addLinePlacement == Constants.ADD_LINE_TO_TOP) AddLineToTop();
+            else if (addLinePlacement == Constants.ADD_LINE_ABOVE) AddLineUp();
+            else if (addLinePlacement == Constants.ADD_LINE_BELLOW) AddLineDown();
+            else if (addLinePlacement == Constants.ADD_LINE_TO_BOTTOM) AddLineToBottom();
+            else throw new InvalidEnumArgumentException();
         }
 
         private void AddLine(int index)

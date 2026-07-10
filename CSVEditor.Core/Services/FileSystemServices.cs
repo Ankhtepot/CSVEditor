@@ -7,12 +7,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Properties;
 using Microsoft.Win32;
 namespace CSVEditor.Core.Services
 {
     public class FileSystemServices
     {
-        private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg" };
+        private static readonly string[] BaseImageFileExtensions = { ".png", ".jpg", ".jpeg", ".webp" };
         private static readonly string AllFilesFilter = "All files (*.*)|*.*";
 
         public static string QueryUserForRootRepositoryPath(string title = "")
@@ -42,7 +43,7 @@ namespace CSVEditor.Core.Services
                 {
                     Filter = filter,
                     CheckFileExists = false,
-                    FileName = "Folder Selection",
+                    FileName = Resources.FolderSelectionText,
                     Title = title,
                     InitialDirectory = Directory.Exists(initialDirectory)
                         ? initialDirectory
@@ -78,7 +79,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error while reading directory path: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorReadingDirectoryPathFormat, e.Message));
             }
 
             return null;
@@ -99,7 +100,7 @@ namespace CSVEditor.Core.Services
                     ? cleanedPath 
                     : Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)) 
                                    ?? Environment.SpecialFolder.CommonDocuments.ToString(),
-                FileName = string.IsNullOrEmpty(fileName) ? $"new file.txt" : fileName,
+                FileName = string.IsNullOrEmpty(fileName) ? Resources.NewFileText : fileName,
             };
 
             if (!string.IsNullOrEmpty(title))
@@ -153,7 +154,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error while checking for GitRepo: " + e.Message);
+                Console.WriteLine(string.Format(Resources.ErrorCheckingGitRepoFormat, e.Message));
             }
 
             if (rootPathDirectories.Count > 0)
@@ -205,11 +206,11 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine($@"Insufficient rights to scan directory at ""{path}"". Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.InsufficientRightsToScanDirectoryFormat, path, e.Message));
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Unexpected error occured while reading directories at: ""{path}"". Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.UnexpectedErrorReadingDirectoriesFormat, path, e.Message));
             }
 
             return directories;
@@ -225,11 +226,11 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine($@"Insufficient rights to read all files in ""{path}"".");
+                Console.WriteLine(string.Format(Resources.InsufficientRightsToReadAllFilesFormat, path));
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Unexpected error occured while scanning directories at: ""{path}"". Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.UnexpectedErrorScanningDirectoriesFormat, path, e.Message));
             }
 
             var directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
@@ -244,11 +245,11 @@ namespace CSVEditor.Core.Services
         {
             try
             {
-                return JsonServices.DeserializeJson<List<CsvFileConfiguration>>(configurationsFilePath, "Csv file configurations");
+                return JsonServices.DeserializeJson<List<CsvFileConfiguration>>(configurationsFilePath, Resources.CsvFileConfigurationsText);
             }
             catch (Exception)
             {
-                Console.WriteLine($@"Creating new {Path.GetFileName(configurationsFilePath)} in {configurationsFilePath}");
+                Console.WriteLine(string.Format(Resources.CreatingNewFileInDirectoryFormat, Path.GetFileName(configurationsFilePath), configurationsFilePath));
 
                 File.Create(configurationsFilePath);
 
@@ -281,7 +282,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error reading file extension for file: {fileAbsPath}. Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorReadingFileExtensionFormat, fileAbsPath, e.Message));
             }
 
             return false;
@@ -291,9 +292,9 @@ namespace CSVEditor.Core.Services
         {
             var newFileName = Path.GetFileName(newImageFile);
 
-            var title = "Confirm Saving Image File";
-            var message = $"Are you sure you want to save file {newFileName} to:\n{selectedSavePath} ?";
-            var messageOverwrite = $"File {newFileName} already exists at :\n{selectedSavePath} .\nDo you want to overwrite this file?";
+            var title = Resources.ConfirmSavingImageFileTitle;
+            var message = string.Format(Resources.ConfirmSavingImageFileMessage, newFileName, selectedSavePath);
+            var messageOverwrite = string.Format(Resources.FileAlreadyExistsOverwriteMessage, newFileName, selectedSavePath);
             var icon = MessageBoxImage.Question;
             var buttons = MessageBoxButton.OKCancel;
             var fullNewFilePath = Path.Combine(selectedSavePath, newFileName);
@@ -340,7 +341,7 @@ namespace CSVEditor.Core.Services
         {
             if (!Directory.Exists(Path.Combine(baseAppPath, configurationFolderName)))
             {
-                Console.WriteLine($@"Creating new {configurationFolderName} directory in {baseAppPath}");
+                Console.WriteLine(string.Format(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName, baseAppPath));
                 Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
             }
         }

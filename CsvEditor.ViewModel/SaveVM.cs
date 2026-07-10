@@ -1,6 +1,7 @@
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
 using CSVEditor.Core.Services;
+using CSVEditor.Core.Properties;
 using Prism.Commands;
 using System;
 using System.ComponentModel;
@@ -81,14 +82,14 @@ namespace CSVEditor.ViewModel
         {
             JsonServices.SerializeJson(EditorVM.FileConfigurations,
                 Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.CSV_CONFIGURATIONS_FILE_NAME),
-                "Csv file configurations");
+                Resources.CsvFileConfigurationsText);
         }
 
         public static void SaveAppOptions()
         {
             JsonServices.SerializeJson(EditorVM.AppOptions,
                 Path.Combine(EditorVM.ConfigurationFolderPath, EditorVM.APP_OPTIONS_FILE_NAME),
-                "App Options");
+                Resources.AppOptionsName);
         }
 
         private void SaveAlternativePath()

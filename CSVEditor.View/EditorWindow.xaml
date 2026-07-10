@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:p="clr-namespace:CSVEditor.View.Properties"
+        xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
         mc:Ignorable="d"
-        Title="CSV Editor" 
+        Title="{x:Static p:Resources.AppTitle}" 
         Icon="Resources/Icons/csv_icon_plain.ico"
         Height="450" 
         Width="1000"
@@ -101,7 +101,7 @@
                             <iconPacks:PackIconFontAwesome Kind="AngleDownSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static p:Resources.AddLineToBottom}"
+                    <MenuItem Header="{x:Static p:Resources.AddLineToBottomText}"
                               Command="{Binding AddLineToBottomCommand}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconFontAwesome Kind="AnglesDownSolid" />
@@ -338,7 +338,7 @@
                                 HorizontalAlignment="Stretch" 
                                 SelectionChanged="TabControl_SelectionChanged" >
                         <!--#region Overview -->
-                        <TabItem Header="Overview" x:Name="OverviewTab">
+                        <TabItem Header="{x:Static p:Resources.OverviewHeaderText}" x:Name="OverviewTab">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>

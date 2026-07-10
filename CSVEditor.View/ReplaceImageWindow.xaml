@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVEditor.View"
-        xmlns:p="clr-namespace:CSVEditor.View.Properties"
+        xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Replace Image" Height="450" Width="800"
+        Title="{x:Static p:Resources.ReplaceImageFile}" Height="450" Width="800"
         Icon="Resources/Icons/replace_image.ico"
         SizeToContent="WidthAndHeight">
 

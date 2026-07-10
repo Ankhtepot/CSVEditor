@@ -1,4 +1,5 @@
 using System;
+using CSVEditor.Core.Properties;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -43,7 +44,7 @@ namespace CSVEditor.ViewModel
 
         private string BuildResultText()
         {
-            return $"Date: {ChosenTime.ToShortDateString()} with date format of \"{InputUriText}\" results to: {ChosenTime.ToString(InputUriText)}.";
+            return string.Format(Resources.DateFormatResultFormat, ChosenTime.ToShortDateString(), InputUriText, ChosenTime.ToString(InputUriText));
         }
 
         private List<string> GetDateFormatExamples()
@@ -58,9 +59,9 @@ namespace CSVEditor.ViewModel
                 "MM/dd/yyyy h:mm tt",
                 "MM/dd/yyyy HH:mm:ss",
                 "MMMM dd",
-                "yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss.fffffffK",
-                "ddd, dd MMM yyy HH’:’mm’:’ss ‘GMT’",
-                "yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss",
+                "yyyyï¿½-ï¿½MMï¿½-ï¿½ddï¿½Tï¿½HHï¿½:ï¿½mmï¿½:ï¿½ss.fffffffK",
+                "ddd, dd MMM yyy HHï¿½:ï¿½mmï¿½:ï¿½ss ï¿½GMTï¿½",
+                "yyyyï¿½-ï¿½MMï¿½-ï¿½ddï¿½Tï¿½HHï¿½:ï¿½mmï¿½:ï¿½ss",
                 "HH:mm",
                 "hh:mm tt",
                 "H:mm",

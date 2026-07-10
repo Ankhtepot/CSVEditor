@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using CSVEditor.Core.Properties;
 
 namespace CSVEditor.Core.Services
 {
@@ -16,11 +17,11 @@ namespace CSVEditor.Core.Services
             try
             {
                 File.WriteAllText(fullPath, jsonedSource);
-                Console.WriteLine($@"{referencedName} saved to: {fullPath}");
+                Console.WriteLine(string.Format(Resources.SavedToFormat, referencedName, fullPath));
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error saving {referencedName}: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorSavingFormat, referencedName, e.Message));
                 return false;
             }
 
@@ -35,11 +36,11 @@ namespace CSVEditor.Core.Services
             {
                 var loadedJson = File.ReadAllText(fullPath);
                 deserializedJson = JsonSerializer.Deserialize<T>(loadedJson);
-                Console.WriteLine($@"{referencedName} loaded from: {fullPath}");
+                Console.WriteLine(string.Format(Resources.LoadedFromFormat, referencedName, fullPath));
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error loading {referencedName}: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorLoadingFormat, referencedName, e.Message));
             }
 
             return deserializedJson;

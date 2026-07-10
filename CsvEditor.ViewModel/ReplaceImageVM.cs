@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using CSVEditor.Core.Services;
+using CSVEditor.Core.Properties;
 using Prism.Commands;
 
 namespace CSVEditor.ViewModel
@@ -125,7 +126,7 @@ namespace CSVEditor.ViewModel
         {
             Overwrite = true;
             ActionChecked = false;
-            NewSavePath = "no path to display";
+            NewSavePath = Resources.NoPathToDisplayText;
 
             CancelCommand = new DelegateCommand(Cancel);
             DeleteCurrentImageAndSaveCommand = new DelegateCommand(DeleteCurrentImageAndSave);
@@ -176,9 +177,9 @@ namespace CSVEditor.ViewModel
             var currentFileExtension = Path.GetExtension(currentPath);
             var filter = string.IsNullOrEmpty(currentFileExtension) 
                 ? null 
-                : $"{currentFileExtension} Files (*{currentFileExtension})|*{currentFileExtension}|All files (*.*)|*.*";
+                : string.Format(Resources.FileFilterFormat, currentFileExtension);
 
-            var newPath = FileSystemServices.QueryUserForPath(currentPath, Properties.Resources.SelectSavePathText, filter);
+            var newPath = FileSystemServices.QueryUserForPath(currentPath, Resources.SelectSavePathText, filter);
 
             if (!string.IsNullOrEmpty(newPath))
             {

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
-        xmlns:p="clr-namespace:CSVEditor.View.Properties"
+        xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
         mc:Ignorable="d"
         x:Name="SaveWindowMain"
         Title="{x:Static p:Resources.SaveWindowTitle}"

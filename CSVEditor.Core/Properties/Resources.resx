@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddLineAbove" xml:space="preserve">
+    <value>Add Above</value>
+  </data>
+  <data name="AddLineBellow" xml:space="preserve">
+    <value>Add Bellow</value>
+  </data>
+  <data name="AddLineToBottom" xml:space="preserve">
+    <value>Add To Bottom</value>
+  </data>
+  <data name="AddLineToTop" xml:space="preserve">
+    <value>Add To Top</value>
+  </data>
+  <data name="CanceledWorkStatus" xml:space="preserve">
+    <value>Last task was cancelled.</value>
+  </data>
+  <data name="CompletedWorkStatus" xml:space="preserve">
+    <value>Task completed successfuly.</value>
+  </data>
+  <data name="ConfigurationEditorTitle" xml:space="preserve">
+    <value>Configuration Editor</value>
+  </data>
+  <data name="DateUriLabelText" xml:space="preserve">
+    <value>Set Formating for Generated Date:</value>
+  </data>
+  <data name="EditColumnConfigurations" xml:space="preserve">
+    <value>Edit Column Configurations</value>
+  </data>
+  <data name="EditLines" xml:space="preserve">
+    <value>Edit Lines</value>
+  </data>
+  <data name="ErrorWorkStatus" xml:space="preserve">
+    <value>Last task stopped with and error.</value>
+  </data>
+  <data name="FileEdited" xml:space="preserve">
+    <value>File Edited</value>
+  </data>
+  <data name="IdleWorkStatus" xml:space="preserve">
+    <value>No task in progress.</value>
+  </data>
+  <data name="ImageUriLabelText" xml:space="preserve">
+    <value>Set Relative Path to Save Image Files to:</value>
+  </data>
+  <data name="LineEditorTitle" xml:space="preserve">
+    <value>Line Editor</value>
+  </data>
+  <data name="LoadRepositoryFailed" xml:space="preserve">
+    <value>Loading the repository failed.</value>
+  </data>
+  <data name="LoadRepositoryPlaceholder" xml:space="preserve">
+    <value>Load Repository...</value>
+  </data>
+  <data name="NotGitRepository" xml:space="preserve">
+    <value>Directory doesn't contain Git repository.</value>
+  </data>
+  <data name="NoFileSelected" xml:space="preserve">
+    <value>No file selected.</value>
+  </data>
+  <data name="OpenDateFilterGuideWindowTooltip" xml:space="preserve">
+    <value>Open help window to guide you how to set date format right.</value>
+  </data>
+  <data name="ProcessingFile" xml:space="preserve">
+    <value>Processing File</value>
+  </data>
+  <data name="ReplaceImageFile" xml:space="preserve">
+    <value>Replace image file</value>
+  </data>
+  <data name="RootDirectory" xml:space="preserve">
+    <value>Root directory</value>
+  </data>
+  <data name="SaveFileAs" xml:space="preserve">
+    <value>Save File As</value>
+  </data>
+  <data name="SaveFileBeforeExitQuery" xml:space="preserve">
+    <value>Would you like to save edited file before closing CsvEditor?</value>
+  </data>
+  <data name="SaveFileTitle" xml:space="preserve">
+    <value>Save File</value>
+  </data>
+  <data name="SavingFailedText" xml:space="preserve">
+    <value>Saving file failed. Error: </value>
+  </data>
+  <data name="SelectPredefinedSavePath" xml:space="preserve">
+    <value>Select Predefined Save Path.</value>
+  </data>
+  <data name="SelectProjectRootDirectory" xml:space="preserve">
+    <value>Select project root directory</value>
+  </data>
+  <data name="SelectedTextDefault" xml:space="preserve">
+    <value>Selected file:</value>
+  </data>
+  <data name="UnknownState" xml:space="preserve">
+    <value>Unknown state...</value>
+  </data>
+  <data name="WorkingWorkStatus" xml:space="preserve">
+    <value>Work in progress!</value>
+  </data>
+  <data name="ConfirmSavingImageFileTitle" xml:space="preserve">
+    <value>Confirm Saving Image File</value>
+  </data>
+  <data name="ConfirmSavingImageFileMessage" xml:space="preserve">
+    <value>Are you sure you want to save file {0} to:
+{1} ?</value>
+  </data>
+  <data name="FileAlreadyExistsOverwriteMessage" xml:space="preserve">
+    <value>File {0} already exists at :
+{1} .
+Do you want to overwrite this file?</value>
+  </data>
+  <data name="FolderSelectionText" xml:space="preserve">
+    <value>Folder Selection</value>
+  </data>
+  <data name="NewFileText" xml:space="preserve">
+    <value>new file.txt</value>
+  </data>
+  <data name="CsvFileConfigurationsText" xml:space="preserve">
+    <value>Csv file configurations</value>
+  </data>
+  <data name="SavedToFormat" xml:space="preserve">
+    <value>{0} saved to: {1}</value>
+  </data>
+  <data name="ErrorSavingFormat" xml:space="preserve">
+    <value>Error saving {0}: {1}</value>
+  </data>
+  <data name="LoadedFromFormat" xml:space="preserve">
+    <value>{0} loaded from: {1}</value>
+  </data>
+  <data name="ErrorLoadingFormat" xml:space="preserve">
+    <value>Error loading {0}: {1}</value>
+  </data>
+  <data name="ErrorReadingDirectoryPathFormat" xml:space="preserve">
+    <value>Error while reading directory path: {0}</value>
+  </data>
+  <data name="ErrorCheckingGitRepoFormat" xml:space="preserve">
+    <value>Error while checking for GitRepo: {0}</value>
+  </data>
+  <data name="InsufficientRightsToScanDirectoryFormat" xml:space="preserve">
+    <value>Insufficient rights to scan directory at "{0}". Error: {1}</value>
+  </data>
+  <data name="UnexpectedErrorReadingDirectoriesFormat" xml:space="preserve">
+    <value>Unexpected error occured while reading directories at: "{0}". Error: {1}</value>
+  </data>
+  <data name="InsufficientRightsToReadAllFilesFormat" xml:space="preserve">
+    <value>Insufficient rights to read all files in "{0}".</value>
+  </data>
+  <data name="UnexpectedErrorScanningDirectoriesFormat" xml:space="preserve">
+    <value>Unexpected error occured while scanning directories at: "{0}". Error: {1}</value>
+  </data>
+  <data name="CreatingNewFileInDirectoryFormat" xml:space="preserve">
+    <value>Creating new {0} in {1}</value>
+  </data>
+  <data name="ErrorReadingFileExtensionFormat" xml:space="preserve">
+    <value>Error reading file extension for file: {0}. Error: {1}</value>
+  </data>
+  <data name="CreatingNewDirectoryInDirectoryFormat" xml:space="preserve">
+    <value>Creating new {0} directory in {1}</value>
+  </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddLineDownText" xml:space="preserve">
+    <value>Add New Line Bellow This Line</value>
+  </data>
+  <data name="AddLineTooltipText" xml:space="preserve">
+    <value>Add Line... Choose placement in the Combo Box</value>
+  </data>
+  <data name="AddLineToTopText" xml:space="preserve">
+    <value>Add New Line to the Beggining of File</value>
+  </data>
+  <data name="AddLineToBottomText" xml:space="preserve">
+    <value>Add New Line to the End of File</value>
+  </data>
+  <data name="AddLineUpText" xml:space="preserve">
+    <value>Add New Line Above This Line</value>
+  </data>
+  <data name="AuthorText" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="CancelProcessText" xml:space="preserve">
+    <value>Cancel Process</value>
+  </data>
+  <data name="CancelText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CommiterText" xml:space="preserve">
+    <value>Commiter</value>
+  </data>
+  <data name="CommitMessageText" xml:space="preserve">
+    <value>Commit Message</value>
+  </data>
+  <data name="CommitRepositoryText" xml:space="preserve">
+    <value>Commit Repository</value>
+  </data>
+  <data name="CommitText" xml:space="preserve">
+    <value>Commit on Save</value>
+  </data>
+  <data name="CurrentImageText" xml:space="preserve">
+    <value>CurrentImage</value>
+  </data>
+  <data name="DeleteCurrentFileAndSaveText" xml:space="preserve">
+    <value>Delete Current File and Save</value>
+  </data>
+  <data name="DeleteCurrentImageText" xml:space="preserve">
+    <value>Delete Current Image</value>
+  </data>
+  <data name="DeleteLineText" xml:space="preserve">
+    <value>Delete This Line</value>
+  </data>
+  <data name="EditedText" xml:space="preserve">
+    <value>Edited</value>
+  </data>
+  <data name="EditText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditThisLineText" xml:space="preserve">
+    <value>Edit this line</value>
+  </data>
+  <data name="Ellipsis" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="EmailText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ExitAndSaveText" xml:space="preserve">
+    <value>Save and Close Csv Editor</value>
+  </data>
+  <data name="ExitAppText" xml:space="preserve">
+    <value>Close Csv Editor</value>
+  </data>
+  <data name="FileText" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="GitSetupWindowTitle" xml:space="preserve">
+    <value>Git Setup</value>
+  </data>
+  <data name="GitText" xml:space="preserve">
+    <value>Git</value>
+  </data>
+  <data name="ImageFilesFilter" xml:space="preserve">
+    <value>All Valid Image Files (*.jpg, *.jpeg, *.png, *.webp)|*.png;*.jpg;*.jpeg;*.webp|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|JPEG Files (*.jpeg)|*.jpeg|WebP Files (*.webp)|*.webp|All Files (*.*)|*.*</value>
+  </data>
+  <data name="LineEditorText" xml:space="preserve">
+    <value>LineEditor</value>
+  </data>
+  <data name="LineNrText" xml:space="preserve">
+    <value>Line:</value>
+  </data>
+  <data name="LoadDirectoryText" xml:space="preserve">
+    <value>Load Directory</value>
+  </data>
+  <data name="LoadedCSVFilesText" xml:space="preserve">
+    <value>Loaded CSV files</value>
+  </data>
+  <data name="LoadText" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="NewImageText" xml:space="preserve">
+    <value>New Image</value>
+  </data>
+  <data name="NewSavePathText" xml:space="preserve">
+    <value>New Save Path:</value>
+  </data>
+  <data name="NotCommitedError" xml:space="preserve">
+    <value>Git Commit not performed - no changes to commit.</value>
+  </data>
+  <data name="NotEditedText" xml:space="preserve">
+    <value>Not Edited</value>
+  </data>
+  <data name="OKText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OpenGitSetupText" xml:space="preserve">
+    <value>Open Git Setup Window</value>
+  </data>
+  <data name="OverwriteCurrentFileText" xml:space="preserve">
+    <value>Overwrite Current File</value>
+  </data>
+  <data name="OverwriteText" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="PasswordText" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PullRepositoryText" xml:space="preserve">
+    <value>Pull From Remote Repository</value>
+  </data>
+  <data name="PushRepositoryText" xml:space="preserve">
+    <value>Push To Remote Repository</value>
+  </data>
+  <data name="PushText" xml:space="preserve">
+    <value>Push on Save</value>
+  </data>
+  <data name="RawFileText" xml:space="preserve">
+    <value>Raw File</value>
+  </data>
+  <data name="RememberSelectionText" xml:space="preserve">
+    <value>Remember This Selection</value>
+  </data>
+  <data name="RemoteBranchNameText" xml:space="preserve">
+    <value>RemoteBranch</value>
+  </data>
+  <data name="RemoteLinkText" xml:space="preserve">
+    <value>Remote repository link</value>
+  </data>
+  <data name="SaveAsText" xml:space="preserve">
+    <value>Save as...</value>
+  </data>
+  <data name="SaveImageText" xml:space="preserve">
+    <value>Save Image</value>
+  </data>
+  <data name="SaveText" xml:space="preserve">
+    <value>Save...</value>
+  </data>
+  <data name="SaveToText" xml:space="preserve">
+    <value>Save To: </value>
+  </data>
+  <data name="SaveWindowTitle" xml:space="preserve">
+    <value>Save Options</value>
+  </data>
+  <data name="SelectPromptComboBoxText" xml:space="preserve">
+    <value>-- Select value --</value>
+  </data>
+  <data name="SelectSavePathText" xml:space="preserve">
+    <value>Select Different Save Path</value>
+  </data>
+  <data name="UserNameText" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="UseThisSetupText" xml:space="preserve">
+    <value>Use This Setup</value>
+  </data>
+  <data name="AppTitle" xml:space="preserve">
+    <value>CSV Editor</value>
+  </data>
+  <data name="OverviewHeaderText" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="SelectAnotherFileText" xml:space="preserve">
+    <value>Select another file.</value>
+  </data>
+  <data name="ContentLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="BasePathLabel" xml:space="preserve">
+    <value>Base Path:</value>
+  </data>
+  <data name="SaveNewImageSourceFileTitle" xml:space="preserve">
+    <value>Save {0} File to:</value>
+  </data>
+  <data name="RootDirectoryLabel" xml:space="preserve">
+    <value>Root Directory</value>
+  </data>
+  <data name="NoPathToDisplayText" xml:space="preserve">
+    <value>no path to display</value>
+  </data>
+  <data name="FileFilterFormat" xml:space="preserve">
+    <value>{0} Files (*{0})|*{0}|All files (*.*)|*.*</value>
+  </data>
+  <data name="LoggedInAsFormat" xml:space="preserve">
+    <value>Logged in as: {0} ({1}).</value>
+  </data>
+  <data name="LogInHelpText" xml:space="preserve">
+    <value>Log in in option Git -> Setup Git Login Options</value>
+  </data>
+  <data name="ErrorPullingRepositoryFormat" xml:space="preserve">
+    <value>Error pulling repository. Error: {0}</value>
+  </data>
+  <data name="RemoteOriginNotFoundAddingFormat" xml:space="preserve">
+    <value>Remote 'origin' not found. Adding remote 'origin' with link: {0}</value>
+  </data>
+  <data name="RemoteOriginNotFoundNoLinkText" xml:space="preserve">
+    <value>Remote 'origin' not found and no valid remote link provided in Git Setup.</value>
+  </data>
+  <data name="RepositoryPushedFormat" xml:space="preserve">
+    <value>Repository pushed to {0}.</value>
+  </data>
+  <data name="ErrorPushingRepositoryFormat" xml:space="preserve">
+    <value>Error pushing repository. Error: {0}</value>
+  </data>
+  <data name="RepositoryStagedText" xml:space="preserve">
+    <value>Repository staged.</value>
+  </data>
+  <data name="RepositoryCommittedText" xml:space="preserve">
+    <value>Repository commited</value>
+  </data>
+  <data name="UnexpectedErrorDuringCommitFormat" xml:space="preserve">
+    <value>Unexpected error during commit. Error: {0}</value>
+  </data>
+  <data name="ErrorStagingRepositoryFormat" xml:space="preserve">
+    <value>Error while staging repository at "{0}". Error: {1}</value>
+  </data>
+  <data name="SettingUpRepositoryText" xml:space="preserve">
+    <value>[GitVM] Setting up repository.</value>
+  </data>
+  <data name="PathNotValidRepositoryFormat" xml:space="preserve">
+    <value>Path "{0}" doesn't contain valid repository. Error: {1}</value>
+  </data>
+  <data name="DefaultDirectoryName" xml:space="preserve">
+    <value>Directory</value>
+  </data>
+  <data name="DefaultFilesName" xml:space="preserve">
+    <value>Files...</value>
+  </data>
+  <data name="SelectedIndexUpdatedFormat" xml:space="preserve">
+    <value>EditorVM, selectedIndexUpdated to {0}</value>
+  </data>
+  <data name="FileConfigurationNotFoundException" xml:space="preserve">
+    <value>Error in file configuration process - configuration NOT FOUND, which should not happen on update.</value>
+  </data>
+  <data name="UpdatingConfigurationFormat" xml:space="preserve">
+    <value>Updating configuration for {0} in {1}</value>
+  </data>
+  <data name="SelectedCsvFileLogFormat" xml:space="preserve">
+    <value>MainVM.SelectedCsvFile: {0}</value>
+  </data>
+  <data name="AppOptionsName" xml:space="preserve">
+    <value>App Options</value>
+  </data>
+  <data name="DateFormatResultFormat" xml:space="preserve">
+    <value>Date: {0} with date format of "{1}" results to: {2}.</value>
+  </data>
+</root>

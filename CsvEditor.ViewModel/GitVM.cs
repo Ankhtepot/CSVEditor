@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CSVEditor.Core.Services;
 using CSVEditor.Core.HelperClasses;
+using CSVEditor.Core.Properties;
 using Octokit;
 
 namespace CSVEditor.ViewModel
@@ -83,8 +84,8 @@ namespace CSVEditor.ViewModel
         public bool IsLoggedIn => EditorVM.AppOptions?.GitOptions?.IsAuthenticated ?? false;
 
         public string LoginTooltip => IsLoggedIn
-            ? $"Logged in as: {EditorVM.AppOptions.GitOptions.UserName} ({EditorVM.AppOptions.GitOptions.Email})."
-            : "Log in in option Git -> Setup Git Login Options";
+            ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions.GitOptions.UserName, EditorVM.AppOptions.GitOptions.Email)
+            : Resources.LogInHelpText;
 
         public DelegateCommand OpenGitSetupCommand { get; set; }
         public DelegateCommand CommitRepositoryCommand { get; set; }
@@ -242,7 +243,7 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error pulling repository. Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorPullingRepositoryFormat, e.Message));
             }
         }
 
@@ -270,12 +271,12 @@ namespace CSVEditor.ViewModel
                     {
                         if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) && !gitOpts.RemoteRepositoryLink.Contains("<"))
                         {
-                            Console.WriteLine($@"Remote 'origin' not found. Adding remote 'origin' with link: {gitOpts.RemoteRepositoryLink}");
+                            Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteRepositoryLink));
                             remote = repo.Network.Remotes.Add("origin", gitOpts.RemoteRepositoryLink);
                         }
                         else
                         {
-                            Console.WriteLine(@"Remote 'origin' not found and no valid remote link provided in Git Setup.");
+                            Console.WriteLine(Resources.RemoteOriginNotFoundNoLinkText);
                             return;
                         }
                     }
@@ -293,13 +294,13 @@ namespace CSVEditor.ViewModel
                     // Push the current branch to origin
                     repo.Network.Push(remote, repo.Head.CanonicalName, options);
                     
-                    Console.WriteLine($@"Repository pushed to {remote.Name}.");
+                    Console.WriteLine(string.Format(Resources.RepositoryPushedFormat, remote.Name));
                     IsRepositoryPushed = true;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error pushing repository. Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorPushingRepositoryFormat, e.Message));
             }
         }
 
@@ -326,24 +327,24 @@ namespace CSVEditor.ViewModel
                     if (IsRepositoryUnstaged())
                     {
                         StageRepository();
-                        Console.WriteLine($@"Repository staged.");
+                        Console.WriteLine(Resources.RepositoryStagedText);
                     }
 
                     repo.Commit(options.CommitMessage, authorSifnature, authorSifnature);
 
-                    Console.WriteLine($@"Repository commited");
+                    Console.WriteLine(Resources.RepositoryCommittedText);
 
                     return true;
                 }
             }
             catch (EmptyCommitException)
             {
-                Console.WriteLine(Properties.Resources.NotCommitedError);
+                Console.WriteLine(Resources.NotCommitedError);
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Unexpected error during commit. Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.UnexpectedErrorDuringCommitFormat, e.Message));
                 return false;
             }
         }
@@ -357,7 +358,7 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine($@"Error while staging repository at ""{CurrentRepository.Info.WorkingDirectory}"". Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.ErrorStagingRepositoryFormat, CurrentRepository.Info.WorkingDirectory, e.Message));
                 return false;
             }
         }
@@ -366,13 +367,13 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                Console.WriteLine(@"[GitVM] Setting up repository.");
+                Console.WriteLine(Resources.SettingUpRepositoryText);
                 CurrentRepository = new Repository(path);
                 var status = IsRepositoryUnstaged();
             }
             catch (RepositoryNotFoundException e)
             {
-                Console.WriteLine($@"Path ""{path}"" doesn't contain valid repository. Error: {e.Message}");
+                Console.WriteLine(string.Format(Resources.PathNotValidRepositoryFormat, path, e.Message));
             }
         }
 

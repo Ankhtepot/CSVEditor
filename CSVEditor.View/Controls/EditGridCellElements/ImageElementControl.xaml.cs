@@ -17,7 +17,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
     {
         private EditorVM Context;
 
-        public static readonly string RootDirectory = "Root Directory";
+        public static readonly string RootDirectory = CSVEditor.Core.Properties.Resources.RootDirectoryLabel;
 
         private static string LastAcceptedImageSavePath;
         private string CurrentImagePath;
@@ -125,7 +125,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
             var selectedSavePath = string.IsNullOrEmpty(CellContentTextBox.Text) 
                                    || string.IsNullOrEmpty(uriText)
                                    || uriText == Context?.RootRepositoryPath
-                ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, $"Save {newImageFileName} File to:")
+                ? FileSystemServices.QueryUserForPath(LastAcceptedImageSavePath, string.Format(CSVEditor.Core.Properties.Resources.SaveNewImageSourceFileTitle, newImageFileName))
                 : uriText;
 
             if (selectedSavePath == null || newImageFile == CurrentImagePath)
@@ -208,7 +208,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
         {
             var path = Path.Combine(Context.RootRepositoryPath, CellContentTextBox.Text.ToSystemPath());
             path = Path.GetDirectoryName(path);
-            var filter = Properties.Resources.ImageFilesFilter;
+            var filter = CSVEditor.Core.Properties.Resources.ImageFilesFilter;
             var selectedImage = FileSystemServices.QueryUserToSelectFile(path, Constants.REPLACE_IMAGE_FILE, filter);
 
             if (string.IsNullOrEmpty(selectedImage))
