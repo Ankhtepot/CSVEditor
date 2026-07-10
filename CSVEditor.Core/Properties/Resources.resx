@@ -430,16 +430,16 @@ Do you want to overwrite this file?</value>
   <data name="RemoteOriginNotFoundNoLinkText" xml:space="preserve">
     <value>Remote '{0}' not found and no valid remote link provided in Git Setup.</value>
   </data>
-  <data name="RepositoryPushedFormat" xml:space="preserve">
+  <data name="GitRepositoryPushedMessage" xml:space="preserve">
     <value>Repository pushed to {0}.</value>
   </data>
-  <data name="ErrorPushingRepositoryFormat" xml:space="preserve">
+  <data name="GitPushingRepositoryErrorMessage" xml:space="preserve">
     <value>Error pushing repository. Error: {0}</value>
   </data>
-  <data name="RepositoryStagedText" xml:space="preserve">
+  <data name="GitRepositoryStagedMessage" xml:space="preserve">
     <value>Repository staged.</value>
   </data>
-  <data name="RepositoryCommittedText" xml:space="preserve">
+  <data name="GitRepositoryCommittedMessage" xml:space="preserve">
     <value>Repository commited</value>
   </data>
   <data name="UnexpectedErrorDuringCommitFormat" xml:space="preserve">
@@ -510,5 +510,32 @@ Do you want to overwrite this file?</value>
   </data>
   <data name="GitPushButtonText" xml:space="preserve">
     <value>Push</value>
+  </data>
+  <data name="GitDetachedHeadErrorMessage" xml:space="preserve">
+    <value>Cannot push a detached HEAD. Please checkout a branch first.</value>
+  </data>
+  <data name="StagingAllBeforePushMessage" xml:space="preserve">
+    <value>Staging all changes before push...</value>
+  </data>
+  <data name="GitSettingUpstreamBranch" xml:space="preserve">
+    <value>Set upstream tracking for '{0}' to '{1}/{2}'</value>
+  </data>
+  <data name="GitPushingLocal" xml:space="preserve">
+    <value>Pushing local '{0}' ({1}) to remote '{2}' ({3}).</value>
+  </data>
+  <data name="GitPushBranchStateInfoMessage" xml:space="preserve">
+    <value>RefSpec: {0}. Ahead by: {1}</value>
+  </data>
+  <data name="GitCommitingBeforePushMessage" xml:space="preserve">
+    <value>Committing staged changes before push...</value>
+  </data>
+  <data name="GitUpdatingRemoteNameMessage" xml:space="preserve">
+    <value>Updating remote '{0}' URL to: {1}</value>
+  </data>
+  <data name="GitProvidingCredentialsMessage" xml:space="preserve">
+    <value>Providing credentials for {0}</value>
+  </data>
+  <data name="GitPushStatusErrorMessage" xml:space="preserve">
+    <value>Push status error: {0} - {1}</value>
   </data>
 </root>

@@ -502,15 +502,6 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error pushing repository. Error: {0}.
-        /// </summary>
-        public static string ErrorPushingRepositoryFormat {
-            get {
-                return ResourceManager.GetString("ErrorPushingRepositoryFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error while reading directory path: {0}.
         /// </summary>
         public static string ErrorReadingDirectoryPathFormat {
@@ -648,11 +639,29 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Committing staged changes before push....
+        /// </summary>
+        public static string GitCommitingBeforePushMessage {
+            get {
+                return ResourceManager.GetString("GitCommitingBeforePushMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note: Your GitHub email is private and couldn&apos;t be fetched. You can manually enter the email you want to use for commit signatures..
         /// </summary>
         public static string GitCouldntFetchEmailText {
             get {
                 return ResourceManager.GetString("GitCouldntFetchEmailText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot push a detached HEAD. Please checkout a branch first..
+        /// </summary>
+        public static string GitDetachedHeadErrorMessage {
+            get {
+                return ResourceManager.GetString("GitDetachedHeadErrorMessage", resourceCulture);
             }
         }
         
@@ -666,6 +675,24 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Providing credentials for {0}.
+        /// </summary>
+        public static string GitProvidingCredentialsMessage {
+            get {
+                return ResourceManager.GetString("GitProvidingCredentialsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RefSpec: {0}. Ahead by: {1}.
+        /// </summary>
+        public static string GitPushBranchStateInfoMessage {
+            get {
+                return ResourceManager.GetString("GitPushBranchStateInfoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Push.
         /// </summary>
         public static string GitPushButtonText {
@@ -675,11 +702,74 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pushing local &apos;{0}&apos; ({1}) to remote &apos;{2}&apos; ({3})..
+        /// </summary>
+        public static string GitPushingLocal {
+            get {
+                return ResourceManager.GetString("GitPushingLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error pushing repository. Error: {0}.
+        /// </summary>
+        public static string GitPushingRepositoryErrorMessage {
+            get {
+                return ResourceManager.GetString("GitPushingRepositoryErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Push status error: {0} - {1}.
+        /// </summary>
+        public static string GitPushStatusErrorMessage {
+            get {
+                return ResourceManager.GetString("GitPushStatusErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Git Push.
         /// </summary>
         public static string GitPushWindowTitle {
             get {
                 return ResourceManager.GetString("GitPushWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository commited.
+        /// </summary>
+        public static string GitRepositoryCommittedMessage {
+            get {
+                return ResourceManager.GetString("GitRepositoryCommittedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository pushed to {0}..
+        /// </summary>
+        public static string GitRepositoryPushedMessage {
+            get {
+                return ResourceManager.GetString("GitRepositoryPushedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository staged..
+        /// </summary>
+        public static string GitRepositoryStagedMessage {
+            get {
+                return ResourceManager.GetString("GitRepositoryStagedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set upstream tracking for &apos;{0}&apos; to &apos;{1}/{2}&apos;.
+        /// </summary>
+        public static string GitSettingUpstreamBranch {
+            get {
+                return ResourceManager.GetString("GitSettingUpstreamBranch", resourceCulture);
             }
         }
         
@@ -725,6 +815,15 @@ namespace CSVEditor.Core.Properties {
         public static string GitText {
             get {
                 return ResourceManager.GetString("GitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating remote &apos;{0}&apos; URL to: {1}.
+        /// </summary>
+        public static string GitUpdatingRemoteNameMessage {
+            get {
+                return ResourceManager.GetString("GitUpdatingRemoteNameMessage", resourceCulture);
             }
         }
         
@@ -1071,20 +1170,20 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remote Name.
-        /// </summary>
-        public static string RemoteNameText {
-            get {
-                return ResourceManager.GetString("RemoteNameText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remote repository link.
         /// </summary>
         public static string RemoteLinkText {
             get {
                 return ResourceManager.GetString("RemoteLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote Name.
+        /// </summary>
+        public static string RemoteNameText {
+            get {
+                return ResourceManager.GetString("RemoteNameText", resourceCulture);
             }
         }
         
@@ -1112,33 +1211,6 @@ namespace CSVEditor.Core.Properties {
         public static string ReplaceImageFile {
             get {
                 return ResourceManager.GetString("ReplaceImageFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repository commited.
-        /// </summary>
-        public static string RepositoryCommittedText {
-            get {
-                return ResourceManager.GetString("RepositoryCommittedText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repository pushed to {0}..
-        /// </summary>
-        public static string RepositoryPushedFormat {
-            get {
-                return ResourceManager.GetString("RepositoryPushedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repository staged..
-        /// </summary>
-        public static string RepositoryStagedText {
-            get {
-                return ResourceManager.GetString("RepositoryStagedText", resourceCulture);
             }
         }
         
@@ -1337,6 +1409,15 @@ namespace CSVEditor.Core.Properties {
         public static string SettingUpRepositoryText {
             get {
                 return ResourceManager.GetString("SettingUpRepositoryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staging all changes before push....
+        /// </summary>
+        public static string StagingAllBeforePushMessage {
+            get {
+                return ResourceManager.GetString("StagingAllBeforePushMessage", resourceCulture);
             }
         }
         

@@ -1,6 +1,5 @@
 using CSVEditor.Core.Interfaces;
 using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
 using Repository = LibGit2Sharp.Repository;
 using Signature = LibGit2Sharp.Signature;
 using Prism.Commands;
@@ -15,6 +14,7 @@ using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Properties;
 using CSVEditor.Core.Extensions;
 using Octokit;
+using Branch = LibGit2Sharp.Branch;
 
 namespace CSVEditor.ViewModel
 {
@@ -101,7 +101,7 @@ namespace CSVEditor.ViewModel
         {
             WindowService = EditorVM.WindowService;
             OpenGitSetupCommand = new DelegateCommand(OpenGitSetup);
-            CommitRepositoryCommand = new DelegateCommand(CommitRepositorySolo);
+            CommitRepositoryCommand = new DelegateCommand(CommitRepositoryWithSetup);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
 
@@ -235,12 +235,12 @@ namespace CSVEditor.ViewModel
                 // Credential information to fetch
                 PullOptions options = new();
                 options.FetchOptions = new FetchOptions();
-                options.FetchOptions.CredentialsProvider = new CredentialsHandler((_, _, _) =>
+                options.FetchOptions.CredentialsProvider = (_, _, _) =>
                     new UsernamePasswordCredentials()
                     {
                         Username = gitOpts.UserName,
                         Password = password
-                    });
+                    };
 
                 // User information to create a merge commit
                 Signature signature = new(gitOpts.UserName, gitOpts.Email, DateTimeOffset.Now);
@@ -292,46 +292,78 @@ namespace CSVEditor.ViewModel
                         return;
                     }
                 }
+                else if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) && 
+                         !gitOpts.RemoteRepositoryLink.Contains('<') && 
+                         remote.Url != gitOpts.RemoteRepositoryLink)
+                {
+                    Console.WriteLine(Resources.GitUpdatingRemoteNameMessage, remote.Name, gitOpts.RemoteRepositoryLink);
+                    repo.Network.Remotes.Update(remote.Name, r => r.Url = gitOpts.RemoteRepositoryLink);
+                    remote = repo.Network.Remotes[gitOpts.RemoteName];
+                }
 
                 PushOptions options = new()
                 {
                     CredentialsProvider = (_, _, _) =>
-                        new UsernamePasswordCredentials()
+                    {
+                        Console.WriteLine(Resources.GitProvidingCredentialsMessage, gitOpts.UserName);
+                        return new UsernamePasswordCredentials()
                         {
                             Username = gitOpts.UserName,
                             Password = password
-                        }
+                        };
+                    },
+                    OnPushStatusError = (error) => 
+                    {
+                        Console.WriteLine(Resources.GitPushStatusErrorMessage, error.Reference, error.Message);
+                    }
                 };
 
                 if (repo.Info.IsHeadDetached)
                 {
-                    throw new InvalidOperationException("Cannot push a detached HEAD. Please checkout a branch first.");
+                    string message = Resources.GitDetachedHeadErrorMessage;
+                    MessageBox.Show(message);
+                    throw new InvalidOperationException(message);
                 }
 
                 // Push the current branch to remote
                 string pushRefSpec = $"{repo.Head.CanonicalName}:{repo.Head.CanonicalName}";
-                repo.Network.Push(remote, pushRefSpec, options);
+                string sha = repo.Head.Tip?.Sha ?? "no commits";
+                BranchTrackingDetails tracking = repo.Head.TrackingDetails;
+                string aheadStr = tracking != null ? (tracking.AheadBy?.ToString() ?? "0") : "unknown (no tracking)";
+
+
+                CommitRepository();
+                
+                Console.WriteLine(Resources.GitPushingLocal, repo.Head.FriendlyName, sha, remote.Name, remote.Url);
+                Console.WriteLine(Resources.GitPushBranchStateInfoMessage, pushRefSpec, aheadStr);
+                repo.Network.Push(remote, [pushRefSpec], options);
 
                 // Set upstream tracking if not set
-                var localBranch = repo.Head;
+                Branch localBranch = repo.Head;
                 if (localBranch.TrackedBranch == null)
                 {
                     repo.Branches.Update(localBranch, b => b.Remote = remote.Name, 
                         b => b.UpstreamBranch = localBranch.CanonicalName);
+                    Console.WriteLine(Resources.GitSettingUpstreamBranch, localBranch.FriendlyName, remote.Name, localBranch.FriendlyName);
                 }
 
-                Console.WriteLine(Resources.RepositoryPushedFormat, remote.Name);
+                Console.WriteLine(Resources.GitRepositoryPushedMessage
+                    , remote.Name);
+                MessageBox.Show(string.Format(Resources.GitRepositoryPushedMessage
+                    , remote.Name));
                 IsRepositoryPushed = true;
+
+                SetRepository(repo.Info.WorkingDirectory);
             }
             catch (Exception e)
             {
                 IsRepositoryPushed = false;
-                Console.WriteLine(Resources.ErrorPushingRepositoryFormat, e.Message);
-                MessageBox.Show(string.Format(Resources.ErrorPushingRepositoryFormat, e.Message));
+                Console.WriteLine(Resources.GitPushingRepositoryErrorMessage, e.Message);
+                MessageBox.Show(string.Format(Resources.GitPushingRepositoryErrorMessage, e.Message));
             }
         }
 
-        private void CommitRepositorySolo()
+        private void CommitRepositoryWithSetup()
         {
             if (!OpenGitSetupWindow())
             {
@@ -344,21 +376,21 @@ namespace CSVEditor.ViewModel
         private bool CommitRepository()
         {
             GitOptions options = EditorVM.AppOptions.GitOptions;
-
-            Signature authorSifnature = new(options.UserName, options.Email, DateTimeOffset.Now);
-
+            
+            Signature authorSignature = new(options.UserName, options.Email, DateTimeOffset.Now);
+            
             try
             {
                 using Repository repo = new(CurrentRepository.Info.Path);
                 if (IsRepositoryUnstaged(repo))
                 {
                     StageRepository(repo);
-                    Console.WriteLine(Resources.RepositoryStagedText);
+                    Console.WriteLine(Resources.GitRepositoryStagedMessage);
                 }
 
-                repo.Commit(options.CommitMessage, authorSifnature, authorSifnature);
+                repo.Commit(options.CommitMessage, authorSignature, authorSignature);
 
-                Console.WriteLine(Resources.RepositoryCommittedText);
+                Console.WriteLine(Resources.GitRepositoryCommittedMessage);
 
                 SetRepository(repo.Info.WorkingDirectory);
 
@@ -395,6 +427,7 @@ namespace CSVEditor.ViewModel
             try
             {
                 Console.WriteLine(Resources.SettingUpRepositoryText);
+                CurrentRepository?.Dispose();
                 CurrentRepository = new Repository(path);
                 bool status = IsRepositoryUnstaged();
             }
