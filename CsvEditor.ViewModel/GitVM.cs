@@ -8,6 +8,7 @@ using System.Windows;
 using CSVEditor.Core.Services;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Properties;
+using EventManager = CSVEditor.Core.Services.EventManager;
 
 namespace CSVEditor.ViewModel
 {
@@ -18,7 +19,7 @@ namespace CSVEditor.ViewModel
     //git push -u origin master
     //*************************************************************************
 
-    public class GitVM : INotifyPropertyChanged
+    public class GitVM : INotifyPropertyChanged, IDisposable
     {
         public IWindowService WindowService { get; set; }
 
@@ -76,15 +77,20 @@ namespace CSVEditor.ViewModel
         public DelegateCommand CommitRepositoryCommand { get; set; }
         public static DelegateCommand PushRepositoryCommand { get; set; }
         public DelegateCommand PullRepositoryCommand { get; set; }
+        
+        private bool _disposed;
 
         public GitVM(EditorVM EditorVM)
         {
             WindowService = EditorVM.WindowService;
+            
+            
             OpenGitSetupCommand = new DelegateCommand(OpenGitSetup);
             CommitRepositoryCommand = new DelegateCommand(CommitRepositoryWithSetup);
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
 
+            EventManager.OnGitOptionsWindowRequested += OpenGitSetup;
             SaveVM.OnSaved += ProcessRepositoryOnSave;
 
             SubscribeToGitOptions();
@@ -136,23 +142,15 @@ namespace CSVEditor.ViewModel
 
         private bool OpenGitSetupWindow()
         {
-            GitOptions oldOptions = EditorVM.AppOptions.GitOptions;
-            GitOptions newOptions = WindowService?.OpenGitSetupWindow();
-
-            if (newOptions == null)
-            {
-                return false;
-            };
-
-            oldOptions.PropertyChanged -= GitOptions_PropertyChanged;
-
-            EditorVM.AppOptions.GitOptions = newOptions;
             SubscribeToGitOptions();
 
-            OnPropertyChanged(nameof(IsLoggedIn));
-            OnPropertyChanged(nameof(LoginTooltip));
+            bool accepted = WindowService?.OpenGitSetupWindow() ?? false;
+
+            if (!accepted)
+                return false;
 
             AppOptionsService.SaveAppOptions();
+
             return true;
         }
 
@@ -230,19 +228,17 @@ namespace CSVEditor.ViewModel
 
         private void ProcessRepositoryOnSave(bool commitOnSave, bool pushOnSave)
         {
-            if (commitOnSave)
+            if (!commitOnSave) return;
+            // if (!OpenGitSetupWindow())
+            // {
+            //     return;
+            // }
+
+            bool commited = CommitRepository();
+
+            if (pushOnSave && commited)
             {
-                if (!OpenGitSetupWindow())
-                {
-                    return;
-                }
-
-                bool commited = CommitRepository();
-
-                if (pushOnSave && commited)
-                {
-                    PushRepository();
-                }
+                PushRepository();
             }
         }
 
@@ -256,6 +252,23 @@ namespace CSVEditor.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+            
+            EventManager.OnGitOptionsWindowRequested -= OpenGitSetup;
+            SaveVM.OnSaved -= ProcessRepositoryOnSave;
+
+            if (EditorVM.AppOptions?.GitOptions != null)
+            {
+                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+            }
+            
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

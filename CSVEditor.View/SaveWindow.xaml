@@ -10,26 +10,26 @@
         x:Name="SaveWindowMain"
         Title="{x:Static p:Resources.SaveWindowTitle}"
         Icon="Resources/Icons/save_options.ico"
-        SizeToContent="WidthAndHeight"
-        Height="327" Width="800"
+        SizeToContent="Height"
+        Width="800"
         ResizeMode="NoResize">
 
     <Window.DataContext>
-        <vm:SaveVM x:Name="VM"/>
+        <vm:SaveVM x:Name="VM" />
     </Window.DataContext>
 
     <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource}">
-        <DockPanel >
-            <Border Style="{StaticResource BaseBorderStyle}" 
+        <DockPanel>
+            <Border Style="{StaticResource BaseBorderStyle}"
                     DockPanel.Dock="Top"
                     BorderThickness="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Button Content="{x:Static p:Resources.SaveAsText}"
@@ -38,7 +38,7 @@
                             Background="{DynamicResource DarkColorResource}"
                             Grid.Column="0">
                         <Button.Resources>
-                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}" />
                         </Button.Resources>
                     </Button>
                     <Button Command="{Binding SaveAlternativePathCommand}" Style="{StaticResource BaseButtonStyle}"
@@ -47,13 +47,13 @@
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} {1}">
-                                    <Binding Source="{x:Static p:Resources.SaveToText}"/>
-                                    <Binding Path="SaveOptions.AlternativePath"/>
+                                    <Binding Source="{x:Static p:Resources.SaveToText}" />
+                                    <Binding Path="SaveOptions.AlternativePath" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
                         <Button.Resources>
-                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                            <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}" />
                         </Button.Resources>
                     </Button>
                 </Grid>
@@ -64,13 +64,13 @@
                         BorderThickness="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <Button Content="{x:Static p:Resources.OverwriteText}"
@@ -80,38 +80,38 @@
                                 Grid.Column="0"
                                 Grid.Row="0">
                             <Button.Resources>
-                                <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}"/>
+                                <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}" />
                             </Button.Resources>
                         </Button>
                         <TextBlock Text="{Binding CsvFilePath}"
                                    Style="{StaticResource BigTextBlockStyle}"
                                    Grid.Column="1"
-                                   Grid.Row="0"/>
+                                   Grid.Row="0" />
                         <Border Style="{StaticResource BaseBorderStyle}"
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
-                                Visibility="{ Binding IsLoggedInToGit}"
-                                >
+                                Visibility="{ Binding IsLoggedInToGit}">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="CommitCheckBox" 
+                                <CheckBox x:Name="CommitCheckBox"
                                           Unchecked="UncheckPushOnSave"
-                                          IsChecked="{Binding SaveOptions.CommitOnSave, Mode=TwoWay}"/>
+                                          IsChecked="{Binding SaveOptions.CommitOnSave, Mode=TwoWay}" />
                                 <TextBlock Text="{x:Static p:Resources.CommitText}"
-                                           Style="{StaticResource BigTextBlockStyle}"/>
+                                           Style="{StaticResource BigTextBlockStyle}" />
                                 <CheckBox x:Name="PushCheckBox"
                                           Unchecked="UncheckPushOnSave"
-                                          IsEnabled="{Binding SaveOptions.CommitOnSave}"                                          
+                                          IsEnabled="{Binding SaveOptions.CommitOnSave}"
                                           Margin="30,5,0,5">
                                     <CheckBox.IsChecked>
-                                        <MultiBinding Converter="{StaticResource DependandOnOtherBoolConverter}">
-                                            <Binding Path="SaveOptions.PushOnSave" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                                            <Binding ElementName="CommitCheckBox" Path="IsChecked"/>
+                                        <MultiBinding Converter="{StaticResource DependedOnOtherBoolConverter}">
+                                            <Binding Path="SaveOptions.PushOnSave" Mode="TwoWay"
+                                                     UpdateSourceTrigger="PropertyChanged" />
+                                            <Binding ElementName="CommitCheckBox" Path="IsChecked" />
                                         </MultiBinding>
                                     </CheckBox.IsChecked>
                                 </CheckBox>
                                 <TextBlock Text="{x:Static p:Resources.PushText}"
-                                           Style="{StaticResource BigTextBlockStyle}"/>
+                                           Style="{StaticResource BigTextBlockStyle}" />
                             </StackPanel>
                         </Border>
 
@@ -119,32 +119,53 @@
                                 DockPanel.Dock="Top"
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                Visibility="{ Binding IsLoggedInToGit}"
-                                >
+                                Visibility="{ Binding IsLoggedInToGit}">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}"/>
+                                <CheckBox IsChecked="{Binding SaveOptions.RememberSetting, Mode=TwoWay}" />
                                 <TextBlock Text="{x:Static p:Resources.RememberSelectionText}"
-                                           Style="{StaticResource BigTextBlockStyle}"/>
+                                           Style="{StaticResource BigTextBlockStyle}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                DockPanel.Dock="Top"
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Visibility="{ Binding IsNotLoggedInToGit}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static p:Resources.NotLoggedToGitInfoText}"
+                                             Style="{StaticResource BigTextBlockStyle}"
+                                           ></TextBlock>
+                                <Button Content="{x:Static p:Resources.OpenGitSetupText}"
+                                        Click="OpenGitSetupButton_OnClick"
+                                        Padding="5,0"
+                                        Style="{StaticResource AcceptButtonStyle}"
+                                        Background="{DynamicResource DarkColorResource}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border"
+                                               BasedOn="{StaticResource RoundBordersForButtonStyle}" />
+                                    </Button.Resources>
+                                </Button>
                             </StackPanel>
                         </Border>
                     </Grid>
                 </Border>
             </Grid>
 
-            <Button Style="{StaticResource CancelButtonStyle}" 
+            <Button Style="{StaticResource CancelButtonStyle}"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding ElementName=SaveWindowMain}"
-                    DockPanel.Dock="Top" 
+                    DockPanel.Dock="Top"
                     Margin="5,20"
                     BorderThickness="2">
                 <Button.Resources>
-                    <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                    <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}" />
                 </Button.Resources>
                 <TextBlock Text="{x:Static p:Resources.CancelText}"
-                           Style="{StaticResource BigTextBlockStyle}"/>
+                           Style="{StaticResource BigTextBlockStyle}" />
             </Button>
 
-           
+
         </DockPanel>
     </Border>
 </Window>

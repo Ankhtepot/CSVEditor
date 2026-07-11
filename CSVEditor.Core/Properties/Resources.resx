@@ -547,4 +547,31 @@ Do you want to overwrite this file?</value>
   <data name="AppOptionsSaveError" xml:space="preserve">
     <value>Error occured while saving app options.\nError: {0}</value>
   </data>
+  <data name="GetPATText" xml:space="preserve">
+    <value>Get a GitHub Personal Access Token (requires 'repo' and 'user' scopes)</value>
+  </data>
+  <data name="UseSecureTokenStorageText" xml:space="preserve">
+    <value>Use Secure Token Storage (Windows Credential Manager</value>
+  </data>
+  <data name="PATOverPasswordPrompt" xml:space="preserve">
+    <value>For GitHub/GitLab, use a Personal Access Token (PAT) instead of your password.</value>
+  </data>
+  <data name="GitHubLoginText" xml:space="preserve">
+    <value>GitHub Login</value>
+  </data>
+  <data name="GitTokenValidationTooltip" xml:space="preserve">
+    <value>Validate token and fetch profile info from GitHub</value>
+  </data>
+  <data name="GitHubLoginGuideTooltip" xml:space="preserve">
+    <value>How it works?&amp;#x0a;1. Generate a PAT using the link below.&amp;#x0a;2. Paste the token into the Password field.&amp;#x0a;3. Click 'GitHub Login' to validate and fill in Username/Email.&amp;#x0a;4. This enables secure Git operations and sets your commit signature.</value>
+  </data>
+  <data name="NotLoggedToGitInfoText" xml:space="preserve">
+    <value>Log into GitHub for git push automation -&gt;</value>
+  </data>
+  <data name="GitTokenNotMatchingUser" xml:space="preserve">
+    <value>Token does not match the entered username.</value>
+  </data>
+  <data name="PleaseEnterUserNamePrompt" xml:space="preserve">
+    <value>Please enter username.</value>
+  </data>
 </root>

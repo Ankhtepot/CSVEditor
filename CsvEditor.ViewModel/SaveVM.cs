@@ -8,15 +8,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using EventManager = CSVEditor.Core.Services.EventManager;
 
 namespace CSVEditor.ViewModel
 {
-    public class SaveVM : INotifyPropertyChanged
+    public class SaveVM : INotifyPropertyChanged, IDisposable
     {
         public string CsvFileText;
         public Window SaveWindow;
         public bool SaveSuccessful;
-        public Visibility IsLoggedInToGit { get; set; } = Visibility.Collapsed;
+        public Visibility IsLoggedInToGit { get; set; }
         public Visibility IsNotLoggedInToGit => IsLoggedInToGit == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
 
         public string CsvFilePath
@@ -45,6 +46,8 @@ namespace CSVEditor.ViewModel
         public DelegateCommand CancelCommand { get; set; }
 
         public static Action<bool, bool> OnSaved;
+        
+        private bool _disposed = false;
 
         public SaveVM()
         {
@@ -53,7 +56,25 @@ namespace CSVEditor.ViewModel
             SaveAlternativePathCommand = new DelegateCommand(SaveAlternativePath);
             CancelCommand = new DelegateCommand(Cancel);
             
-            IsLoggedInToGit = AppOptionsService.IsLoggedInToGit == true ? Visibility.Visible : Visibility.Collapsed;
+            SubscribeToGitOptions();
+            RefreshGitOptionsVisibility();
+        }
+
+        private void SubscribeToGitOptions()
+        {
+            if (EditorVM.AppOptions?.GitOptions != null)
+            {
+                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+                EditorVM.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
+            }
+        }
+
+        private void GitOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(GitOptions.IsAuthenticated))
+            {
+                RefreshGitOptionsVisibility();
+            }
         }
 
         public static async void SaveCurrentCsvFile(EditorVM context, IWindowService windowService)
@@ -135,6 +156,41 @@ namespace CSVEditor.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void HandleOpenGitSetupWindow()
+        {
+            EventManager.OnGitOptionsWindowClosed += HandleGitOptionsWindowClosed;
+            EventManager.TriggerGitOptionsWindowRequested();
+        }
+
+        private void HandleGitOptionsWindowClosed()
+        {
+            RefreshGitOptionsVisibility();
+            EventManager.OnGitOptionsWindowClosed -= HandleGitOptionsWindowClosed;
+        }
+
+        private void RefreshGitOptionsVisibility()
+        {
+            IsLoggedInToGit = AppOptionsService.IsLoggedInToGit == true ? Visibility.Visible : Visibility.Collapsed;
+            OnPropertyChanged(nameof(IsLoggedInToGit));
+            OnPropertyChanged(nameof(IsNotLoggedInToGit));
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            EventManager.OnGitOptionsWindowClosed -= HandleGitOptionsWindowClosed;
+
+            if (EditorVM.AppOptions?.GitOptions != null)
+            {
+                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+            }
+
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

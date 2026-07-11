@@ -1,6 +1,8 @@
 ﻿using CSVEditor.Core.HelperClasses;
 using CSVEditor.ViewModel;
 using System.Windows;
+using CSVEditor.Core.Services;
+using EventManager = CSVEditor.Core.Services.EventManager;
 
 namespace CSVEditor.View
 {
@@ -25,6 +27,11 @@ namespace CSVEditor.View
         private void UncheckPushOnSave(object sender, RoutedEventArgs e)
         {
             _dataContext.SaveOptions.PushOnSave = false;
+        }
+
+        private void OpenGitSetupButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _dataContext.HandleOpenGitSetupWindow();
         }
     }
 }

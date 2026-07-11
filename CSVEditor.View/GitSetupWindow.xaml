@@ -58,6 +58,7 @@
                      Grid.Row="1"
                      FontSize="{StaticResource MiddleFontSize}"
                      Height="22" VerticalContentAlignment="Center"
+                     KeyDown="UserNameTextBox_KeyDown"
                      LostFocus="UserNameTextBox_LostFocus"/>
             
             <Label Content="{x:Static p:Resources.EmailText}"
@@ -84,20 +85,29 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <PasswordBox x:Name="PasswordBox"
                              FontSize="{StaticResource MiddleFontSize}"
                              Height="22" VerticalContentAlignment="Center"
-                             ToolTip="For GitHub/GitLab, use a Personal Access Token (PAT) instead of your password."/>
+                             PasswordChanged="PasswordBox_PasswordChanged"
+                             ToolTip="{x:Static p:Resources.PATOverPasswordPrompt}"/>
                 <Button x:Name="GitHubLoginButton" 
                         Grid.Column="1"
-                        Content="GitHub Login"
+                        Content="{x:Static p:Resources.GitHubLoginText}"
                         Margin="5,0,0,0"
                         Padding="5,0"
                         Click="GitHubLoginButton_Click"
-                        ToolTip="Validate token and fetch profile info from GitHub"/>
-                <Grid Grid.Column="2" Background="Transparent" VerticalAlignment="Center"
-                      ToolTip="How it works?&#x0a;1. Generate a PAT using the link below.&#x0a;2. Paste the token into the Password field.&#x0a;3. Click 'GitHub Login' to validate and fill in Username/Email.&#x0a;4. This enables secure Git operations and sets your commit signature.">
+                        ToolTip="{x:Static p:Resources.GitTokenValidationTooltip}"/>
+                <iconPacks:PackIconOcticons Kind="Check" 
+                                            Grid.Column="2"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="Green"
+                                            ToolTip="Authenticated"
+                                            Visibility="{Binding GitOptions.IsAuthenticated, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Grid Grid.Column="3" Background="Transparent" VerticalAlignment="Center"
+                      ToolTip="{x:Static p:Resources.GitHubLoginGuideTooltip}">
                     <iconPacks:PackIconOcticons Kind="Question" 
                                                 Margin="5,0,0,0"
                                                 VerticalAlignment="Center"
@@ -107,11 +117,11 @@
             
             <TextBlock Grid.Column="1" Grid.Row="4" Margin="0,2,0,5" FontSize="11">
                 <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/settings/tokens/new?scopes=repo,user&amp;description=CSVEditor">
-                    Get a GitHub Personal Access Token (requires 'repo' and 'user' scopes)
+                    <Run Text="{x:Static p:Resources.GetPATText}"/>
                 </Hyperlink>
             </TextBlock>
             
-            <CheckBox Content="Use Secure Token Storage (Windows Credential Manager)"
+            <CheckBox Content="{x:Static p:Resources.UseSecureTokenStorageText}"
                       IsChecked="{Binding GitOptions.UseToken, Mode=TwoWay}"
                       Grid.Row="5" Grid.Column="1"
                       Margin="0,5"

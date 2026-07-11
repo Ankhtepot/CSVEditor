@@ -8,41 +8,41 @@
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.AppTitle}" 
+        Title="{x:Static p:Resources.AppTitle}"
         Icon="Resources/Icons/csv_icon_plain.ico"
-        Height="450" 
+        Height="450"
         Width="1000"
         MinWidth="600"
         MinHeight="400">
 
     <Grid x:Name="TopContainer" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- #region MainMenu -->
         <Border Grid.Row="0"
                 Style="{StaticResource BaseBorderStyle}">
             <Menu Margin="5,0,0,0">
-                <MenuItem Header="{x:Static p:Resources.FileText}" 
-                      IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
-                      BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
-                    <MenuItem.Icon >
+                <MenuItem Header="{x:Static p:Resources.FileText}"
+                          IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
+                          BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
+                    <MenuItem.Icon>
                         <iconPacks:PackIconBoxIcons Kind="RegularSave" />
                     </MenuItem.Icon>
 
                     <MenuItem Header="{x:Static p:Resources.LoadDirectoryText}"
-                          Command="{Binding LoadRepositoryCommand}">
+                              Command="{Binding LoadRepositoryCommand}">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconBoxIcons Kind="RegularFile"/>
+                            <iconPacks:PackIconBoxIcons Kind="RegularFile" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}" />
                     <MenuItem Header="{x:Static p:Resources.SaveText}"
                               Command="{Binding SaveCommand}">
                         <MenuItem.Icon>
@@ -55,7 +55,7 @@
                             <iconPacks:PackIconUnicons Kind="SignOutAltLine" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}" />
                     <MenuItem Header="{x:Static p:Resources.ExitAppText}"
                               Command="{Binding ExitCommand}">
                         <MenuItem.Icon>
@@ -68,8 +68,8 @@
                           BorderBrush="{DynamicResource MenuHeaderBorderColorResource}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{StaticResource FileMenuEnabledConverter}">
-                            <Binding Path="AsyncVM.WorkingStatus"/>
-                            <Binding Path="SelectedCsvFile"/>
+                            <Binding Path="AsyncVM.WorkingStatus" />
+                            <Binding Path="SelectedCsvFile" />
                         </MultiBinding>
                     </MenuItem.IsEnabled>
                     <MenuItem.Icon>
@@ -82,7 +82,7 @@
                             <iconPacks:PackIconFontAwesome Kind="PenToSquareSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}" />
                     <MenuItem Header="{x:Static p:Resources.AddLineToTopText}"
                               Command="{Binding AddLineToTopCommand}">
                         <MenuItem.Icon>
@@ -107,7 +107,7 @@
                             <iconPacks:PackIconFontAwesome Kind="AnglesDownSolid" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}" />
                     <MenuItem Header="{x:Static p:Resources.DeleteLineText}"
                               Command="{Binding DeleteLineCommand}">
                         <MenuItem.Icon>
@@ -129,7 +129,7 @@
                             <iconPacks:PackIconBoxIcons Kind="RegularWindow" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                    <Separator Style="{StaticResource MenuSeparatorStyle}" />
                     <MenuItem Header="{x:Static p:Resources.CommitRepositoryText}"
                               Command="{Binding GitVM.CommitRepositoryCommand}">
                         <MenuItem.Icon>
@@ -163,54 +163,53 @@
         <!--#region Control Bar -->
         <Border Style="{StaticResource BaseBorderStyle}"
                 Grid.Row="1"
-                VerticalAlignment="Center"
-                >
+                VerticalAlignment="Center">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--#region column 0: Work Indication -->
-                <uc:ProgressInfoControl WorkStatus="{Binding AsyncVM.WorkingStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        Progress="{Binding AsyncVM.WorkProgress}"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Width="300"
-                                        />
+                <uc:ProgressInfoControl
+                    WorkStatus="{Binding AsyncVM.WorkingStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Progress="{Binding AsyncVM.WorkProgress}"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="300" />
                 <!--#endregion-->
 
                 <!--#region column 1: Load repo section -->
                 <Grid Grid.Column="1" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
                     <Button Grid.Column="0"
-                                Content="{x:Static p:Resources.LoadDirectoryText}"
-                                HorizontalAlignment="Left"
-                                Height="28"
-                                Width="Auto"
-                                Command="{Binding LoadRepositoryCommand}"
-                                IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
-                                Margin="1,0"
-                                Padding="10,0,5,0"
-                                >
+                            Content="{x:Static p:Resources.LoadDirectoryText}"
+                            HorizontalAlignment="Left"
+                            Height="28"
+                            Width="Auto"
+                            Command="{Binding LoadRepositoryCommand}"
+                            IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}"
+                            Margin="1,0"
+                            Padding="10,0,5,0">
                         <Button.Resources>
-                            <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}"/>
+                            <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}" />
                         </Button.Resources>
                     </Button>
-                    <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center" Margin="0.5">
+                    <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center"
+                            Margin="0.5">
                         <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
                     </Border>
                 </Grid>
@@ -219,27 +218,30 @@
                 <!--#region column 2: GitRepo control -->
                 <Border Style="{StaticResource BaseBorderStyle}"
                         Grid.Column="2"
-                        VerticalAlignment="Center" 
+                        VerticalAlignment="Center"
                         HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource LightColorResource }"
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                Background="{DynamicResource LightColorResource }"
                                 Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}">
                             <TextBlock Style="{StaticResource LowTextBlockStyle}"
-                                   Text="{x:Static p:Resources.NotEditedText}"/>
+                                       Text="{x:Static p:Resources.NotEditedText}" />
                         </Border>
-                        <Border Style="{StaticResource BaseBorderStyle}" Background="{DynamicResource WarningColorResource }"
+                        <Border Style="{StaticResource BaseBorderStyle}"
+                                Background="{DynamicResource WarningColorResource }"
                                 Visibility="{Binding IsFileEdited, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Style="{StaticResource LowTextBlockStyle}"
-                                   Text="{x:Static p:Resources.EditedText}"/>
+                                       Text="{x:Static p:Resources.EditedText}" />
                         </Border>
                         <Border Style="{StaticResource BaseBorderStyle}"
                                 Visibility="{Binding GitVM.IsGitRepo, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"
                                 Background="{DynamicResource DarkColorResource}">
                             <TextBlock Text="{x:Static p:Resources.NotGitRepository}"
-                                       Style="{StaticResource LowTextBlockStyle}"/>
+                                       Style="{StaticResource LowTextBlockStyle}" />
                         </Border>
                         <Viewbox Height="18">
-                            <uc:GitControlsControl Visibility="{Binding GitVM.IsGitRepo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <uc:GitControlsControl
+                                Visibility="{Binding GitVM.IsGitRepo, Converter={StaticResource BoolToVisibilityConverter}}" />
                         </Viewbox>
                     </StackPanel>
                 </Border>
@@ -247,14 +249,13 @@
 
                 <Button Grid.Row="1"
                         Content="{x:Static p:Resources.CancelProcessText}"
-                        HorizontalAlignment="Left"                        
+                        HorizontalAlignment="Left"
                         Visibility="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToVisibilityConverter}}"
                         Style="{StaticResource CancelButtonStyle}"
-                        Command="{Binding CancelActiveWorkerAsyncCommand}"
-                        >
+                        Command="{Binding CancelActiveWorkerAsyncCommand}">
                     <Button.Resources>
                         <Style TargetType="Border" BasedOn="{StaticResource BaseBorderStyle}">
-                            <Setter Property="CornerRadius" Value="7"/>
+                            <Setter Property="CornerRadius" Value="7" />
                         </Style>
                     </Button.Resources>
                 </Button>
@@ -264,8 +265,7 @@
 
         <!--#region Main Section -->
         <Border Style="{StaticResource BaseBorderStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                Grid.Row="2"
-                >
+                Grid.Row="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"></ColumnDefinition>
@@ -277,22 +277,22 @@
                 </Grid.RowDefinitions>
 
                 <!--#region Loaded files section -->
-                <Border Style="{StaticResource BaseBorderStyle}" 
-                        Grid.Column="0" 
+                <Border Style="{StaticResource BaseBorderStyle}"
+                        Grid.Column="0"
                         Margin="5,5,0,5"
                         Background="{DynamicResource DarkColorResource}">
                     <Grid VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="{x:Static p:Resources.LoadedCSVFilesText}" 
+                        <TextBlock Text="{x:Static p:Resources.LoadedCSVFilesText}"
                                    Margin="10,0"
                                    Grid.Row="0"
                                    FontSize="{StaticResource MiddleFontSize}"
                                    FontWeight="SemiBold"
-                                   Background="{DynamicResource DarkColorResource}"/>
+                                   Background="{DynamicResource DarkColorResource}" />
                         <ListBox Grid.Row="1"
                                  ItemsSource="{Binding CsvFilesStructure}"
                                  x:Name="DirectoryListBoxOutter"
@@ -302,16 +302,16 @@
                                  IsEnabled="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToEnabledConverter}}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
-                                    <Setter Property="Focusable" Value="False"/>
+                                    <Setter Property="Focusable" Value="False" />
                                 </Style>
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <uc:DirectoryWithCsvControl x:Name="DirectoryListBoxInner" 
+                                    <uc:DirectoryWithCsvControl x:Name="DirectoryListBoxInner"
                                                                 DirectoryData="{Binding}"
                                                                 SelectedFile="{Binding DataContext.SelectedFile, 
                                                                 Mode=TwoWay, 
-                                                                RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                                RelativeSource={RelativeSource AncestorType=ListBox}}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -321,118 +321,119 @@
 
                 <!--#region GriSplitter -->
                 <GridSplitter Grid.Column="1"
-                            ResizeDirection="Columns"
-                            HorizontalAlignment="Center"
-                            Width="5"
-                            Height="100"
-                            Background="Blue"
-                            VerticalAlignment="Center"
-                            Margin="0"
-                            ></GridSplitter>
+                              ResizeDirection="Columns"
+                              HorizontalAlignment="Center"
+                              Width="5"
+                              Height="100"
+                              Background="Blue"
+                              VerticalAlignment="Center"
+                              Margin="0">
+                </GridSplitter>
                 <!--#endregion GridSplitter-->
 
                 <!--#region EditTab -->
                 <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="2" Margin="0,5,5,5">
                     <TabControl x:Name="MainTabControl"
-                                VerticalAlignment="Stretch" 
-                                HorizontalAlignment="Stretch" 
-                                SelectionChanged="TabControl_SelectionChanged" >
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                SelectionChanged="TabControl_SelectionChanged">
                         <!--#region Overview -->
                         <TabItem Header="{x:Static p:Resources.OverviewHeaderText}" x:Name="OverviewTab">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="1*" />
                                 </Grid.RowDefinitions>
 
                                 <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"/>
-                                <uc:CsvFileGridViewerControl Grid.Row="1" 
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}" />
+                                <uc:CsvFileGridViewerControl Grid.Row="1"
                                                              x:Name="CsvFileGridViewer"
-                                                             InputCsvFile="{Binding SelectedCsvFile}" 
-                                                             Grid.ColumnSpan="2"/>
+                                                             InputCsvFile="{Binding SelectedCsvFile}"
+                                                             Grid.ColumnSpan="2" />
                             </Grid>
                         </TabItem>
                         <!--#endregion Overview-->
 
                         <!--#region Line Editor-->
                         <TabItem Header="{x:Static p:Resources.LineEditorText}"
-                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
+                                 Visibility="{Binding SelectedCsvFile, Converter={StaticResource SelectedCsvFileToVisibilityConverter}}"
+                                 Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="0" Background="Beige">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <uc:FileInfoControl Grid.Column="1"
-                                                        VerticalAlignment="Stretch" HorizontalAlignment="Left"                                                        
+                                                        VerticalAlignment="Stretch" HorizontalAlignment="Left"
                                                         SelectedText="{Binding SelectedText}"
                                                         FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
-                                                        MaxWidth="300"
-                                                        />
-                                    <Border Style="{StaticResource BaseLeftAlignedBorderStyle}"                                             
+                                                        MaxWidth="300" />
+                                    <Border Style="{StaticResource BaseLeftAlignedBorderStyle}"
                                             Grid.Column="0"
                                             Background="AntiqueWhite">
-                                        <TextBlock Text="{Binding IsLineEditMode, Converter={StaticResource EditModeToTitleConverter}}"
-                                                   Style="{StaticResource BigTextBlockStyle}"/>
+                                        <TextBlock
+                                            Text="{Binding IsLineEditMode, Converter={StaticResource EditModeToTitleConverter}}"
+                                            Style="{StaticResource BigTextBlockStyle}" />
                                     </Border>
                                 </Grid>
                                 <DockPanel Grid.Row="1">
                                     <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <Border Style="{StaticResource BaseBorderStyle}" 
-                                                Grid.Column="0" 
+                                        <Border Style="{StaticResource BaseBorderStyle}"
+                                                Grid.Column="0"
                                                 Margin="1"
                                                 Background="{DynamicResource DarkColorResource}"
                                                 MaxHeight="38"
                                                 Visibility="{Binding IsLineEditMode,
-                                                    Converter={StaticResource BoolToVisibilityConverter}}"
-                                                >
+                                                    Converter={StaticResource BoolToVisibilityConverter}}">
                                             <Viewbox HorizontalAlignment="Center">
-                                                <uc:LineNavigationBarControl InputIndex="{Binding SelectedItemIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                             LinesCount="{Binding SelectedCsvFile.Lines.Count}"
-                                                                             Margin="5,5"/>
+                                                <uc:LineNavigationBarControl
+                                                    InputIndex="{Binding SelectedItemIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    LinesCount="{Binding SelectedCsvFile.Lines.Count}"
+                                                    Margin="5,5" />
                                             </Viewbox>
                                         </Border>
-                                        <Border Style="{StaticResource BaseBorderStyle}" 
-                                                Grid.Column="1" 
+                                        <Border Style="{StaticResource BaseBorderStyle}"
+                                                Grid.Column="1"
                                                 Margin="1"
                                                 Background="{DynamicResource DarkColorResource}"
                                                 MaxHeight="38"
                                                 Visibility="{Binding IsLineEditMode,
-                                                    Converter={StaticResource BoolToVisibilityConverter}}"
-                                                >
+                                                    Converter={StaticResource BoolToVisibilityConverter}}">
                                             <Viewbox HorizontalAlignment="Center">
-                                                <uc:FileOperationsControl/>
+                                                <uc:FileOperationsControl />
                                             </Viewbox>
                                         </Border>
                                     </Grid>
-                                    <Button Content="{Binding IsLineEditMode, Converter={StaticResource EditModeToTextConverter}}"
-                                            Height="30"
-                                            HorizontalAlignment="Left"
-                                            DockPanel.Dock="Left"
-                                            Margin="1"
-                                            Command="{Binding SwitchEditModeCommand}"
-                                        >
+                                    <Button
+                                        Content="{Binding IsLineEditMode, Converter={StaticResource EditModeToTextConverter}}"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        DockPanel.Dock="Left"
+                                        Margin="1"
+                                        Command="{Binding SwitchEditModeCommand}">
                                         <Button.LayoutTransform>
-                                            <RotateTransform Angle="90"/>
+                                            <RotateTransform Angle="90" />
                                         </Button.LayoutTransform>
                                         <Button.Resources>
-                                            <Style TargetType="Border" BasedOn="{StaticResource RoundBordersForButtonStyle}"/>
+                                            <Style TargetType="Border"
+                                                   BasedOn="{StaticResource RoundBordersForButtonStyle}" />
                                         </Button.Resources>
                                     </Button>
 
@@ -442,15 +443,13 @@
                                                                 SelectedLineIndex="{Binding SelectedItemIndex}"
                                                                 Visibility="{Binding IsLineEditMode,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
-                                                                HorizontalAlignment="Stretch"
-                                                               />
-                                            <uc:ConfigurationEditControl x:Name="ConfigurationEditGrid" 
-                                                                         CsvFile="{Binding SelectedCsvFile}" 
+                                                                HorizontalAlignment="Stretch" />
+                                            <uc:ConfigurationEditControl x:Name="ConfigurationEditGrid"
+                                                                         CsvFile="{Binding SelectedCsvFile}"
                                                                          Visibility="{Binding IsLineEditMode,
                                                                           Converter={StaticResource BoolToVisibilityConverter},
                                                                           ConverterParameter=false}"
-                                                                         HorizontalAlignment="Stretch"
-                                                   />
+                                                                         HorizontalAlignment="Stretch" />
                                         </Grid>
                                     </Border>
                                 </DockPanel>
@@ -462,20 +461,17 @@
                         <TabItem Header="{x:Static p:Resources.RawFileText}">
                             <Grid x:Name="RawFileStackPanel">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
                                 <uc:FileInfoControl Grid.Row="0"
                                                     SelectedText="{Binding SelectedText}"
-                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}"
-                                                    />
+                                                    FileInfoText="{Binding SelectedFile, Converter={StaticResource AbsPathToFileNameConverter}}" />
                                 <Border Style="{StaticResource BaseBorderStyle}"
-                                        Grid.Row="1"
-                                        >
+                                        Grid.Row="1">
                                     <TextBox Text="{Binding AsyncVM.SelectedFileRaw}"
-                                                VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                                                />
+                                             VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
                                 </Border>
                             </Grid>
                         </TabItem>

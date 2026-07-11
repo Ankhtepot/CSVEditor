@@ -72,6 +72,31 @@ namespace CSVEditor.Core.HelperClasses
             RemoteName = DefaultRemoteName;
         }
 
+        public GitOptions(GitOptions source)
+        {
+            if (source == null)
+            {
+                CommitMessage = DefaultCommitMessage;
+                UserName = "<UserName>";
+                Email = "<Email>";
+                Password = "";
+                UseToken = true;
+                IsAuthenticated = false;
+                RemoteRepositoryLink = "<Remote Repository Link>";
+                RemoteName = DefaultRemoteName;
+                return;
+            }
+
+            CommitMessage = source.CommitMessage;
+            UserName = source.UserName;
+            Email = source.Email;
+            Password = source.Password;
+            UseToken = source.UseToken;
+            IsAuthenticated = source.IsAuthenticated;
+            RemoteRepositoryLink = source.RemoteRepositoryLink;
+            RemoteName = source.RemoteName;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

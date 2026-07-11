@@ -1,4 +1,5 @@
-﻿using CSVEditor.Core.HelperClasses;
+﻿using System.Windows;
+using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
 using CSVEditor.Core.Services;
 using CSVEditor.ViewModel;
@@ -22,14 +23,16 @@ namespace CSVEditor.View
                 : null;
         }
 
-        public GitOptions OpenGitSetupWindow()
+        public bool OpenGitSetupWindow()
         {
-            GitSetupWindow window = new(AppOptionsService.AppOptions.GitOptions);
+            GitSetupWindow window = new(AppOptionsService.AppOptions.GitOptions)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
             window.ShowDialog();
 
-            return window.Canceled
-                ? null
-                : window.GitOptions;
+            return !window.Canceled;
         }
 
         public bool OpenGitPushWindow()

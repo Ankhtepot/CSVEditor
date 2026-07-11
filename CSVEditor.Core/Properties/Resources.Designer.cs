@@ -648,6 +648,15 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get a GitHub Personal Access Token (requires &apos;repo&apos; and &apos;user&apos; scopes).
+        /// </summary>
+        public static string GetPATText {
+            get {
+                return ResourceManager.GetString("GetPATText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication failed: {0}&quot;.
         /// </summary>
         public static string GitAuthFailed {
@@ -689,6 +698,24 @@ namespace CSVEditor.Core.Properties {
         public static string GitDetachedHeadErrorMessage {
             get {
                 return ResourceManager.GetString("GitDetachedHeadErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How it works?&amp;#x0a;1. Generate a PAT using the link below.&amp;#x0a;2. Paste the token into the Password field.&amp;#x0a;3. Click &apos;GitHub Login&apos; to validate and fill in Username/Email.&amp;#x0a;4. This enables secure Git operations and sets your commit signature..
+        /// </summary>
+        public static string GitHubLoginGuideTooltip {
+            get {
+                return ResourceManager.GetString("GitHubLoginGuideTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub Login.
+        /// </summary>
+        public static string GitHubLoginText {
+            get {
+                return ResourceManager.GetString("GitHubLoginText", resourceCulture);
             }
         }
         
@@ -842,6 +869,24 @@ namespace CSVEditor.Core.Properties {
         public static string GitText {
             get {
                 return ResourceManager.GetString("GitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token does not match the entered username..
+        /// </summary>
+        public static string GitTokenNotMatchingUser {
+            get {
+                return ResourceManager.GetString("GitTokenNotMatchingUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validate token and fetch profile info from GitHub.
+        /// </summary>
+        public static string GitTokenValidationTooltip {
+            get {
+                return ResourceManager.GetString("GitTokenValidationTooltip", resourceCulture);
             }
         }
         
@@ -1071,6 +1116,15 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log into GitHub for git push automation -&gt;.
+        /// </summary>
+        public static string NotLoggedToGitInfoText {
+            get {
+                return ResourceManager.GetString("NotLoggedToGitInfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OKText {
@@ -1139,6 +1193,24 @@ namespace CSVEditor.Core.Properties {
         public static string PathNotValidRepositoryFormat {
             get {
                 return ResourceManager.GetString("PathNotValidRepositoryFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For GitHub/GitLab, use a Personal Access Token (PAT) instead of your password..
+        /// </summary>
+        public static string PATOverPasswordPrompt {
+            get {
+                return ResourceManager.GetString("PATOverPasswordPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter username..
+        /// </summary>
+        public static string PleaseEnterUserNamePrompt {
+            get {
+                return ResourceManager.GetString("PleaseEnterUserNamePrompt", resourceCulture);
             }
         }
         
@@ -1499,6 +1571,15 @@ namespace CSVEditor.Core.Properties {
         public static string UserNameText {
             get {
                 return ResourceManager.GetString("UserNameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Secure Token Storage (Windows Credential Manager.
+        /// </summary>
+        public static string UseSecureTokenStorageText {
+            get {
+                return ResourceManager.GetString("UseSecureTokenStorageText", resourceCulture);
             }
         }
         
