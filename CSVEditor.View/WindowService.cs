@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
-using CSVEditor.Core.Services;
 using CSVEditor.ViewModel;
 
 namespace CSVEditor.View
@@ -25,7 +24,7 @@ namespace CSVEditor.View
 
         public bool OpenGitSetupWindow()
         {
-            GitSetupWindow window = new(AppOptionsService.AppOptions.GitOptions)
+            GitSetupWindow window = new()
             {
                 Owner = Application.Current.MainWindow
             };

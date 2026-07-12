@@ -47,7 +47,7 @@ namespace CSVEditor.ViewModel
 
         public static Action<bool, bool> OnSaved;
         
-        private bool _disposed = false;
+        private bool _disposed;
 
         public SaveVM()
         {
@@ -160,14 +160,7 @@ namespace CSVEditor.ViewModel
 
         public void HandleOpenGitSetupWindow()
         {
-            EventManager.OnGitOptionsWindowClosed += HandleGitOptionsWindowClosed;
             EventManager.TriggerGitOptionsWindowRequested();
-        }
-
-        private void HandleGitOptionsWindowClosed()
-        {
-            RefreshGitOptionsVisibility();
-            EventManager.OnGitOptionsWindowClosed -= HandleGitOptionsWindowClosed;
         }
 
         private void RefreshGitOptionsVisibility()
@@ -181,8 +174,6 @@ namespace CSVEditor.ViewModel
         {
             if (_disposed)
                 return;
-
-            EventManager.OnGitOptionsWindowClosed -= HandleGitOptionsWindowClosed;
 
             if (EditorVM.AppOptions?.GitOptions != null)
             {

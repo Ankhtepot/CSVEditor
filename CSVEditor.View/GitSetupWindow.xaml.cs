@@ -14,33 +14,21 @@ namespace CSVEditor.View
     /// <summary>
     /// Interaction logic for GitSetupWindow.xaml
     /// </summary>
-    public partial class GitSetupWindow : Window, INotifyPropertyChanged
+    public partial class GitSetupWindow : Window
     {
-        private string _lastCheckedUsername;
         private string _validatedToken;
-        private GitOptions _gitOptions;
-
-        public GitOptions GitOptions
-        {
-            get => _gitOptions;
-            set
-            {
-                _gitOptions = value;
-                OnPropertyChanged();
-            }
-        }
+        
+        public GitOptions GitOptions => AppOptionsService.AppOptions.GitOptions;
 
         public bool Canceled { get; set; }
 
         // public GitSetupWindow(GitOptions gitOptions)
-        public GitSetupWindow(GitOptions gitOptions)
+        public GitSetupWindow()
         {
             InitializeComponent();
-
-            GitOptions = gitOptions;
+            
             DataContext = this;
             Canceled = true;
-            _lastCheckedUsername = null;
 
             if (GitOptions.UseToken)
             {
@@ -48,24 +36,25 @@ namespace CSVEditor.View
                 {
                     _validatedToken = CredentialService.GetToken(GitOptions.UserName);
                     PasswordBox.Password = _validatedToken ?? "";
-                    _lastCheckedUsername = GitOptions.UserName;
+                    NameTextBox.Text = GitOptions.UserName;
                 }
                 else
                 {
-                    FillPasswordForCurrentUser(force: true);
+                    FillPasswordForCurrentUser();
                 }
             }
             else
             {
                 PasswordBox.Password = GitOptions.Password;
             }
+            
+            NameTextBox.Text = GitOptions.UserName;
         }
 
         private async void GitHubLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string enteredUserName = GitOptions.UserName?.Trim();
+            string enteredUserName = NameTextBox.Text.Trim();
             string token = PasswordBox.Password;
-            GitOptions.UserName = enteredUserName;
 
             if (string.IsNullOrEmpty(enteredUserName))
             {
@@ -97,13 +86,13 @@ namespace CSVEditor.View
                     GitOptions.Email = user.Email;
                 }
                 GitOptions.Password = token;
+                GitOptions.UserName = enteredUserName;
                 GitOptions.IsAuthenticated = true;
                 if (GitOptions.UseToken)
                 {
                     CredentialService.SaveToken(GitOptions.UserName, token);
                 }
                 _validatedToken = token;
-                _lastCheckedUsername = GitOptions.UserName;
 
                 string msg = string.Format(T.GitAuthSuccessText, user.Login);
                 if (string.IsNullOrEmpty(user.Email))
@@ -115,7 +104,6 @@ namespace CSVEditor.View
             catch (Exception ex)
             {
                 GitOptions.IsAuthenticated = false;
-                GitOptions.Password = null;
                 _validatedToken = null;
 
                 string message = ex.Message;
@@ -130,7 +118,6 @@ namespace CSVEditor.View
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            EventManager.TriggerGitOptionsWindowClosed();
             Close();
         }
 
@@ -147,60 +134,42 @@ namespace CSVEditor.View
             {
                 GitOptions.Password = PasswordBox.Password;
             }
+            
+            GitOptions.UserName = NameTextBox.Text.Trim();
 
             AppOptionsService.SaveAppOptions();
 
             Canceled = false;
-
-            EventManager.TriggerGitOptionsWindowClosed();
 
             Close();
         }
 
         private void UserNameTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            FillPasswordForCurrentUser(force: true);
+            FillPasswordForCurrentUser();
         }
 
         private void UserNameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                FillPasswordForCurrentUser(force: true);
+                FillPasswordForCurrentUser();
                 e.Handled = true;
             }
         }
 
-        private void FillPasswordForCurrentUser(bool force = false)
+        private void FillPasswordForCurrentUser()
         {
             if (!GitOptions.UseToken)
                 return;
 
-            string username = GitOptions.UserName?.Trim() ?? "";
-
-            if (GitOptions.UserName != username)
-            {
-                GitOptions.UserName = username;
-            }
-
-            if (!force &&
-                string.Equals(username,
-                    _lastCheckedUsername,
-                    StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
-            _lastCheckedUsername = username;
-
-            MigrateLegacyToken(username);
+            string username = NameTextBox.Text.Trim() ?? "";
 
             string token = CredentialService.GetToken(username);
 
             if (!string.IsNullOrEmpty(token))
             {
                 PasswordBox.Password = token;
-                GitOptions.Password = token;
                 
                 // If it's the same token as already validated, keep authenticated status
                 if (token != _validatedToken)
@@ -212,7 +181,6 @@ namespace CSVEditor.View
             else
             {
                 PasswordBox.Password = "";
-                GitOptions.Password = "";
                 GitOptions.IsAuthenticated = false;
                 _validatedToken = null;
             }
@@ -228,28 +196,6 @@ namespace CSVEditor.View
                 GitOptions.IsAuthenticated = false;
                 _validatedToken = null;
             }
-        }
-        
-        private void MigrateLegacyToken(string username)
-        {
-            string token = CredentialService.GetToken(username);
-
-            if (!string.IsNullOrEmpty(token))
-                return;
-
-            string legacy = CredentialService.GetLegacyToken();
-
-            if (string.IsNullOrWhiteSpace(legacy))
-                return;
-
-            CredentialService.SaveToken(username, legacy);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)

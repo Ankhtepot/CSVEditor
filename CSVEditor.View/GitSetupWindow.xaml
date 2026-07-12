@@ -10,7 +10,9 @@
         Title="{x:Static p:Resources.GitSetupWindowTitle}" 
         Icon="Resources/Icons/github.ico"
         SizeToContent="WidthAndHeight"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance local:GitSetupWindow}"
+        >
 
     <Border Style="{StaticResource BaseBorderStyle}" 
             Background="{DynamicResource LightColorResource}"
@@ -53,7 +55,7 @@
                    HorizontalContentAlignment="Right"
                    Grid.Column="0"
                    Grid.Row="1"/>
-            <TextBox Text="{Binding GitOptions.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Name="NameTextBox"
                      Grid.Column="1"
                      Grid.Row="1"
                      FontSize="{StaticResource MiddleFontSize}"
@@ -105,7 +107,9 @@
                                             VerticalAlignment="Center"
                                             Foreground="Green"
                                             ToolTip="Authenticated"
-                                            Visibility="{Binding GitOptions.IsAuthenticated, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                            Visibility="{Binding GitOptions.IsAuthenticated, 
+                                            Converter={StaticResource BoolToVisibilityConverter}}"
+                                            />
                 <Grid Grid.Column="3" Background="Transparent" VerticalAlignment="Center"
                       ToolTip="{x:Static p:Resources.GitHubLoginGuideTooltip}">
                     <iconPacks:PackIconOcticons Kind="Question" 

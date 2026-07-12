@@ -24,7 +24,7 @@ namespace CSVEditor.Core.Services
             string normalizedUserName = NormalizeUserName(username);
             if (string.IsNullOrEmpty(normalizedUserName) || string.IsNullOrEmpty(token)) return;
 
-            using var cred = new Credential();
+            using Credential cred = new();
             cred.Target = GetTarget(normalizedUserName);
             cred.Password = token;
             cred.Type = CredentialType.Generic;
@@ -37,34 +37,11 @@ namespace CSVEditor.Core.Services
             string normalizedUserName = NormalizeUserName(username);
             if (string.IsNullOrEmpty(normalizedUserName)) return null;
 
-            using var cred = new Credential();
+            using Credential cred = new();
             cred.Target = GetTarget(normalizedUserName);
-            if (cred.Load())
-            {
-                return cred.Password;
-            }
-
-            string trimmedUserName = username.Trim();
-            if (!string.Equals(trimmedUserName, normalizedUserName, StringComparison.Ordinal))
-            {
-                using var legacyPerUserCred = new Credential();
-                legacyPerUserCred.Target = $"{CredentialName}_{trimmedUserName}";
-                if (legacyPerUserCred.Load())
-                {
-                    string token = legacyPerUserCred.Password;
-                    SaveToken(trimmedUserName, token);
-                    return token;
-                }
-            }
-
-            return null;
-        }
-
-        public static string GetLegacyToken()
-        {
-            using var cred = new Credential();
-            cred.Target = CredentialName;
-            return cred.Load() ? cred.Password : null;
+            return cred.Load() 
+                ? cred.Password 
+                : null;
         }
 
         public static void DeleteToken(string username)
@@ -72,7 +49,7 @@ namespace CSVEditor.Core.Services
             string normalizedUserName = NormalizeUserName(username);
             if (!string.IsNullOrEmpty(normalizedUserName))
             {
-                using var cred = new Credential();
+                using Credential cred = new();
                 cred.Target = GetTarget(normalizedUserName);
                 cred.Delete();
             }
@@ -82,13 +59,13 @@ namespace CSVEditor.Core.Services
                 string trimmedUserName = username.Trim();
                 if (!string.Equals(trimmedUserName, normalizedUserName, StringComparison.Ordinal))
                 {
-                    using var rawUserCred = new Credential();
+                    using Credential rawUserCred = new();
                     rawUserCred.Target = $"{CredentialName}_{trimmedUserName}";
                     rawUserCred.Delete();
                 }
             }
 
-            using (var cred = new Credential())
+            using (Credential cred = new())
             {
                 cred.Target = CredentialName;
                 cred.Delete();

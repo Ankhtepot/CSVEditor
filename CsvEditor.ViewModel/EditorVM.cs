@@ -32,7 +32,7 @@ namespace CSVEditor.ViewModel
 
         public IWindowService WindowService { get; set; }
 
-        public static AppOptions AppOptions;
+        public static AppOptions AppOptions => AppOptionsService.AppOptions;
 
         public string RootRepositoryPath
         {
@@ -163,7 +163,6 @@ namespace CSVEditor.ViewModel
 
         public EditorVM(IWindowService windowService)
         {
-            AppOptions = new AppOptions();
             WindowService = windowService;
             AsyncVM = new AsyncVM(this);
             GitVM = new GitVM(this);
@@ -429,6 +428,7 @@ namespace CSVEditor.ViewModel
             {
                 string errorMessage = string.Format(Resources.AppOptionsProcessingError, e.Message);
                 Console.WriteLine(errorMessage);
+                AppOptionsService.SetDefaultAppOptions();
             }
         }
 

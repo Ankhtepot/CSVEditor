@@ -66,12 +66,26 @@ namespace CSVEditor.ViewModel
             }
         }
 
-        public bool IsLoggedIn => EditorVM.AppOptions?.GitOptions?.IsAuthenticated ?? false;
+        public bool IsLoggedIn 
+        {
+            get => field;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(LoginTooltip));
+            }
+        }
 
-        public string LoginTooltip => IsLoggedIn
-            ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions.GitOptions.UserName,
-                EditorVM.AppOptions.GitOptions.Email)
-            : Resources.LogInHelpText;
+        public string LoginTooltip 
+        {
+            get => field;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
+        }
 
         public DelegateCommand OpenGitSetupCommand { get; set; }
         public DelegateCommand CommitRepositoryCommand { get; set; }
@@ -83,7 +97,6 @@ namespace CSVEditor.ViewModel
         public GitVM(EditorVM EditorVM)
         {
             WindowService = EditorVM.WindowService;
-            
             
             OpenGitSetupCommand = new DelegateCommand(OpenGitSetup);
             CommitRepositoryCommand = new DelegateCommand(CommitRepositoryWithSetup);
@@ -98,10 +111,21 @@ namespace CSVEditor.ViewModel
 
         public async Task InitializeAsync()
         {
-            if (IsLoggedIn)
+            if (AppOptionsService.AppOptions?.GitOptions?.IsAuthenticated == true)
             {
                 await GitService.VerifyGitHubLoginAsync();
+
+                SetLoginProperties();
             }
+        }
+
+        private void SetLoginProperties()
+        {
+            IsLoggedIn = EditorVM.AppOptions?.GitOptions?.IsAuthenticated ?? false;
+            LoginTooltip = IsLoggedIn
+                ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions?.GitOptions?.UserName,
+                    EditorVM.AppOptions?.GitOptions?.Email)
+                : Resources.LogInHelpText;
         }
 
         private void SubscribeToGitOptions()
@@ -120,8 +144,7 @@ namespace CSVEditor.ViewModel
                 or nameof(GitOptions.UserName)
                 or nameof(GitOptions.Email))
             {
-                OnPropertyChanged(nameof(IsLoggedIn));
-                OnPropertyChanged(nameof(LoginTooltip));
+                SetLoginProperties();
             }
         }
 
@@ -229,10 +252,6 @@ namespace CSVEditor.ViewModel
         private void ProcessRepositoryOnSave(bool commitOnSave, bool pushOnSave)
         {
             if (!commitOnSave) return;
-            // if (!OpenGitSetupWindow())
-            // {
-            //     return;
-            // }
 
             bool commited = CommitRepository();
 

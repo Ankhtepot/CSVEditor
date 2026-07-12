@@ -9,56 +9,98 @@ namespace CSVEditor.Core.HelperClasses
         private const string DefaultCommitMessage = "<change in CSV file>";
         private const string DefaultRemoteName = "origin";
 
-        private string commitMessage;
         public string CommitMessage
         {
-            get => commitMessage;
-            set { commitMessage = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private string userName;
         public string UserName
         {
-            get => userName;
-            set { userName = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private string email;
         public string Email
         {
-            get => email;
-            set { email = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
-        
+
         [JsonIgnore]
         public string Password { get; set; }
 
-        private bool useToken;
         public bool UseToken
         {
-            get => useToken;
-            set { useToken = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private bool isAuthenticated;
         public bool IsAuthenticated
         {
-            get => isAuthenticated;
-            set { isAuthenticated = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private string remoteRepositoryLink;
         public string RemoteRepositoryLink
         {
-            get => remoteRepositoryLink;
-            set { remoteRepositoryLink = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private string remoteName;
         public string RemoteName
         {
-            get => remoteName;
-            set { remoteName = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                if (value == field)
+                    return;
+                
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
         public GitOptions()

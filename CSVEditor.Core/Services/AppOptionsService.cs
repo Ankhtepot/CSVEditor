@@ -45,4 +45,10 @@ public static class AppOptionsService
             throw new InvalidOperationException(errorMessage);
         }
     }
+
+    public static void SetDefaultAppOptions()
+    {
+        AppOptions = new AppOptions();
+        SaveAppOptions();
+    }
 }
