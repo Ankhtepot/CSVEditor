@@ -8,7 +8,6 @@ using System.Windows;
 using CSVEditor.Core.Services;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Properties;
-using EventManager = CSVEditor.Core.Services.EventManager;
 
 namespace CSVEditor.ViewModel
 {
@@ -103,7 +102,6 @@ namespace CSVEditor.ViewModel
             PushRepositoryCommand = new DelegateCommand(PushRepository);
             PullRepositoryCommand = new DelegateCommand(PullRepository);
 
-            EventManager.OnGitOptionsWindowRequested += OpenGitSetup;
             SaveVM.OnSaved += ProcessRepositoryOnSave;
 
             SubscribeToGitOptions();
@@ -169,12 +167,7 @@ namespace CSVEditor.ViewModel
 
             bool accepted = WindowService?.OpenGitSetupWindow() ?? false;
 
-            if (!accepted)
-                return false;
-
-            AppOptionsService.SaveAppOptions();
-
-            return true;
+            return accepted;
         }
 
         public bool? OpenGitPushWindow()
@@ -278,7 +271,6 @@ namespace CSVEditor.ViewModel
             if (_disposed)
                 return;
             
-            EventManager.OnGitOptionsWindowRequested -= OpenGitSetup;
             SaveVM.OnSaved -= ProcessRepositoryOnSave;
 
             if (EditorVM.AppOptions?.GitOptions != null)

@@ -2,11 +2,8 @@ using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Services;
 using Octokit;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using EventManager = CSVEditor.Core.Services.EventManager;
 using T = CSVEditor.Core.Properties.Resources;
 
 namespace CSVEditor.View
@@ -163,7 +160,7 @@ namespace CSVEditor.View
             if (!GitOptions.UseToken)
                 return;
 
-            string username = NameTextBox.Text.Trim() ?? "";
+            string username = NameTextBox.Text.Trim();
 
             string token = CredentialService.GetToken(username);
 

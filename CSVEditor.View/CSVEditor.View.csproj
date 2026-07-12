@@ -5,6 +5,7 @@
     <TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>csv_icon.ico</ApplicationIcon>
+    <AssemblyName>CSVEditor</AssemblyName>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

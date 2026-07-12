@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using EventManager = CSVEditor.Core.Services.EventManager;
 
 namespace CSVEditor.ViewModel
 {
@@ -156,11 +155,6 @@ namespace CSVEditor.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void HandleOpenGitSetupWindow()
-        {
-            EventManager.TriggerGitOptionsWindowRequested();
         }
 
         private void RefreshGitOptionsVisibility()
