@@ -32,7 +32,7 @@ namespace CSVEditor.ViewModel
 
         public IWindowService WindowService { get; set; }
 
-        public static AppOptions AppOptions => AppOptionsService.AppOptions;
+        private static AppOptions AppOptions => AppOptionsService.AppOptions;
 
         public string RootRepositoryPath
         {
@@ -405,8 +405,12 @@ namespace CSVEditor.ViewModel
 
                 AppOptions loadedOptions = AppOptionsService.LoadAppOptions();
 
-                if (loadedOptions == null) 
-                    return;
+                if (loadedOptions == null)
+                {
+                    Console.WriteLine(Resources.LoadOptionsErrorCreatingNewMessage);
+                    loadedOptions = new AppOptions();
+                    AppOptionsService.SaveAppOptions();
+                }
             
                 RootRepositoryPath = loadedOptions.LastRootPath;
 
@@ -420,7 +424,7 @@ namespace CSVEditor.ViewModel
                         .ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
                 AppOptions.VisualConfig = loadedOptions.VisualConfig;
                 AppOptions.SaveOptions = loadedOptions.SaveOptions;
-                AppOptions.GitOptions = loadedOptions.GitOptions;
+                AppOptionsService.SetGitOptions(loadedOptions.GitOptions);
             
                 await VerifyGitHubLoginAsync();
             }

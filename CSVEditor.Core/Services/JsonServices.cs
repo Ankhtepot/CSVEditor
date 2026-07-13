@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -17,11 +17,11 @@ namespace CSVEditor.Core.Services
             try
             {
                 File.WriteAllText(fullPath, jsonedSource);
-                Console.WriteLine(string.Format(Resources.SavedToFormat, referencedName, fullPath));
+                Console.WriteLine(Resources.SavedToFormat, referencedName, fullPath);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorSavingFormat, referencedName, e.Message));
+                Console.WriteLine(Resources.ErrorSavingFormat, referencedName, e.Message);
                 return false;
             }
 
@@ -36,11 +36,12 @@ namespace CSVEditor.Core.Services
             {
                 var loadedJson = File.ReadAllText(fullPath);
                 deserializedJson = JsonSerializer.Deserialize<T>(loadedJson);
-                Console.WriteLine(string.Format(Resources.LoadedFromFormat, referencedName, fullPath));
+                Console.WriteLine(Resources.LoadedFromFormat, referencedName, fullPath);
             }
             catch (Exception e)
             {
-                Console.WriteLine(string.Format(Resources.ErrorLoadingFormat, referencedName, e.Message));
+                Console.WriteLine(Resources.ErrorLoadingFormat, referencedName, e.Message);
+                throw new InvalidOperationException();
             }
 
             return deserializedJson;

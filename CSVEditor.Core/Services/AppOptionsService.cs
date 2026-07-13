@@ -51,4 +51,16 @@ public static class AppOptionsService
         AppOptions = new AppOptions();
         SaveAppOptions();
     }
+
+    public static void SetGitOptions(GitOptions sourceGitOptions)
+    {
+        AppOptions.GitOptions.CommitMessage = sourceGitOptions.CommitMessage;
+        AppOptions.GitOptions.UserName = sourceGitOptions.UserName;
+        AppOptions.GitOptions.Email = sourceGitOptions.Email;
+        AppOptions.GitOptions.Password = sourceGitOptions.Password;
+        AppOptions.GitOptions.UseToken = sourceGitOptions.UseToken;
+        AppOptions.GitOptions.RemoteRepositoryLink = sourceGitOptions.RemoteRepositoryLink;
+        AppOptions.GitOptions.RemoteName = sourceGitOptions.RemoteName;
+        AppOptions.GitOptions.IsAuthenticated = sourceGitOptions.IsAuthenticated;
+    }
 }

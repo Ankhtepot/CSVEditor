@@ -40,6 +40,6 @@ namespace CSVEditor.Core.HelperClasses
         public static string WORKING_WORK_STATUS => Resources.WorkingWorkStatus;
         public const string APP_OPTIONS_FILE_NAME = "options.json";
         public const string CSV_CONFIGURATIONS_FILE_NAME = "csv_conf.json";
-        public const string CONFIGURATION_FOLDER_NAME = "config";
+        public const string CONFIGURATION_FOLDER_NAME = "CSVEditor";
     }
 }

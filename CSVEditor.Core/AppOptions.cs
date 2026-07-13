@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using System.Collections.Generic;
 
 namespace CSVEditor.Core

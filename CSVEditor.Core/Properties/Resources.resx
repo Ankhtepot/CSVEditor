@@ -497,7 +497,7 @@ Do you want to overwrite this file?</value>
     <value>Tip: For GitHub, you must use a Personal Access Token (PAT). Regular passwords are no longer supported for API access.</value>
   </data>
   <data name="GitAuthFailed" xml:space="preserve">
-    <value>Authentication failed: {0}"</value>
+    <value>Authentication failed: {0}</value>
   </data>
   <data name="GitStatusText" xml:space="preserve">
     <value>Git Status</value>
@@ -573,5 +573,14 @@ Do you want to overwrite this file?</value>
   </data>
   <data name="PleaseEnterUserNamePrompt" xml:space="preserve">
     <value>Please enter username.</value>
+  </data>
+  <data name="FixErrorsPrompt" xml:space="preserve">
+    <value>Please fix the following errors before proceeding:\n\n</value>
+  </data>
+  <data name="GitLoginEntriesFalsy" xml:space="preserve">
+    <value>Login data ar not correct</value>
+  </data>
+  <data name="LoadOptionsErrorCreatingNewMessage" xml:space="preserve">
+    <value>Options file not found or invalid. Creating new default options.</value>
   </data>
 </root>

@@ -86,7 +86,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
         protected override void _Completed(object sender, RunWorkerCompletedEventArgs e)
         {
             base._Completed(sender, e);
-            EditorVM.AppOptions.LastCsvFilesStructure = VM.CsvFilesStructure.ToList();
+            AppOptionsService.AppOptions.LastCsvFilesStructure = VM.CsvFilesStructure.ToList();
         }
     }
 }

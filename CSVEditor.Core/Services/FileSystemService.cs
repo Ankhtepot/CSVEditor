@@ -15,7 +15,7 @@ namespace CSVEditor.Core.Services
     {
         private static string _baseAppPath;
         public static string BaseAppPath => _baseAppPath 
-            ??= Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName);
+            ??= Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         private static string _configurationFolderPath;
         public static string ConfigurationFolderPath => _configurationFolderPath
@@ -344,10 +344,10 @@ namespace CSVEditor.Core.Services
 
         public static void ValidateConfigDirectory(string baseAppPath, string configurationFolderName)
         {
-            if (!Directory.Exists(Path.Combine(baseAppPath, configurationFolderName)))
+            if (!Directory.Exists(ConfigurationFolderPath))
             {
                 Console.WriteLine(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName, baseAppPath);
-                Directory.CreateDirectory(Path.Combine(baseAppPath, configurationFolderName));
+                Directory.CreateDirectory(ConfigurationFolderPath);
             }
         }
 

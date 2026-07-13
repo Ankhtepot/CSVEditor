@@ -2,6 +2,7 @@ using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Services;
 using Octokit;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using T = CSVEditor.Core.Properties.Resources;
@@ -19,7 +20,8 @@ namespace CSVEditor.View
 
         public bool Canceled { get; set; }
 
-        // public GitSetupWindow(GitOptions gitOptions)
+        private readonly GitOptions _gitOptionsOnOpen;
+        
         public GitSetupWindow()
         {
             InitializeComponent();
@@ -46,24 +48,29 @@ namespace CSVEditor.View
             }
             
             NameTextBox.Text = GitOptions.UserName;
+            
+            _gitOptionsOnOpen = new GitOptions(GitOptions);
         }
 
-        private async void GitHubLoginButton_Click(object sender, RoutedEventArgs e)
+        private void GitHubLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string enteredUserName = NameTextBox.Text.Trim();
-            string token = PasswordBox.Password;
-
-            if (string.IsNullOrEmpty(enteredUserName))
+            _ = AsyncService.RunAsync(async () =>
             {
-                MessageBox.Show(T.PleaseEnterUserNamePrompt);
-                return;
-            }
+                await ProcessGitHubLoginButton_Click_Async();
+            });
+        }
 
-            if (string.IsNullOrEmpty(token))
-            {
-                MessageBox.Show(T.EnterPATPrompt);
+        private async Task ProcessGitHubLoginButton_Click_Async(
+            string userNameOverride = null,
+            string tokenOverride = null,
+            bool forceIsAuthenticatedOnChange = false
+            )
+        {
+            string enteredUserName = string.IsNullOrEmpty(userNameOverride) ? NameTextBox.Text.Trim() : userNameOverride;
+            string token = string.IsNullOrEmpty(tokenOverride) ? PasswordBox.Password : tokenOverride;
+
+            if (AreLoginEntriesFalsy(enteredUserName, token))
                 return;
-            }
 
             try
             {
@@ -78,62 +85,122 @@ namespace CSVEditor.View
                     throw new InvalidOperationException(T.GitTokenNotMatchingUser);
                 }
 
-                if (!string.IsNullOrEmpty(user.Email))
-                {
-                    GitOptions.Email = user.Email;
-                }
-                GitOptions.Password = token;
-                GitOptions.UserName = enteredUserName;
-                GitOptions.IsAuthenticated = true;
-                if (GitOptions.UseToken)
-                {
-                    CredentialService.SaveToken(GitOptions.UserName, token);
-                }
-                _validatedToken = token;
-
-                string msg = string.Format(T.GitAuthSuccessText, user.Login);
-                if (string.IsNullOrEmpty(user.Email))
-                {
-                    msg += $"\n\n{T.GitCouldntFetchEmailText}";
-                }
-                MessageBox.Show(msg);
+                ProcessLoginSuccess(user, token, enteredUserName, forceIsAuthenticatedOnChange);
             }
             catch (Exception ex)
             {
-                GitOptions.IsAuthenticated = false;
-                _validatedToken = null;
-
-                string message = ex.Message;
-                if (ex is AuthorizationException)
-                {
-                    message += $"\n\n{T.GitPATTipText}";
-                }
-
-                MessageBox.Show(string.Format(T.GitAuthFailed, message));
+                ProcessLogInFailure(ex);
             }
+        }
+
+        private static bool AreLoginEntriesFalsy(string enteredUserName, string token)
+        {
+            string errorMessage = T.FixErrorsPrompt;
+            bool hasErrors = false;
+
+            if (string.IsNullOrEmpty(enteredUserName))
+            {
+                errorMessage += T.PleaseEnterUserNamePrompt + "\n";
+                hasErrors = true;
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                errorMessage += T.EnterPATPrompt;
+                hasErrors = true;
+            }
+
+            if (!hasErrors)
+            {
+                return false;
+            }
+
+            MessageBoxHelper.ShowProcessErrorBox(T.GitLoginEntriesFalsy, errorMessage);
+            return true;
+        }
+
+        private void ProcessLoginSuccess(
+            User user,
+            string token,
+            string enteredUserName,
+            bool forceIsAuthenticatedOnChange = false
+            )
+        {
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                GitOptions.Email = user.Email;
+            }
+            GitOptions.Password = token;
+            GitOptions.UserName = enteredUserName;
+            GitOptions.IsAuthenticated = true;
+            
+            if (forceIsAuthenticatedOnChange)
+            {
+                AppOptionsService.AppOptions.GitOptions.OnPropertyChanged(nameof(GitOptions.IsAuthenticated));
+            }
+
+            if (GitOptions.UseToken)
+            {
+                CredentialService.SaveToken(GitOptions.UserName, token);
+            }
+            _validatedToken = token;
+
+            string msg = string.Format(T.GitAuthSuccessText, user.Login);
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                msg += $"\n\n{T.GitCouldntFetchEmailText}";
+            }
+            MessageBox.Show(msg);
+        }
+
+        private void ProcessLogInFailure(Exception ex)
+        {
+            AppOptionsService.AppOptions.GitOptions.IsAuthenticated = false;
+            _validatedToken = null;
+
+            string message = ex.Message;
+            if (ex is AuthorizationException)
+            {
+                message += $"\n\n{T.GitPATTipText}";
+            }
+
+            MessageBox.Show(string.Format(T.GitAuthFailed, message));
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            _ = AsyncService.RunAsync(async () =>
+            {
+                await ProcessCancelButton_Click_Async();
+            });
+        }
+
+        private async Task ProcessCancelButton_Click_Async()
+        {
+            // Revert conditions:
+            // If user changed login and is authenticated with token -> relog to previous user, restore the rest
+            // If user did not change the login -> restore all previous values
+            // If user changed login and is not authenticated with token -> relog previous user, restore all previous values
+            bool userChangedLogin = !string.Equals(GitOptions.UserName, _gitOptionsOnOpen.UserName, StringComparison.OrdinalIgnoreCase);
+            bool switchedToAnotherAuthenticatedUser = userChangedLogin && GitOptions.IsAuthenticated;
+            bool userLoggedOffAuthenticatedUser = _gitOptionsOnOpen.IsAuthenticated && !GitOptions.IsAuthenticated;
+            
+            RestoreGitOptionsToOnOpenState();
+            if (userLoggedOffAuthenticatedUser || switchedToAnotherAuthenticatedUser)
+            {
+                await ProcessGitHubLoginButton_Click_Async(GitOptions.UserName, GitOptions.Password, true);
+            }
+
             Close();
+        }
+
+        private void RestoreGitOptionsToOnOpenState()
+        {
+            AppOptionsService.SetGitOptions(_gitOptionsOnOpen);
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GitOptions.UseToken)
-            {
-                if (!GitOptions.IsAuthenticated)
-                {
-                    GitOptions.Password = null;
-                }
-            }
-            else
-            {
-                GitOptions.Password = PasswordBox.Password;
-            }
-            
-            GitOptions.UserName = NameTextBox.Text.Trim();
-
             AppOptionsService.SaveAppOptions();
 
             Canceled = false;
@@ -178,18 +245,6 @@ namespace CSVEditor.View
             else
             {
                 PasswordBox.Password = "";
-                GitOptions.IsAuthenticated = false;
-                _validatedToken = null;
-            }
-        }
-
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            string password = PasswordBox.Password;
-            GitOptions.Password = password;
-
-            if (GitOptions.IsAuthenticated && password != _validatedToken)
-            {
                 GitOptions.IsAuthenticated = false;
                 _validatedToken = null;
             }

@@ -61,10 +61,10 @@ namespace CSVEditor.ViewModel
 
         private void SubscribeToGitOptions()
         {
-            if (EditorVM.AppOptions?.GitOptions != null)
+            if (AppOptionsService.AppOptions?.GitOptions != null)
             {
-                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
-                EditorVM.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
             }
         }
 
@@ -78,8 +78,8 @@ namespace CSVEditor.ViewModel
 
         public static async void SaveCurrentCsvFile(EditorVM context, IWindowService windowService)
         {
-            SaveOptions saveOptions = EditorVM.AppOptions.SaveOptions.RememberSetting
-                ? EditorVM.AppOptions.SaveOptions
+            SaveOptions saveOptions = AppOptionsService.AppOptions.SaveOptions.RememberSetting
+                ? AppOptionsService.AppOptions.SaveOptions
                 : new SaveOptions();
 
             string csvText = await context.AsyncVM.CsvFileToTextTask(context.SelectedCsvFile);
@@ -87,7 +87,7 @@ namespace CSVEditor.ViewModel
             SaveOptions saveWindowResult = windowService.OpenSaveWindow(saveOptions, csvText, context.SelectedCsvFile.AbsPath);
             if (saveWindowResult != null)
             {
-                EditorVM.AppOptions.SaveOptions = saveWindowResult;
+                AppOptionsService.AppOptions.SaveOptions = saveWindowResult;
                 OnSaved?.Invoke(saveWindowResult.CommitOnSave, saveWindowResult.PushOnSave);
                 context.IsFileEdited = false;
             }
@@ -169,9 +169,9 @@ namespace CSVEditor.ViewModel
             if (_disposed)
                 return;
 
-            if (EditorVM.AppOptions?.GitOptions != null)
+            if (AppOptionsService.AppOptions?.GitOptions != null)
             {
-                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
             }
 
             _disposed = true;

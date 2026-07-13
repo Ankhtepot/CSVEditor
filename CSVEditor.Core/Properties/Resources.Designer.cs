@@ -639,6 +639,15 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fix the following errors before proceeding:\n\n.
+        /// </summary>
+        public static string FixErrorsPrompt {
+            get {
+                return ResourceManager.GetString("FixErrorsPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder Selection.
         /// </summary>
         public static string FolderSelectionText {
@@ -657,7 +666,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication failed: {0}&quot;.
+        ///   Looks up a localized string similar to Authentication failed: {0}.
         /// </summary>
         public static string GitAuthFailed {
             get {
@@ -716,6 +725,15 @@ namespace CSVEditor.Core.Properties {
         public static string GitHubLoginText {
             get {
                 return ResourceManager.GetString("GitHubLoginText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login data ar not correct.
+        /// </summary>
+        public static string GitLoginEntriesFalsy {
+            get {
+                return ResourceManager.GetString("GitLoginEntriesFalsy", resourceCulture);
             }
         }
         
@@ -995,6 +1013,15 @@ namespace CSVEditor.Core.Properties {
         public static string LoadedFromFormat {
             get {
                 return ResourceManager.GetString("LoadedFromFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options file not found or invalid. Creating new default options..
+        /// </summary>
+        public static string LoadOptionsErrorCreatingNewMessage {
+            get {
+                return ResourceManager.GetString("LoadOptionsErrorCreatingNewMessage", resourceCulture);
             }
         }
         

@@ -103,8 +103,6 @@ namespace CSVEditor.ViewModel
             PullRepositoryCommand = new DelegateCommand(PullRepository);
 
             SaveVM.OnSaved += ProcessRepositoryOnSave;
-
-            SubscribeToGitOptions();
         }
 
         public async Task InitializeAsync()
@@ -112,27 +110,28 @@ namespace CSVEditor.ViewModel
             if (AppOptionsService.AppOptions?.GitOptions?.IsAuthenticated == true)
             {
                 await GitService.VerifyGitHubLoginAsync();
-
+                
+                SubscribeToGitOptions();
                 SetLoginProperties();
             }
         }
 
         private void SetLoginProperties()
         {
-            IsLoggedIn = EditorVM.AppOptions?.GitOptions?.IsAuthenticated ?? false;
+            IsLoggedIn = AppOptionsService.AppOptions?.GitOptions?.IsAuthenticated ?? false;
             LoginTooltip = IsLoggedIn
-                ? string.Format(Resources.LoggedInAsFormat, EditorVM.AppOptions?.GitOptions?.UserName,
-                    EditorVM.AppOptions?.GitOptions?.Email)
+                ? string.Format(Resources.LoggedInAsFormat, AppOptionsService.AppOptions?.GitOptions?.UserName,
+                    AppOptionsService.AppOptions?.GitOptions?.Email)
                 : Resources.LogInHelpText;
         }
 
         private void SubscribeToGitOptions()
         {
-            if (EditorVM.AppOptions?.GitOptions != null)
+            if (AppOptionsService.AppOptions?.GitOptions != null)
             {
-                EditorVM.AppOptions.GitOptions.PropertyChanged -=
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged -=
                     GitOptions_PropertyChanged; // Unsubscribe first to avoid multiple subscriptions
-                EditorVM.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged += GitOptions_PropertyChanged;
             }
         }
 
@@ -148,7 +147,6 @@ namespace CSVEditor.ViewModel
 
         public void SetGitInfo(string rootRepositoryPath)
         {
-            SubscribeToGitOptions();
             IsGitRepo = FileSystemService.IsDirectoryWithGitRepository(rootRepositoryPath);
             if (IsGitRepo)
             {
@@ -163,8 +161,6 @@ namespace CSVEditor.ViewModel
 
         private bool OpenGitSetupWindow()
         {
-            SubscribeToGitOptions();
-
             bool accepted = WindowService?.OpenGitSetupWindow() ?? false;
 
             return accepted;
@@ -189,7 +185,7 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                GitService.Pull(EditorVM.AppOptions.GitOptions);
+                GitService.Pull(AppOptionsService.AppOptions.GitOptions);
             }
             catch (Exception e)
             {
@@ -211,7 +207,7 @@ namespace CSVEditor.ViewModel
         {
             try
             {
-                GitOptions gitOpts = EditorVM.AppOptions.GitOptions;
+                GitOptions gitOpts = AppOptionsService.AppOptions.GitOptions;
                 GitService.Push(gitOpts);
                 MessageBox.Show(string.Format(Resources.GitRepositoryPushedMessage, gitOpts.RemoteName));
                 IsRepositoryPushed = true;
@@ -240,7 +236,7 @@ namespace CSVEditor.ViewModel
             CommitRepository();
         }
 
-        private bool CommitRepository() => GitService.CommitRepository(EditorVM.AppOptions.GitOptions);
+        private bool CommitRepository() => GitService.CommitRepository(AppOptionsService.AppOptions.GitOptions);
 
         private void ProcessRepositoryOnSave(bool commitOnSave, bool pushOnSave)
         {
@@ -273,9 +269,9 @@ namespace CSVEditor.ViewModel
             
             SaveVM.OnSaved -= ProcessRepositoryOnSave;
 
-            if (EditorVM.AppOptions?.GitOptions != null)
+            if (AppOptionsService.AppOptions?.GitOptions != null)
             {
-                EditorVM.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
+                AppOptionsService.AppOptions.GitOptions.PropertyChanged -= GitOptions_PropertyChanged;
             }
             
             _disposed = true;

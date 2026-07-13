@@ -197,7 +197,7 @@ public static class GitService
     /// </summary>
     public static async Task<bool?> VerifyGitHubLoginAsync()
     {
-        GitOptions gitOpts = AppOptionsService.LoadAppOptions().GitOptions;
+        GitOptions gitOpts = AppOptionsService.AppOptions?.GitOptions;
         if (gitOpts is not {IsAuthenticated: true}) return null;
 
         string token = gitOpts.UseToken
@@ -212,6 +212,7 @@ public static class GitService
                 Credentials = new Credentials(token)
             };
             await client.User.Current();
+            AppOptionsService.AppOptions.GitOptions.Password = token;
             return true;
         }
         catch (AuthorizationException)

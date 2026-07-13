@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
         mc:Ignorable="d" 
@@ -11,6 +10,7 @@
         Icon="Resources/Icons/github.ico"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
+        xmlns:local="clr-namespace:CSVEditor.View"
         d:DataContext="{d:DesignInstance local:GitSetupWindow}"
         >
 
@@ -92,7 +92,6 @@
                 <PasswordBox x:Name="PasswordBox"
                              FontSize="{StaticResource MiddleFontSize}"
                              Height="22" VerticalContentAlignment="Center"
-                             PasswordChanged="PasswordBox_PasswordChanged"
                              ToolTip="{x:Static p:Resources.PATOverPasswordPrompt}"/>
                 <Button x:Name="GitHubLoginButton" 
                         Grid.Column="1"

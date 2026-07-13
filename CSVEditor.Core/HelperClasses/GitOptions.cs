@@ -110,10 +110,17 @@ namespace CSVEditor.Core.HelperClasses
             Email = "<Email>";
             Password = "";
             UseToken = true;
+            IsAuthenticated = false;
             RemoteRepositoryLink = "<Remote Repository Link>";
             RemoteName = DefaultRemoteName;
         }
-
+        
+        /// <summary>
+        /// Creates a new instance of GitOptions by copying the values from the provided source
+        /// instance (DeppCopy unless somo object is added later).
+        /// If the source is null, it initializes the properties with default values.
+        /// </summary>
+        /// <param name="source"></param>
         public GitOptions(GitOptions source)
         {
             if (source == null)
@@ -141,7 +148,7 @@ namespace CSVEditor.Core.HelperClasses
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

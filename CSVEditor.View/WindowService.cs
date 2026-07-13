@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Interfaces;
+using CSVEditor.Core.Services;
 using CSVEditor.ViewModel;
 
 namespace CSVEditor.View
@@ -36,7 +37,7 @@ namespace CSVEditor.View
 
         public bool OpenGitPushWindow()
         {
-            GitPushWindow window = new(EditorVM.AppOptions.GitOptions);
+            GitPushWindow window = new(AppOptionsService.AppOptions.GitOptions);
             window.ShowDialog();
 
             return !window.Canceled;
