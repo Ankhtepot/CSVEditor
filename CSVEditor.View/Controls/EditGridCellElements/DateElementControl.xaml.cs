@@ -1,4 +1,4 @@
-using Prism.Commands;
+﻿using Prism.Commands;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,19 +12,19 @@ namespace CSVEditor.View.Controls.DataCellElements
     {
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(DateElementControl), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(DateElementControl), new PropertyMetadata(""));
 
         public string DateFormat
         {
-            get { return (string)GetValue(DateFormatProperty); }
-            set { SetValue(DateFormatProperty, value); }
+            get => (string)GetValue(DateFormatProperty);
+            set => SetValue(DateFormatProperty, value);
         }
         public static readonly DependencyProperty DateFormatProperty =
-            DependencyProperty.Register("DateFormat", typeof(string), typeof(DateElementControl), new PropertyMetadata(""));       
+            DependencyProperty.Register(nameof(DateFormat), typeof(string), typeof(DateElementControl), new PropertyMetadata(""));       
 
         public DelegateCommand GenerateDateFromNowCommand { get; set; }
 
@@ -51,8 +51,8 @@ namespace CSVEditor.View.Controls.DataCellElements
 
         private static void DateFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var control = (DateElementControl)d;
-            var newText = (string)e.NewValue;
+            DateElementControl control = (DateElementControl)d;
+            string newText = (string)e.NewValue;
 
             if (control == null)
             {
@@ -67,7 +67,7 @@ namespace CSVEditor.View.Controls.DataCellElements
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            var newDate = (DateTime)e.AddedItems[0];
+            DateTime newDate = e.AddedItems.Count > 0 ? (DateTime)e.AddedItems[0]! : default;
             GenerateDate(newDate);
         }
     }

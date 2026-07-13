@@ -269,7 +269,15 @@ namespace CSVEditor.Core.Services
                 ? new Uri(path) 
                 : ResourceHelper.LoadBitmapUriSourceFromResource(Constants.IMAGE_NOT_AVAILABLE_APP_PATH);
 
-            newImage.EndInit();
+            try
+            {
+                newImage.EndInit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(Resources.CouldNotFindImagePathError, e);
+                return null;
+            }
 
             return newImage;
         }

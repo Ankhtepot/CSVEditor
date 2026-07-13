@@ -331,6 +331,15 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find neither image file on disk or implicit placeholder path. Error: {0}.
+        /// </summary>
+        public static string CouldNotFindImagePathError {
+            get {
+                return ResourceManager.GetString("CouldNotFindImagePathError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating new {0} directory in {1}.
         /// </summary>
         public static string CreatingNewDirectoryInDirectoryFormat {

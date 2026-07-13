@@ -14,11 +14,11 @@ namespace CSVEditor.View.Controls
 
         public int SelectedLineIndex
         {
-            get { return (int)GetValue(SelectedLineIndexProperty); }
-            set { SetValue(SelectedLineIndexProperty, value); }
+            get => (int)GetValue(SelectedLineIndexProperty);
+            set => SetValue(SelectedLineIndexProperty, value);
         }
         public static readonly DependencyProperty SelectedLineIndexProperty =
-            DependencyProperty.Register("SelectedLineIndex", typeof(int), typeof(LineEditControl), new PropertyMetadata(0, SelectedLineIndexChanged));
+            DependencyProperty.Register(nameof(SelectedLineIndex), typeof(int), typeof(LineEditControl), new PropertyMetadata(0, SelectedLineIndexChanged));
 
         public LineEditControl()
         {
@@ -27,10 +27,10 @@ namespace CSVEditor.View.Controls
 
         private static void SelectedLineIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var control = (LineEditControl)d;
+            LineEditControl control = (LineEditControl)d;
             control.TopContainer.Children.Clear();
 
-            if (control == null || !control.IsVisible)
+            if (!control.IsVisible)
             {
                 return;
             }
@@ -50,14 +50,14 @@ namespace CSVEditor.View.Controls
 
         private static void BuildGrid(Grid topContainer, ResourceDictionary resources)
         {
-            var Context = topContainer.DataContext as EditorVM;
+            EditorVM context = topContainer.DataContext as EditorVM;
             topContainer.Children.Clear();
 
             VM = new EditGridControlViewModel(
                resources,
-               Context);
+               context);
 
-            Console.WriteLine($@"LineEditControl, building new Grid for Index =  {Context.SelectedItemIndex}.");
+            Console.WriteLine($@"LineEditControl, building new Grid for Index =  {context?.SelectedItemIndex}.");
             
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }

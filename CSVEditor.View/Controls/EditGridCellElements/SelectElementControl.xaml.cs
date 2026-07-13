@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +17,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
             set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(SelectElementControl), new PropertyMetadata("", TextChanged));        
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(SelectElementControl), new PropertyMetadata("", TextChanged));        
 
         public List<string> ComboBoxSource
         {
@@ -25,7 +25,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
             set => SetValue(ComboBoxSourceProperty, value);
         }
         public static readonly DependencyProperty ComboBoxSourceProperty =
-            DependencyProperty.Register("ComboBoxSource", typeof(List<string>), typeof(SelectElementControl), new PropertyMetadata(new List<string>()));
+            DependencyProperty.Register(nameof(ComboBoxSource), typeof(List<string>), typeof(SelectElementControl), new PropertyMetadata(new List<string>()));
 
         public Action OnEdited;
 

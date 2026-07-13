@@ -583,4 +583,7 @@ Do you want to overwrite this file?</value>
   <data name="LoadOptionsErrorCreatingNewMessage" xml:space="preserve">
     <value>Options file not found or invalid. Creating new default options.</value>
   </data>
+  <data name="CouldNotFindImagePathError" xml:space="preserve">
+    <value>Could not find neither image file on disk or implicit placeholder path. Error: {0}</value>
+  </data>
 </root>

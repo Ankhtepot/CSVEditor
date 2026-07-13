@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -24,7 +24,7 @@ namespace CSVEditor.View.Controls
             set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(""));
 
         public CornerRadius CornerRadius
         {
@@ -32,7 +32,7 @@ namespace CSVEditor.View.Controls
             set => SetValue(CornerRadiusProperty, value);
         }
         public static readonly DependencyProperty CornerRadiusProperty =
-            DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(HeaderWithBorderControl), new PropertyMetadata(new CornerRadius(5)));
+            DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(HeaderWithBorderControl), new PropertyMetadata(new CornerRadius(5)));
 
         public Thickness TextPadding
         {
@@ -40,7 +40,7 @@ namespace CSVEditor.View.Controls
             set => SetValue(TextPaddingProperty, value);
         }
         public static readonly DependencyProperty TextPaddingProperty =
-            DependencyProperty.Register("TextPadding", typeof(Thickness), typeof(HeaderWithBorderControl), new PropertyMetadata(new Thickness(5)));
+            DependencyProperty.Register(nameof(TextPadding), typeof(Thickness), typeof(HeaderWithBorderControl), new PropertyMetadata(new Thickness(5)));
 
         public ICommand Command
         {
@@ -48,7 +48,7 @@ namespace CSVEditor.View.Controls
             set => SetValue(CommandProperty, value);
         }
         public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
 
         public string CommandParameter
         {
@@ -56,7 +56,7 @@ namespace CSVEditor.View.Controls
             set => SetValue(CommandParameterProperty, value);
         }
         public static readonly DependencyProperty CommandParameterProperty =
-            DependencyProperty.Register("CommandParameter", typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(CommandParameter), typeof(string), typeof(HeaderWithBorderControl), new PropertyMetadata(null));
 
         public HeaderWithBorderControl()
         {

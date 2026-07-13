@@ -20,11 +20,11 @@ namespace CSVEditor.View.Controls
 
         public CsvFile CsvFile
         {
-            get { return (CsvFile)GetValue(CsvFileProperty); }
-            set { SetValue(CsvFileProperty, value); }
+            get => (CsvFile)GetValue(CsvFileProperty);
+            set => SetValue(CsvFileProperty, value);
         }
         public static readonly DependencyProperty CsvFileProperty =
-            DependencyProperty.Register("CsvFile", typeof(CsvFile), typeof(ConfigurationEditControl), new PropertyMetadata(DEFAULT_CSV_FILE, CsvFileChanged));
+            DependencyProperty.Register(nameof(CsvFile), typeof(CsvFile), typeof(ConfigurationEditControl), new PropertyMetadata(DEFAULT_CSV_FILE, CsvFileChanged));
 
         public ConfigurationEditControl()
         {
@@ -48,7 +48,7 @@ namespace CSVEditor.View.Controls
                 control.DataContext as EditorVM,
                 control.TopContainer);
 
-            Console.WriteLine($@"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM).SelectedCsvFile.AbsPath)}");
+            Console.WriteLine($@"ConfigurationEditControl, new CsvFile set. Building new Grid for CsvFile: {Path.GetFileName((control.DataContext as EditorVM)?.SelectedCsvFile.AbsPath)}");
 
             control.TopContainer.Children.Clear();
             control.TopContainer.Children.Add(VM.GetEditConfigurationsGridForNewCsvFile());

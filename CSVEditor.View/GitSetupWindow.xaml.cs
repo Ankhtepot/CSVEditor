@@ -52,13 +52,8 @@ namespace CSVEditor.View
             _gitOptionsOnOpen = new GitOptions(GitOptions);
         }
 
-        private void GitHubLoginButton_Click(object sender, RoutedEventArgs e)
-        {
-            _ = AsyncService.RunAsync(async () =>
-            {
-                await ProcessGitHubLoginButton_Click_Async();
-            });
-        }
+        private void GitHubLoginButton_Click(object sender, RoutedEventArgs e) =>
+            _ = AsyncService.RunAsync(async () => await ProcessGitHubLoginButton_Click_Async());
 
         private async Task ProcessGitHubLoginButton_Click_Async(
             string userNameOverride = null,
@@ -167,20 +162,15 @@ namespace CSVEditor.View
             MessageBox.Show(string.Format(T.GitAuthFailed, message));
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            _ = AsyncService.RunAsync(async () =>
-            {
-                await ProcessCancelButton_Click_Async();
-            });
-        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e) =>
+            _ = AsyncService.RunAsync(async () => await ProcessCancelButton_Click_Async());
 
         private async Task ProcessCancelButton_Click_Async()
         {
             // Revert conditions:
             // If user changed login and is authenticated with token -> relog to previous user, restore the rest
-            // If user did not change the login -> restore all previous values
-            // If user changed login and is not authenticated with token -> relog previous user, restore all previous values
+            // If user changed login or not but is not authenticated with token anymore -> relog previous user, restore all previous values
+            // If user did not change the login -> just restore all previous values
             bool userChangedLogin = !string.Equals(GitOptions.UserName, _gitOptionsOnOpen.UserName, StringComparison.OrdinalIgnoreCase);
             bool switchedToAnotherAuthenticatedUser = userChangedLogin && GitOptions.IsAuthenticated;
             bool userLoggedOffAuthenticatedUser = _gitOptionsOnOpen.IsAuthenticated && !GitOptions.IsAuthenticated;
@@ -192,11 +182,9 @@ namespace CSVEditor.View
             }
 
             Close();
-        }
+            return;
 
-        private void RestoreGitOptionsToOnOpenState()
-        {
-            AppOptionsService.SetGitOptions(_gitOptionsOnOpen);
+            void RestoreGitOptionsToOnOpenState() => AppOptionsService.SetGitOptions(_gitOptionsOnOpen);
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)

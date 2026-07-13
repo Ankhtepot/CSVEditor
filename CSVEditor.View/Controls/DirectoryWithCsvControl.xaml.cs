@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -18,32 +18,30 @@ namespace CSVEditor.View.Controls
 
         public DirectoryWithCsv DirectoryData
         {
-            get { return (DirectoryWithCsv)GetValue(directoryProperty); }
-            set { SetValue(directoryProperty, value); }
+            get => (DirectoryWithCsv)GetValue(directoryProperty);
+            set => SetValue(directoryProperty, value);
         }
         public static readonly DependencyProperty directoryProperty =
-            DependencyProperty.Register("DirectoryData", typeof(DirectoryWithCsv), typeof(DirectoryWithCsvControl), new PropertyMetadata(DefaultRecord, DirectoryDataChanged));
+            DependencyProperty.Register(nameof(DirectoryData), typeof(DirectoryWithCsv), typeof(DirectoryWithCsvControl), new PropertyMetadata(DefaultRecord, DirectoryDataChanged));
 
         private static void DirectoryDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            DirectoryWithCsvControl control = d as DirectoryWithCsvControl;
-
-            if (control != null)
+            if (d is DirectoryWithCsvControl control)
             {
                 DirectoryWithCsv newValue = e.NewValue as DirectoryWithCsv;
-                control.RootPathTextBlock.Text = newValue.DirectoryAbsolutePath;
-                control.CsvFilesListBox.ItemsSource = newValue.CsvFilesNames;
+                control.RootPathTextBlock.Text = newValue?.DirectoryAbsolutePath;
+                control.CsvFilesListBox.ItemsSource = newValue?.CsvFilesNames;
             }
         }
 
         public string SelectedFile
         {
-            get { return (string)GetValue(SelectedFileProperty); }
-            set { SetValue(SelectedFileProperty, value); }
+            get => (string)GetValue(SelectedFileProperty);
+            set => SetValue(SelectedFileProperty, value);
         }
 
         public static readonly DependencyProperty SelectedFileProperty =
-            DependencyProperty.Register("SelectedFile", typeof(string), typeof(DirectoryWithCsvControl), new PropertyMetadata("SelectedFile"));
+            DependencyProperty.Register(nameof(SelectedFile), typeof(string), typeof(DirectoryWithCsvControl), new PropertyMetadata("SelectedFile"));
 
         public DirectoryWithCsvControl()
         {
@@ -54,7 +52,7 @@ namespace CSVEditor.View.Controls
         {
             if (e.AddedItems.Count != 0)
             {
-                SelectedFile = e.AddedItems[0].ToString();
+                SelectedFile = e.AddedItems[0]!.ToString();
             }
         }
 

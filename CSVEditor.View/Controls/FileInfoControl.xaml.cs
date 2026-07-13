@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace CSVEditor.View.Controls
@@ -10,11 +10,11 @@ namespace CSVEditor.View.Controls
     {
         public string SelectedText
         {
-            get { return (string)GetValue(SelectedTextProperty); }
-            set { SetValue(SelectedTextProperty, value); }
+            get => (string)GetValue(SelectedTextProperty);
+            set => SetValue(SelectedTextProperty, value);
         }
         public static readonly DependencyProperty SelectedTextProperty =
-            DependencyProperty.Register("SelectedText", typeof(string), typeof(FileInfoControl), new PropertyMetadata("", SelectedTextChanged));
+            DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(FileInfoControl), new PropertyMetadata("", SelectedTextChanged));
 
         private static void SelectedTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -28,11 +28,11 @@ namespace CSVEditor.View.Controls
 
         public string FileInfoText
         {
-            get { return (string)GetValue(FileInfoTextProperty); }
-            set { SetValue(FileInfoTextProperty, value); }
+            get => (string)GetValue(FileInfoTextProperty);
+            set => SetValue(FileInfoTextProperty, value);
         }
         public static readonly DependencyProperty FileInfoTextProperty =
-            DependencyProperty.Register("FileInfoText", typeof(string), typeof(FileInfoControl), new PropertyMetadata("", FileInfoTextChanged));
+            DependencyProperty.Register(nameof(FileInfoText), typeof(string), typeof(FileInfoControl), new PropertyMetadata("", FileInfoTextChanged));
 
         private static void FileInfoTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

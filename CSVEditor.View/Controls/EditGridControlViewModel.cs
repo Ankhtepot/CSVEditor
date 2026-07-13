@@ -19,7 +19,7 @@ namespace CSVEditor.View.Controls
 {
     public class EditGridControlViewModel : INotifyPropertyChanged
     {
-        private int rowsCount { get => Context.SelectedCsvFile?.HeadersStrings?.Count + 1 ?? 1; }
+        private int rowsCount => Context.SelectedCsvFile?.HeadersStrings?.Count + 1 ?? 1;
 
         private TextBox lastTextBoxWithContextMenuClosed;
 
@@ -37,7 +37,7 @@ namespace CSVEditor.View.Controls
         public Grid MainGrid { get; set; }
         public Grid MainGridContainer { get; set; }
         public ResourceDictionary Resources { get; set; }
-        public int LineIndex { get => Context.SelectedItemIndex; }
+        public int LineIndex => Context.SelectedItemIndex;
         public DelegateCommand QueryForRelativePathToRootPathCommand { get; set; }
         public DelegateCommand<string> OpenDateFilterGuideWindowCommand { get; set; }        
 
@@ -55,7 +55,7 @@ namespace CSVEditor.View.Controls
         {
             string[] parameters = parameterInfo.Split('|');
             DateGuideWindow dateGuideWindow = new(
-                new CellInfo() 
+                new CellInfo
                 {
                     Content = parameters[0],
                     ColumnNr = int.Parse(parameters[1])
@@ -83,7 +83,7 @@ namespace CSVEditor.View.Controls
 
         private void SetupNewGrid()
         {
-            MainGrid = new Grid()
+            MainGrid = new Grid
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };
@@ -133,7 +133,7 @@ namespace CSVEditor.View.Controls
         {
             for (int i = 0; i < rowsCount + 1; i++) // +1 for header line
             {
-                MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
         }
 
@@ -185,7 +185,7 @@ namespace CSVEditor.View.Controls
 
         private UIElement HeaderSelectionColumnCreationMethod(int count)
         {
-            return new RadioButton()
+            return new RadioButton
             {
                 GroupName = "HeaderSelectionRadioGroup",
                 VerticalAlignment = VerticalAlignment.Center,
@@ -223,6 +223,11 @@ namespace CSVEditor.View.Controls
                         LabeledTextBoxControl newUri = BuildConfigUriCell(Constants.IMAGE_URI_LABEL_TEXT, count);
                         newUri.TextBox.ContextMenu = (ContextMenu)Resources[URI_TEXT_BOX_CONTEXT_MENU];
                         newUri.TextBox.ContextMenuClosing += (sender, _) => lastTextBoxWithContextMenuClosed = sender as TextBox;
+                        newUri.TextBox.MouseDoubleClick  += (sender, _) =>
+                        {
+                            lastTextBoxWithContextMenuClosed = sender as TextBox;
+                            QueryForRelativePathToRootPath();
+                        };
 
                         return newUri;
                     }
@@ -449,10 +454,12 @@ namespace CSVEditor.View.Controls
 
         private Binding getBaseTwoWayBinding(int columnNr)
         {
-            Binding binding = new($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]");
-            binding.Source = Context;
-            binding.Mode = BindingMode.TwoWay;
-            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            Binding binding = new($"SelectedCsvFile.Lines[{LineIndex}][{columnNr}]")
+            {
+                Source = Context,
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
 
             return binding;
         }
@@ -498,12 +505,16 @@ namespace CSVEditor.View.Controls
 
         public UIElement BuildHeader(int columnNumber, string text, string headerStyle = HEADER_TEXT_BOX_STYLE)
         {
-            Grid wrapperGrid = new();
-            wrapperGrid.Style = (Style)Resources[HEADER_GRID_STYLE];
+            Grid wrapperGrid = new()
+            {
+                Style = (Style)Resources[HEADER_GRID_STYLE]
+            };
 
-            TextBlock newHeader = new();
-            newHeader.Style = (Style)Resources[headerStyle];
-            newHeader.Text = text;
+            TextBlock newHeader = new()
+            {
+                Style = (Style)Resources[headerStyle],
+                Text = text
+            };
 
 
             Grid.SetColumn(wrapperGrid, columnNumber);
@@ -516,18 +527,19 @@ namespace CSVEditor.View.Controls
 
         public Grid BuildBasicGrid(int rowCount, int columnCount)
         {
-            Grid newGrid = new();
-
-            newGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            Grid newGrid = new()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
 
             for (int i = 0; i < rowCount; i++)
             {
-                newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                newGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
 
             for (int i = 0; i < columnCount; i++)
             {
-                newGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+                newGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             }
 
             return newGrid;

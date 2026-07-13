@@ -32,7 +32,7 @@ namespace CSVEditor.View.Controls.EditGridCellElements
             set => SetValue(ColumnNrProperty, value);
         }
         public static readonly DependencyProperty ColumnNrProperty =
-            DependencyProperty.Register("ColumnNr", typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(ColumnNr), typeof(int), typeof(ImageElementControl), new PropertyMetadata(0));
 
         public ImageElementControl()
         {

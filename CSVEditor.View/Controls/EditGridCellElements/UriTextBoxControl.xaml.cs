@@ -20,7 +20,7 @@ namespace CSVEditor.View.Controls
         private bool isTextValidUri;
         public bool IsTextValidUri
         {
-            get { return isTextValidUri; }
+            get => isTextValidUri;
             set 
             {
                 isTextValidUri = value;
@@ -30,11 +30,11 @@ namespace CSVEditor.View.Controls
 
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(UriTextBoxControl), new PropertyMetadata("", TextChanged));        
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(UriTextBoxControl), new PropertyMetadata("", TextChanged));        
 
         public UriTextBoxControl()
         {            

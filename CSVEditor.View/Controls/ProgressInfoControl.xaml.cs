@@ -1,4 +1,4 @@
-using CSVEditor.Core.HelperClasses;
+﻿using CSVEditor.Core.HelperClasses;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,19 +13,19 @@ namespace CSVEditor.View.Controls
     {
         public WorkStatus WorkStatus
         {
-            get { return (WorkStatus)GetValue(WorkStatusProperty); }
-            set { SetValue(WorkStatusProperty, value); }
+            get => (WorkStatus)GetValue(WorkStatusProperty);
+            set => SetValue(WorkStatusProperty, value);
         }
         public static readonly DependencyProperty WorkStatusProperty =
-            DependencyProperty.Register("WorkStatus", typeof(WorkStatus), typeof(ProgressInfoControl), new PropertyMetadata(WorkStatus.Idle, WorkStatusChanged));
+            DependencyProperty.Register(nameof(WorkStatus), typeof(WorkStatus), typeof(ProgressInfoControl), new PropertyMetadata(WorkStatus.Idle, WorkStatusChanged));
 
         public int Progress
         {
-            get { return (int)GetValue(ProgressProperty); }
-            set { SetValue(ProgressProperty, value); }
+            get => (int)GetValue(ProgressProperty);
+            set => SetValue(ProgressProperty, value);
         }
         public static readonly DependencyProperty ProgressProperty =
-            DependencyProperty.Register("Progress", typeof(int), typeof(ProgressInfoControl), new PropertyMetadata(0, ProgressChanged));
+            DependencyProperty.Register(nameof(Progress), typeof(int), typeof(ProgressInfoControl), new PropertyMetadata(0, ProgressChanged));
 
         private static void ProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

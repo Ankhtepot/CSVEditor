@@ -14,19 +14,19 @@ namespace CSVEditor.View.Controls
     {
         public int InputIndex
         {
-            get { return (int)GetValue(InputIndexProperty); }
-            set { SetValue(InputIndexProperty, value); }
+            get => (int)GetValue(InputIndexProperty);
+            set => SetValue(InputIndexProperty, value);
         }
         public static readonly DependencyProperty InputIndexProperty =
-            DependencyProperty.Register("InputIndex", typeof(int), typeof(LineNavigationBarControl), new PropertyMetadata(0, InputIndexChanged));
+            DependencyProperty.Register(nameof(InputIndex), typeof(int), typeof(LineNavigationBarControl), new PropertyMetadata(0, InputIndexChanged));
 
         public int LinesCount
         {
-            get { return (int)GetValue(LinesCountProperty); }
-            set { SetValue(LinesCountProperty, value); }
+            get => (int)GetValue(LinesCountProperty);
+            set => SetValue(LinesCountProperty, value);
         }
         public static readonly DependencyProperty LinesCountProperty =
-            DependencyProperty.Register("LinesCount", typeof(int), typeof(LineNavigationBarControl), new PropertyMetadata(0, LinesCountChanged));
+            DependencyProperty.Register(nameof(LinesCount), typeof(int), typeof(LineNavigationBarControl), new PropertyMetadata(0, LinesCountChanged));
 
         public LineNavigationBarControl()
         {

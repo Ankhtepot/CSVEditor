@@ -17,16 +17,16 @@ namespace CSVEditor.View.Controls
 
         public CsvFile InputCsvFile
         {
-            get { return (CsvFile)GetValue(InputCsvFileProperty); }
-            set { SetValue(InputCsvFileProperty, value); }
+            get => (CsvFile)GetValue(InputCsvFileProperty);
+            set => SetValue(InputCsvFileProperty, value);
         }
         public static readonly DependencyProperty InputCsvFileProperty =
-            DependencyProperty.Register("InputCsvFile", typeof(CsvFile), typeof(CsvFileGridViewerControl), new PropertyMetadata(new CsvFile(), InputCsvFileChanged));
+            DependencyProperty.Register(nameof(InputCsvFile), typeof(CsvFile), typeof(CsvFileGridViewerControl), new PropertyMetadata(new CsvFile(), InputCsvFileChanged));
 
         private static void InputCsvFileChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var control = (CsvFileGridViewerControl)d;
-            var newCsvFile = (CsvFile)e.NewValue;
+            CsvFileGridViewerControl control = (CsvFileGridViewerControl)d;
+            CsvFile newCsvFile = (CsvFile)e.NewValue;
 
             if (control == null
                 || newCsvFile == null
@@ -49,26 +49,26 @@ namespace CSVEditor.View.Controls
 
             if (lineEditorWrapper != null)
             {
-                var lineEdit = lineEditorWrapper.FindName("LineEdit") as LineEditControl;
-                lineEdit.TopContainer.Children.Clear();
+                LineEditControl lineEdit = lineEditorWrapper.FindName("LineEdit") as LineEditControl;
+                lineEdit?.TopContainer.Children.Clear();
             }
 
-            var gridView = (GridView)control.GridListView.View;
+            GridView gridView = (GridView)control.GridListView.View;
             control.GridListView.ItemsSource = newCsvFile.Lines;
 
             gridView.Columns.Clear();
             for (int i = 0; i < newCsvFile.HeadersStrings.Count; i++)
             {
-                var gridViewColumn = new GridViewColumn();
-                var dataTemplate = new DataTemplate();
+                GridViewColumn gridViewColumn = new GridViewColumn();
+                DataTemplate dataTemplate = new DataTemplate();
 
-                var gridFactory = new FrameworkElementFactory(typeof(Grid));
-                var borderFactory = new FrameworkElementFactory(typeof(Border));
-                var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+                FrameworkElementFactory gridFactory = new FrameworkElementFactory(typeof(Grid));
+                FrameworkElementFactory borderFactory = new FrameworkElementFactory(typeof(Border));
+                FrameworkElementFactory textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
 
                 dataTemplate.VisualTree = borderFactory;
 
-                var newBinding = new Binding($"[{i}]");
+                Binding newBinding = new Binding($"[{i}]");
 
                 textBlockFactory.SetBinding(TextBlock.TextProperty, newBinding);
                 textBlockFactory.SetValue(NameProperty, $"GridViewTextBlockDataTemplateKey{dataTemplate.DataTemplateKey}Column{i}");
@@ -88,7 +88,7 @@ namespace CSVEditor.View.Controls
 
                 borderFactory.AppendChild(gridFactory);
 
-                var newHeader = new GridViewColumnHeader();
+                GridViewColumnHeader newHeader = new GridViewColumnHeader();
                 newHeader.Content = newCsvFile.HeadersStrings[i];
                 newHeader.Width = double.NaN;
 
@@ -144,7 +144,7 @@ namespace CSVEditor.View.Controls
             SetMainTabSelectedTabIndexEvent?.Invoke(1);
         }
 
-        public EditorWindow.SetMainTabSelectedTabIndexEvent SetMainTabSelectedTabIndexEvent = null;
+        public EditorWindow.SetMainTabSelectedTabIndexEvent SetMainTabSelectedTabIndexEvent;
 
         public void SetMainTabSelectedTabIndex(EditorWindow.SetMainTabSelectedTabIndexEvent setMainTabSelectedTabIndex)
         {

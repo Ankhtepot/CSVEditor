@@ -18,7 +18,10 @@ namespace CSVEditor.Core.Services
                 pathInApplication = pathInApplication.Substring(1);
             }
 
-            return new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute);
+            // legacy, left for posterity: return new Uri(@"pack://application:,,,/CsvEditor.View;component/" + pathInApplication, UriKind.Absolute);
+            return new Uri(
+                $"pack://application:,,,/{pathInApplication}",
+                UriKind.Absolute);
         }
 
         public static BitmapImage GetBitmapImageFromResources(string resourcePath)
