@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CSVEditor.View"
         xmlns:uc="clr-namespace:CSVEditor.View.Controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:p="clr-namespace:CSVEditor.Core.Properties;assembly=CSVEditor.Core"
+        xmlns:vm="clr-namespace:CSVEditor.ViewModel;assembly=CSVEditor.ViewModel"
+        d:DataContext="{d:DesignInstance vm:EditorVM}"
         mc:Ignorable="d"
         Title="{x:Static p:Resources.AppTitle}"
         Icon="Resources/Icons/csv_icon_plain.ico"
@@ -186,7 +187,7 @@
                 <!--#endregion-->
 
                 <!--#region column 1: Load repo section -->
-                <Grid Grid.Column="1" VerticalAlignment="Center">
+                <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition />
@@ -195,7 +196,7 @@
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Column="0"
+                    <Button Grid.Column="0" Grid.Row="0"
                             Content="{x:Static p:Resources.LoadDirectoryText}"
                             HorizontalAlignment="Left"
                             Height="28"
@@ -208,7 +209,9 @@
                             <Style TargetType="Border" BasedOn="{StaticResource LeftSideRoundedBorderForButtonStyle}" />
                         </Button.Resources>
                     </Button>
-                    <Border Grid.Column="1" Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center"
+                    <Border Grid.Column="1" 
+                            Grid.Row="0" 
+                            Style="{StaticResource RightRoundedBorderStyle}" VerticalAlignment="Center"
                             Margin="0.5">
                         <TextBlock Text="{Binding RootRepositoryPath}" Margin="10,5"></TextBlock>
                     </Border>
@@ -218,6 +221,7 @@
                 <!--#region column 2: GitRepo control -->
                 <Border Style="{StaticResource BaseBorderStyle}"
                         Grid.Column="2"
+                        Grid.Row="0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal">
@@ -247,7 +251,7 @@
                 </Border>
                 <!--#endregion column 2: GitRepo control -->
 
-                <Button Grid.Row="1"
+                <Button Grid.Row="1" Grid.Column="0"
                         Content="{x:Static p:Resources.CancelProcessText}"
                         HorizontalAlignment="Left"
                         Visibility="{Binding AsyncVM.WorkingStatus, Converter={StaticResource WorkStatusToVisibilityConverter}}"
@@ -437,7 +441,7 @@
                                         </Button.Resources>
                                     </Button>
 
-                                    <Border Style="{StaticResource BaseBorderStyle}" Grid.Column="0" Margin="1">
+                                    <Border Style="{StaticResource BaseBorderStyle}" Margin="1">
                                         <Grid x:Name="LineEditorWrapper">
                                             <uc:LineEditControl x:Name="LineEdit"
                                                                 SelectedLineIndex="{Binding SelectedItemIndex}"

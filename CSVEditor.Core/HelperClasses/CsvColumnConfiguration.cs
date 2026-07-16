@@ -6,22 +6,22 @@ namespace CSVEditor.Core.HelperClasses
 {
     public class CsvColumnConfiguration : INotifyPropertyChanged
     {
-        private FieldType type;
-        public FieldType Type {
-            get => type;
+        public FieldType Type
+        {
+            get;
             set
             {
-                type = value;
+                field = value;
                 OnPropertyChanged(nameof(Type));
             }
         }
 
-        private string uRI;
-        public string URI {
-            get => uRI;
+        public string URI
+        {
+            get;
             set
             {
-                uRI = value;
+                field = value;
                 OnPropertyChanged(nameof(URI));
             }
         }

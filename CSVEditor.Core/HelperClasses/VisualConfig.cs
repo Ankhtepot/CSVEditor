@@ -11,18 +11,24 @@ namespace CSVEditor.Core.HelperClasses
         private const double DEFAULT_MAIN_WINDOW_WIDTH = 1000;
         private const double DEFAULT_MAIN_WINDOW_HEIGHT = 450;
 
-        private double mainWindowWidth;
         public double MainWindowWidth
         {
-            get => mainWindowWidth;
-            set { mainWindowWidth = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
-        private double mainWindowHeight;
         public double MainWindowHeight
         {
-            get => mainWindowHeight;
-            set { mainWindowHeight = value; OnPropertyChanged(); }
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged();
+            }
         }
 
         public VisualConfig() : this(DEFAULT_MAIN_WINDOW_WIDTH, DEFAULT_MAIN_WINDOW_HEIGHT) { }

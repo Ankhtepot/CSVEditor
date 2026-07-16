@@ -174,10 +174,7 @@ namespace CSVEditor.ViewModel
             ShouldExitAfterSave = false;
             SelectedText = Constants.SELECTED_TEXT_DEFAULT;
             AsyncVM.WorkingStatus = WorkStatus.Idle;
-            CsvFilesStructure =
-            [
-                DEFAULT_DIRECTORY
-            ];
+            CsvFilesStructure = [ DEFAULT_DIRECTORY ];
             AddLinePlacementSource = GetAddLineComboBoxSource();
 
             LoadRepositoryCommand = new DelegateCommand(AsyncVM.LoadRepository, AsyncVM.LoadRepository_CanExecute);
@@ -299,14 +296,22 @@ namespace CSVEditor.ViewModel
                         ShouldExitAfterSave = true;
                         SaveCurrentCsvFile();
                         break;
+                    case MessageBoxResult.No:
+                        CloseApplication();
+                        break;
                     case MessageBoxResult.Cancel:
                     default: return;
                 }
             }
             else
             {
-                Application.Current?.MainWindow?.Close();
+                CloseApplication();
             }
+        }
+        
+        private void CloseApplication()
+        {
+            Application.Current?.MainWindow?.Close();
         }
 
         private static List<CsvFileConfiguration> initializeFileConfigurations()
@@ -422,6 +427,8 @@ namespace CSVEditor.ViewModel
                 AppOptions.LastCsvFilesStructure =
                     CsvFilesStructure
                         .ToList(); // Setting whole new CsvFileStructure instead of line by line via CsvFilesStructure OnChange event
+                AppOptions.LastOpenedDirectoryPath = loadedOptions.LastOpenedDirectoryPath;
+                AppOptions.LastSavedDirectoryPath = loadedOptions.LastSavedDirectoryPath;
                 AppOptions.VisualConfig = loadedOptions.VisualConfig;
                 AppOptions.SaveOptions = loadedOptions.SaveOptions;
                 AppOptionsService.SetGitOptions(loadedOptions.GitOptions);

@@ -28,5 +28,12 @@ namespace CSVEditor.Core.HelperClasses
             ToTheTop,
             ToTheBottom
         }
+
+        public enum DialogPathType
+        {
+            None = 0,
+            Save,
+            Open
+        }
     }
 }

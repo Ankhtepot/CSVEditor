@@ -11,104 +11,96 @@ namespace CSVEditor.ViewModel
 {
     public class ReplaceImageVM : INotifyPropertyChanged
     {
-        private ImageSource newImageSource;
         public ImageSource NewImageSource
         {
             get 
             {
-                if (newImageSource == null)
+                if (field == null)
                 {
                     return FileSystemService.GetBitmapImageFromPath("");
                 }
-                return newImageSource; 
+                return field; 
             }
             private set 
             {
-                newImageSource = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private ImageSource currentImageSource;
         public ImageSource CurrentImageSource
         {
             get 
             {
-                if (currentImageSource == null)
+                if (field == null)
                 {
                     return FileSystemService.GetBitmapImageFromPath("");
                 }
-                return currentImageSource;
+                return field;
             }
             private set
             {
-                currentImageSource = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private string newImagePath;
         public string NewImagePath
         {
-            get => newImagePath;
-            private set 
+            get;
+            private set
             {
-                newImagePath = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private string currentImagePath;
         public string CurrentImagePath
         {
-            get => currentImagePath;
-            private set 
+            get;
+            private set
             {
-                currentImagePath = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private string savePath;
         public string SavePath
         {
-            get => savePath;
-            set 
+            get;
+            set
             {
-                savePath = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool overwrite;
         public bool Overwrite
         {
-            get => overwrite;
-            set 
+            get;
+            set
             {
-                overwrite = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool actionChecked;
         public bool ActionChecked
         {
-            get => actionChecked;
-            set 
+            get;
+            set
             {
-                actionChecked = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
 
-        private string newSavePath;
         public string NewSavePath
         {
-            get => newSavePath;
-            set 
+            get;
+            set
             {
-                newSavePath = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
@@ -201,7 +193,40 @@ namespace CSVEditor.ViewModel
 
             SavePath = savePath;
 
-            NewSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
+            // Extract relative path structure from newImagePath for currentImagePath
+            // If currentImagePath has subfolders (e.g., savePath\SomeFolder\ImageName.jpg),
+            // preserve them in NewSavePath
+            string newSavePath;
+            
+            if (Path.IsPathRooted(currentImagePath) && Path.IsPathRooted(savePath))
+            {
+                // Both are absolute paths
+                if (currentImagePath.StartsWith(savePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    string relativePath = currentImagePath.Substring(savePath.Length).TrimStart('\\');
+                    string currentDir = Path.GetDirectoryName(relativePath);
+                    newSavePath = Path.Combine(SavePath, currentDir!, Path.GetFileName(NewImagePath));
+                }
+                else
+                {
+                    newSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
+                }
+            }
+            else if (!Path.IsPathRooted(currentImagePath) && !Path.IsPathRooted(savePath))
+            {
+                // Both are relative paths
+                string currentDir = Path.GetDirectoryName(currentImagePath)?.TrimStart('\\');
+                newSavePath = string.IsNullOrEmpty(currentDir) 
+                    ? Path.Combine(SavePath, Path.GetFileName(NewImagePath)) 
+                    : Path.Combine(SavePath, currentDir, Path.GetFileName(NewImagePath));
+            }
+            else
+            {
+                // Mixed absolute/relative - just use filename
+                newSavePath = Path.Combine(SavePath, Path.GetFileName(NewImagePath));
+            }
+
+            NewSavePath = newSavePath;
 
             Overwrite = File.Exists(NewSavePath);
 

@@ -13,14 +13,9 @@ namespace CSVEditor.Core
 
         public string AbsoluteFilePath { get; set; }
 
-        public string FileName 
-        {
-            get 
-            {
-                return !string.IsNullOrEmpty(AbsoluteFilePath) && File.Exists(AbsoluteFilePath)
-                    ? Path.GetFileName(AbsoluteFilePath)
-                    : "";                
-            } 
-        }
+        public string FileName =>
+            !string.IsNullOrEmpty(AbsoluteFilePath) && File.Exists(AbsoluteFilePath)
+                ? Path.GetFileName(AbsoluteFilePath)
+                : "";
     }
 }

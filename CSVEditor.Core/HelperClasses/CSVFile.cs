@@ -9,74 +9,66 @@ namespace CSVEditor.Core
 {
     public class CsvFile : INotifyPropertyChanged
     {
-        private string absPath;
         public string AbsPath
         {
-            get { return absPath; }
-            set { absPath = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private int headerIndex;
         public int HeaderIndex
         {
-            get { return headerIndex; }
-            set { headerIndex = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private List<string> headersStrings;
         public List<string> HeadersStrings
         {
-            get { return headersStrings; }
-            set { headersStrings = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private char delimiter;
         public char Delimiter
         {
-            get { return delimiter; }
-            set { delimiter = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private char blockIdentifier;
         public char BlockIdentifier
         {
-            get { return blockIdentifier; }
-            set { blockIdentifier = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private int columnCount;
         public int ColumnCount
         {
-            get { return columnCount; }
-            set { columnCount = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private List<List<string>> lines;
         public List<List<string>> Lines
         {
-            get { return lines; }
-            set { lines = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
-        private List<CsvColumnConfiguration> columnConfigurations;
         public List<CsvColumnConfiguration> ColumnConfigurations
         {
-            get { return columnConfigurations; }
-            set { columnConfigurations = value; OnPropertyChanged(); }
+            get => field;
+            set { field = value; OnPropertyChanged(); }
         }
 
         private static List<char> delimiters = new List<char> { ',', ';', ':'};
         public static List<char> Delimiters
         {
-            get { return delimiters; }
-            set { delimiters = value; }
+            get => delimiters;
+            set => delimiters = value;
         }
 
         private static List<char> blockIdentifiers = new List<char> { '\"', '\''};
         public static List<char> BlockIdentifiers
         {
-            get { return blockIdentifiers; }
-            set { blockIdentifiers = value; }
+            get => blockIdentifiers;
+            set => blockIdentifiers = value;
         }
 
         public CsvFile() : this("", 0, ',','"', new List<List<string>>())
