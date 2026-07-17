@@ -1,57 +1,47 @@
-# CSVEditor
+# CSVEditor.Core
 
-A WPF-based CSV Editor application.
+Core library for the CSVEditor application. It contains shared models, services, constants, extensions, and configuration/app-state handling used by `CSVEditor.View` and `CSVEditor.ViewModel`.
 
-## Versions & Dependencies
+## Framework
 
-This project is built using the following technologies and versions:
+- **Target Framework:** `.NET 10` (`net10.0-windows10.0.22000.0`)
+- **UseWPF:** `true`
 
-### Framework
-- **Target Framework:** .NET 8.0 (`net8.0-windows10.0.22000.0`)
+## NuGet dependencies
 
-### Core Libraries (NuGet)
-- **Newtonsoft.Json** (13.0.3) - JSON processing
-- **LibGit2Sharp** (0.30.0) - Git operations
-- **Prism.Core** (9.0.537) - MVVM Framework
+- **CredentialManagement** (1.0.2)
+- **LibGit2Sharp** (0.30.0)
+- **Newtonsoft.Json** (13.0.3)
+- **Octokit** (14.0.0)
 
-### UI & Styling
-- **FontAwesome5** (2.1.11) - Icons
-- **MahApps.Metro.IconPacks** (5.1.0) - More icons
+## UI styling (app project)
 
-## Local Development & Testing (JetBrains Rider)
+UI styling packages are defined in `CSVEditor.View`:
 
-To run and test the application locally using JetBrains Rider:
+- **FontAwesome5** (2.1.11)
+- **MahApps.Metro.IconPacks** (5.1.0)
 
-1. **Open Solution:** Open `CSVEditor.sln` in JetBrains Rider.
-2. **Restore NuGet Packages:** Rider should automatically restore dependencies. If not, right-click the Solution and select **Restore NuGet Packages**.
-3. **Set Startup Project:** Ensure `CSVEditor.View` is selected as the Startup Project in the top toolbar.
-4. **Run or Debug:**
-   - Press `F5` to start with the debugger attached.
-   - Press `Ctrl + F5` to run without debugging.
-5. **XAML Hot Reload:** You can use Rider's XAML Hot Reload to see UI changes immediately while the app is running.
+## Deployment (standalone executable)
 
-## How to Build Standalone Executable
-
-To build a standalone `.exe` that includes all dependencies and the .NET runtime (so it can run on machines without .NET installed), use the following command:
-
-### Prerequisites
-- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0) installed on your system.
-
-### Build Command
-Run this command from the root directory of the project:
+Build from repository root:
 
 ```powershell
 dotnet publish CSVEditor.View\CSVEditor.View.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 
-#### Flag Explanation:
-- `-c Release`: Builds in Release mode (optimized).
-- `-r win-x64`: Targets 64-bit Windows.
-- `--self-contained true`: Bundles the .NET runtime with the app.
-- `-p:PublishSingleFile=true`: Packs everything into one `.exe`.
-- `-p:PublishReadyToRun=true`: Improves startup time by ahead-of-time compilation.
-- `-p:IncludeNativeLibrariesForSelfExtract=true`: Ensures native dependencies are correctly extracted at runtime.
+Output location:
 
-### Output Location
-After building, the standalone executable will be found at:
-`CSVEditor.View\bin\Release\net8.0-windows10.0.22000.0\win-x64\publish\CSVEditor.View.exe`
+`CSVEditor.View\bin\Release\net10.0-windows10.0.22000.0\win-x64\publish\CSVEditor.exe`
+
+## AppOptions notes
+
+`AppOptions` stores persisted editor/session settings, including:
+
+- `LastRootPath`
+- `LastOpenedDirectoryPath`
+- `LastSavedDirectoryPath`
+- `LastSelectedFilePath`
+- visual, save, git and CSV-related options
+
+`LastOpenedDirectoryPath` defaults to `MyDocuments` when empty.  
+`LastSavedDirectoryPath` defaults to `LastRootPath` (or `MyDocuments` if `LastRootPath` is empty).

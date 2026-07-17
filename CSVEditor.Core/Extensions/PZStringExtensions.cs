@@ -17,9 +17,9 @@ namespace CSVEditor.Core.Extensions
             return Rgx.IsMatch(URL);
         }
 
-        public static string ToHumanReadableString(this IEnumerable<string> strings)
+        public static string ToHumanReadableString(this IEnumerable<string> strings, char separator = ',')
         {
-            return string.Join(", ", strings);
+            return string.Join(separator, strings);
         }
 
         public static bool ContainsAny(this string text, char[] chars)

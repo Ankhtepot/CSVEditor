@@ -49,7 +49,7 @@ public static class GitService
             : status.Modified.ToList().Count > 0
                 ? CurrentRepository.RetrieveStatus().Modified
                     .Select(e => e.FilePath)
-                    .ToHumanReadableString()
+                    .ToHumanReadableString('\n')
                 : Resources.GitStatusNoChanges;
     }
 
@@ -101,14 +101,18 @@ public static class GitService
         string password = gitOpts.UseToken
             ? CredentialService.GetToken(gitOpts.UserName) ?? gitOpts.Password
             : gitOpts.Password;
-        PullOptions options = new();
-        options.FetchOptions = new FetchOptions();
-        options.FetchOptions.CredentialsProvider = (_, _, _) =>
-            new UsernamePasswordCredentials
+        PullOptions options = new()
+        {
+            FetchOptions = new FetchOptions
             {
-                Username = gitOpts.UserName,
-                Password = password
-            };
+                CredentialsProvider = (_, _, _) =>
+                    new UsernamePasswordCredentials
+                    {
+                        Username = gitOpts.UserName,
+                        Password = password
+                    }
+            }
+        };
         Signature signature = new(gitOpts.UserName, gitOpts.Email, DateTimeOffset.Now);
         Commands.Pull(repo, signature, options);
         SetRepository(repo.Info.WorkingDirectory);
@@ -127,12 +131,12 @@ public static class GitService
             if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) &&
                 !gitOpts.RemoteRepositoryLink.Contains("<"))
             {
-                Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteName, gitOpts.RemoteRepositoryLink));
+                Console.WriteLine(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteName, gitOpts.RemoteRepositoryLink);
                 remote = repo.Network.Remotes.Add(gitOpts.RemoteName, gitOpts.RemoteRepositoryLink);
             }
             else
             {
-                Console.WriteLine(string.Format(Resources.RemoteOriginNotFoundNoLinkText, gitOpts.RemoteName));
+                Console.WriteLine(Resources.RemoteOriginNotFoundNoLinkText, gitOpts.RemoteName);
                 return;
             }
         }
