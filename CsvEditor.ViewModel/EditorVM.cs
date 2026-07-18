@@ -23,6 +23,19 @@ namespace CSVEditor.ViewModel
 {
     public class EditorVM : INotifyPropertyChanged
     {
+        // General TODOS ->
+        // TODO: Refactor this class into smaller classes, as it is currently too large and has too many responsibilities.
+        // TODO: Get rid of Resources from Constants and use Resources directly, as it is more readable and easier to maintain.
+        // TODO: Replace all Console.WriteLine with Logger.LogInfo, Logger.LogWarning, or Logger.LogError, as it is more consistent and easier to maintain.
+        // TODO: Start app from Core project and do there all the initialization, as it is more consistent and easier to maintain.
+        // TODO: Simplify code behinds, they have often too much logic inside
+        // TODO: Add more unit tests, as it is currently lacking and it is important to have them for future changes.
+        // TODO: Remove all the async void methods, as they are dangerous and can cause unhandled exceptions. Use async Task instead.
+        // TODO: Remove helper and service classes from view and viewmodel projects, as they are not supposed to be there and it is more consistent and easier to maintain.
+        // TODO: BUG: On save files are committed before showing the commit/push dialog
+        
+        #region Fields
+        
         public readonly DirectoryWithCsv DEFAULT_DIRECTORY =
             new(Resources.DefaultDirectoryName, [Resources.DefaultFilesName]);
 
@@ -117,7 +130,7 @@ namespace CSVEditor.ViewModel
                 if (field == value) return;
 
                 field = value;
-                Console.WriteLine(Resources.SelectedIndexUpdatedFormat, value);
+                Logger.LogInfo(string.Format(Resources.SelectedIndexUpdatedFormat, value));
                 OnPropertyChanged();
             }
         }
@@ -138,7 +151,11 @@ namespace CSVEditor.ViewModel
         public Action OnCsvFileSet;
         public Action OnCsvFileUpdated;
         public Action<int> RequestChangeTab;
-
+        
+        #endregion
+        
+        #region Commands
+        
         //*******************************
         //********** Commands ***********
         //*******************************
@@ -156,6 +173,10 @@ namespace CSVEditor.ViewModel
         public DelegateCommand SaveCommand { get; set; }
         public DelegateCommand SaveAndExitCommand { get; set; }
         public DelegateCommand ExitCommand { get; set; }
+        
+        #endregion Commands
+
+        #region Constructor
 
         //*******************************
         //********* Constructor *********
@@ -199,6 +220,10 @@ namespace CSVEditor.ViewModel
             SetVisuals(AppOptions.VisualConfig);
         }
 
+        #endregion Constructor
+        
+        #region Methods
+
         //*******************************
         //*********** Methods ***********
         //*******************************        
@@ -210,7 +235,7 @@ namespace CSVEditor.ViewModel
                 throw new InvalidDataException(Resources.FileConfigurationNotFoundException);
             }
 
-            Console.WriteLine(Resources.UpdatingConfigurationFormat, SelectedCsvFile.AbsPath, nameof(FileConfigurations));
+            Logger.LogInfo(string.Format(Resources.UpdatingConfigurationFormat, SelectedCsvFile.AbsPath, nameof(FileConfigurations)));
 
             int configToUpdateIndex =
                 FileConfigurations.FindIndex(config => config.AbsoluteFilePath == SelectedCsvFile.AbsPath);
@@ -265,6 +290,8 @@ namespace CSVEditor.ViewModel
 
         private void AddNewFileConfiguration(List<CsvColumnConfiguration> currentFileConfigurations, string fileAbsPath)
         {
+            FileConfigurations ??= [];
+            
             FileConfigurations.Add(new CsvFileConfiguration()
             {
                 AbsoluteFilePath = fileAbsPath,
@@ -328,7 +355,7 @@ namespace CSVEditor.ViewModel
 
             if (File.Exists(value))
             {
-                Console.WriteLine(Resources.SelectedCsvFileLogFormat, _selectedFile);
+                Logger.LogInfo(string.Format(Resources.SelectedCsvFileLogFormat, _selectedFile));
                 if (needsProcessing)
                 {
                     new GetCsvFileFromPathWorker(this).RunAsync(SelectedFile);
@@ -412,7 +439,8 @@ namespace CSVEditor.ViewModel
 
                 if (loadedOptions == null)
                 {
-                    Console.WriteLine(Resources.LoadOptionsErrorCreatingNewMessage);
+                    Logger.LogError(Resources.LoadOptionsErrorCreatingNewMessage);
+                    
                     loadedOptions = new AppOptions();
                     AppOptionsService.SaveAppOptions();
                 }
@@ -437,8 +465,10 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                string errorMessage = string.Format(Resources.AppOptionsProcessingError, e.Message);
-                Console.WriteLine(errorMessage);
+                string errorMessage = $"{Resources.AppOptionsProcessingError}" +
+                                      $"{Environment.NewLine} " +
+                                      $"{string.Format(Resources.ErrorWithPreface, e.Message)}";
+                Logger.LogError(errorMessage);
                 AppOptionsService.SetDefaultAppOptions();
             }
         }
@@ -529,6 +559,8 @@ namespace CSVEditor.ViewModel
             SelectedCsvFile = updatedCsvFile;
             SelectedItemIndex = index.Clamp(0, updatedCsvFile.Lines.Count - 1);
         }
+        
+        #endregion Methods
 
         public event PropertyChangedEventHandler PropertyChanged;
 

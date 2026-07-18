@@ -53,7 +53,7 @@ namespace CSVEditor.View.Controls
                 return;
             }
 
-            control.IsTextValidUri = newText.IsValidURL();
+            control.IsTextValidUri = newText.IsValidUrl();
         }
         
         private void UriTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -1,58 +1,65 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace CSVEditor.Core.Extensions
+namespace CSVEditor.Core.Extensions;
+
+public static class PzStringExtensions
 {
-    public static class PZStringExtensions
+    extension(string text)
     {
-        public static char LastChar(this string text)
+        public char LastChar()
         {
-            return string.IsNullOrEmpty(text) ? '\0' : text[text.Length - 1];
+            return string.IsNullOrEmpty(text) ? '\0' : text[^1];
         }
 
-        public static bool IsValidURL(this string URL)
+        public bool IsValidUrl()
         {
-            var Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
-            var Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            return Rgx.IsMatch(URL);
+            const string pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+            Regex rgx = new(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            return rgx.IsMatch(text);
+        }
+    }
+
+    public static string ToHumanReadableString(this IEnumerable<string> strings, string separator = ",")
+    {
+        return string.Join(separator, strings);
+    }
+
+    extension(string text)
+    {
+        public bool ContainsAny(char[] chars)
+        {
+            return chars.Any(text.Contains);
         }
 
-        public static string ToHumanReadableString(this IEnumerable<string> strings, char separator = ',')
+        public string ToSystemPath()
         {
-            return string.Join(separator, strings);
-        }
+            string path = "";
 
-        public static bool ContainsAny(this string text, char[] chars)
-        {
-            foreach (var character in chars)
-            {
-                if (text.Contains(character))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static string ToSystemPath(this string jsonPath)
-        {
-            var path = "";
-
-            if (string.IsNullOrEmpty(jsonPath))
+            if (string.IsNullOrEmpty(text))
             {
                 return path;
             }
 
-            path = Regex.Replace(jsonPath, "\r", "");
+            path = Regex.Replace(text, "\r", "");
             path = Regex.Replace(path, "/", @"\");
 
             if (!char.IsLetterOrDigit(path[0]))
             {
-                path = path.Substring(1);
+                path = path[1..];
             }
 
             return path;
+        }
+
+        public void CreateDirectoryIfNotExists()
+        {
+            if (!string.IsNullOrEmpty(text) && !Directory.Exists(text))
+            {
+                Directory.CreateDirectory(text);
+            }
         }
     }
 }

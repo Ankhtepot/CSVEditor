@@ -90,7 +90,7 @@ namespace CSVEditor.View
 
         private static bool AreLoginEntriesFalsy(string enteredUserName, string token)
         {
-            string errorMessage = T.FixErrorsPrompt;
+            string errorMessage = T.FixErrorsPrompt + Environment.NewLine + Environment.NewLine;
             bool hasErrors = false;
 
             if (string.IsNullOrEmpty(enteredUserName))

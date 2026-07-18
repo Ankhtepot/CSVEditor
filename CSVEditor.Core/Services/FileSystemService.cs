@@ -85,7 +85,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.ErrorReadingDirectoryPathFormat, e.Message);
+                Logger.LogError(Resources.ErrorReadingDirectoryPathFormat + Environment.NewLine + e.Message);
             }
 
             return null;
@@ -111,9 +111,9 @@ namespace CSVEditor.Core.Services
                 fileDialog.Title = title;
             }
 
-            if (fileDialog.ShowDialog() != true) 
+            if (fileDialog.ShowDialog() != true)
                 return null;
-            
+
             StoreUsedPath(Path.GetDirectoryName(fileDialog.FileName), DialogPathType.Open);
             return fileDialog.FileName;
         }
@@ -146,15 +146,16 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                MessageBoxHelper.ShowProcessErrorBox(title, Constants.SAVING_FAILED_TEXT + e.Message);
+                Logger.LogError(Resources.SavingFailedText + Environment.NewLine + e.Message);
+                MessageBoxHelper.ShowProcessErrorBox(title, Resources.SavingFailedText + e.Message);
             }
-            
+
             return null;
         }
 
         public static bool IsDirectoryWithGitRepository(string rootPath)
         {
-            List<string> rootPathDirectories = new();
+            List<string> rootPathDirectories = [];
 
             try
             {
@@ -162,7 +163,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.ErrorCheckingGitRepoFormat, e.Message);
+                Logger.LogError(string.Format(Resources.ErrorCheckingGitRepoFormat, e.Message));
             }
 
             if (rootPathDirectories.Count > 0)
@@ -198,12 +199,12 @@ namespace CSVEditor.Core.Services
 
             return directories?.ToList();
         }
-        
+
         private static void StoreUsedPath(string dialogFolderName, DialogPathType dialogPathType)
         {
             if (string.IsNullOrEmpty(dialogFolderName))
                 return;
-            
+
             switch (dialogPathType)
             {
                 case DialogPathType.Save:
@@ -250,11 +251,11 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine(Resources.InsufficientRightsToScanDirectoryFormat, path, e.Message);
+                Logger.LogError(string.Format(Resources.InsufficientRightsToScanDirectoryFormat, path, e.Message));
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.UnexpectedErrorReadingDirectoriesFormat, path, e.Message);
+                Logger.LogError(string.Format(Resources.UnexpectedErrorReadingDirectoriesFormat, path, e.Message));
             }
 
             return directories;
@@ -270,11 +271,11 @@ namespace CSVEditor.Core.Services
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine(Resources.InsufficientRightsToReadAllFilesFormat, path);
+                Logger.LogError(string.Format(Resources.InsufficientRightsToReadAllFilesFormat, path));
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.UnexpectedErrorScanningDirectoriesFormat, path, e.Message);
+                Logger.LogError(string.Format(Resources.UnexpectedErrorScanningDirectoriesFormat, path, e.Message));
             }
 
             string directoryPath = Regex.Replace(path, Regex.Escape(rootPath), ".");
@@ -294,8 +295,9 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception)
             {
-                Console.WriteLine(Resources.CreatingNewFileInDirectoryFormat, Path.GetFileName(configurationsFilePath),
-                    configurationsFilePath);
+                Logger.LogError(string.Format(Resources.CreatingNewFileInDirectoryFormat,
+                    Path.GetFileName(configurationsFilePath),
+                    configurationsFilePath));
 
                 File.Create(configurationsFilePath);
 
@@ -319,7 +321,7 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.CouldNotFindImagePathError, e);
+                Logger.LogError(string.Format(Resources.CouldNotFindImagePathError, e.Message));
                 return null;
             }
 
@@ -399,8 +401,8 @@ namespace CSVEditor.Core.Services
         {
             if (!Directory.Exists(ConfigurationFolderPath))
             {
-                Console.WriteLine(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName,
-                    baseAppPath);
+                Logger.LogInfo(string.Format(Resources.CreatingNewDirectoryInDirectoryFormat, configurationFolderName,
+                    baseAppPath));
                 Directory.CreateDirectory(ConfigurationFolderPath);
             }
         }
@@ -419,8 +421,10 @@ namespace CSVEditor.Core.Services
             }
             catch (Exception e)
             {
-                MessageBoxHelper.ShowProcessErrorBox(Constants.SAVE_FILE_TITLE,
-                    Constants.SAVING_FAILED_TEXT + e.Message);
+                MessageBoxHelper.ShowProcessErrorBox(
+                    Resources.SaveFileTitle,
+                    Resources.SavingFailedText + e.Message);
+                Logger.LogError(Resources.SavingFailedText + ": " + fileName + " " + e.Message);
                 return false;
             }
         }

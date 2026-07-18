@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using CSVEditor.Core.HelperClasses;
 using CSVEditor.Core.Properties;
 
 namespace CSVEditor.Core.Services
@@ -10,18 +11,19 @@ namespace CSVEditor.Core.Services
     {
         public static bool SerializeJson<T>(T source, string fullPath, string referencedName = "")
         {
-            var options = new JsonSerializerOptions() { WriteIndented = true };
+            JsonSerializerOptions options = new();
+            options.WriteIndented = true;
 
-            var jsonedSource = JsonSerializer.Serialize(source, options);
+            string jsonedSource = JsonSerializer.Serialize(source, options);
 
             try
             {
                 File.WriteAllText(fullPath, jsonedSource);
-                Console.WriteLine(Resources.SavedToFormat, referencedName, fullPath);
+                Logger.LogInfo(string.Format(Resources.SavedToFormat, referencedName, fullPath));
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.ErrorSavingFormat, referencedName, e.Message);
+                Logger.LogError(string.Format(Resources.ErrorSavingFormat, referencedName, e.Message));
                 return false;
             }
 
@@ -34,13 +36,13 @@ namespace CSVEditor.Core.Services
 
             try
             {
-                var loadedJson = File.ReadAllText(fullPath);
+                string loadedJson = File.ReadAllText(fullPath);
                 deserializedJson = JsonSerializer.Deserialize<T>(loadedJson);
-                Console.WriteLine(Resources.LoadedFromFormat, referencedName, fullPath);
+                Logger.LogInfo(string.Format(Resources.LoadedFromFormat, referencedName, fullPath));
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.ErrorLoadingFormat, referencedName, e.Message);
+                Logger.LogError(string.Format(Resources.ErrorLoadingFormat, referencedName, e.Message));
                 throw new InvalidOperationException();
             }
 

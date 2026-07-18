@@ -1,6 +1,7 @@
 ﻿using System;
 using CSVEditor.Core.HelperClasses;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace CSVEditor.Core
 {
@@ -47,6 +48,10 @@ namespace CSVEditor.Core
         } = lastSavedDirectoryPath;
 
         public string LastSelectedFilePath { get; set; } = lastSelectedFilePath;
+        [JsonIgnore]
+        public string LogFilePath { get; set; }
+        [JsonIgnore]
+        public LogLevel LogLevel { get; set; } = LogLevel.Info;
         public bool WasEdited { get; set; } = wasEdited;
         public CsvFile LastSelectedCsvFile { get; set; } = lastSelectedCsvFile;
         public VisualConfig VisualConfig { get; set; } = visulaConfig;

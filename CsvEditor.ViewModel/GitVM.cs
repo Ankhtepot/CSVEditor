@@ -189,7 +189,7 @@ namespace CSVEditor.ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine(Resources.ErrorPullingRepositoryFormat, e.Message);
+                Logger.LogError(string.Format(Resources.ErrorPullingRepositoryFormat, e.Message));
             }
         }
 
@@ -209,19 +209,20 @@ namespace CSVEditor.ViewModel
             {
                 GitOptions gitOpts = AppOptionsService.AppOptions.GitOptions;
                 GitService.Push(gitOpts);
+                Logger.LogInfo(string.Format(Resources.GitRepositoryPushedMessage, gitOpts.RemoteName));
                 MessageBox.Show(string.Format(Resources.GitRepositoryPushedMessage, gitOpts.RemoteName));
                 IsRepositoryPushed = true;
             }
             catch (InvalidOperationException e)
             {
                 IsRepositoryPushed = false;
-                Console.WriteLine(Resources.GitPushingRepositoryErrorMessage, e.Message);
+                Logger.LogError(string.Format(Resources.GitPushingRepositoryErrorMessage, e.Message));
                 MessageBox.Show(e.Message);
             }
             catch (Exception e)
             {
                 IsRepositoryPushed = false;
-                Console.WriteLine(Resources.GitPushingRepositoryErrorMessage, e.Message);
+                Logger.LogError(string.Format(Resources.GitPushingRepositoryErrorMessage, e.Message));
                 MessageBox.Show(string.Format(Resources.GitPushingRepositoryErrorMessage, e.Message));
             }
         }

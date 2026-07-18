@@ -2,6 +2,7 @@ using CSVEditor.ViewModel;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using CSVEditor.Core.HelperClasses;
 
 namespace CSVEditor.View.Controls
 {
@@ -57,7 +58,8 @@ namespace CSVEditor.View.Controls
                resources,
                context);
 
-            Console.WriteLine($@"LineEditControl, building new Grid for Index =  {context?.SelectedItemIndex}.");
+            
+            Logger.LogInfo($@"LineEditControl, building new Grid for Index =  {context?.SelectedItemIndex}.");
             
             topContainer.Children.Add(VM.GetEditLinesGridForNewCsvFile());
         }

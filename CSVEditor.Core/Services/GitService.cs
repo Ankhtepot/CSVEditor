@@ -21,14 +21,14 @@ public static class GitService
     {
         try
         {
-            Console.WriteLine(Resources.SettingUpRepositoryText);
+            Logger.LogInfo(Resources.SettingUpRepositoryText);
             CurrentRepository?.Dispose();
             CurrentRepository = new Repository(path);
             IsRepositoryUnstaged();
         }
         catch (RepositoryNotFoundException e)
         {
-            Console.WriteLine(Resources.PathNotValidRepositoryFormat, path, e.Message);
+            Logger.LogError(string.Format(Resources.PathNotValidRepositoryFormat, path, e.Message));
         }
     }
 
@@ -49,7 +49,7 @@ public static class GitService
             : status.Modified.ToList().Count > 0
                 ? CurrentRepository.RetrieveStatus().Modified
                     .Select(e => e.FilePath)
-                    .ToHumanReadableString('\n')
+                    .ToHumanReadableString(Environment.NewLine)
                 : Resources.GitStatusNoChanges;
     }
 
@@ -62,7 +62,7 @@ public static class GitService
         }
         catch (Exception e)
         {
-            Console.WriteLine(Resources.ErrorStagingRepositoryFormat, repo.Info.WorkingDirectory, e.Message);
+            Logger.LogError(string.Format(Resources.ErrorStagingRepositoryFormat, repo.Info.WorkingDirectory, e.Message));
             return false;
         }
     }
@@ -76,21 +76,21 @@ public static class GitService
             if (IsRepositoryUnstaged(repo))
             {
                 StageRepository(repo);
-                Console.WriteLine(Resources.GitRepositoryStagedMessage);
+                Logger.LogInfo(Resources.GitRepositoryStagedMessage);
             }
             repo.Commit(gitOpts.CommitMessage, authorSignature, authorSignature);
-            Console.WriteLine(Resources.GitRepositoryCommittedMessage);
+            Logger.LogInfo(Resources.GitRepositoryCommittedMessage);
             SetRepository(repo.Info.WorkingDirectory);
             return true;
         }
         catch (EmptyCommitException)
         {
-            Console.WriteLine(Resources.NotCommitedError);
+            Logger.LogWarning(Resources.NotCommitedError);
             return true;
         }
         catch (Exception e)
         {
-            Console.WriteLine(Resources.UnexpectedErrorDuringCommitFormat, e.Message);
+            Logger.LogError(string.Format(Resources.UnexpectedErrorDuringCommitFormat, e.Message));
             return false;
         }
     }
@@ -131,12 +131,12 @@ public static class GitService
             if (!string.IsNullOrEmpty(gitOpts.RemoteRepositoryLink) &&
                 !gitOpts.RemoteRepositoryLink.Contains("<"))
             {
-                Console.WriteLine(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteName, gitOpts.RemoteRepositoryLink);
+                Logger.LogInfo(string.Format(Resources.RemoteOriginNotFoundAddingFormat, gitOpts.RemoteName, gitOpts.RemoteRepositoryLink));
                 remote = repo.Network.Remotes.Add(gitOpts.RemoteName, gitOpts.RemoteRepositoryLink);
             }
             else
             {
-                Console.WriteLine(Resources.RemoteOriginNotFoundNoLinkText, gitOpts.RemoteName);
+                Logger.LogWarning(string.Format(Resources.RemoteOriginNotFoundNoLinkText, gitOpts.RemoteName));
                 return;
             }
         }
@@ -144,7 +144,7 @@ public static class GitService
                  !gitOpts.RemoteRepositoryLink.Contains('<') &&
                  remote.Url != gitOpts.RemoteRepositoryLink)
         {
-            Console.WriteLine(Resources.GitUpdatingRemoteNameMessage, remote.Name, gitOpts.RemoteRepositoryLink);
+            Logger.LogInfo(string.Format(Resources.GitUpdatingRemoteNameMessage, remote.Name, gitOpts.RemoteRepositoryLink));
             repo.Network.Remotes.Update(remote.Name, r => r.Url = gitOpts.RemoteRepositoryLink);
             remote = repo.Network.Remotes[gitOpts.RemoteName];
         }
@@ -153,7 +153,7 @@ public static class GitService
         {
             CredentialsProvider = (_, _, _) =>
             {
-                Console.WriteLine(Resources.GitProvidingCredentialsMessage, gitOpts.UserName);
+                Logger.LogInfo(string.Format(Resources.GitProvidingCredentialsMessage, gitOpts.UserName));
                 return new UsernamePasswordCredentials
                 {
                     Username = gitOpts.UserName,
@@ -162,7 +162,7 @@ public static class GitService
             },
             OnPushStatusError = error =>
             {
-                Console.WriteLine(Resources.GitPushStatusErrorMessage, error.Reference, error.Message);
+                Logger.LogError(string.Format(Resources.GitPushStatusErrorMessage, error.Reference, error.Message));
             }
         };
 
@@ -178,8 +178,8 @@ public static class GitService
 
         CommitRepository(gitOpts);
 
-        Console.WriteLine(Resources.GitPushingLocal, repo.Head.FriendlyName, sha, remote.Name, remote.Url);
-        Console.WriteLine(Resources.GitPushBranchStateInfoMessage, pushRefSpec, aheadStr);
+        Logger.LogInfo(string.Format(Resources.GitPushingLocal, repo.Head.FriendlyName, sha, remote.Name, remote.Url));
+        Logger.LogInfo(string.Format(Resources.GitPushBranchStateInfoMessage, pushRefSpec, aheadStr));
         repo.Network.Push(remote, [pushRefSpec], options);
 
         Branch localBranch = repo.Head;
@@ -188,10 +188,10 @@ public static class GitService
             repo.Branches.Update(localBranch,
                 b => b.Remote = remote.Name,
                 b => b.UpstreamBranch = localBranch.CanonicalName);
-            Console.WriteLine(Resources.GitSettingUpstreamBranch, localBranch.FriendlyName, remote.Name, localBranch.FriendlyName);
+            Logger.LogInfo(string.Format(Resources.GitSettingUpstreamBranch, localBranch.FriendlyName, remote.Name, localBranch.FriendlyName));
         }
 
-        Console.WriteLine(Resources.GitRepositoryPushedMessage, remote.Name);
+        Logger.LogInfo(string.Format(Resources.GitRepositoryPushedMessage, remote.Name));
         SetRepository(repo.Info.WorkingDirectory);
     }
 

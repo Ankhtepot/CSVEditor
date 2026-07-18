@@ -150,7 +150,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load app options from {0}.\nError: {1}.
+        ///   Looks up a localized string similar to Failed to load app options from {0}..
         /// </summary>
         public static string AppOptionsLoadError {
             get {
@@ -168,7 +168,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured while processing app options.\nError: {0}.
+        ///   Looks up a localized string similar to Error occured while processing app options..
         /// </summary>
         public static string AppOptionsProcessingError {
             get {
@@ -177,7 +177,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured while saving app options.\nError: {0}.
+        ///   Looks up a localized string similar to Error occured while saving app options to {0}..
         /// </summary>
         public static string AppOptionsSaveError {
             get {
@@ -574,6 +574,15 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error: {0}.
+        /// </summary>
+        public static string ErrorWithPreface {
+            get {
+                return ResourceManager.GetString("ErrorWithPreface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last task stopped with and error..
         /// </summary>
         public static string ErrorWorkStatus {
@@ -648,7 +657,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please fix the following errors before proceeding:\n\n.
+        ///   Looks up a localized string similar to Please fix the following errors before proceeding:.
         /// </summary>
         public static string FixErrorsPrompt {
             get {
@@ -1539,7 +1548,7 @@ namespace CSVEditor.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [GitVM] Setting up repository..
+        ///   Looks up a localized string similar to Setting up Git repository..
         /// </summary>
         public static string SettingUpRepositoryText {
             get {
