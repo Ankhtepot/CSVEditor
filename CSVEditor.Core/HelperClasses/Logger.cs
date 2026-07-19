@@ -18,16 +18,21 @@ public static class Logger
     public static string LogFilePath { get; private set; } = "log.txt";
     public static bool ShowWholeClassPath { get; private set; }
     public static LogLevel CurrentLogLevel { get; private set; } = LogLevel.Debug;
+    public static bool LogIntoConsole { get; private set; } = true;
     
-    private static bool _failedToWriteToLogFile;
     private const int MaxFailCount = 10;
-    private static int _failCount = 0;
+    private static int _failCount;
     
-    public static void SetOptions(string logFilePath = "log.txt", bool showWholeClassPath = false, LogLevel logLevel = LogLevel.Debug)
+    public static void SetOptions(
+        string logFilePath = "log.txt",
+        bool showWholeClassPath = false,
+        LogLevel logLevel = LogLevel.Debug,
+        bool logIntoConsole = true)
     {
         LogFilePath = logFilePath;
         ShowWholeClassPath = showWholeClassPath;
         CurrentLogLevel = logLevel;
+        LogIntoConsole = logIntoConsole;
     }
     
     public static void LogDebug(string message = "", [CallerFilePath] string classPath = "", [CallerMemberName] string memberName = "")
@@ -71,7 +76,10 @@ public static class Logger
     
     private static void PropagateLogMessage(string logMessage)
     {
-        Console.WriteLine(logMessage);
+        if (LogIntoConsole)
+        {
+            Console.WriteLine(logMessage);
+        }
         
         if(_failCount >= MaxFailCount || LogFilePath == null)
         {

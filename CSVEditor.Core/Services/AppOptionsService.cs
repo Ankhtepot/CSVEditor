@@ -79,14 +79,20 @@ public static class AppOptionsService
 #if DEBUG
         AppOptions.LogFilePath = DebugLogFilePath;
         AppOptions.LogLevel = LogLevel.Debug;
+        AppOptions.LogIntoConsole = true;
 #else
         AppOptions.LogFilePath = ProductionLogFilePath;
         AppOptions.LogLevel = LogLevel.Info;
+        AppOptions.LogIntoConsole = false;
 #endif
         try
         {
             Path.GetDirectoryName(AppOptions.LogFilePath).CreateDirectoryIfNotExists();
-            Logger.SetOptions(AppOptions.LogFilePath, false, AppOptions.LogLevel);
+            Logger.SetOptions(
+                AppOptions.LogFilePath,
+                false,
+                AppOptions.LogLevel,
+                AppOptions.LogIntoConsole);
         }
         catch (Exception e)
         {

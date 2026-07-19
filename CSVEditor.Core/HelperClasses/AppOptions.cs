@@ -52,6 +52,8 @@ namespace CSVEditor.Core
         public string LogFilePath { get; set; }
         [JsonIgnore]
         public LogLevel LogLevel { get; set; } = LogLevel.Info;
+        [JsonIgnore]
+        public bool LogIntoConsole { get; set; } = true;
         public bool WasEdited { get; set; } = wasEdited;
         public CsvFile LastSelectedCsvFile { get; set; } = lastSelectedCsvFile;
         public VisualConfig VisualConfig { get; set; } = visulaConfig;
