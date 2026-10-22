@@ -32,6 +32,7 @@ namespace CSVEditor.ViewModel
         // TODO: Add more unit tests, as it is currently lacking and it is important to have them for future changes.
         // TODO: Remove all the async void methods, as they are dangerous and can cause unhandled exceptions. Use async Task instead.
         // TODO: Remove helper and service classes from view and viewmodel projects, as they are not supposed to be there and it is more consistent and easier to maintain.
+        // TODO: Make AsyncVM a separate AsyncService class, as it is currently too tightly coupled with EditorVM and it is more consistent and easier to maintain.
         // TODO: BUG: On save files are committed before showing the commit/push dialog
         
         #region Fields
@@ -212,6 +213,7 @@ namespace CSVEditor.ViewModel
             SaveAndExitCommand = new DelegateCommand(SaveAndExit);
             ExitCommand = new DelegateCommand(ExitApp);
 
+            AppOptionsService.SetLogRelatedFields();
             FileConfigurations = initializeFileConfigurations();
             Application.Current.MainWindow?.SizeChanged += MainWindow_SizeChanged;
             SetAppOptions();

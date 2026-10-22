@@ -9,10 +9,8 @@ using static CSVEditor.Core.HelperClasses.Enums;
 
 namespace CSVEditor.ViewModel.BackgroundWorkers
 {
-    public class LoadDirectoriesWithCsvWorker : AbstractEditorVMWorker
+    public class LoadDirectoriesWithCsvWorker(EditorVM vM) : AbstractEditorVMWorker(vM)
     {
-        public LoadDirectoriesWithCsvWorker(EditorVM vM) : base(vM) { }
-
         protected override void _DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -20,12 +18,12 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
             VM.AsyncVM.WorkingStatus = WorkStatus.Working;
 
             worker.ReportProgress(VM.AsyncVM.WorkProgress + 100); // +100 to always trigger change for progress value >=100
-            var path = e.Argument as string;
+            string path = e.Argument as string;
 
-            var directories = new List<string> { path };
-            var foundDirectories = FileSystemService.GetDirectoriesFromRootPath(path, worker);
+            List<string> directories = [path];
+            List<string> foundDirectories = FileSystemService.GetDirectoriesFromRootPath(path, worker);
 
-            if (worker.CancellationPending == true || foundDirectories == null)
+            if (worker.CancellationPending || foundDirectories == null)
             {
                 e.Cancel = true;
                 return;
@@ -37,19 +35,18 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
 
             worker.ReportProgress(25);
 
-            double progressStep = (100d / (double)directories.Count);
+            double progressStep = (100d / directories.Count);
             double currentProgress = 0;
             directories.ForEach(directory =>
             {
-                if (worker.CancellationPending == true)
+                if (worker.CancellationPending)
                 {
                     e.Cancel = true;
-                    return;
                 }
                 else
                 {
                     currentProgress += progressStep;
-                    var foundDirectoryWithCsv = FileSystemService.ScanDirectory(path, directory);
+                    DirectoryWithCsv foundDirectoryWithCsv = FileSystemService.ScanDirectory(path, directory);
                     if (foundDirectoryWithCsv != null)
                     {
                         worker.ReportProgress((int)currentProgress, foundDirectoryWithCsv);
@@ -70,7 +67,7 @@ namespace CSVEditor.ViewModel.BackgroundWorkers
                 return;
             }
 
-            var foundDirectoryWithCsv = e.UserState as DirectoryWithCsv;
+            DirectoryWithCsv foundDirectoryWithCsv = e.UserState as DirectoryWithCsv;
             VM.AsyncVM.WorkProgress = e.ProgressPercentage;
             if (foundDirectoryWithCsv != null)
             {

@@ -23,8 +23,6 @@ public static class AppOptionsService
             AppOptions = JsonServices.DeserializeJson<AppOptions>(
                 Path.Combine(FileSystemService.ConfigurationFolderPath, Constants.APP_OPTIONS_FILE_NAME),
                 Resources.AppOptionsName);
-            
-            SetLogRelatedFields();
         }
         catch (Exception e)
         {
@@ -74,25 +72,28 @@ public static class AppOptionsService
         AppOptions.GitOptions.IsAuthenticated = sourceGitOptions.IsAuthenticated;
     }
     
-    private static void SetLogRelatedFields()
+    public static void SetLogRelatedFields()
     {
+        string envInfo = null;
 #if DEBUG
-        AppOptions.LogFilePath = DebugLogFilePath;
-        AppOptions.LogLevel = LogLevel.Debug;
-        AppOptions.LogIntoConsole = true;
+        AppSettings.LogFilePath = DebugLogFilePath;
+        AppSettings.LogLevel = LogLevel.Debug;
+        AppSettings.LogIntoConsole = true;
+        envInfo = "DEBUG";
 #else
-        AppOptions.LogFilePath = ProductionLogFilePath;
-        AppOptions.LogLevel = LogLevel.Info;
-        AppOptions.LogIntoConsole = false;
+        AppSettings.LogFilePath = ProductionLogFilePath;
+        AppSettings.LogLevel = LogLevel.Info;
+        AppSettings.LogIntoConsole = false;
 #endif
         try
         {
-            Path.GetDirectoryName(AppOptions.LogFilePath).CreateDirectoryIfNotExists();
+            Path.GetDirectoryName(AppSettings.LogFilePath).CreateDirectoryIfNotExists();
             Logger.SetOptions(
-                AppOptions.LogFilePath,
+                AppSettings.LogFilePath,
                 false,
-                AppOptions.LogLevel,
-                AppOptions.LogIntoConsole);
+                AppSettings.LogLevel,
+                AppSettings.LogIntoConsole);
+            Logger.LogInfo($"Application started in {envInfo} mode.");
         }
         catch (Exception e)
         {
